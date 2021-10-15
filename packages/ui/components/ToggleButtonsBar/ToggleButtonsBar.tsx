@@ -22,7 +22,6 @@ export const ToggleButtonsBar: FunctionComponent<PropsWithChildren<Props>> = ({
       <Img
         height="18px"
         width="18px"
-        layout="fixed"
         src={handbarImg}
         alt="Toggle left sidebar"
       />
