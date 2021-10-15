@@ -1,0 +1,109 @@
+import fetch from "isomorphic-fetch";
+import { CredentialRepository } from "..";
+import {
+  DataError,
+  Either,
+  NetworkError,
+  UnauthorizedError,
+  UnexpectedError,
+} from "../domain";
+
+type Method = "GET" | "POST" | "DELETE" | "PUT";
+
+export class ApiDataFetcher {
+  constructor(
+    private baseUrl: string,
+    private credentialRepositroy?: CredentialRepository
+  ) {}
+
+  private getAuthHeader = () => {
+    return this.credentialRepositroy?.isLoggedIn
+      ? {
+          credentials: "include",
+          Authorization: `Bearer ${this.credentialRepositroy?.token}`,
+        }
+      : { credentials: "include" };
+  };
+  private async request<P, D = undefined>(
+    method: Method,
+    url: string,
+    body?: D
+  ): Promise<Either<DataError, P>> {
+    try {
+      const response = await fetch(`${this.baseUrl}${url}`, {
+        method,
+        headers: new Headers({
+          "content-type": "application/json",
+          ...this.getAuthHeader(),
+        }),
+        ...(body ? { body: JSON.stringify(body) } : {}),
+      });
+      if (!response.ok) {
+        switch (response.status) {
+          case 401:
+            return Either.left(
+              new UnauthorizedError(new Error(response.statusText))
+            );
+
+          default:
+            return Either.left(
+              new UnexpectedError(new Error(response.statusText))
+            );
+        }
+      }
+
+      const data: P = await response.json();
+      return Either.right(data);
+    } catch (e) {
+      return Either.left(new NetworkError(e));
+    }
+  }
+
+  private async requestBlob(url: string): Promise<Either<DataError, Blob>> {
+    try {
+      const response = await fetch(`${this.baseUrl}${url}`, {
+        headers: new Headers({
+          //"content-type": "application/json",
+          ...this.getAuthHeader(),
+        }),
+      });
+      if (!response.ok) {
+        switch (response.status) {
+          case 401:
+            return Either.left(
+              new UnauthorizedError(new Error(response.statusText))
+            );
+
+          default:
+            return Either.left(
+              new UnexpectedError(new Error(response.statusText))
+            );
+        }
+      }
+      const data = await response.blob();
+      return Either.right(data);
+    } catch (e) {
+      return Either.left(new NetworkError(e));
+    }
+  }
+
+  get<P>(url: string): Promise<Either<DataError, P>> {
+    return this.request<P>("GET", url);
+  }
+
+  post<P, D>(url: string, data: D): Promise<Either<DataError, P>> {
+    return this.request<P, D>("POST", url, data);
+  }
+
+  put<P, D>(url: string, data: D): Promise<Either<DataError, P>> {
+    return this.request<P, D>("PUT", url, data);
+  }
+
+  delete<P, D>(url: string): Promise<Either<DataError, P>> {
+    return this.request<P, D>("DELETE", url);
+  }
+
+  getBlob(url: string): Promise<Either<DataError, Blob>> {
+    return this.requestBlob(url);
+  }
+}

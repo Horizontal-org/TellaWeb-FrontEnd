@@ -1,0 +1,12 @@
+.onlyOnHoverOrSelected {
+  visibility: hidden;
+  display: flex;
+  justify-content: end;
+}
+tr:hover .onlyOnHoverOrSelected {
+  visibility: visible;
+}
+
+:global(.bg-blue-light) > td > .onlyOnHoverOrSelected {
+  visibility: visible;
+}
