@@ -1,7 +1,8 @@
+import { NextPage } from "next";
 import Head from "next/head";
 import { useAuthRequired } from "../common/useAuthRequired";
 
-export default function Home() {
+const Home: NextPage = () => {
   useAuthRequired("/report");
 
   return (
@@ -14,4 +15,6 @@ export default function Home() {
       <main></main>
     </div>
   );
-}
+};
+
+export default Home;
