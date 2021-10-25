@@ -1,15 +1,13 @@
-import { ReportFile } from "../../packages/ui/domain/ReportFile";
+import { IReportFile } from "../../packages/ui/domain/ReportFile";
+import { ReportFileType } from '../../packages/ui/domain/ReportFileType'
 
-export const FilesMokedData: ReportFile[] = [
+export const FilesMokedData: IReportFile[] = [
   {
     id: "1",
     bucket: "",
     fileName: "video.avi",
-    type: "video",
-    src: {
-      path: "",
-      name: "",
-    },
+    type: ReportFileType.IMAGE,
+    src: "https://wearehorizontal.org/wp-content/uploads/2020/04/SourTyre_FemaleLebaneseProtestor-MobilePhone_RomanDeckert22102019.jpg",
     size: Math.random() * 10000000,
     thumbnail:
       "https://wearehorizontal.org/wp-content/uploads/2020/04/SourTyre_FemaleLebaneseProtestor-MobilePhone_RomanDeckert22102019.jpg",
@@ -18,11 +16,8 @@ export const FilesMokedData: ReportFile[] = [
     id: "1",
     bucket: "",
     fileName: "image.avi",
-    type: "image",
-    src: {
-      path: "",
-      name: "",
-    },
+    type: ReportFileType.IMAGE,
+    src: "https://wearehorizontal.org/wp-content/uploads/2020/04/SourTyre_FemaleLebaneseProtestor-MobilePhone_RomanDeckert22102019.jpg",
     size: Math.random() * 10000000,
     thumbnail:
       "https://wearehorizontal.org/wp-content/uploads/2020/04/SourTyre_FemaleLebaneseProtestor-MobilePhone_RomanDeckert22102019.jpg",
@@ -31,22 +26,16 @@ export const FilesMokedData: ReportFile[] = [
     id: "1",
     bucket: "",
     fileName: "audio.avi",
-    type: "audio",
-    src: {
-      path: "",
-      name: "",
-    },
+    type: ReportFileType.AUDIO,
+    src: "",
     size: Math.random() * 10000000,
   },
   {
     id: "1",
     bucket: "",
+    src: "",
     fileName: "other.pdf",
-    type: "file",
-    src: {
-      path: "",
-      name: "",
-    },
+    type: ReportFileType.OTHER,    
     size: Math.random() * 10000000,
   },
 ];
