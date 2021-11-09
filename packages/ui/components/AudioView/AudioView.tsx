@@ -1,6 +1,6 @@
 import { FunctionComponent, useState, useEffect, useRef } from 'react'
 import { IReportFile } from '../../domain/ReportFile'
-import { AudioControls } from './AudioControls'
+import { MediaControls } from '../MediaControls/MediaControls';
 import { AudioVisualization } from './AudioVisualization'
 
 type Props = {
@@ -8,69 +8,57 @@ type Props = {
 };
 
 export const AudioView: FunctionComponent<Props> = ({file}) => {
-  const [duration, setDuration] = useState<number>(0)
-  const [curTime, setCurTime] = useState<number>(0)
-  const [isPlaying, handlePlaying] = useState<boolean>(false)
-
-  const audioRef = useRef<HTMLAudioElement | null>(null)
-  const currentPercentage = (curTime / duration) * 100;
+  const [canPlay, handleCanPlay] = useState<boolean>(false)
+  const [currentPercentage, handlePercentage] = useState<number>(0)
+  const fileRef = useRef<HTMLVideoElement | null>(null)
 
   useEffect(() => {
-    if (!audioRef) {
+    if (!fileRef) {
       return
     }
 
-    const setAudioData = () => {
-      setDuration(audioRef.current.duration);
-      setCurTime(audioRef.current.currentTime);
-    }
+    fileRef.current.addEventListener('canplay', () => {
+      handleCanPlay(true)
+    })
 
-    const setAudioTime = () => {
-      audioRef.current && setCurTime(audioRef.current.currentTime)
-    }
-
-    audioRef.current.addEventListener("canplaythrough", setAudioData);
-    // audioRef.current.addEventListener("stalled", () => {
-    //   console.log('is stalled')
-    // })
-
-    // audioRef.current.addEventListener("completed", () => {
-    //   console.log('completed')
-    // })
-
-    // audioRef.current.addEventListener("ended", () => {
-    //   audioRef.current.currentTime = 0
-    //   handlePlaying(false)
-    // })
-
-    audioRef.current.addEventListener("timeupdate", setAudioTime)
-    return function cleanup () {
-      document.removeEventListener('timeUpdate', setAudioTime)
-      document.removeEventListener('canplaythrough', setAudioData)
-    }
+    fileRef.current.addEventListener("timeupdate", () => {
+      handlePercentage((fileRef.current.currentTime / fileRef.current.duration) * 100)
+    })
   }, [])
+
+  useEffect(() => {
+    fileRef.current.load()
+  }, [file.src])
   
-  console.log(audioRef)
   return (
-    <div className="w-full h-full flex flex-col px-10">
-      <audio crossOrigin="use-credentials" preload='auto' ref={audioRef} id="audio">
+    <div className="w-full h-full flex flex-col items-center px-10">
+      <audio crossOrigin="use-credentials" ref={fileRef} id="audio">
         <source src={file.src} />
         Your browser does not support the <code>audio</code> element.
       </audio>
 
-      <AudioVisualization 
-        currentPercentage={currentPercentage}
-      />
+      { fileRef.current && (
+        <div          
+          style={{
+            width: '40vw'
+          }}
+        >
+          <AudioVisualization 
+            currentPercentage={`${currentPercentage}` || '0'}
+          />
+        </div>
+      )}
 
-      <AudioControls 
-        audioRef={audioRef}
-        currentTime={curTime}
-        handleCurrentTime={setCurTime}        
-        duration={duration}
-        currentPercentage={currentPercentage}
-        handlePlaying={handlePlaying}
-        isPlaying={isPlaying}
-      />
+      <div className='w-full flex justify-center'>
+        <div  style={{ width: '40vw'}}>
+          <MediaControls 
+            isVideo={false}
+            fileRef={fileRef}
+          />
+        </div>
+      </div>
+
+
     </div>
   )
 }

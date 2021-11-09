@@ -1,6 +1,5 @@
 import { FunctionComponent } from 'react'
 import { IReportFile } from '../../domain/ReportFile'
-import { ReportFileType } from "../../domain/ReportFileType"
 
 type Props = {
   file: IReportFile,

@@ -5,13 +5,12 @@ import StreamVisual from './StreamVisual'
 import StreamDefault from './StreamDefault'
 
 type Props = {
-  currentPercentage: number
+  currentPercentage: string
 }
 
 export const AudioVisualization: FunctionComponent<Props> = ({ currentPercentage }) => {
   return (
-    <div className='h-60 w-full flex justify-center items-center bg-gray-200 my-5'>
-      {/* <div className='p-4'> */}
+    <div className='h-60 w-full flex justify-center items-center bg-gray-200 my-5'>      
         <div className="relative" style={{
           height: 80,
           width: 468
@@ -31,7 +30,6 @@ export const AudioVisualization: FunctionComponent<Props> = ({ currentPercentage
             />
           </div>
         </div>
-      {/* </div> */}
     </div>
   )
 }
