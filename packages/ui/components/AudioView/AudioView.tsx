@@ -17,13 +17,22 @@ export const AudioView: FunctionComponent<Props> = ({file}) => {
       return
     }
 
-    fileRef.current.addEventListener('canplay', () => {
-      handleCanPlay(true)
-    })
-
-    fileRef.current.addEventListener("timeupdate", () => {
+    const handleTimeUpdateListener = () => {
       handlePercentage((fileRef.current.currentTime / fileRef.current.duration) * 100)
-    })
+    }
+
+    const handleCanPlayListener = () => {
+      handleCanPlay(true)
+    }
+
+    fileRef.current.addEventListener('canplay', handleCanPlayListener)
+
+    fileRef.current.addEventListener("timeupdate", handleTimeUpdateListener)
+
+    return function cleanup () {
+      document.removeEventListener('timeupdate', handleTimeUpdateListener)
+      document.removeEventListener('canplay', handleCanPlayListener)
+    }
   }, [])
 
   useEffect(() => {

@@ -10,11 +10,9 @@ export const ImageView: FunctionComponent<Props> = ({ file, onClick }) => {
   return (
     <div 
       onClick={onClick}
-      className="w-full h-full bg-gray-25 rounded-md cursor-pointer"
+      className="w-full h-full bg-gray-25 rounded-md cursor-pointer bg-cover bg-center"
       style={{
-        backgroundImage: `url(${file.src})`,
-        backgroundPosition: "center",
-        backgroundSize: "cover"
+        backgroundImage: `url(${file.src})`
       }}
     >
       <div 

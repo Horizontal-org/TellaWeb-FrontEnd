@@ -11,23 +11,31 @@ export const VideoView: FunctionComponent<Props> = ({file}) => {
   const [canPlay, handleCanPlay] = useState<boolean>(false)
   const fileRef = useRef<HTMLVideoElement | null>(null)
 
+  const listenerCanPlay = () => {
+    handleCanPlay(true)
+  }
+
   useEffect(() => {
     if (!fileRef) {
       return
     }
 
-    fileRef.current.addEventListener('canplay', () => {
-      handleCanPlay(true)
-    })
+    fileRef.current.addEventListener('canplay', listenerCanPlay)
+
+    return function cleanup () {
+      document.removeEventListener('canplay', listenerCanPlay)      
+    }
   }, [])
 
   useEffect(() => {
     handleCanPlay(false) 
     fileRef.current.load()
 
-    fileRef.current.addEventListener('canplay', () => {
-      handleCanPlay(true)
-    })
+    fileRef.current.addEventListener('canplay', listenerCanPlay)
+
+    return function cleanup () {
+      document.removeEventListener('canplay', listenerCanPlay)      
+    }
   }, [file.src])
 
   const getFileType = () => {

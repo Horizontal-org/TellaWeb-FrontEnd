@@ -1,9 +1,8 @@
 import { FunctionComponent, useRef } from 'react'
-import moment from 'moment'
 
 type Props = {
-  momentCurrentTime: moment.Duration
-  momentDuration: moment.Duration
+  parsedCurrentTime: string
+  parsedDuration: string
   percentage: string
   onBarClick: (
     e,
@@ -13,8 +12,8 @@ type Props = {
 }
 
 export const MediaProgressBar: FunctionComponent<Props> = ({
-  momentCurrentTime,
-  momentDuration,
+  parsedCurrentTime,
+  parsedDuration,
   percentage,
   onBarClick
 }) => {
@@ -23,7 +22,7 @@ export const MediaProgressBar: FunctionComponent<Props> = ({
   return (
     <div className='flex items-center'>
       <div className='p-4 text-gray-500 text-sm'>    
-        { moment(momentCurrentTime.minutes() + ':' + momentCurrentTime.seconds(), 'mm:ss').format('mm:ss')  }
+        { parsedCurrentTime  }
       </div>
       <div className="w-full relative">
         <div
@@ -52,7 +51,7 @@ export const MediaProgressBar: FunctionComponent<Props> = ({
         </div>
       </div>
       <div className='p-4 text-gray-500 text-sm'>
-        { moment(momentDuration.minutes() + ':' + momentDuration.seconds(), 'mm:ss').format('mm:ss') }
+        { parsedDuration }
       </div>
     </div>
   )

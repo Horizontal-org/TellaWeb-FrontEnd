@@ -1,5 +1,4 @@
-import { useRef, useEffect, useState, FunctionComponent, MutableRefObject } from 'react'
-import moment from 'moment'
+import { useEffect, useState, FunctionComponent, MutableRefObject } from 'react'
 import { MediaButtons } from './MediaButtons'
 import { MediaProgressBar } from './MediaProgressBar'
 
@@ -16,12 +15,21 @@ export const MediaControls: FunctionComponent<Props> = ({
   const [isMuted, handleMuted] = useState<boolean>(false)
   const [volumePercentage, handleVolumePercentage] = useState<number>(0)
   const [currentFileRef, handleCurrentRef] = useState<HTMLVideoElement | HTMLAudioElement>(null)
-  const [momentDuration, handleMomentDuration] = useState<moment.Duration>()
-  const [momentCurrentTime, handleMomentCurrentTime] = useState<moment.Duration>()
+  const [parsedDuration, handleParsedDuration] = useState<string>()
+  const [parsedCurrentTime, handleParsedCurrentTime] = useState<string>()
+
+  const getParsedTime = (time) => {
+    const minutes = Math.floor(time / 60)    
+    const seconds = Math.floor(time - minutes * 60)
+    let parsedTime = (minutes + '').length === 1 ? `0${minutes}` : minutes
+    parsedTime = parsedTime + ':'
+    parsedTime = parsedTime + ((seconds + '').length === 1 ? `0${seconds}` : seconds)
+    return parsedTime
+  }
 
   const setTime = () => {
-    handleMomentDuration(moment.duration(fileRef.current.duration, 'seconds'))
-    handleMomentCurrentTime(moment.duration(fileRef.current.currentTime, 'seconds'))
+    handleParsedDuration(getParsedTime(fileRef.current.duration))
+    handleParsedCurrentTime(getParsedTime(fileRef.current.currentTime))
   }
 
   const setData = () => {
@@ -51,7 +59,6 @@ export const MediaControls: FunctionComponent<Props> = ({
   }, [])
 
   useEffect(() => {
-    console.log('fileref current')
     fileRef.current.currentTime = 0
     setData()    
     handleVolumePercentage(0)
@@ -95,8 +102,8 @@ export const MediaControls: FunctionComponent<Props> = ({
         />
 
         <MediaProgressBar 
-          momentCurrentTime={momentCurrentTime}
-          momentDuration={momentDuration}
+          parsedCurrentTime={parsedCurrentTime}
+          parsedDuration={parsedDuration}
           percentage={`${(currentFileRef.currentTime / currentFileRef.duration) * 100}%` || '0'}
           onBarClick={(e, clientRectLeft, clientWidth) => {
             const start = clientRectLeft

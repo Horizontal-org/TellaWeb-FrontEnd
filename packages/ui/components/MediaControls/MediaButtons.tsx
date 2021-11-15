@@ -1,12 +1,8 @@
-import { FunctionComponent, useState, useEffect, useRef } from 'react'
-import cn from 'classnames'
+import { FunctionComponent } from 'react'
+import { MediaVolume } from './MediaVolume'
 import { BsPlus } from "@react-icons/all-files/bs/BsPlus"
 import { BsDash } from "@react-icons/all-files/bs/BsDash"
 import { BsArrowsFullscreen } from "@react-icons/all-files/bs/BsArrowsFullscreen"
-
-import { BsFillVolumeMuteFill } from "@react-icons/all-files/bs/BsFillVolumeMuteFill"
-import { BsFillVolumeDownFill } from "@react-icons/all-files/bs/BsFillVolumeDownFill"
-import { BsFillVolumeUpFill } from "@react-icons/all-files/bs/BsFillVolumeUpFill"
 import { BsPlay } from "@react-icons/all-files/bs/BsPlay"
 
 type Props = {
@@ -36,31 +32,9 @@ export const MediaButtons: FunctionComponent<Props> = ({
   toggleMuted,
   toggleVolume
 }) => {
-  
-  const volumeRef = useRef<HTMLDivElement | null>(null)
-  const [volumeIcon, handleVolumeIcon] = useState(null)
-
-  const getVolumeIcon = () => {
-    let icon = null
-    if (muted || volumePercentage == 0) {
-      icon = (<BsFillVolumeMuteFill size={20} color="#8B8E8F"/>)
-    } else if (volumePercentage >= 50) {
-      icon = (<BsFillVolumeUpFill size={20} color="#8B8E8F"/>)
-    } else if (volumePercentage < 50) {
-      icon = (<BsFillVolumeDownFill size={20} color="#8B8E8F"/>)
-    }
-    handleVolumeIcon(icon)
-  }
-
-  useEffect(() => {
-    getVolumeIcon()
-  }, [muted, volumePercentage])
-
-
 
   return (
-    <div className="h-10 relative flex justify-center items-center">
-      
+    <div className="h-10 relative flex justify-center items-center"> 
       <div className='cursor-pointer '>
         <div onClick={subTen}  className='p-2 flex items-center text-gray-600'>
           <BsDash />
@@ -90,49 +64,18 @@ export const MediaButtons: FunctionComponent<Props> = ({
           <span>10</span>          
         </div>
       </div>
-
-
       <div className='h-10 absolute right-0 top-0 flex items-center'>
-          <div className='mr-2 flex items-center'>
-            <div className='cursor-pointer pr-2' onClick={toggleMuted}>
-              { volumeIcon }
-            </div>
-            <div className='relative' style={{width: 50}}>
-              <div
-                ref={volumeRef}
-                className='bg-gray-200 w-full'
-                style={{
-                  height: 5,
-                  borderRadius: 5 
-                }}
-              />
-              <div
-                style={{
-                  width: volumePercentage + '%',
-                  height: 5,
-                  borderRadius: 5 
-                }}
-                className={cn(
-                  'absolute top-0 left-0',
-                  {
-                    "w-gray-200": muted,
-                    'bg-blue-300': !muted
-                  }
-                )}
-              />
-              <div
-                className="w-full cursor-pointer bg-transparent absolute top-0"
-                style={{ height: 4 }}
-                onClick={(e) => { toggleVolume(volumeRef.current.getBoundingClientRect().left, e.clientX)} }
-              >
-            </div>
-            </div>
+        <MediaVolume 
+          volumePercentage={volumePercentage}
+          muted={muted}
+          toggleMuted={toggleMuted}
+          toggleVolume={toggleVolume}
+        />
+        { isVideo && (
+          <div className='cursor-pointer ml-4' onClick={requestFullscreen}>
+            <BsArrowsFullscreen color="#8B8E8F"/>
           </div>
-          { isVideo && (
-            <div className='cursor-pointer ml-4' onClick={requestFullscreen}>
-              <BsArrowsFullscreen color="#8B8E8F"/>
-            </div>
-          )}
+        )}
       </div>
     </div>   
   )
