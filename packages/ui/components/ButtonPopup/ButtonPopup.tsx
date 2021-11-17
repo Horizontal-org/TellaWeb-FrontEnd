@@ -14,6 +14,7 @@ type Props = {
   icon?: ReactNode;
   text: string;
   render?: (toggle: () => void) => ReactNode;
+  onClose?: () => void
 };
 
 export const ButtonPopup: FunctionComponent<PropsWithChildren<Props>> = ({
@@ -22,6 +23,7 @@ export const ButtonPopup: FunctionComponent<PropsWithChildren<Props>> = ({
   text,
   children,
   render,
+  onClose
 }) => {
   const [popupOpen, changePopupStatus] = useState(false);
 
@@ -40,10 +42,13 @@ export const ButtonPopup: FunctionComponent<PropsWithChildren<Props>> = ({
         overlayClassName={
           "flex bg-black bg-opacity-50 absolute inset-0 justify-center items-center"
         }
-        className="bg-white font-thin w-4/12 py-2 px-3 rounded shadow-xl text-gray-800"
+        className="bg-white font-thin w-4/12 py-4 px-3 rounded shadow-xl text-gray-800"
       >
         <div className="flex-start items-center">
-          <button type="button" onClick={togglePopup}>
+          <button type="button" onClick={() => {
+            togglePopup()
+            onClose && onClose()
+          }}>
             <MdClose className="text-gray-300" />
           </button>
         </div>
