@@ -5,13 +5,18 @@ import { FileView, ImageView } from "../../packages/ui"
 
 
 storiesOf("FileView", module)
-  .add("ImageView", () => (
-    <div className="w-24 h-24">
+  .add("VideoView", () => (
+    <div className="max-w-xs h-24">
       <FileView file={FilesMokedData[0]}/>
     </div>
   ))
+  .add("ImageView", () => (
+    <div className="max-w-xs h-screen">
+      <FileView file={FilesMokedData[1]}/>
+    </div>
+  ))
   .add("AudioView", () => (
-    <div className="w-24 h24">
-      <FileView file={FilesMokedData[0]}/>
+    <div className="max-w-xs h24">
+      <FileView file={FilesMokedData[2]}/>
     </div>
   ));

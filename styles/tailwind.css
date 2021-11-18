@@ -1267,6 +1267,14 @@ video {
   --tw-bg-opacity: 0.1;
 }
 
+.bg-cover {
+  background-size: cover;
+}
+
+.bg-center {
+  background-position: center;
+}
+
 .p-0 {
   padding: 0px;
 }
