@@ -30,7 +30,6 @@ export const Report = () => {
 
   useEffect(() => {
     if (!state) return;
-    console.log("query");
     setQuery({
       ...query,
       pagination: {

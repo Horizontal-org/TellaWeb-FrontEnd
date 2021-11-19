@@ -26,6 +26,8 @@ export { Table } from "./components/Table/Table";
 export { Thumbnail } from "./components/Thumbnail/Thumbnail";
 export { ToggleButtonsBar } from "./components/ToggleButtonsBar/ToggleButtonsBar";
 export { TopBar } from "./components/TopBar/TopBar";
+export { FileView } from "./components/FileView/FileView"
+export { ImageView } from "./components/ImageView/ImageView"
 
 export { LoginPage } from "./pages/LoginPage/LoginPage";
 export { ReportListPage } from "./pages/ReportListPage/ReportListPage";
