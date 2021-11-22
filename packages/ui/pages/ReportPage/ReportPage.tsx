@@ -18,6 +18,7 @@ import {
   ToggleButtonsBar,
   MainContent,
   LeftCollapsingSidebar,
+  FileView
 } from "../..";
 import { btnType } from "../../components/Button/Button";
 import { ButtonPopup } from "../../components/ButtonPopup/ButtonPopup";
@@ -36,8 +37,9 @@ export const ReportPage: FunctionComponent<Props> = ({
   onDeleteFile,
   onClose,
 }) => {
-  const [leftSidebarOpen, changeLeftSidebarOpneStatus] = useState(true);
-  const [rightSidebarOpen, changeRightSidebarOpneStatus] = useState(true);
+  const [leftSidebarOpen, changeLeftSidebarOpenStatus] = useState(true);
+  const [rightSidebarOpen, changeRightSidebarOpenStatus] = useState(true);
+
   const [current, setCurrent] = useState(1);
 
   const goNext = () => {
@@ -56,16 +58,22 @@ export const ReportPage: FunctionComponent<Props> = ({
     setCurrent(current - 1);
   };
 
-  const toggleLeftSideBar = () => changeLeftSidebarOpneStatus(!leftSidebarOpen);
-  const toggleRightSideBar = () => changeRightSidebarOpneStatus(!rightSidebarOpen);
+  const toggleLeftSideBar = () => changeLeftSidebarOpenStatus(!leftSidebarOpen);
+  const toggleRightSideBar = () => changeRightSidebarOpenStatus(!rightSidebarOpen);
 
   return (
     <div className="flex flex-grow min-h-screen">
       <LeftCollapsingSidebar collapsed={!leftSidebarOpen}>
         <ReportInformation report={report} />
         <div className="grid grid-cols-2 gap-2 mt-6">
-          {report.files.map((file) => (
-            <Thumbnail file={file} key={file.src.toString()} />
+          {report.files.map((file, index) => (
+            <Thumbnail 
+              file={file} 
+              key={file.src.toString()}
+              onClick={() => {
+                setCurrent(index + 1)
+              }} 
+            />
           ))}
         </div>
       </LeftCollapsingSidebar>
@@ -120,7 +128,7 @@ export const ReportPage: FunctionComponent<Props> = ({
 
         <MainContent>
           {report.files.length && (
-            <Thumbnail file={report.files[current - 1]} full />
+            <FileView file={report.files[current - 1]} />
           )}
         </MainContent>
       </div>
