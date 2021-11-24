@@ -19,7 +19,7 @@ export const Report = () => {
     pagination: {
       page: 1,
       total: 1,
-      size: 5,
+      size: 10,
     },
   });
 

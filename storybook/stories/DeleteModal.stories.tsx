@@ -1,10 +1,10 @@
 import { storiesOf } from "@storybook/react"
-import { DeleteModal } from "../../packages/ui"
+import { ButtonMenu, DeleteModal } from "../../packages/ui"
 import { action } from "@storybook/addon-actions"
 
 storiesOf("Delete modal", module).add("Delete modal", () => {
   return (
-    <div>
+    <ButtonMenu openSide="right">
       <DeleteModal 
         render={(
           <p>
@@ -13,6 +13,6 @@ storiesOf("Delete modal", module).add("Delete modal", () => {
         )}
         onDelete={() => action(`Delete`)('Delete something')}
       />    
-    </div>
+    </ButtonMenu>
   );
 });

@@ -1,5 +1,5 @@
 import { FunctionComponent, useState, useRef } from 'react'
-import { ButtonPopup } from '../ButtonPopup/ButtonPopup'
+import { DeletePopup } from './DeletePopup'
 import { btnType, Button } from '../Button/Button'
 import { TextInput } from '../Inputs/TextInput/TextInput';
 import { MdDelete } from "@react-icons/all-files/md/MdDelete";
@@ -15,7 +15,8 @@ export const DeleteModal: FunctionComponent<Props> = ({ render, onDelete }) => {
   const [canDelete, handleCanDelete] = useState(false)
 
   return (
-    <ButtonPopup
+    <DeletePopup
+      color="#D6933B"    
       icon={<MdDelete />}
       text="Delete"
       onClose={() => {

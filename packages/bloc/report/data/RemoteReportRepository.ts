@@ -11,7 +11,7 @@ export class RemoteReportRepository implements ReportRepository {
   }
 
   async list(
-    limit: number = 5,
+    limit: number = 10,
     offset: number = 0
   ): Promise<Either<DataError, Pagination<Report>>> {
     return this.api.get<Pagination<Report>>(
