@@ -4,6 +4,7 @@ import { Column, useTable, useRowSelect, useSortBy } from "react-table";
 import cn from "classnames";
 import { MdExpandMore } from "@react-icons/all-files/md/MdExpandMore";
 import { MdExpandLess } from "@react-icons/all-files/md/MdExpandLess";
+import { FaRegFolder } from "@react-icons/all-files/fa/FaRegFolder";
 import { IndeterminateCheckbox } from "./IndeterminateCheckbox";
 import { Item } from "../../domain/Item";
 import { ItemQuery } from "../../domain/ItemQuery";
@@ -46,14 +47,26 @@ export const Table: FunctionComponent<Props> = ({
       hooks.visibleColumns.push((col) => [
         {
           id: "selection",
-          Header: "",
-          className: "max-w-content text-center p-2",
-          // eslint-disable-next-line react/display-name
-          Cell: ({ row }) => (
-            <div>
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+          Header: ({ getToggleAllRowsSelectedProps }) => (
+            <div className='flex justify-center w-full'>
+              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
             </div>
           ),
+          className: "max-w-content text-center p-2",
+          // eslint-disable-next-line react/display-name
+          Cell: ({ row }) => {
+            return (
+              <div className='flex justify-center'>
+                <div style={{width: 20}}>
+                  { row.isSelected ? (
+                    <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+                  ) : (
+                    <FaRegFolder size={14} color="#8B8E8F"/>
+                  )}
+                </div>
+              </div>
+            )
+          },
         },
         ...col,
       ]);
@@ -73,13 +86,15 @@ export const Table: FunctionComponent<Props> = ({
       }`}
     >
       <thead className="border-b border-gray-200">
-        {headerGroups.map((headerGroup) => (
+        {headerGroups.map((headerGroup, i) => (
           <tr
+            key={i}
             {...headerGroup.getHeaderGroupProps()}
             className="rounded-lg text-base font-sans text-gray-300 text-left"
           >
-            {headerGroup.headers.map((column) => (
+            {headerGroup.headers.map((column, j) => (
               <th
+                key={j}
                 {...column.getHeaderProps([
                   {
                     className: `${column.className} font-semibold text-base`,
@@ -106,10 +121,12 @@ export const Table: FunctionComponent<Props> = ({
         ))}
       </thead>
       <tbody {...getTableBodyProps()} className="text-base text-gray-700">
-        {rows.map((row) => {
+        {rows.map((row, i) => {
           prepareRow(row);
           return (
             <tr
+              key={i}
+              onClick={() => { row.toggleRowSelected() }}
               {...row.getRowProps()}
               className={cn(
                 "border-b border-gray-200 hover:border-transparent",
@@ -119,9 +136,10 @@ export const Table: FunctionComponent<Props> = ({
                 }
               )}
             >
-              {row.cells.map((cell) => {
+              {row.cells.map((cell, j) => {
                 return (
                   <td
+                    key={j}
                     {...cell.getCellProps([
                       { className: cell.column.className || "px-3 py-3" },
                     ])}
