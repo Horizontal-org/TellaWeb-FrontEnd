@@ -1,7 +1,11 @@
-import { SortingRule } from "react-table";
+// import { SortingRule } from "react-table";
 
 export type ItemQuery = {
-  sort: SortingRule<object>[];
+  sort: {
+    key: string
+    order: string
+  },
+  search?: string,
   filter: {
     byName?: string;
   };

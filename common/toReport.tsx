@@ -1,6 +1,6 @@
 export const toReport = (report: any) => ({
   ...report,
-  date: Date.now(),
+  date: new Date(report.createdAt),
   name: report.title,
   files: report.files.map((file: any) => ({
     ...file,

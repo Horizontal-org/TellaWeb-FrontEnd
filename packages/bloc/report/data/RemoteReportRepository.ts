@@ -1,5 +1,6 @@
 import { ApiDataFetcher, DataError, Either, Pagination } from "../../common";
 import { Report, ReportRepository } from "../domain";
+import { ItemQuery } from '../../../ui'
 
 export class RemoteReportRepository implements ReportRepository {
   private url = "/report";
@@ -10,12 +11,9 @@ export class RemoteReportRepository implements ReportRepository {
     return this.api.get<Report>(`${this.url}/${reportId}`);
   }
 
-  async list(
-    limit: number = 5,
-    offset: number = 0
-  ): Promise<Either<DataError, Pagination<Report>>> {
+  async list(query: ItemQuery): Promise<Either<DataError, Pagination<Report>>> {
     return this.api.get<Pagination<Report>>(
-      `${this.url}?limit=${limit}&offset=${offset}`
+      `${this.url}?limit=${query.pagination.size}&offset=${query.pagination.page * query.pagination.size}&sort=${query.sort.key}&order=${query.sort.order}&search=${query.search}`
     );
   }
 

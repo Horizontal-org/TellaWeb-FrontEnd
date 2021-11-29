@@ -14,18 +14,22 @@ export const Report = () => {
   const state = usePlocState(reportPloc);
 
   const [query, setQuery] = useState<ItemQuery>({
-    sort: [],
+    sort: {
+      key: '',
+      order: ''
+    },
+    search: '',
     filter: {},
     pagination: {
-      page: 1,
+      page: 0,
       total: 1,
-      size: 5,
+      size: 3,
     },
   });
 
   const loadReports = (newQuery: ItemQuery) => {
     setQuery(newQuery);
-    reportPloc.list();
+    reportPloc.list(newQuery);
   };
 
   useEffect(() => {
@@ -42,7 +46,7 @@ export const Report = () => {
   }, [state]);
 
   useEffect(() => {
-    reportPloc.list();
+    reportPloc.list(query);
   }, []);
 
   return (
