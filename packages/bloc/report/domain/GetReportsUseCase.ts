@@ -1,12 +1,12 @@
 import { ReportRepository } from "./ReportRepository";
 import { Report } from "./Report";
+import { ReportQuery } from "./ReportQuery";
 import { Either, DataError, Pagination } from "../../common";
-import { ItemQuery } from "../../../ui";
 
 export class GetReportsUseCase {
   constructor(private reportRepository: ReportRepository) {}
 
-  execute(query: ItemQuery): Promise<Either<DataError, Pagination<Report>>> {
+  execute(query?: ReportQuery): Promise<Either<DataError, Pagination<Report>>> {
     return this.reportRepository.list(query);
   }
 }

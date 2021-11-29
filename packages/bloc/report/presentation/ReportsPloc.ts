@@ -2,6 +2,7 @@ import { ItemQuery } from "../../../ui";
 import { DataError, Ploc, UnexpectedError } from "../../common";
 import { GetReportsUseCase, LoadReportByIdUseCase } from "../domain";
 import { DeleteReportByIdUseCase } from "../domain/DeleteReportByIdUseCase";
+import { ReportQuery } from "../domain/ReportQuery";
 import { addThumbnail } from "../utils/addThumbnail";
 import { reportsInitialState, ReportsState } from "./ReportsState";
 
@@ -14,7 +15,7 @@ export class ReportsPloc extends Ploc<ReportsState> {
     super(reportsInitialState);
   }
 
-  async list(query: ItemQuery) {
+  async list(query?: ItemQuery) {
     const reportsResult = await this.getReportsUseCase.execute(this.prepareQuery(query));
 
     reportsResult.fold(
@@ -40,31 +41,32 @@ export class ReportsPloc extends Ploc<ReportsState> {
     );
   }
 
-  async delete(reportId: string, query: ItemQuery) {
+  async delete(reportId: string) {
     const deleteResult = await this.deleteReporByIdUseCase.execute(reportId);
     deleteResult.fold(
       (error) => this.changeState(this.handleError(error)),
       () => {
-        this.list(query);
+        this.list();
       }
     );
   }
 
-  private prepareQuery(query: ItemQuery) {
+  private prepareQuery (query: ItemQuery): ReportQuery {
     const parsedKey = {
       'Name': 'report.title',    
       'Date': 'report.createdAt'
     }
 
     const newQuery = {
-      ...query,
-      sort: {
-        order: query.sort.order,
-        key: parsedKey[query.sort.key] || ''
-      }
+      search: query.search,
+      sortKey: parsedKey[query.sort.key] || '',
+      sortOrder: query.sort.order,
+      page: query.pagination.page,
+      total: query.pagination.total,
+      size: query.pagination.size,
     }
-
-    return newQuery
+    
+    return newQuery 
   } 
 
   private handleError(error: DataError): ReportsState {
