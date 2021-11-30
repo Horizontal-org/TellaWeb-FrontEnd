@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { FunctionComponent, useEffect, useMemo } from "react";
-import { Column, useTable, useRowSelect, useSortBy } from "react-table";
+import { Column, useTable, useRowSelect, useSortBy, usePagination } from "react-table";
 import cn from "classnames";
 import { MdExpandMore } from "@react-icons/all-files/md/MdExpandMore";
 import { MdExpandLess } from "@react-icons/all-files/md/MdExpandLess";
@@ -8,6 +8,7 @@ import { FaRegFolder } from "@react-icons/all-files/fa/FaRegFolder";
 import { IndeterminateCheckbox } from "./IndeterminateCheckbox";
 import { Item } from "../../domain/Item";
 import { ItemQuery } from "../../domain/ItemQuery";
+import { Paginator } from "./Paginator";
 
 type Props = {
   columns: Array<Column>;
@@ -33,15 +34,30 @@ export const Table: FunctionComponent<Props> = ({
     rows,
     prepareRow,
     selectedFlatRows,
+    //pagination
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
     state: { selectedRowIds, pageIndex, pageSize },
   } = useTable(
     {
       columns: tColumns,
       data: tData,
       manualPagination: true,
+      initialState: { pageIndex: 0, pageSize: itemQuery.pagination.size },
       autoResetPage: false,
-      pageCount: itemQuery.pagination.total / itemQuery.pagination.size,
+      pageCount: Math.floor(itemQuery.pagination.total / itemQuery.pagination.size) + 1,
+      manualSortBy: true,
+      disableMultiSort: true,
     },
+    useSortBy,
+    usePagination,
     useRowSelect,
     (hooks) => {
       hooks.visibleColumns.push((col) => [
@@ -78,81 +94,117 @@ export const Table: FunctionComponent<Props> = ({
     onSelection(r);
   }, [selectedRowIds, onSelection]);
 
+  useEffect(() => {
+    onFetch({
+      ...itemQuery,
+      pagination: {
+        total: itemQuery.pagination.total,
+        size: pageSize,
+        page: pageIndex
+      }
+    })
+  }, [pageIndex, pageSize])
+
   return (
-    <table
-      {...getTableProps()}
-      className={`table-auto border-collapse w-full ${
-        getTableProps().className
-      }`}
-    >
-      <thead className="border-b border-gray-200">
-        {headerGroups.map((headerGroup, i) => (
-          <tr
-            key={i}
-            {...headerGroup.getHeaderGroupProps()}
-            className="rounded-lg text-base font-sans text-gray-300 text-left"
-          >
-            {headerGroup.headers.map((column, j) => (
-              <th
-                key={j}
-                {...column.getHeaderProps([
-                  {
-                    className: `${column.className} font-semibold text-base`,
-                  },
-                ])}
-              >
-                <div className="flex flex-row">
-                  {column.render("Header")}
-                  <span>
-                    {column.isSorted ? (
-                      column.isSortedDesc ? (
-                        <MdExpandMore />
-                      ) : (
-                        <MdExpandLess />
-                      )
-                    ) : (
-                      ""
-                    )}
-                  </span>
-                </div>
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()} className="text-base text-gray-700">
-        {rows.map((row, i) => {
-          prepareRow(row);
-          return (
+    <>
+      <table
+        {...getTableProps()}
+        className={`table-auto border-collapse w-full ${
+          getTableProps().className
+        }`}
+      >
+        <thead className="border-b border-gray-200">
+          {headerGroups.map((headerGroup, i) => (
             <tr
               key={i}
-              onClick={() => { row.toggleRowSelected() }}
-              {...row.getRowProps()}
-              className={cn(
-                "border-b border-gray-200 hover:border-transparent",
-                {
-                  "bg-blue-light": row.isSelected,
-                  "hover:bg-gray-200": !row.isSelected,
-                }
-              )}
+              {...headerGroup.getHeaderGroupProps()}
+              className="rounded-lg text-base font-sans text-gray-300 text-left"
             >
-              {row.cells.map((cell, j) => {
-                return (
-                  <td
-                    key={j}
-                    {...cell.getCellProps([
-                      { className: cell.column.className || "px-3 py-3" },
-                    ])}
-                  >
-                    {cell.render("Cell")}
-                  </td>
-                );
-              })}
+              {headerGroup.headers.map((column, j) => (
+                <th
+                  key={j}
+                  {...column.getHeaderProps([
+                    {
+                      className: `${column.className} font-semibold text-base`,
+                    },
+                    column.getSortByToggleProps()
+                  ])}
+                  onClick={() => {
+                    onFetch({
+                      ...itemQuery,
+                      sort: {
+                        key: column.Header,
+                        order: column.isSortedDesc ? 'asc' : 'desc'
+                      },
+                    })
+                    column.toggleSortBy(!column.isSortedDesc)
+                  }}
+                >
+                  <div className="flex flex-row">
+                    {column.render("Header")}
+                    <span className='pl-2'>
+                      {column.isSorted ? (
+                        column.isSortedDesc ? (
+                          <MdExpandMore />
+                        ) : (
+                          <MdExpandLess />
+                        )
+                      ) : (
+                        ""
+                      )}
+                    </span>
+                  </div>
+                </th>
+              ))}
             </tr>
-          );
-        })}
-      </tbody>
-    </table>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()} className="text-base text-gray-700">
+          {rows.map((row, i) => {
+            prepareRow(row);
+            return (
+              <tr
+                key={i}
+                onClick={() => { row.toggleRowSelected() }}
+                {...row.getRowProps()}
+                className={cn(
+                  "border-b border-gray-200 hover:border-transparent",
+                  {
+                    "bg-blue-light": row.isSelected,
+                    "hover:bg-gray-200": !row.isSelected,
+                  }
+                )}
+              >
+                {row.cells.map((cell, j) => {
+                  return (
+                    <td
+                      key={j}
+                      {...cell.getCellProps([
+                        { className: cell.column.className || "px-3 py-3" },
+                      ])}
+                    >
+                      {cell.render("Cell")}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+
+      <Paginator 
+        gotoPage={gotoPage}
+        previousPage={previousPage}
+        nextPage={nextPage}
+        canNextPage={canNextPage}
+        canPreviousPage={canPreviousPage}
+        pageCount={pageCount}
+        pageIndex={pageIndex}
+        pageTotal={pageOptions.length}
+      />
+      
+    </>
   );
 };
 
