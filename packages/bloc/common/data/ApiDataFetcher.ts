@@ -6,6 +6,7 @@ import {
   NetworkError,
   UnauthorizedError,
   UnexpectedError,
+  NotFoundError
 } from "../domain";
 
 type Method = "GET" | "POST" | "DELETE" | "PUT";
@@ -43,6 +44,11 @@ export class ApiDataFetcher {
           case 401:
             return Either.left(
               new UnauthorizedError(new Error(response.statusText))
+            );
+
+          case 404:
+            return Either.left(
+              new NotFoundError(new Error(response.statusText))
             );
 
           default:

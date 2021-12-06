@@ -9,4 +9,8 @@ export class RemoteUserRepository implements UserRepository {
   async getProfile(): Promise<Either<DataError, User>> {
     return this.api.get<User>(`${this.url}`);
   }
+
+  async validateEmail(email: string): Promise<Either<DataError, User>> {
+    return this.api.get(`${this.url}/${email}`)
+  }
 }

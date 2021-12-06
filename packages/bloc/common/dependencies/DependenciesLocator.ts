@@ -1,5 +1,7 @@
 import {
   AuthPloc,
+  UserPloc,
+  ValidateEmailUseCase,
   LoginUserUseCase,
   LogoutUserUseCase,
   RemoteUserRepository,
@@ -23,7 +25,7 @@ import { DeleteReportByIdUseCase } from "../../report/domain/DeleteReportByIdUse
 
 const BASE_URL = (process.env.BASE_URL = "http://localhost:3000");
 
-function priovideDataFetcher(url: string = BASE_URL) {
+function provideDataFetcher(url: string = BASE_URL) {
   const loginDataFetcher = new ApiDataFetcher(url);
   const tokenGenerator = new JWTTokenGenerator(loginDataFetcher);
   const credentialRepositroy = new InMemoryCredentailRepository(tokenGenerator);
@@ -33,7 +35,7 @@ function priovideDataFetcher(url: string = BASE_URL) {
 }
 
 function provideAuthPloc(url: string = BASE_URL): AuthPloc {
-  const { dataFetcher, credentialRepositroy } = priovideDataFetcher(url);
+  const { dataFetcher, credentialRepositroy } = provideDataFetcher(url);
   const userRepository = new RemoteUserRepository(dataFetcher);
   const loginUserUseCase = new LoginUserUseCase(
     credentialRepositroy,
@@ -45,8 +47,17 @@ function provideAuthPloc(url: string = BASE_URL): AuthPloc {
   return authPloc;
 }
 
+function provideUserPloc(url: string = BASE_URL): UserPloc {
+  const { dataFetcher } = provideDataFetcher(url)
+  const userRepository = new RemoteUserRepository(dataFetcher)
+  const validateEmailUseCase = new ValidateEmailUseCase(userRepository)
+
+  const usersPloc = new UserPloc(validateEmailUseCase)
+  return usersPloc
+}
+
 function provideReportPloc(url: string = BASE_URL): ReportsPloc {
-  const { dataFetcher } = priovideDataFetcher(url);
+  const { dataFetcher } = provideDataFetcher(url);
   const reportRepository = new RemoteReportRepository(dataFetcher);
   const getReportsUseCase = new GetReportsUseCase(reportRepository);
   const loadReportByIdUseCase = new LoadReportByIdUseCase(reportRepository);
@@ -60,7 +71,7 @@ function provideReportPloc(url: string = BASE_URL): ReportsPloc {
 }
 
 function provideFilePloc(url: string = BASE_URL): FilePloc {
-  const { dataFetcher } = priovideDataFetcher(url);
+  const { dataFetcher } = provideDataFetcher(url);
   const fileRepository = new RemoteFileRepository(dataFetcher);
   const downloadAllReportFiles = new DownloadAllReportFilesUseCase(
     fileRepository
@@ -79,4 +90,5 @@ export const dependenciesLocator = {
   provideAuthPloc,
   provideReportPloc,
   provideFilePloc,
+  provideUserPloc
 };

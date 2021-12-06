@@ -13,4 +13,9 @@ export class NetworkError {
   constructor(public message: Error) {}
 }
 
-export type DataError = UnexpectedError | UnauthorizedError | NetworkError;
+export class NotFoundError {
+  public kind = "NotFoundError";
+  constructor(public message: Error) {}
+}
+
+export type DataError = UnexpectedError | UnauthorizedError | NetworkError | NotFoundError;

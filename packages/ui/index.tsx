@@ -28,6 +28,7 @@ export { ToggleButtonsBar } from "./components/ToggleButtonsBar/ToggleButtonsBar
 export { TopBar } from "./components/TopBar/TopBar";
 export { FileView } from "./components/FileView/FileView"
 export { ImageView } from "./components/ImageView/ImageView"
+export { TextInput } from './components/TextInput/TextInput'
 
 export { LoginPage } from "./pages/LoginPage/LoginPage";
 export { ReportListPage } from "./pages/ReportListPage/ReportListPage";

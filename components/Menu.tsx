@@ -2,6 +2,9 @@ import { useRouter } from "next/dist/client/router";
 import { FunctionComponent } from "react";
 import { SidebarLayout } from "packages/ui";
 
+import { MdOutlineSettings } from 'react-icons/md'
+import { BsFillCloudArrowUpFill } from 'react-icons/bs'
+
 export const Menu: FunctionComponent = () => {
   const router = useRouter();
 
@@ -10,7 +13,7 @@ export const Menu: FunctionComponent = () => {
       topMenu={[
         {
           text: "Reports",
-          icon: null,
+          icon: <BsFillCloudArrowUpFill />,
           onClick: () => router.replace("/report"),
           selected: router.route.includes("/report"),
         },
@@ -28,7 +31,14 @@ export const Menu: FunctionComponent = () => {
           selected: router.route.includes("/configuration"),
         },
       ]}
-      bottomMenu={[]}
+      bottomMenu={[
+        {
+          text: "Settings",
+          icon: <MdOutlineSettings />,
+          onClick: () => router.replace("/settings"),
+          selected: router.route.includes("/settings"),
+        }
+      ]}
     />
   );
 };
