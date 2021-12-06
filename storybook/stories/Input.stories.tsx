@@ -29,6 +29,7 @@ storiesOf("Inputs", module).add("Seatch input", () => {
   );
 });
 
+
 storiesOf("Inputs", module).add("Text input", () => {
   const textRef = useRef<HTMLInputElement>();
   return (

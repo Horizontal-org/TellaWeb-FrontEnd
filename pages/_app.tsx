@@ -3,6 +3,7 @@ import "../styles/tailwind.css";
 import type { AppProps } from "next/app";
 import { dependenciesLocator as plocs } from "packages/bloc";
 import { createContext } from "../common/Context";
+import { ToastWrapper } from '../components/ToastWrapper'
 
 const ploc = {
   auth: plocs.provideAuthPloc(process.env.NEXT_PUBLIC_API_URL),
@@ -16,7 +17,9 @@ export const [blocContext, usePloc] = createContext<typeof ploc>();
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <blocContext.Provider value={ploc}>
-      <Component {...pageProps} />
+      <ToastWrapper>
+        <Component {...pageProps} />
+      </ToastWrapper>
     </blocContext.Provider>
   );
 }

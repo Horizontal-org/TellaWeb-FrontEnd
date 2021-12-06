@@ -5,6 +5,7 @@ import "@fontsource/open-sans/300.css";
 import "../styles/globals.css";
 import "../styles/tailwind.css";
 import * as NextImage from "next/image";
+import { ToastWrapper } from '../components/ToastWrapper'
 
 const OriginalNextImage = NextImage.default;
 
@@ -18,3 +19,11 @@ Object.defineProperty(NextImage, "default", {
     />
   ),
 });
+
+export const decorators = [
+  (Story) => (
+    <ToastWrapper>
+      <Story />
+    </ToastWrapper>
+  ),
+];

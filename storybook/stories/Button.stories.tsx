@@ -24,6 +24,18 @@ storiesOf("Buttons", module)
       </div>
     </div>
   ))
+  .add("Danger Buttons", () => (
+    <div className="flex flex-col items-start">
+      <h3 style={titleStyle} className="text-xl py-4">
+        Danger Button
+      </h3>
+      <div className="flex items-start space-x-4 ">
+        <Button text="Preview" icon={<MdRemoveRedEye />} type={btnType.Danger} />
+        <Button text="..." type={btnType.Danger}/>
+        <Button text="Preview" icon={<MdRemoveRedEye />} disabled type={btnType.Danger} />
+      </div>
+    </div>
+  ))
   .add("Secondary Buttons", () => (
     <div className="flex flex-col items-start">
       <h3 style={titleStyle} className="text-xl py-4">
