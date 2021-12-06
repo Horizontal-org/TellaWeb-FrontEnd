@@ -24,7 +24,6 @@ export const ReportById = () => {
         if (file) {
           filePloc.delete(file)
           handleToast('File deleted')
-          // handleFileState
         }
       }}
       onDeleteReport={(report) => {

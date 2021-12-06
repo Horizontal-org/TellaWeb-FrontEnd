@@ -5,6 +5,7 @@ import {
   SetStateAction,
   useRef,
   useState,
+  ChangeEvent
 } from "react";
 
 import { MdOpenInNew } from "@react-icons/all-files/md/MdOpenInNew";
@@ -55,20 +56,20 @@ export const ReportListPage: FunctionComponent<Props> = ({
   const [selectedReports, setSelectedReports] = useState<Report[]>([]);
 
   const searchInput = useRef<HTMLInputElement>();
+  let searchTimeout = null
 
   const openReport = () => {
     setCurrentReport(selectedReports[0]);
   };
 
-  const search = (e: FormEvent<HTMLFormElement>) => {
+  const search = (e: FormEvent<HTMLFormElement> | ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const name = searchInput.current.value;
-    ({
+
+    onQueryChange({
       ...currentQuery,
-      filter: {
-        byName: name,
-      },
-    });
+      search: name
+    })
   };
 
   return (
@@ -81,8 +82,14 @@ export const ReportListPage: FunctionComponent<Props> = ({
             {selectedReports.length === 0 && (
               <form onSubmit={search} className="flex">
                 <SearchInput
+                  onChange={(e) => {
+                    clearTimeout(searchTimeout)
+                    searchTimeout = setTimeout(() => {
+                      search(e)
+                    }, 500)
+                  }}
                   ref={searchInput}
-                  defaultValue={currentQuery.filter?.byName}
+                  defaultValue={currentQuery.search}
                 />
               </form>
             )}

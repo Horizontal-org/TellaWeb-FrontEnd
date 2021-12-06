@@ -1,6 +1,8 @@
+import { ItemQuery } from "../../../ui";
 import { DataError, Ploc, UnexpectedError } from "../../common";
 import { GetReportsUseCase, LoadReportByIdUseCase } from "../domain";
 import { DeleteReportByIdUseCase } from "../domain/DeleteReportByIdUseCase";
+import { ReportQuery } from "../domain/ReportQuery";
 import { addThumbnail } from "../utils/addThumbnail";
 import { reportsInitialState, ReportsState } from "./ReportsState";
 
@@ -13,8 +15,8 @@ export class ReportsPloc extends Ploc<ReportsState> {
     super(reportsInitialState);
   }
 
-  async list() {
-    const reportsResult = await this.getReportsUseCase.execute();
+  async list(query?: ItemQuery) {
+    const reportsResult = await this.getReportsUseCase.execute(this.prepareQuery(query));
 
     reportsResult.fold(
       (error) => this.changeState(this.handleError(error)),
@@ -48,6 +50,24 @@ export class ReportsPloc extends Ploc<ReportsState> {
       }
     );
   }
+
+  private prepareQuery (query: ItemQuery): ReportQuery {
+    const parsedKey = {
+      'Name': 'report.title',    
+      'Date': 'report.createdAt'
+    }
+
+    const newQuery = {
+      search: query.search,
+      sortKey: parsedKey[query.sort.key] || '',
+      sortOrder: query.sort.order,
+      page: query.pagination.page,
+      total: query.pagination.total,
+      size: query.pagination.size,
+    }
+    
+    return newQuery 
+  } 
 
   private handleError(error: DataError): ReportsState {
     switch (error.kind) {

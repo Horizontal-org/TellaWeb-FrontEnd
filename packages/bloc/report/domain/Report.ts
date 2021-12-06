@@ -7,4 +7,5 @@ export interface Report {
   description: string;
   author: User;
   files: File[];
+  createdAt: string;
 }
