@@ -22,6 +22,7 @@ import {
 } from "../..";
 import { btnType } from "../../components/Button/Button";
 import { ButtonPopup } from "../../components/ButtonPopup/ButtonPopup";
+import { DeleteModal } from '../../components/DeleteModal/DeleteModal'
 
 type Props = {
   report: Report;
@@ -40,7 +41,6 @@ export const ReportPage: FunctionComponent<Props> = ({
   const [rightSidebarOpen, changeRightSidebarOpenStatus] = useState(true);
 
   const [current, setCurrent] = useState(1);
-  const deleteModalRef = useRef<typeof ButtonPopup>(null);
 
   const goNext = () => {
     if (current === report.files.length) {
@@ -59,8 +59,7 @@ export const ReportPage: FunctionComponent<Props> = ({
   };
 
   const toggleLeftSideBar = () => changeLeftSidebarOpenStatus(!leftSidebarOpen);
-  const toggleRightSideBar = () =>
-  changeRightSidebarOpenStatus(!rightSidebarOpen);
+  const toggleRightSideBar = () => changeRightSidebarOpenStatus(!rightSidebarOpen);
 
   return (
     <div className="flex flex-grow min-h-screen">
@@ -104,30 +103,14 @@ export const ReportPage: FunctionComponent<Props> = ({
               text="Download file"
             />
             <ButtonMenu openSide="right" type={btnType.Secondary} text="...">
-              <ButtonPopup
-                icon={<MdDelete />}
-                text="Delete"
-                render={(toggle) => (
-                  <>
-                    <p>
-                      Are you sure you want to delete the file? <br />
-                      <strong>
-                        {report.files[current - 1].fileName} will be permanently
-                        deleted.
-                      </strong>
-                    </p>
-                    <div className="flex justify-end">
-                      <Button
-                        text={"Confirm"}
-                        onClick={() => {
-                          toggle();
-                          onDeleteFile(report, report.files[current - 1]);
-                        }}
-                      />
-                    </div>
-                  </>
+              <DeleteModal 
+                render={(
+                  <p>
+                    {report.files[current - 1].fileName} will be permanently deleted.
+                  </p>
                 )}
-              />
+                onDelete={() => onDeleteFile(report, report.files[current - 1])}
+              />              
             </ButtonMenu>
           </div>
           <div className="flex space-x-4 mb-2 px-4 py-2 items-center">
@@ -160,26 +143,14 @@ export const ReportPage: FunctionComponent<Props> = ({
 
       <TopBar title={report.title} onClose={onClose}>
         <ButtonMenu openSide="left">
-          <ButtonPopup
-            icon={<MdDelete />}
-            text="Delete"
-            render={(toggle) => (
-              <>
-                <p>
-                  Are you sure you want to delete the report? <br />
-                  <strong>All files will be permanently deleted.</strong>
-                </p>
-                <div className="flex justify-end">
-                  <Button
-                    text={"Confirm"}
-                    onClick={() => {
-                      toggle();
-                      onDeleteReport(report);
-                    }}
-                  />
-                </div>
-              </>
+          <DeleteModal 
+            render={(
+              <p>
+                Are you sure you want to delete the report? <br />
+                <strong>All files will be permanently deleted.</strong>
+              </p>
             )}
+            onDelete={() => onDeleteReport(report)}
           />
         </ButtonMenu>
         <Button icon={<MdRemoveRedEye />} text="Preview" />
