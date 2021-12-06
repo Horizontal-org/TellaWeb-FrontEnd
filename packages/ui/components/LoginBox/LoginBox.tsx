@@ -1,4 +1,5 @@
 import { FunctionComponent, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 type Credential = {
   username: string;
@@ -18,6 +19,8 @@ export const LoginBox: FunctionComponent<Props> = ({
     username: "",
     password: "",
   });
+
+  const { t } = useTranslation("login");
 
   return (
     <form
@@ -39,13 +42,13 @@ export const LoginBox: FunctionComponent<Props> = ({
           clipRule="evenodd"
         />
       </svg>
-      <p className="mb-5 text-3xl uppercase text-gray-600">Login</p>
+      <p className="mb-5 text-3xl uppercase text-gray-600">{t("title")}</p>
       <input
         type="text"
         name="username"
         className="mb-5 p-3 w-80 focus:border-blue-700 rounded border-2 outline-none"
         value={credentail.username}
-        placeholder="Username"
+        placeholder={t("username")}
         onChange={(e) => {
           setCredentail({ ...credentail, username: e.target.value });
         }}
@@ -56,7 +59,7 @@ export const LoginBox: FunctionComponent<Props> = ({
         value={credentail.password}
         name="password"
         className="mb-5 p-3 w-80 focus:border-blue-700 rounded border-2 outline-none"
-        placeholder="Password"
+        placeholder={t("password")}
         onChange={(e) => {
           setCredentail({ ...credentail, password: e.target.value });
         }}
@@ -67,14 +70,14 @@ export const LoginBox: FunctionComponent<Props> = ({
         id="login"
         type={"submit"}
       >
-        <span>Login</span>
+        <span>{t("login.btn")}</span>
       </button>
       {errorMessage && (
         <div
           className="w-full p-2 mt-4 mb-4 bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200"
           role="alert"
         >
-          {errorMessage}
+          {t(errorMessage)}
         </div>
       )}
     </form>

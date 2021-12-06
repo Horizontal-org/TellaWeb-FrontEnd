@@ -1,0 +1,7 @@
+{
+    "title": "Inicio de sesión",
+    "username": "Usuario",
+    "password": "Contraseña",
+    "login.btn": "Ingresar",
+    "error.invalid": "Disculpa, tu usuario o contraseña son incorrectos."
+}

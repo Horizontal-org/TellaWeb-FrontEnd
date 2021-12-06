@@ -1,0 +1,7 @@
+{
+    "title": "Login",
+    "username": "Username",
+    "password": "Password",
+    "login.btn": "Login",
+    "error.invalid": "Sorry, invalid username or password"
+}
