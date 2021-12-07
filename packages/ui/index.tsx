@@ -11,6 +11,7 @@ export { ConfigSelectOption } from "./components/ConfigSelect/ConfigSelectOption
 export { ConfigurationInformation } from "./components/ConfigurationInformation/ConfigurationInformation";
 export { ConfigurationPanel } from "./components/ConfigurationPanel/ConfigurationPanel";
 export { Title, SubTitle } from "./components/Headers/Headers";
+export { TextInput } from './components/Inputs/TextInput/TextInput'
 export { SearchInput } from "./components/Inputs/SearchInput/SearchInput";
 export { ItemInformation } from "./components/ItemInformation/ItemInformation";
 export { MainContent } from "./components/MainContent/MainContent";
@@ -26,6 +27,7 @@ export { Table } from "./components/Table/Table";
 export { Thumbnail } from "./components/Thumbnail/Thumbnail";
 export { ToggleButtonsBar } from "./components/ToggleButtonsBar/ToggleButtonsBar";
 export { TopBar } from "./components/TopBar/TopBar";
+export { DeleteModal } from './components/DeleteModal/DeleteModal'
 export { FileView } from "./components/FileView/FileView"
 export { ImageView } from "./components/ImageView/ImageView"
 

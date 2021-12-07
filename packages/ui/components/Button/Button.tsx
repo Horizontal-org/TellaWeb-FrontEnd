@@ -4,6 +4,7 @@ import cn from "classnames";
 export enum btnType {
   "Primary",
   "Secondary",
+  "Danger"
 }
 
 interface Props {
@@ -30,8 +31,9 @@ export const Button: FunctionComponent<Props> = ({
     {
       "text-white bg-blue-300 hover:bg-blue-400": type === btnType.Primary,
       "text-gray-300 bg-white hover:bg-gray-50": type === btnType.Secondary,
+      "text-white bg-red-600 hover:bg-red-700": type === btnType.Danger,
       "cursor-not-allowed": disabled === true,
-      "flex-1 w-100 flex-col": full,
+      "flex-1 w-full flex-col": full,
     }
   );
 
