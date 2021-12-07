@@ -20,6 +20,7 @@ import {
   ButtonMenu,
   ButtonOption,
   SearchInput,
+  DeleteModal
 } from "../..";
 import { btnType } from "../../components/Button/Button";
 
@@ -121,12 +122,14 @@ export const ReportListPage: FunctionComponent<Props> = ({
                   text="Download"
                 />
                 <ButtonMenu openSide="right">
-                  <ButtonOption
-                    icon={<MdDelete />}
-                    text="Delete"
-                    color="#D6933B"
-                    onClick={() => onDelete(selectedReports)}
-                  />
+                  <DeleteModal 
+                    render={(
+                      <p>
+                        the selected reports will be permanently deleted.
+                      </p>
+                    )}
+                    onDelete={() => onDelete(selectedReports)}
+                  />  
                 </ButtonMenu>
               </>
             )}

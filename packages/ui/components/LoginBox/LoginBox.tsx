@@ -1,5 +1,7 @@
-import { FunctionComponent, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { FunctionComponent, useState, useEffect } from "react";
+import logo from '../../assets/tella-logo.png'
+import Img from "next/image";
+import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai'
 
 type Credential = {
   username: string;
@@ -19,67 +21,99 @@ export const LoginBox: FunctionComponent<Props> = ({
     username: "",
     password: "",
   });
+  const [message, handleMessage] = useState<string>('')
+  const [canSubmit, handleCanSubmit] = useState<boolean>(false)
+  const [showPass, handleShowPass] = useState<boolean>(false)
 
-  const { t } = useTranslation("login");
+  useEffect(() => {
+    if (message.length > 0) {
+      handleMessage('')
+    }
+    
+    const auxCanSubmit = credentail.username.length > 0 && credentail.password.length > 0
+    if (auxCanSubmit !== canSubmit) {
+      handleCanSubmit(auxCanSubmit)
+    }
+  }, [credentail])
+
+  const testMail = () => {
+    // const expression = ""
+    return /\S+@\S+\.\S+/.test(credentail.username)
+  }
 
   return (
     <form
-      className="p-10 bg-white rounded flex justify-center items-center flex-col shadow-md"
+      className="p-10 bg-white rounded flex justify-center items-center flex-col shadow-md border"
       onSubmit={(e) => {
         e.preventDefault();
         onSubmit(credentail);
       }}
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-20 h-20 text-gray-600 mb-2"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-      >
-        <path
-          fillRule="evenodd"
-          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-          clipRule="evenodd"
-        />
-      </svg>
-      <p className="mb-5 text-3xl uppercase text-gray-600">{t("title")}</p>
+      <div className='flex justify-center items-center py-4'>
+        <Img src={logo} height="36px" alt="Tella logo"/>
+      </div>
+      <p className="mb-5 text-xl text-gray-600 font-bold">Sign in</p>
       <input
         type="text"
         name="username"
-        className="mb-5 p-3 w-80 focus:border-blue-700 rounded border-2 outline-none"
+        className="mb-5 w-80 focus:border-blue-700 rounded text-base p-2 border-2 outline-none"
         value={credentail.username}
-        placeholder={t("username")}
+        placeholder="Email"
+        required
         onChange={(e) => {
           setCredentail({ ...credentail, username: e.target.value });
         }}
-        required
       />
-      <input
-        type="password"
-        value={credentail.password}
-        name="password"
-        className="mb-5 p-3 w-80 focus:border-blue-700 rounded border-2 outline-none"
-        placeholder={t("password")}
-        onChange={(e) => {
-          setCredentail({ ...credentail, password: e.target.value });
-        }}
-        required
-      />
+      <div className='relative'>
+        <input
+          type={showPass ? 'text' : 'password'}
+          value={credentail.password}
+          name="password"
+          className="mb-5 w-80 focus:border-blue-700 rounded text-base p-2 border-2 outline-none"
+          placeholder="Password"
+          required
+          onChange={(e) => {
+            setCredentail({ ...credentail, password: e.target.value });
+          }}
+        />
+        <div 
+          className='absolute right-0 top-0 pr-2 cursor-pointer' 
+          style={{paddingTop: '10px'}}
+          onClick={() => {
+            handleShowPass(!showPass)
+          }}
+        >
+          { showPass ? (
+            <AiFillEye color='#8B8E8F'/>
+          ) : (
+            <AiFillEyeInvisible color='#8B8E8F'/>
+          )}
+        </div>
+      </div>
       <button
-        className="bg-blue-600 hover:bg-blue text-white font-bold p-2 rounded w-80"
+        className="bg-blue-300 hover:bg-blue py-2 text-white uppercase text-base font-bold rounded w-80 disabled:opacity-50"
         id="login"
+        disabled={!canSubmit}
         type={"submit"}
       >
-        <span>{t("login.btn")}</span>
+        <span>Sign in</span>
       </button>
       {errorMessage && (
         <div
-          className="w-full p-2 mt-4 mb-4 bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200"
+          className="w-full p-2 mt-4 mb-2 bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200"
           role="alert"
         >
-          {t(errorMessage)}
+          {errorMessage}
         </div>
       )}
+      { !testMail() &&
+        <div
+          className="w-full p-2 mt-2 mb-4 bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200"
+          role="alert"
+        >
+          Please enter a valid email address
+        </div>
+      }
     </form>
   );
 };

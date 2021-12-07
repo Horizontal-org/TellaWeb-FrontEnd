@@ -1,6 +1,7 @@
 import { useRouter } from "next/dist/client/router";
 import { FunctionComponent } from "react";
 import { SidebarLayout } from "packages/ui";
+import { IoMdExit } from 'react-icons/io'
 
 export const Menu: FunctionComponent = () => {
   const router = useRouter();
@@ -28,7 +29,14 @@ export const Menu: FunctionComponent = () => {
           selected: router.route.includes("/configuration"),
         },
       ]}
-      bottomMenu={[]}
+      bottomMenu={[
+        {
+          text: "Logout",
+          icon: (<IoMdExit />),
+          onClick: () => router.replace("/logout"),
+          selected: router.route.includes("/logout"),
+        },
+      ]}
     />
   );
 };
