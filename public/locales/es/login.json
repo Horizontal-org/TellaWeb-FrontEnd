@@ -3,5 +3,6 @@
     "username": "Usuario",
     "password": "Contraseña",
     "login.btn": "Ingresar",
-    "error.invalid": "Disculpa, tu usuario o contraseña son incorrectos."
+    "error.email": "Introduzca una dirección de correo electrónico válida",
+    "error.credentials": "Disculpa, tu usuario o contraseña son incorrectos."
 }
