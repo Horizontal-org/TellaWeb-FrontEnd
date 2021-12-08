@@ -11,7 +11,7 @@ export const LoginPage: FunctionComponent<Props> = ({
   errorMessage,
 }) => {
   return (
-    <div className="w-screen h-screen flex justify-center items-center bg-gray-100">
+    <div className="w-screen h-screen flex justify-center items-center bg-white">
       <LoginBox onSubmit={onSubmit} errorMessage={errorMessage} />
     </div>
   );
