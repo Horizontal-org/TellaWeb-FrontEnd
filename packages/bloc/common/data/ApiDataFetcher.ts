@@ -6,7 +6,9 @@ import {
   NetworkError,
   UnauthorizedError,
   UnexpectedError,
-  NotFoundError
+  NotFoundError,
+  NotAllowedError,
+  ConflictError
 } from "../domain";
 
 type Method = "GET" | "POST" | "DELETE" | "PUT";
@@ -40,6 +42,7 @@ export class ApiDataFetcher {
         ...(body ? { body: JSON.stringify(body) } : {}),
       });
       if (!response.ok) {
+        const errorObject =  await response.json()
         switch (response.status) {
           case 401:
             return Either.left(
@@ -51,6 +54,14 @@ export class ApiDataFetcher {
               new NotFoundError(new Error(response.statusText))
             );
 
+          case 405:
+            return Either.left(
+              new NotAllowedError(new Error(errorObject.message))
+            )
+          case 409:
+            return Either.left(
+              new ConflictError(new Error(errorObject.message))
+            )
           default:
             return Either.left(
               new UnexpectedError(new Error(response.statusText))

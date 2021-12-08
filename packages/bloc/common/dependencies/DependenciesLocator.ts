@@ -1,7 +1,9 @@
 import {
   AuthPloc,
   UserPloc,
-  ValidateEmailUseCase,
+  GetProfileUseCase,
+  UpdateUserUseCase,
+  UpdatePasswordUseCase,
   LoginUserUseCase,
   LogoutUserUseCase,
   RemoteUserRepository,
@@ -50,9 +52,11 @@ function provideAuthPloc(url: string = BASE_URL): AuthPloc {
 function provideUserPloc(url: string = BASE_URL): UserPloc {
   const { dataFetcher } = provideDataFetcher(url)
   const userRepository = new RemoteUserRepository(dataFetcher)
-  const validateEmailUseCase = new ValidateEmailUseCase(userRepository)
+  const getProfileUseCase = new GetProfileUseCase(userRepository)
+  const updateUserUseCase = new UpdateUserUseCase(userRepository)
+  const updatePasswordUseCase = new UpdatePasswordUseCase(userRepository)
 
-  const usersPloc = new UserPloc(validateEmailUseCase)
+  const usersPloc = new UserPloc(getProfileUseCase, updateUserUseCase, updatePasswordUseCase)
   return usersPloc
 }
 

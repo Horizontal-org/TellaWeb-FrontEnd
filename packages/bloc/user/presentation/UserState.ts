@@ -1,14 +1,28 @@
+import {User} from '../domain/User'
+
 export interface CommonUserState {
-  mailAvailable?: boolean
+  user?: User | null
 }
 
 export interface StandByState {
   kind: "StandByState";
 }
 
-export interface ValidatedEmailState {
-  kind: "ValidatedEmailState";
-  mailAvailable: boolean
+export interface LoadedUser {
+  kind: "LoadedUser";
+  user: User;
+}
+
+export interface AttemptUpdate {
+  kind: 'AttemptUpdate'
+}
+
+export interface PasswordUpdated {
+  kind: "PasswordUpdated";  
+}
+
+export interface UsernameUpdated { 
+  kind: 'UsernameUpdated'
 }
 
 export interface ErrorUserState {
@@ -16,13 +30,22 @@ export interface ErrorUserState {
   error: string;
 }
 
-export interface UpdateUsernameSuccess {
-  kind: 'UpdateUsernameSuccess'
+export interface UpdateFailed {
+  kind: "UpdateFailed";
+  error: string;
 }
 
-export type UserState = (StandByState | ValidatedEmailState | UpdateUsernameSuccess | ErrorUserState) &
-CommonUserState;
+export type UserState = (
+  StandByState | 
+  LoadedUser | 
+  UsernameUpdated | 
+  PasswordUpdated | 
+  ErrorUserState |
+  AttemptUpdate | 
+  UpdateFailed
+) & CommonUserState;
 
 export const userInitialState: UserState = {
-  kind: "StandByState"
+  kind: "StandByState",
+  user: null,
 };

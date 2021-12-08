@@ -1139,6 +1139,10 @@ video {
   border-right-width: 1px;
 }
 
+.border-b-2 {
+  border-bottom-width: 2px;
+}
+
 .border-b {
   border-bottom-width: 1px;
 }
@@ -1413,12 +1417,12 @@ video {
   padding-top: 0.5rem;
 }
 
-.pt-12 {
-  padding-top: 3rem;
-}
-
 .pt-4 {
   padding-top: 1rem;
+}
+
+.pt-12 {
+  padding-top: 3rem;
 }
 
 .pt-20 {
