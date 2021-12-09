@@ -10,12 +10,20 @@ export const ReportById = () => {
   const { query, back, push } = useRouter();
   const { report: reportPloc, file: filePloc } = usePloc();
   const state = usePlocState(reportPloc);
+  const fileState = usePlocState(filePloc)
   const handleToast = useToast()
 
   useEffect(() => {
     if (typeof query.reportId !== "string") return;
     reportPloc.open(query.reportId);
   }, [query.reportId, reportPloc]);
+
+  useEffect(() => {
+    if (fileState.kind === 'DeletedFileState') {
+      if (typeof query.reportId !== "string") return;
+      reportPloc.open(query.reportId);
+    }  
+  }, [fileState.kind])
 
   return state && state.currentReport ? (
     <ReportPage
