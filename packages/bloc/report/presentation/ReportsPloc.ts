@@ -58,12 +58,12 @@ export class ReportsPloc extends Ploc<ReportsState> {
     }
 
     const newQuery = {
-      search: query.search,
-      sortKey: parsedKey[query.sort.key] || '',
-      sortOrder: query.sort.order,
-      page: query.pagination.page,
-      total: query.pagination.total,
-      size: query.pagination.size,
+      search: query ? query.search : '',
+      sortKey: query ? (parsedKey[query.sort.key] || '') : '',
+      sortOrder: query ? query.sort.order : '',
+      page: query ? query.pagination.page : 0,
+      total: query ? query.pagination.total : 1,
+      size: query ? query.pagination.size : 25,
     }
     
     return newQuery 

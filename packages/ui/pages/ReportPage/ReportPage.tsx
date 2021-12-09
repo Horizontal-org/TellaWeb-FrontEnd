@@ -91,28 +91,30 @@ export const ReportPage: FunctionComponent<Props> = ({
           leftToggle={toggleLeftSideBar}
           rightToggle={toggleRightSideBar}
         >
-          <div className="flex-1 flex space-x-2 mb-2 px-4 py-2">
-            <Button
-              type={btnType.Secondary}
-              icon={<MdInfoOutline />}
-              text="File Information"
-            />
-            <Button
-              type={btnType.Secondary}
-              icon={<MdSave />}
-              text="Download file"
-            />
-            <ButtonMenu openSide="right" type={btnType.Secondary} text="...">
-              <DeleteModal 
-                render={(
-                  <p>
-                    {report.files[current - 1].fileName} will be permanently deleted.
-                  </p>
-                )}
-                onDelete={() => onDeleteFile(report, report.files[current - 1])}
-              />              
-            </ButtonMenu>
-          </div>
+          { report.files.length > 0 && (
+            <div className="flex-1 flex space-x-2 mb-2 px-4 py-2">
+              <Button
+                type={btnType.Secondary}
+                icon={<MdInfoOutline />}
+                text="File Information"
+              />
+              <Button
+                type={btnType.Secondary}
+                icon={<MdSave />}
+                text="Download file"
+              />
+              <ButtonMenu openSide="right" type={btnType.Secondary} text="...">
+                <DeleteModal 
+                  render={(
+                    <p>
+                      {report.files[current - 1].fileName} will be permanently deleted.
+                    </p>
+                  )}
+                  onDelete={() => onDeleteFile(report, report.files[current - 1])}
+                />              
+              </ButtonMenu>
+            </div>
+          )}          
           <div className="flex space-x-4 mb-2 px-4 py-2 items-center">
             <Button type={btnType.Secondary} icon={<BsArrowsAngleExpand />} />
             <div className="w-24">
@@ -127,7 +129,7 @@ export const ReportPage: FunctionComponent<Props> = ({
         </ToggleButtonsBar>
 
         <MainContent>
-          {report.files.length && (
+          {!!(report.files.length) && (
             <FileView file={report.files[current - 1]} />
           )}
         </MainContent>

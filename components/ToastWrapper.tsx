@@ -48,7 +48,6 @@ export const ToastWrapper: FunctionComponent<Props> = ({ children }) => {
     }
   }
 
-  console.log(toastType)
 
   return (
     <toastContext.Provider value={handleToast}>
