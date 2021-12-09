@@ -13,7 +13,7 @@ export const Report = () => {
   const { report: reportPloc, file: filePloc } = usePloc();
   const state = usePlocState(reportPloc);
 
-  const [query, setQuery] = useState<ItemQuery>({
+  const defaultQuery = {
     sort: {
       key: '',
       order: ''
@@ -25,7 +25,9 @@ export const Report = () => {
       total: 1,
       size: 25,
     },
-  });
+  }
+
+  const [query, setQuery] = useState<ItemQuery>(defaultQuery);
 
   const loadReports = (newQuery: ItemQuery) => {
     setQuery(newQuery);
@@ -46,13 +48,15 @@ export const Report = () => {
   }, [state]);
 
   useEffect(() => {
-    reportPloc.list(query);
-  }, []);
+    reportPloc.list(query || defaultQuery);
+  }, [])
 
   return (
     <ReportListPage
       currentQuery={query}
-      onQueryChange={(newQuery: ItemQuery) => loadReports(newQuery)}
+      onQueryChange={(newQuery: ItemQuery) => {
+        loadReports(newQuery || defaultQuery)
+      }}
       onDelete={() => {}}
       onOpen={(report) => {
         push(`./report/${report.id}`);
