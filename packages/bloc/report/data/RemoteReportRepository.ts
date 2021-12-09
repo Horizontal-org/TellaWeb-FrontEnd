@@ -1,6 +1,7 @@
 import { ApiDataFetcher, DataError, Either, Pagination } from "../../common";
 import { Report, ReportRepository } from "../domain";
 import { ReportQuery } from "../domain/ReportQuery";
+import { Report as UiReport } from "../../../ui/domain/Report";
 
 export class RemoteReportRepository implements ReportRepository {
   private url = "/report";
@@ -29,5 +30,11 @@ export class RemoteReportRepository implements ReportRepository {
 
   async delete(reportId: string): Promise<Either<DataError, boolean>> {
     return this.api.delete(`${this.url}/${reportId}`);
+  }
+
+  async batchDelete(toDelete: UiReport[]): Promise<Either<DataError, boolean>> {    
+    return this.api.post(`${this.url}/batch-delete`, {
+      toDelete: toDelete.map(d => d.id) 
+    })
   }
 }

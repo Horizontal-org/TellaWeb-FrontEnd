@@ -57,7 +57,9 @@ export const Report = () => {
       onQueryChange={(newQuery: ItemQuery) => {
         loadReports(newQuery || defaultQuery)
       }}
-      onDelete={() => {}}
+      onDelete={(toDelete) => {
+        reportPloc.batchDelete(toDelete.filter(td => td.id))
+      }}
       onOpen={(report) => {
         push(`./report/${report.id}`);
       }}
