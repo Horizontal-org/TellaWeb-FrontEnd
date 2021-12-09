@@ -1,6 +1,5 @@
 import { ApiDataFetcher, DataError, Either, Pagination } from "../../common";
 import { Report, ReportRepository } from "../domain";
-import { ItemQuery } from '../../../ui'
 import { ReportQuery } from "../domain/ReportQuery";
 
 export class RemoteReportRepository implements ReportRepository {
