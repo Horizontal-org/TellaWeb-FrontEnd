@@ -6,4 +6,5 @@ export interface Report extends Item {
   author: Reporter;
   date?: number;
   files: IReportFile[];
+  description: string;
 }
