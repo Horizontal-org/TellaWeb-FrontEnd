@@ -1,7 +1,6 @@
 import "../styles/globals.css";
 import "../styles/tailwind.css";
 import type { AppProps } from "next/app";
-import { appWithTranslation } from "next-i18next";
 import { dependenciesLocator as plocs } from "packages/bloc";
 import { createContext } from "../common/Context";
 import { ToastWrapper } from '../components/ToastWrapper'
@@ -24,4 +23,4 @@ function MyApp({ Component, pageProps }: AppProps) {
     </blocContext.Provider>
   );
 }
-export default appWithTranslation(MyApp);
+export default MyApp;
