@@ -1,7 +1,8 @@
 import { FunctionComponent, useState, useEffect } from "react";
-import logo from '../../assets/tella-logo.png'
+import { useTranslation } from "next-i18next";
+import logo from "../../assets/tella-logo.png";
 import Img from "next/image";
-import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai'
+import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 
 type Credential = {
   username: string;
@@ -21,25 +22,27 @@ export const LoginBox: FunctionComponent<Props> = ({
     username: "",
     password: "",
   });
-  const [message, handleMessage] = useState<string>('')
-  const [canSubmit, handleCanSubmit] = useState<boolean>(false)
-  const [showPass, handleShowPass] = useState<boolean>(false)
+  const [message, handleMessage] = useState<string>("");
+  const [canSubmit, handleCanSubmit] = useState<boolean>(false);
+  const [showPass, handleShowPass] = useState<boolean>(false);
+  const { t } = useTranslation("login");
 
   useEffect(() => {
     if (message.length > 0) {
-      handleMessage('')
+      handleMessage("");
     }
-    
-    const auxCanSubmit = credentail.username.length > 0 && credentail.password.length > 0
+
+    const auxCanSubmit =
+      credentail.username.length > 0 && credentail.password.length > 0;
     if (auxCanSubmit !== canSubmit) {
-      handleCanSubmit(auxCanSubmit)
+      handleCanSubmit(auxCanSubmit);
     }
-  }, [credentail])
+  }, [credentail]);
 
   const testMail = () => {
     // const expression = ""
-    return /\S+@\S+\.\S+/.test(credentail.username)
-  }
+    return /\S+@\S+\.\S+/.test(credentail.username);
+  };
 
   return (
     <form
@@ -49,44 +52,44 @@ export const LoginBox: FunctionComponent<Props> = ({
         onSubmit(credentail);
       }}
     >
-      <div className='flex justify-center items-center py-4'>
-        <Img src={logo} height="36px" alt="Tella logo"/>
+      <div className="flex justify-center items-center py-4">
+        <Img src={logo} height="36px" alt="Tella logo" />
       </div>
-      <p className="mb-5 text-xl text-gray-600 font-bold">Sign in</p>
+      <p className="mb-5 text-xl text-gray-600 font-bold">{t("title")}</p>
       <input
         type="text"
         name="username"
         className="mb-5 w-80 focus:border-blue-700 rounded text-base p-2 border-2 outline-none"
         value={credentail.username}
-        placeholder="Email"
+        placeholder={t("email")}
         required
         onChange={(e) => {
           setCredentail({ ...credentail, username: e.target.value });
         }}
       />
-      <div className='relative'>
+      <div className="relative">
         <input
-          type={showPass ? 'text' : 'password'}
+          type={showPass ? "text" : "password"}
           value={credentail.password}
           name="password"
           className="mb-5 w-80 focus:border-blue-700 rounded text-base p-2 border-2 outline-none"
-          placeholder="Password"
+          placeholder={t("password")}
           required
           onChange={(e) => {
             setCredentail({ ...credentail, password: e.target.value });
           }}
         />
-        <div 
-          className='absolute right-0 top-0 pr-2 cursor-pointer' 
-          style={{paddingTop: '10px'}}
+        <div
+          className="absolute right-0 top-0 pr-2 cursor-pointer"
+          style={{ paddingTop: "10px" }}
           onClick={() => {
-            handleShowPass(!showPass)
+            handleShowPass(!showPass);
           }}
         >
-          { showPass ? (
-            <AiFillEye color='#8B8E8F'/>
+          {showPass ? (
+            <AiFillEye color="#8B8E8F" />
           ) : (
-            <AiFillEyeInvisible color='#8B8E8F'/>
+            <AiFillEyeInvisible color="#8B8E8F" />
           )}
         </div>
       </div>
@@ -96,7 +99,7 @@ export const LoginBox: FunctionComponent<Props> = ({
         disabled={!canSubmit}
         type={"submit"}
       >
-        <span>Sign in</span>
+        <span>{t("login.btn")}</span>
       </button>
       {errorMessage && (
         <div
@@ -106,14 +109,14 @@ export const LoginBox: FunctionComponent<Props> = ({
           {errorMessage}
         </div>
       )}
-      { !testMail() &&
+      {!testMail() && (
         <div
           className="w-full p-2 mt-2 mb-4 bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200"
           role="alert"
         >
-          Please enter a valid email address
+          {t("error.email")}
         </div>
-      }
+      )}
     </form>
   );
 };

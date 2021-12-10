@@ -1,0 +1,8 @@
+{
+    "title": "Sign in",
+    "username": "Username",
+    "password": "Password",
+    "login.btn": "Sign in",
+    "error.email": "Please enter a valid email address",
+    "error.credentials" : "Sorry, invalid username or password"
+}

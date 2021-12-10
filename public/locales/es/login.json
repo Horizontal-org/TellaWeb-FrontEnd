@@ -1,0 +1,8 @@
+{
+    "title": "Inicio de sesión",
+    "username": "Usuario",
+    "password": "Contraseña",
+    "login.btn": "Ingresar",
+    "error.email": "Introduzca una dirección de correo electrónico válida",
+    "error.credentials": "Disculpa, tu usuario o contraseña son incorrectos."
+}
