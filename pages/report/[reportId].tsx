@@ -34,6 +34,9 @@ export const ReportById = () => {
           handleToast('File deleted')
         }
       }}
+      onDownloadFile={(file) => {
+        filePloc.donwload(file)
+      }}
       onDeleteReport={(report) => {
         reportPloc.delete(report.id);
         handleToast('Report deleted')

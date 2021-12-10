@@ -16,6 +16,7 @@ export class FilePloc extends Ploc<FileState> {
 
   async donwload(file: BasicFileDto) {
     const downloadResult = await this.downloadFile.execute(file);
+    const type = file.fileName.split('.')[1] 
 
     downloadResult.fold(
       (error) =>
@@ -23,7 +24,7 @@ export class FilePloc extends Ploc<FileState> {
       (file) => {
         const link = document.createElement("a");
         link.href = window.URL.createObjectURL(file);
-        link.download = "download";
+        link.download = `download.${type}`;
         link.target = "_blank";
         link.click();
       }

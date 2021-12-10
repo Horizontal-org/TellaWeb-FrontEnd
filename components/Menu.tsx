@@ -17,20 +17,7 @@ export const Menu: FunctionComponent = () => {
           icon: <BsFillCloudArrowUpFill />,
           onClick: () => router.replace("/report"),
           selected: router.route.includes("/report"),
-        },
-        {
-          text: "Users",
-          onClick: () => router.replace("/user"),
-
-          icon: null,
-          selected: router.route.includes("/user"),
-        },
-        {
-          text: "Configuration",
-          icon: null,
-          onClick: () => router.replace("/configuration"),
-          selected: router.route.includes("/configuration"),
-        },
+        }
       ]}
       bottomMenu={[
         {

@@ -58,7 +58,10 @@ export class ReportsPloc extends Ploc<ReportsState> {
     deleteResult.fold(
       (error) => this.changeState(this.handleError(error)),
       () => {
-        this.list();
+        this.changeState({
+          ...this.state,
+          kind: 'DeletedReportsState'
+        })
       }
     );
   }

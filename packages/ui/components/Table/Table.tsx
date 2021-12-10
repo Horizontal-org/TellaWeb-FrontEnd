@@ -122,6 +122,7 @@ export const Table: FunctionComponent<Props> = ({
             >
               {headerGroup.headers.map((column, j) => (
                 <th
+                  disableSortBy={j === 0}
                   key={j}
                   {...column.getHeaderProps([
                     {
@@ -130,6 +131,10 @@ export const Table: FunctionComponent<Props> = ({
                     column.getSortByToggleProps()
                   ])}
                   onClick={() => {
+                    if (j === 0) { 
+                      return
+                    }
+
                     onFetch({
                       ...itemQuery,
                       sort: {

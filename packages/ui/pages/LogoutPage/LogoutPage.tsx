@@ -1,8 +1,10 @@
 import { FunctionComponent } from 'react'
+import { useRouter, } from "next/dist/client/router";
 import Img from 'next/image'
 import logo from '../../assets/tella-logo.png'
 
 export const LogoutPage: FunctionComponent = () => {
+  const { push } = useRouter();
 
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-white">
@@ -19,10 +21,10 @@ export const LogoutPage: FunctionComponent = () => {
           id="logout"          
           type={"button"}
           onClick={() => {
-            window.close()
+            push('/login')
           }}
         >
-          <span>Close window</span>
+          <span>Back to login</span>
         </button>
       </div>
     </div>    

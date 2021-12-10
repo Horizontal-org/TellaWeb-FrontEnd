@@ -111,16 +111,16 @@ export const ReportListPage: FunctionComponent<Props> = ({
                       text="Preview"
                       onClick={openReport}
                     />
+                    <Button
+                      type={btnType.Secondary}
+                      icon={<MdSave />}
+                      onClick={(event: MouseEvent) =>
+                        onDownload(selectedReports[0])
+                      }
+                      text="Download"
+                    />
                   </>
-                )}
-                <Button
-                  type={btnType.Secondary}
-                  icon={<MdSave />}
-                  onClick={(event: MouseEvent) =>
-                    onDownload(selectedReports[0])
-                  }
-                  text="Download"
-                />
+                )}                
                 <ButtonMenu openSide="right">
                   <DeleteModal 
                     render={(

@@ -20,10 +20,15 @@ export interface ErrorReportsState {
   error: string;
 }
 
+export interface DeletedReportsState {
+  kind: 'DeletedReportsState'  
+}
+
 export type ReportsState = (
   | LoadingReportsState
   | LoadedReportsState
   | ErrorReportsState
+  | DeletedReportsState
 ) &
   CommonReportsState;
 

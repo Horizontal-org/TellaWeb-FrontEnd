@@ -1,5 +1,6 @@
 import { FunctionComponent, useState, useEffect } from 'react'
 import { MainLayout } from '../../layouts/MainLayout'
+import { TextInput } from '../../components/Inputs/TextInput/TextInput'
 import { User } from '../../../bloc'
 import { EditEmailModal } from '../../components/EditEmailModal/EditEmailModal'
 import { EditPasswordModal } from '../../components/EditPasswordModal/EditPasswordModal'
@@ -28,21 +29,26 @@ export const SettingsPage: FunctionComponent<Props> = ({
         <div>
           <div className='flex h-10 mb-2'></div>
           <div className='flex justify-between items-center py-4 border-b'>
-            <p className='text-gray-600 uppercase'>
-              email
-            </p>
-            <p>
-              { user ? user.username : '' }
-            </p>
+            <div className='flex items-center'>
+              <p className='text-gray-600 uppercase' style={{ width: 200 }}>
+                email
+              </p>
+              <p >
+                { user ? user.username : '' }
+              </p>
+            </div>
             <EditEmailModal 
               onSubmit={onUpdateUsername}
             />
           </div>
 
           <div className='flex justify-between items-center py-4 border-b'>
-            <p className='text-gray-600 uppercase'>
-              Password
-            </p>
+            <div className='flex items-center'>
+              <p className='text-gray-600 uppercase' style={{ width: 200 }}>
+                Password
+              </p>
+              <p>••••••••••</p>              
+            </div>
             <EditPasswordModal 
               onSubmit={onUpdatePassword}
             />

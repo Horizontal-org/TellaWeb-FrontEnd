@@ -51,6 +51,12 @@ export const Report = () => {
     reportPloc.list(query || defaultQuery);
   }, [])
 
+  useEffect(() => {
+    if (state.kind === 'DeletedReportsState') {
+      reportPloc.list(query || defaultQuery)
+    }
+  }, [state.kind])
+
   return (
     <ReportListPage
       currentQuery={query}

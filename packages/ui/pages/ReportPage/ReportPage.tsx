@@ -28,6 +28,7 @@ type Props = {
   report: Report;
   onDeleteReport: (report: Report) => void;
   onDeleteFile: (report: Report, file: IReportFile) => void;
+  onDownloadFile: (file: IReportFile) => void;
   onClose: () => void;
 };
 
@@ -35,6 +36,7 @@ export const ReportPage: FunctionComponent<Props> = ({
   report,
   onDeleteReport,
   onDeleteFile,
+  onDownloadFile,
   onClose,
 }) => {
   const [leftSidebarOpen, changeLeftSidebarOpenStatus] = useState(true);
@@ -102,6 +104,9 @@ export const ReportPage: FunctionComponent<Props> = ({
                 type={btnType.Secondary}
                 icon={<MdSave />}
                 text="Download file"
+                onClick={() => {
+                  onDownloadFile(report.files[current - 1])
+                }}
               />
               <ButtonMenu openSide="right" type={btnType.Secondary} text="...">
                 <DeleteModal 
