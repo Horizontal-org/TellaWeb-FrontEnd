@@ -1,16 +1,18 @@
 import { ItemQuery } from "../../../ui";
 import { DataError, Ploc, UnexpectedError } from "../../common";
-import { GetReportsUseCase, LoadReportByIdUseCase } from "../domain";
+import { GetReportsUseCase, LoadReportByIdUseCase, BatchDeleteReportUseCase } from "../domain";
 import { DeleteReportByIdUseCase } from "../domain/DeleteReportByIdUseCase";
 import { ReportQuery } from "../domain/ReportQuery";
 import { addThumbnail } from "../utils/addThumbnail";
 import { reportsInitialState, ReportsState } from "./ReportsState";
+import { Report } from '../../../ui/domain/Report'
 
 export class ReportsPloc extends Ploc<ReportsState> {
   constructor(
     private getReportsUseCase: GetReportsUseCase,
     private loadReportByIdUseCase: LoadReportByIdUseCase,
-    private deleteReporByIdUseCase: DeleteReportByIdUseCase
+    private deleteReporByIdUseCase: DeleteReportByIdUseCase,
+    private batchDeleteReportUseCase: BatchDeleteReportUseCase
   ) {
     super(reportsInitialState);
   }
@@ -50,6 +52,17 @@ export class ReportsPloc extends Ploc<ReportsState> {
       }
     );
   }
+
+  async batchDelete(toDelete: Report[]) {
+    const deleteResult = await this.batchDeleteReportUseCase.execute(toDelete);
+    deleteResult.fold(
+      (error) => this.changeState(this.handleError(error)),
+      () => {
+        this.list();
+      }
+    );
+  }
+
 
   private prepareQuery (query: ItemQuery): ReportQuery {
     const parsedKey = {

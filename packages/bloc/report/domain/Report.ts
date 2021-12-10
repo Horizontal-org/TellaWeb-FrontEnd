@@ -8,4 +8,5 @@ export interface Report {
   author: User;
   files: File[];
   createdAt: string;
+  id?: string;
 }

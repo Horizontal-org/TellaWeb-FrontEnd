@@ -13,6 +13,7 @@ import {
   RemoteReportRepository,
   ReportsPloc,
   LoadReportByIdUseCase,
+  BatchDeleteReportUseCase
 } from "../../report";
 import {
   ApiDataFetcher,
@@ -66,10 +67,13 @@ function provideReportPloc(url: string = BASE_URL): ReportsPloc {
   const getReportsUseCase = new GetReportsUseCase(reportRepository);
   const loadReportByIdUseCase = new LoadReportByIdUseCase(reportRepository);
   const deleteReporByIdUseCase = new DeleteReportByIdUseCase(reportRepository);
+  const batchDeleteReportUseCase = new BatchDeleteReportUseCase(reportRepository)
+
   const reportsPloc = new ReportsPloc(
     getReportsUseCase,
     loadReportByIdUseCase,
-    deleteReporByIdUseCase
+    deleteReporByIdUseCase,
+    batchDeleteReportUseCase
   );
   return reportsPloc;
 }
