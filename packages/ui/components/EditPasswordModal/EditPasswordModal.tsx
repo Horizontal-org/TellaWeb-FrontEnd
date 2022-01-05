@@ -13,17 +13,23 @@ export const EditPasswordModal: FunctionComponent<Props> = ({ onSubmit }) => {
 
 
   return (
-    <ButtonPopup 
-      text="CHANGE PASSWORD"
-      buttonType={btnType.Secondary}
+    <ButtonPopup       
+      toggleButton={(toggle) => (
+        <Button
+          text="CHANGE PASSWORD"
+          onClick={toggle}
+          type={btnType.Secondary}
+        />
+      )}
       render={(toggle) => (
         <div className='p-4'>
-          <p className='font-bold'>
-            Edit email
+          <p className='text-xxxl font-bold'>
+            Edit password
           </p>
           <p className='text-base text-gray-600'>
-            Please enter the new email address you would like to use to log in Tella
+            Please enter your current password and new password.           
           </p>
+          
           <div className='py-4'>
             <TextInput
               name='current-password'
@@ -43,6 +49,7 @@ export const EditPasswordModal: FunctionComponent<Props> = ({ onSubmit }) => {
               onChange={(e) => { handleNewPassword(e.target.value) }}
             />
           </div>
+
           <div className='py-4'>
             <TextInput 
               name='confirm-password'
@@ -53,7 +60,7 @@ export const EditPasswordModal: FunctionComponent<Props> = ({ onSubmit }) => {
             /> 
           </div>
 
-          { !(newPassword.length > 0 && newPassword === confirmPassword) && (
+          { newPassword.length > 0 && confirmPassword.length > 0 && !(newPassword === confirmPassword) && (
             <div className="w-full p-2 mt-4  bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200">
               Your new passwords do not match
             </div>

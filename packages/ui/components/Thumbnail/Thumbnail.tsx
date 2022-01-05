@@ -11,6 +11,7 @@ type Props = {
   onClick?: () => void;
   full?: boolean;
   box?: boolean;
+  selected?: boolean
 };
 
 export const Thumbnail: FunctionComponent<Props> = ({
@@ -18,6 +19,7 @@ export const Thumbnail: FunctionComponent<Props> = ({
   onClick,
   full,
   box,
+  selected
 }) => {
   const icon = ((type: keyof typeof ReportFileType) => {
     switch (type) {
@@ -68,10 +70,12 @@ export const Thumbnail: FunctionComponent<Props> = ({
     >
       <div
         className={cn(
-          "flex content-center flex-wrap border rounded-md border-gray-100 hover:border-gray-500 hover:bg-black",
+          "flex content-center flex-wrap rounded-md  hover:bg-black",
           {
             "hover:bg-opacity-5 ": file.thumbnail === undefined,
             "hover:bg-opacity-10": file.thumbnail !== undefined,
+            "border-gray-100 hover:border-gray-500 border": !selected,
+            "border-blue-400 hover:border-blue-500 border-2": !!(selected),
             "w-24 h-24": !full && !box,
             "aspect-w-4 aspect-h-4 w-full": box,
             "h-full w-full": full,

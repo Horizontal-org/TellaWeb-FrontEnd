@@ -7,7 +7,7 @@ import { useAuthRequired } from "../../common/useAuthRequired"
 import { useToast } from '../../components/ToastWrapper'
 
 const Settings = () => {
-  useAuthRequired();
+  useAuthRequired()
 
   const { user: userPloc } = usePloc();
   const state = usePlocState(userPloc);

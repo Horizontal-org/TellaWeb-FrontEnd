@@ -4,7 +4,6 @@ import { MdInfoOutline } from "@react-icons/all-files/md/MdInfoOutline";
 import { MdSave } from "@react-icons/all-files/md/MdSave";
 import { BsArrowsAngleExpand } from "@react-icons/all-files/bs/BsArrowsAngleExpand";
 import { MdRemoveRedEye } from "@react-icons/all-files/md/MdRemoveRedEye";
-import { MdDelete } from "@react-icons/all-files/md/MdDelete";
 
 import { Report, IReportFile } from "../../domain";
 import {
@@ -18,7 +17,8 @@ import {
   ToggleButtonsBar,
   MainContent,
   LeftCollapsingSidebar,
-  FileView
+  FileView,
+  Paginator
 } from "../..";
 import { btnType } from "../../components/Button/Button";
 import { ButtonPopup } from "../../components/ButtonPopup/ButtonPopup";
@@ -68,15 +68,18 @@ export const ReportPage: FunctionComponent<Props> = ({
       <LeftCollapsingSidebar collapsed={!leftSidebarOpen}>
         <ReportInformation report={report} />
         <div className="grid grid-cols-2 gap-2 mt-6">
-          {report.files.map((file, index) => (
-            <Thumbnail 
-              file={file} 
-              key={file.src.toString()}
-              onClick={() => {
-                setCurrent(index + 1)
-              }} 
-            />
-          ))}
+          {report.files.map((file, index) => {
+            return (
+              <Thumbnail 
+                file={file} 
+                selected={index == (current - 1)}
+                key={file.src.toString()}
+                onClick={() => {
+                  setCurrent(index + 1)
+                }} 
+              />
+            )
+          })}
         </div>
       </LeftCollapsingSidebar>
 
@@ -122,12 +125,14 @@ export const ReportPage: FunctionComponent<Props> = ({
           )}          
           <div className="flex space-x-4 mb-2 px-4 py-2 items-center">
             <Button type={btnType.Secondary} icon={<BsArrowsAngleExpand />} />
-            <div className="w-24">
-              <SliderControl
-                goNext={goNext}
-                goPrev={goPrev}
-                current={current}
-                total={report.files.length}
+            <div >
+              <Paginator 
+                previousPage={goPrev}
+                nextPage={goNext}
+                canNextPage={true}
+                canPreviousPage={true}
+                pageIndex={current - 1}
+                pageTotal={report.files.length}
               />
             </div>
           </div>

@@ -45,8 +45,8 @@ function provideAuthPloc(url: string = BASE_URL): AuthPloc {
     userRepository
   );
   const logoutUserUseCase = new LogoutUserUseCase(credentialRepositroy);
-
-  const authPloc = new AuthPloc(loginUserUseCase, logoutUserUseCase);
+  const getProfileUseCase = new GetProfileUseCase(userRepository)
+  const authPloc = new AuthPloc(loginUserUseCase, logoutUserUseCase, getProfileUseCase);
   return authPloc;
 }
 

@@ -3,6 +3,7 @@ export { Button } from "./components/Button/Button";
 export { ButtonMenu } from "./components/ButtonMenu/ButtonMenu";
 export { ButtonOption } from "./components/ButtonMenu/ButtonOption";
 export { ButtonPopup } from "./components/ButtonPopup/ButtonPopup";
+export { SidebarButton }  from "./components/SidebarButton/SidebarButton"
 export { CamouflageWizard } from "./components/CamouflageWizard/CamouflageWizard";
 export { LeftCollapsingSidebar } from "./components/CollapsingSidebar/LeftCollapsingSidebar";
 export { RightCollapsingSidebar } from "./components/CollapsingSidebar/RightCollapsingSidebar";
@@ -30,6 +31,7 @@ export { TopBar } from "./components/TopBar/TopBar";
 export { DeleteModal } from './components/DeleteModal/DeleteModal'
 export { FileView } from "./components/FileView/FileView"
 export { ImageView } from "./components/ImageView/ImageView"
+export { Paginator } from './components/Paginator/Paginator'
 
 export { LoginPage } from "./pages/LoginPage/LoginPage";
 export { ReportListPage } from "./pages/ReportListPage/ReportListPage";

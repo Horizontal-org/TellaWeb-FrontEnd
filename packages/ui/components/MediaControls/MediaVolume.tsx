@@ -1,4 +1,4 @@
-import { FunctionComponent, useRef } from 'react'
+import { FunctionComponent, useRef, useState, useEffect } from 'react'
 import { BsFillVolumeMuteFill } from "@react-icons/all-files/bs/BsFillVolumeMuteFill"
 import { BsFillVolumeDownFill } from "@react-icons/all-files/bs/BsFillVolumeDownFill"
 import { BsFillVolumeUpFill } from "@react-icons/all-files/bs/BsFillVolumeUpFill"
@@ -7,65 +7,65 @@ import { IconContext } from '@react-icons/all-files/lib'
 
 type Props = {
   muted: boolean
-  volumePercentage: number
+  volume: number
   toggleMuted: () => void
-  toggleVolume: (clientRectLeft: number, clientX: number) => void
+  toggleVolume: (volume: number) => void
 }
 
 export const MediaVolume: FunctionComponent<Props> = ({
   muted,
-  volumePercentage,
+  volume,
   toggleMuted,
   toggleVolume
 }) => {
-  const volumeRef = useRef<HTMLDivElement | null>(null)
 
   const getVolumeIcon = () => {
     let icon = null
-    if (muted || volumePercentage == 0) {
-      icon = (<BsFillVolumeMuteFill size={20} color="#8B8E8F"/>)
-    } else if (volumePercentage >= 50) {
-      icon = (<BsFillVolumeUpFill size={20} color="#8B8E8F"/>)
-    } else if (volumePercentage < 50) {
-      icon = (<BsFillVolumeDownFill size={20} color="#8B8E8F"/>)
+    if (muted || volume == 0) {
+      icon = (<BsFillVolumeMuteFill size={30} color="#8B8E8F"/>)
+    } else if (volume >= 5) {
+      icon = (<BsFillVolumeUpFill size={30} color="#8B8E8F"/>)
+    } else if (volume < 5) {
+      icon = (<BsFillVolumeDownFill size={30} color="#8B8E8F"/>)
     }
     return icon
   }
 
   return (
-    <div className='mr-2 flex items-center'>
-      <div className='cursor-pointer pr-2' onClick={toggleMuted}>
-        { getVolumeIcon() }
-      </div>
-      <div className='relative' style={{width: 50}}>
-        <div
-          ref={volumeRef}
-          className='bg-gray-200 w-full'
+    <div className='mr-2 flex items-center relative'>
+      <div className='group'>
+        <div className='cursor-pointer pr-2' onClick={toggleMuted}>
+          { getVolumeIcon() }
+        </div>
+        <div 
+          className='absolute hidden group-hover:flex'
           style={{
-            height: 5,
-            borderRadius: 5 
+            zIndex: 2,
+            top: -50,
+            left: -10,
+            width: 50,
+            height: 50
           }}
-        />
-        <div
-          style={{
-            width: volumePercentage + '%',
-            height: 5,
-            borderRadius: 5 
-          }}
-          className={cn(
-            'absolute top-0 left-0',
-            {
-              "w-gray-200": muted,
-              'bg-blue-300': !muted
-            }
-          )}
-        />
-        <div
-          className="w-full cursor-pointer bg-transparent absolute top-0"
-          style={{ height: 4 }}
-          onClick={(e) => { toggleVolume(volumeRef.current.getBoundingClientRect().left, e.clientX)} }
         >
-      </div>
+          <div 
+            className='flex justify-center'
+            style={{
+              transform: 'rotate(270deg)'
+            }}
+          >
+            <input 
+              style={{width: 50}}
+              id="typeinp" 
+              type="range" 
+              min="0" max="10" 
+              value={volume} 
+              onChange={(e) => { 
+                toggleVolume(parseInt(e.target.value))
+               }}
+              step="1"
+            />
+          </div>
+        </div>
       </div>
     </div>
   )

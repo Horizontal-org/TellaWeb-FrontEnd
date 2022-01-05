@@ -2,7 +2,7 @@ import { CSSProperties } from "react";
 import { storiesOf } from "@storybook/react";
 import { MdRemoveRedEye } from "@react-icons/all-files/md/MdRemoveRedEye";
 
-import { Button } from "../../packages/ui";
+import { Button, SidebarButton } from "../../packages/ui";
 import { btnType } from "../../packages/ui/components/Button/Button";
 
 const titleStyle: CSSProperties = {
@@ -56,4 +56,13 @@ storiesOf("Buttons", module)
         />
       </div>
     </div>
-  ));
+  ))
+  .add('Sidebar Buttons', () => (
+    <div>
+      <SidebarButton 
+        onClick={() => {
+          console.log('onclick')
+        }}
+      />
+    </div>
+  ))

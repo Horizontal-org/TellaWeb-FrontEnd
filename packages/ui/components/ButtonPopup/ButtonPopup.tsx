@@ -10,22 +10,16 @@ import { btnType, Button } from "../Button/Button";
 import ReactModal from "react-modal";
 
 type Props = {
-  disabled?: boolean;
-  icon?: ReactNode;
-  text: string;
   render?: (toggle: () => void) => ReactNode;
   onClose?: () => void
-  buttonType?: btnType
+  toggleButton: (toggle: () => void) => ReactNode
 };
 
 export const ButtonPopup: FunctionComponent<PropsWithChildren<Props>> = ({
-  disabled,
-  icon,
-  text,
   children,
   render,
   onClose,
-  buttonType
+  toggleButton
 }) => {
   const [popupOpen, changePopupStatus] = useState(false);
 
@@ -38,13 +32,8 @@ export const ButtonPopup: FunctionComponent<PropsWithChildren<Props>> = ({
 
   return (
     <div>
-      <Button
-        icon={icon}
-        text={text}
-        disabled={disabled}
-        onClick={togglePopup}
-        type={buttonType}
-      />
+      { toggleButton && toggleButton(togglePopup)}
+
       <ReactModal
         onRequestClose={requestClose}
         isOpen={popupOpen}
@@ -64,7 +53,3 @@ export const ButtonPopup: FunctionComponent<PropsWithChildren<Props>> = ({
     </div>
   );
 };
-
-ButtonPopup.defaultProps = {
-  buttonType: btnType.Primary
-}

@@ -1,5 +1,6 @@
 import { FunctionComponent, useState, useRef } from 'react'
-import { DeletePopup } from './DeletePopup'
+import { ButtonOption } from '../ButtonMenu/ButtonOption'
+import { ButtonPopup } from '../ButtonPopup/ButtonPopup';
 import { btnType, Button } from '../Button/Button'
 import { TextInput } from '../Inputs/TextInput/TextInput';
 import { MdDelete } from "@react-icons/all-files/md/MdDelete";
@@ -15,10 +16,15 @@ export const DeleteModal: FunctionComponent<Props> = ({ render, onDelete }) => {
   const [canDelete, handleCanDelete] = useState(false)
 
   return (
-    <DeletePopup
-      color="#D6933B"    
-      icon={<MdDelete />}
-      text="Delete"
+    <ButtonPopup
+      toggleButton={(toggle) => (
+        <ButtonOption 
+          icon={<MdDelete />}
+          color="#D6933B"
+          text="DELETE"
+          onClick={toggle}
+        />      
+      )}                
       onClose={() => {
         handleCanDelete(false)
       }}
@@ -26,10 +32,10 @@ export const DeleteModal: FunctionComponent<Props> = ({ render, onDelete }) => {
         <>
           <div className='p-4'>
             <h3 className='text-xxxl font-bold'>Delete file</h3>
-            <div className='py-4 text-base'>
+            <div className='text-base'>
               { render }
             </div>
-            <div>
+            <div className='py-4'>
               <p className='text-base text-gray-500'>
                 <strong>{`To confirm, please type "DELETE"`}</strong>
               </p>
@@ -45,22 +51,22 @@ export const DeleteModal: FunctionComponent<Props> = ({ render, onDelete }) => {
                   }}
                 />
               </div>
-            </div>          
-          </div>
+            </div>
 
-          <div className="flex justify-end">
-            <Button
-              type={btnType.Danger}
-              full={true}
-              text={"Confirm"}
-              disabled={!canDelete}
-              onClick={() => {
-                handleCanDelete(false)
-                toggle()
-                onDelete()
-              }}
-            />
-          </div>
+            <div className='py-4'>
+              <Button
+                type={btnType.Danger}
+                full={true}
+                text={"Confirm"}
+                disabled={!canDelete}
+                onClick={() => {
+                  handleCanDelete(false)
+                  toggle()
+                  onDelete()
+                }}
+              />
+            </div>          
+          </div>          
         </>
       )}
     />

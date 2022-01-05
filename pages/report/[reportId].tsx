@@ -5,8 +5,10 @@ import { toReport } from "../../common/toReport";
 import { usePlocState } from "../../common/usePlocState";
 import { usePloc } from "../_app";
 import { useToast } from '../../components/ToastWrapper'
+import { useAuthRequired } from "../../common/useAuthRequired"
 
 export const ReportById = () => {
+  useAuthRequired()
   const { query, back, push } = useRouter();
   const { report: reportPloc, file: filePloc } = usePloc();
   const state = usePlocState(reportPloc);

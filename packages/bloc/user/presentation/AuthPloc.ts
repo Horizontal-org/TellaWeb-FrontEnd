@@ -1,14 +1,30 @@
 import { Ploc, DataError, Credential } from "../../common";
-import { LoginUserUseCase, LogoutUserUseCase } from "../domain";
+import { LoginUserUseCase, LogoutUserUseCase, GetProfileUseCase } from "../domain";
 import { authInitialState, AuthState } from "./AuthState";
 
 export class AuthPloc extends Ploc<AuthState> {
   constructor(
     private loginUserUseCase: LoginUserUseCase,
-    private logoutUserUseCase: LogoutUserUseCase
+    private logoutUserUseCase: LogoutUserUseCase,
+    private getProfileUseCase: GetProfileUseCase
   ) {
     super(authInitialState);
-    this.login();
+    // this.login();
+  }
+
+  async getProfile () {
+    const getProfileResult = await this.getProfileUseCase.execute();
+
+    getProfileResult.fold(
+      (error) => this.changeState(this.handleError(error)),
+      (user) => {
+        this.changeState({
+          kind: "LoadedAuthState",
+          username: user.username,
+          loggedIn: true,
+        });
+      }
+    );
   }
 
   async logout() {
