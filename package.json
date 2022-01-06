@@ -8,7 +8,9 @@
     "lint": "next lint",
     "build": "next build",
     "build:css": "NODE_ENV=production tailwindcss -o styles/tailwind.css",
-    "storybook": "start-storybook -p 6006"
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "chromatic": "npx chromatic --project-token=15ec91a46767 --build-script-name=build-storybook"
   },
   "devDependencies": {
     "@react-icons/all-files": "^4.1.0",
@@ -25,6 +27,7 @@
     "@types/react": "17.0.30",
     "@zeit/next-typescript": "^1.1.1",
     "autoprefixer": "^10.3.7",
+    "chromatic": "^6.3.3",
     "eslint": "8.0.1",
     "eslint-config-next": "11.1.2",
     "namor": "^2.0.3",
