@@ -45,11 +45,12 @@ export const VideoView: FunctionComponent<Props> = ({file}) => {
 
 
   return (
-    <div className=" w-full h-full flex flex-col items-center px-10">
+    <div className=" w-full h-full flex flex-col items-center">
       <div 
         className='relative flex justify-center items-center'     
         style={{
-          width: '40vw',
+          width: '100%',
+          maxWidth: '40vw'
         }}    
       >
         <video 
@@ -72,7 +73,10 @@ export const VideoView: FunctionComponent<Props> = ({file}) => {
 
       { canPlay && (
         <div className='w-full flex justify-center'>
-          <div  style={{ width: '40vw'}}>
+          <div  style={{ 
+            width: '100%',
+            maxWidth: '40vw'
+          }}>
             <MediaControls 
               isVideo={true}
               fileRef={fileRef}

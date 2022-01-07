@@ -31,6 +31,10 @@ module.exports = {
         500: "#5f6368",
         700: "#404040",
       },
+      customgray: {
+        400: '#D9D9D9',
+        500: '#8B8E8F'
+      }
     },
     fontSize: {
       sm: ["11px", "14px"],
@@ -69,6 +73,7 @@ module.exports = {
       placeholderColor: ["hover"],
       opacity: ["disabled"],
       boxShadow: ["active"],
+      display: ["group-hover"]
     },
   },
   plugins: [aspectRatio],

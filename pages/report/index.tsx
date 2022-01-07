@@ -52,10 +52,12 @@ export const Report = () => {
   }, [])
 
   useEffect(() => {
+    if (!state) return
+    
     if (state.kind === 'DeletedReportsState') {
       reportPloc.list(query || defaultQuery)
     }
-  }, [state.kind])
+  }, [state?.kind])
 
   return (
     <ReportListPage

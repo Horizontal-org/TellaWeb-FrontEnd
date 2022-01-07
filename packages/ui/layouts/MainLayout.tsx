@@ -1,10 +1,8 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import cn from "classnames";
-import Img from "next/image";
 import { Title, SubTitle } from "..";
 import { Item } from "../domain/Item";
-
-import handbarToggle from "../assets/handbar-toggle.png";
+import { SidebarButton } from '../components/SidebarButton/SidebarButton'
 
 type Props = {
   title?: string;
@@ -69,40 +67,18 @@ export const MainLayout: FunctionComponent<Props> = ({
         <div className="flex">
           {leftbar && (
             <div>
-              <button
-                type="button"
-                style={{ lineHeight: 1 }}
+              <SidebarButton 
                 onClick={toggleLeftSideBar}
-                className="focus:outline-none cursor-pointer border-r my-2 py-1 pr-3"
-              >
-                <Img
-                  height="18px"
-                  width="18px"
-                  src={handbarToggle}
-                  alt="Toggle left sidebar"
-                />
-              </button>
+              />          
             </div>
           )}
           <div className="flex-1">{content}</div>
-          {currentItem && rightbar && (
+          {rightbar && (
             <div>
-              <button
-                type="button"
-                style={{ lineHeight: 1 }}
+              <SidebarButton 
                 onClick={toggleRightSideBar}
-                className="focus:outline-none cursor-pointer border-l my-2 py-1"
-              >
-                <div className="ml-3">
-                  <Img
-                    height="18px"
-                    width="18px"
-                    className="transform rotate-180"
-                    src={handbarToggle}
-                    alt="Toggle right sidebar"
-                  />
-                </div>
-              </button>
+                position='right'
+              />
             </div>
           )}
         </div>

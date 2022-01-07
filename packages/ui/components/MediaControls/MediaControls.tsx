@@ -13,7 +13,7 @@ export const MediaControls: FunctionComponent<Props> = ({
 }) => {
   const [isPlaying, handlePlaying] = useState<boolean>(false)
   const [isMuted, handleMuted] = useState<boolean>(false)
-  const [volumePercentage, handleVolumePercentage] = useState<number>(0)
+  const [volume, handleVolume] = useState<number>(0)
   const [currentFileRef, handleCurrentRef] = useState<HTMLVideoElement | HTMLAudioElement>(null)
   const [parsedDuration, handleParsedDuration] = useState<string>()
   const [parsedCurrentTime, handleParsedCurrentTime] = useState<string>()
@@ -61,20 +61,20 @@ export const MediaControls: FunctionComponent<Props> = ({
   useEffect(() => {
     fileRef.current.currentTime = 0
     setData()    
-    handleVolumePercentage(0)
+    handleVolume(0)
 
   }, [fileRef.current])
 
   if (!currentFileRef) return null
 
   return (
-    <div className="w-full py-4">
+    <div className="w-full py-4 pt-16">
       <div>
         <MediaButtons
           isVideo={isVideo}
           isPlaying={isPlaying}
           muted={isMuted}
-          volumePercentage={volumePercentage}
+          volume={volume}
           addTen={() => { currentFileRef.currentTime += 10 }}
           subTen={() => { currentFileRef.currentTime -= 10 }}
           play={() => {
@@ -94,10 +94,14 @@ export const MediaControls: FunctionComponent<Props> = ({
             currentFileRef.muted = !currentFileRef.muted
             handleMuted(currentFileRef.muted)
           }}
-          toggleVolume={(clientRectLeft: number, clientX: number) => {
-            const newVolume = ((clientX - clientRectLeft) / 50) * 100
-            handleVolumePercentage(newVolume)
-            currentFileRef.volume = newVolume / 100
+          toggleVolume={(newVolume: number) => {
+            if (newVolume > 0 && currentFileRef.muted) {
+              currentFileRef.muted = false
+              handleMuted(false)
+            }
+
+            handleVolume(newVolume)
+            currentFileRef.volume = newVolume / 10
           }}
         />
 

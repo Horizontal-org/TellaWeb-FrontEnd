@@ -8,7 +8,7 @@ import { FaRegFolder } from "@react-icons/all-files/fa/FaRegFolder";
 import { IndeterminateCheckbox } from "./IndeterminateCheckbox";
 import { Item } from "../../domain/Item";
 import { ItemQuery } from "../../domain/ItemQuery";
-import { Paginator } from "./Paginator";
+import { Paginator } from "../Paginator/Paginator";
 
 type Props = {
   columns: Array<Column>;
@@ -176,7 +176,7 @@ export const Table: FunctionComponent<Props> = ({
                   "border-b border-gray-200 hover:border-transparent",
                   {
                     "bg-blue-light": row.isSelected,
-                    "hover:bg-gray-200": !row.isSelected,
+                    "hover:bg-gray-50": !row.isSelected,
                   }
                 )}
               >
@@ -198,16 +198,18 @@ export const Table: FunctionComponent<Props> = ({
         </tbody>
       </table>
 
-      <Paginator 
-        gotoPage={gotoPage}
-        previousPage={previousPage}
-        nextPage={nextPage}
-        canNextPage={canNextPage}
-        canPreviousPage={canPreviousPage}
-        pageCount={pageCount}
-        pageIndex={pageIndex}
-        pageTotal={pageOptions.length}
-      />
+      <div className='w-full flex justify-center item-center py-8'>
+        <Paginator 
+          gotoPage={gotoPage}
+          previousPage={previousPage}
+          nextPage={nextPage}
+          canNextPage={canNextPage}
+          canPreviousPage={canPreviousPage}
+          pageCount={pageCount}
+          pageIndex={pageIndex}
+          pageTotal={pageOptions.length}
+        />
+      </div>      
       
     </>
   );

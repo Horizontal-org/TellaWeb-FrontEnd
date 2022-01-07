@@ -21,25 +21,30 @@ export const LoginBox: FunctionComponent<Props> = ({
     username: "",
     password: "",
   });
-  const [message, handleMessage] = useState<string>('')
+  
   const [canSubmit, handleCanSubmit] = useState<boolean>(false)
   const [showPass, handleShowPass] = useState<boolean>(false)
+  const [showErrorMessage, handleShowError] = useState<boolean>(false)
 
-  useEffect(() => {
-    if (message.length > 0) {
-      handleMessage('')
-    }
+  const testMail = () => {
+    return /\S+@\S+\.\S+/.test(credentail.username)
+  }
+
+
+  useEffect(() => {    
+    const requiredFields = credentail.username.length > 0 && credentail.password.length > 0
+    const emailValid = testMail()
     
-    const auxCanSubmit = credentail.username.length > 0 && credentail.password.length > 0
-    if (auxCanSubmit !== canSubmit) {
-      handleCanSubmit(auxCanSubmit)
+    handleCanSubmit(requiredFields && emailValid)
+
+    if (showErrorMessage) {
+      handleShowError(false)
     }
   }, [credentail])
 
-  const testMail = () => {
-    // const expression = ""
-    return /\S+@\S+\.\S+/.test(credentail.username)
-  }
+  useEffect(() => {
+    handleShowError(true)
+  }, [errorMessage])
 
   return (
     <form
@@ -98,7 +103,7 @@ export const LoginBox: FunctionComponent<Props> = ({
       >
         <span>Sign in</span>
       </button>
-      {errorMessage && (
+      {errorMessage && showErrorMessage && (
         <div
           className="w-full p-2 mt-4 mb-2 bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200"
           role="alert"
@@ -106,7 +111,7 @@ export const LoginBox: FunctionComponent<Props> = ({
           {errorMessage}
         </div>
       )}
-      { !testMail() &&
+      { credentail.username.length > 0 && credentail.password.length > 0 && !testMail() &&
         <div
           className="w-full p-2 mt-2 mb-4 bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200"
           role="alert"

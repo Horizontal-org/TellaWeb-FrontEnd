@@ -13,8 +13,13 @@ export const EditEmailModal: FunctionComponent<Props> = ({ onSubmit }) => {
 
   return (
     <ButtonPopup 
-      text="EDIT"
-      buttonType={btnType.Secondary}
+      toggleButton={(toggle) => (
+        <Button
+          text="EDIT"
+          onClick={toggle}
+          type={btnType.Secondary}
+        />
+      )}
       render={(toggle) => (
         <div className='p-4'>
           <p className='font-bold'>
@@ -40,7 +45,7 @@ export const EditEmailModal: FunctionComponent<Props> = ({ onSubmit }) => {
             />
           </div>
 
-          { !(/\S+@\S+\.\S+/.test(username)) && (
+          { username.length > 0 && confirmUsername.length > 0 && !(/\S+@\S+\.\S+/.test(username)) && (
             <div className="w-full p-2 mt-4 mb-4 bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200">
               Please enter a valid email address.
             </div>
@@ -63,7 +68,6 @@ export const EditEmailModal: FunctionComponent<Props> = ({ onSubmit }) => {
               }}
             />
           </div>
-
           
         </div>
       )}

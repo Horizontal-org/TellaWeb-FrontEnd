@@ -9,6 +9,10 @@ export const useAuthRequired = (redirectoTo?: string) => {
   const router = useRouter();
 
   useEffect(() => {
+    authPloc.getProfile()  
+  }, [])
+
+  useEffect(() => {
     if (!state || typeof state?.loggedIn === "undefined") return;
     if (!state.loggedIn) {
       router.replace("/login");
