@@ -1,25 +1,40 @@
+import { useEffect } from "react";
+
 import { LoginPage } from "packages/ui";
 import { useRouter } from "next/dist/client/router";
-import { useEffect } from "react";
-import { Credential } from "packages/bloc";
-import { usePlocState } from "../../common/usePlocState";
-import { usePloc } from "../_app";
+import { useDispatch } from "react-redux";
+import { Credential } from "@tellaweb/bloc";
+import { useAuth } from "packages/state/features/auth/authHooks";
+import { useLoginMutation } from "packages/state/services/auth";
+import {
+  setCredentials,
+  setError,
+} from "packages/state/features/auth/authSlice";
 
 const Login = () => {
-  const { auth: authPloc } = usePloc();
-  const state = usePlocState(authPloc);
+  const { errorMessage, user } = useAuth();
   const router = useRouter();
+  const dispatch = useDispatch();
+  const [login, { isLoading }] = useLoginMutation();
 
   useEffect(() => {
-    if (state?.loggedIn) router.replace("/report");
-  }, [state?.loggedIn]);
+    if (user) router.replace("/report");
+  }, [user]);
+
+  const doLogin = async (credential: Credential) => {
+    try {
+      const data = await login(credential).unwrap();
+      dispatch(setCredentials(data));
+    } catch (err) {
+      dispatch(setError(err.data.message));
+    }
+  };
 
   return (
     <LoginPage
-      onSubmit={(userAndPassword: Credential) =>
-        authPloc.login(userAndPassword)
-      }
-      errorMessage={state?.kind === "ErrorAuthState" ? state.error : undefined}
+      onSubmit={doLogin}
+      errorMessage={errorMessage}
+      isLoading={isLoading}
     />
   );
 };

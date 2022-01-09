@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import { SettingsPage } from '../../packages/ui/pages/SettingsPage/SettingsPage'
 import { Menu } from '../../components/Menu'
 import { usePloc } from "../_app";
-import { usePlocState } from "../../common/usePlocState"
-import { useAuthRequired } from "../../common/useAuthRequired"
-import { useToast } from '../../components/ToastWrapper'
+import { useAuthRequired } from "packages/state/features/auth/authHooks";
 
 const Settings = () => {
-  useAuthRequired()
+  useAuthRequired();
 
   const { user: userPloc } = usePloc();
   const state = usePlocState(userPloc);

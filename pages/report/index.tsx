@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useAuthRequired } from "../../common/useAuthRequired";
 import { ReportListPage, ItemQuery } from "packages/ui";
 import { usePlocState } from "../../common/usePlocState";
 import { usePloc } from "../_app";
 import { Menu } from "../../components/Menu";
 import { toReport } from "../../common/toReport";
 import { useRouter } from "next/dist/client/router";
+import { useAuthRequired } from "packages/state/features/auth/authHooks";
 
 export const Report = () => {
   useAuthRequired();
+
   const { push } = useRouter();
   const { report: reportPloc, file: filePloc } = usePloc();
   const state = usePlocState(reportPloc);

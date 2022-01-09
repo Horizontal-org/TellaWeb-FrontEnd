@@ -11,11 +11,13 @@ type Credential = {
 type Props = {
   onSubmit: (credential: Credential) => void;
   errorMessage?: string;
+  isLoading?: boolean;
 };
 
 export const LoginBox: FunctionComponent<Props> = ({
   onSubmit,
   errorMessage,
+  isLoading,
 }) => {
   const [credentail, setCredentail] = useState<Credential>({
     username: "",
@@ -71,7 +73,7 @@ export const LoginBox: FunctionComponent<Props> = ({
       />
       <div className='relative'>
         <input
-          type={showPass ? 'text' : 'password'}
+          type={showPass ? "text" : "password"}
           value={credentail.password}
           name="password"
           className="mb-5 w-80 focus:border-blue-700 rounded text-base p-2 border-2 outline-none"
@@ -98,10 +100,10 @@ export const LoginBox: FunctionComponent<Props> = ({
       <button
         className="bg-blue-300 hover:bg-blue py-2 text-white uppercase text-base font-bold rounded w-80 disabled:opacity-50"
         id="login"
-        disabled={!canSubmit}
+        disabled={!canSubmit || isLoading}
         type={"submit"}
       >
-        <span>Sign in</span>
+        <span>{isLoading ? "Logging in..." : "Sign in"}</span>
       </button>
       {errorMessage && showErrorMessage && (
         <div

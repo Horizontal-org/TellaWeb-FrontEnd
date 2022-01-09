@@ -1,15 +1,16 @@
-import { useRouter, } from "next/dist/client/router";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
+import { useRouter } from "next/dist/client/router";
 import { ReportPage } from "packages/ui";
 import { toReport } from "../../common/toReport";
 import { usePlocState } from "../../common/usePlocState";
 import { usePloc } from "../_app";
-import { useToast } from '../../components/ToastWrapper'
-import { useAuthRequired } from "../../common/useAuthRequired"
+import { useToast } from "../../components/ToastWrapper";
+import { useAuthRequired } from "packages/state/features/auth/authHooks";
 
 export const ReportById = () => {
-  useAuthRequired()
-  const { query, back, push } = useRouter();
+  useAuthRequired();
+
+  const { query, back } = useRouter();
   const { report: reportPloc, file: filePloc } = usePloc();
   const state = usePlocState(reportPloc);
   const fileState = usePlocState(filePloc)
