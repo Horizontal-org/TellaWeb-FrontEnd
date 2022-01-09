@@ -1,18 +1,16 @@
-import React, { useEffect } from 'react'
-import { LogoutPage } from '../../packages/ui/pages/LogoutPage/LogoutPage'
-import { usePloc } from "../_app"
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { LogoutPage } from "packages/ui/pages/LogoutPage/LogoutPage";
+import { clearCredentials } from "packages/state/features/auth/authSlice";
 
 const Logout = () => {
-  const { auth: authPloc } = usePloc()
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    authPloc.logout()
-  }, [])
+    dispatch(clearCredentials());
+  }, []);
 
-  
-  return (
-    <LogoutPage />
-  )
-}
+  return <LogoutPage />;
+};
 
-export default Logout
+export default Logout;

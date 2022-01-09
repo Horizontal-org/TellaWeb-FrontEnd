@@ -29,8 +29,12 @@ export const authSlice = createSlice({
         errorMessage: payload,
       };
     },
+    clearCredentials: () => ({
+      user: undefined,
+      accessToken: undefined,
+    }),
   },
   extraReducers: {},
 });
 
-export const { setCredentials, setError } = authSlice.actions;
+export const { setCredentials, setError, clearCredentials } = authSlice.actions;
