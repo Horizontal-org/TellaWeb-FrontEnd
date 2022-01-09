@@ -1,13 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "@tellaweb/bloc";
 
+const ISSERVER = typeof window === "undefined";
 interface AuthState {
   user?: User;
   accessToken?: string;
   errorMessage?: string;
 }
 
-const initialState: AuthState = {};
+const initialState: AuthState = {
+  accessToken: !ISSERVER ? localStorage.getItem("access_token") : undefined,
+};
 
 export const authSlice = createSlice({
   name: "user",
@@ -29,10 +32,12 @@ export const authSlice = createSlice({
         errorMessage: payload,
       };
     },
-    clearCredentials: () => ({
-      user: undefined,
-      accessToken: undefined,
-    }),
+    clearCredentials: () => {
+      return {
+        user: undefined,
+        accessToken: undefined,
+      };
+    },
   },
   extraReducers: {},
 });
