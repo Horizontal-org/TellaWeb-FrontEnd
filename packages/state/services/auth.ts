@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Credential } from "@tellaweb/bloc";
 import { RootStore } from "packages/state/store";
-import { User } from "../domain/user";
+import { Credential, User } from "../domain/user";
 
 export const authApi = createApi({
   baseQuery: fetchBaseQuery({

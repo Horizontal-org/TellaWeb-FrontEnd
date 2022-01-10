@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { LoginPage } from "packages/ui";
 import { useRouter } from "next/dist/client/router";
 import { useDispatch } from "react-redux";
-import { Credential } from "@tellaweb/bloc";
 import { useAuth } from "packages/state/features/auth/authHooks";
 import { useLoginMutation } from "packages/state/services/auth";
 import {
@@ -11,6 +10,7 @@ import {
   setError,
 } from "packages/state/features/auth/authSlice";
 import { useUserProfile } from "packages/state/features/user/userHooks";
+import { Credential } from "packages/state/domain/user";
 
 const Login = () => {
   const { errorMessage } = useAuth();
