@@ -13,7 +13,7 @@
     "chromatic": "npx chromatic --project-token=15ec91a46767 --build-script-name=build-storybook"
   },
   "devDependencies": {
-    "@react-icons/all-files": "^4.1.0",
+    "@react-icons/all-files": "4.1.0",
     "@storybook/addon-essentials": "^6.3.8",
     "@storybook/addon-links": "^6.3.8",
     "@storybook/addon-postcss": "^2.0.0",
