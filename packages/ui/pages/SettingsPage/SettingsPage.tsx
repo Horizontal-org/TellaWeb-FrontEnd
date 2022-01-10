@@ -1,8 +1,8 @@
-import { FunctionComponent, useState, useEffect } from "react";
+import { FunctionComponent } from "react";
 import { MainLayout } from "../../layouts/MainLayout";
-import { User } from "../../../bloc";
 import { EditEmailModal } from "../../components/EditEmailModal/EditEmailModal";
 import { EditPasswordModal } from "../../components/EditPasswordModal/EditPasswordModal";
+import { User } from "packages/state/domain/user";
 
 type Props = {
   sidebar: React.ReactNode;
@@ -24,7 +24,6 @@ export const SettingsPage: FunctionComponent<Props> = ({
       leftbar={sidebar}
       content={
         <div>
-          {JSON.stringify(user || {})}
           <div className="flex h-10 mb-2"></div>
           <div className="flex justify-between items-center py-4 border-b">
             <div className="flex items-center">
