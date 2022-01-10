@@ -1,55 +1,57 @@
-import React, { useEffect, useState } from "react";
-import { SettingsPage } from '../../packages/ui/pages/SettingsPage/SettingsPage'
-import { Menu } from '../../components/Menu'
-import { usePloc } from "../_app";
+import React, { useEffect } from "react";
+import { SettingsPage } from "../../packages/ui/pages/SettingsPage/SettingsPage";
+import { Menu } from "../../components/Menu";
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
+import { useUserProfile } from "packages/state/features/user/userHooks";
+import { useToast } from "components/ToastWrapper";
+import {
+  useUpdatePasswordMutation,
+  useUpdateUserMutation,
+} from "packages/state/services/user";
+import { useDispatch } from "react-redux";
+import { setUser } from "packages/state/features/user/userSlice";
 
 const Settings = () => {
   useAuthRequired();
+  const user = useUserProfile();
+  const dispatch = useDispatch();
 
-  const { user: userPloc } = usePloc();
-  const state = usePlocState(userPloc);
-  const handleToast = useToast()
+  const handleToast = useToast();
 
-  const [currentUser, handleCurrentUser] = useState(null)
-
-  useEffect(() => {
-    userPloc.getProfile()
-  }, [])
+  const [updatePassword, updatePasswordResult] = useUpdatePasswordMutation();
+  const [updateUser, updateUserResult] = useUpdateUserMutation();
 
   useEffect(() => {
-    if (state.kind === 'PasswordUpdated') {
-      handleToast('Password updated!', 'info')
+    if (updatePasswordResult.isSuccess) {
+      handleToast("Password updated!", "info");
     }
-
-    if (state.kind === 'UsernameUpdated') {
-      handleToast('Email updated!', 'info')
-      userPloc.getProfile()
+    if (updatePasswordResult.error && "status" in updatePasswordResult.error) {
+      handleToast(updatePasswordResult.error.data.message, "danger");
     }
+  }, [updatePasswordResult.status]);
 
-    if (state.kind === 'UpdateFailed') {
-      handleToast(state.error, 'danger')
+  useEffect(() => {
+    if (updateUserResult.isSuccess) {
+      handleToast("Email updated!", "info");
+      dispatch(setUser({ ...user, ...updateUserResult.data }));
     }
-
-    if (state.kind === 'LoadedUser') {
-      handleCurrentUser(state.user)
+    if (updateUserResult.error && "status" in updateUserResult.error) {
+      handleToast(updateUserResult.error.data.message, "danger");
     }
-
-  }, [state.kind])
-  
+  }, [updateUserResult.status]);
 
   return (
-    <SettingsPage 
+    <SettingsPage
       sidebar={<Menu />}
-      user={currentUser}
-      onUpdatePassword={(currentPassword, newPassword) => {
-        userPloc.updatePassword(currentPassword, newPassword)
+      user={user}
+      onUpdatePassword={(current, newPassword) => {
+        updatePassword({ current, new: newPassword });
       }}
       onUpdateUsername={(username) => {
-        userPloc.updateUsername(currentUser.id, username)
+        updateUser({ id: user.id, username });
       }}
     />
-  )
-}
+  );
+};
 
-export default Settings
+export default Settings;

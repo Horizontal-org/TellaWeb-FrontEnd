@@ -22,10 +22,7 @@ export const authApi = createApi({
         body: credential,
       }),
     }),
-    getProfile: builder.query<User, undefined>({
-      query: (undefined) => ({ url: "/user" }),
-    }),
   }),
 });
 
-export const { useLoginMutation, useGetProfileQuery } = authApi;
+export const { useLoginMutation } = authApi;

@@ -10,9 +10,11 @@ import {
   setCredentials,
   setError,
 } from "packages/state/features/auth/authSlice";
+import { useUserProfile } from "packages/state/features/user/userHooks";
 
 const Login = () => {
-  const { errorMessage, user } = useAuth();
+  const { errorMessage } = useAuth();
+  const user = useUserProfile();
   const router = useRouter();
   const dispatch = useDispatch();
   const [login, { isLoading }] = useLoginMutation();
