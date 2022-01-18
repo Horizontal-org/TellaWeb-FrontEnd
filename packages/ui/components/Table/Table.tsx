@@ -2,9 +2,9 @@
 import { FunctionComponent, useEffect, useMemo } from "react";
 import { Column, useTable, useRowSelect, useSortBy, usePagination } from "react-table";
 import cn from "classnames";
-import { MdExpandMore } from "@react-icons/all-files/md/MdExpandMore";
-import { MdExpandLess } from "@react-icons/all-files/md/MdExpandLess";
-import { FaRegFolder } from "@react-icons/all-files/fa/FaRegFolder";
+import { MdExpandMore } from "react-icons/md";
+import { MdExpandLess } from "react-icons/md";
+import { FaRegFolder } from "react-icons/fa";
 import { IndeterminateCheckbox } from "./IndeterminateCheckbox";
 import { Item } from "../../domain/Item";
 import { ItemQuery } from "../../domain/ItemQuery";

@@ -1,7 +1,5 @@
 import { FunctionComponent } from 'react'
 import { MediaVolume } from './MediaVolume'
-import { BsPlus } from "@react-icons/all-files/bs/BsPlus"
-import { BsDash } from "@react-icons/all-files/bs/BsDash"
 import { BsPlay } from 'react-icons/bs'
 import { MdFullscreen } from "react-icons/md"
 

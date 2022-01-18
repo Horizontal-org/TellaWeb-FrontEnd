@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
 import { storiesOf } from "@storybook/react";
-import { MdCloudUpload } from "@react-icons/all-files/md/MdCloudUpload";
+import { MdCloudUpload } from "react-icons/md";
 
 import { NavButton } from "../../packages/ui";
 import { ExampleMenuMokedData } from "../moked/menu";

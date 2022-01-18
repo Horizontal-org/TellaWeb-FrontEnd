@@ -1,9 +1,7 @@
 import { FunctionComponent, useRef, useState } from "react";
 import cn from "classnames";
-import { MdInfoOutline } from "@react-icons/all-files/md/MdInfoOutline";
-import { MdSave } from "@react-icons/all-files/md/MdSave";
-import { BsArrowsAngleExpand } from "@react-icons/all-files/bs/BsArrowsAngleExpand";
-import { MdRemoveRedEye } from "@react-icons/all-files/md/MdRemoveRedEye";
+import { MdInfoOutline, MdSave, MdRemoveRedEye } from "react-icons/md";
+import { BsArrowsAngleExpand } from "react-icons/bs";
 
 import { Report, IReportFile } from "../../domain";
 import {

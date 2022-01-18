@@ -1,7 +1,7 @@
 import { FunctionComponent  } from 'react'
 import cn from 'classnames'
-import { HiChevronLeft } from "@react-icons/all-files/hi/HiChevronLeft"
-import { HiChevronRight } from "@react-icons/all-files/hi/HiChevronRight"
+import { HiChevronLeft } from "react-icons/hi"
+import { HiChevronRight } from "react-icons/hi"
 
 type Props = {
   gotoPage?: (index: number) => void

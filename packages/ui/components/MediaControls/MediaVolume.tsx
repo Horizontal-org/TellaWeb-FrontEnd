@@ -1,9 +1,5 @@
 import { FunctionComponent, useRef, useState, useEffect } from 'react'
-import { BsFillVolumeMuteFill } from "@react-icons/all-files/bs/BsFillVolumeMuteFill"
-import { BsFillVolumeDownFill } from "@react-icons/all-files/bs/BsFillVolumeDownFill"
-import { BsFillVolumeUpFill } from "@react-icons/all-files/bs/BsFillVolumeUpFill"
-import cn from 'classnames'
-import { IconContext } from '@react-icons/all-files/lib'
+import { BsFillVolumeUpFill, BsFillVolumeDownFill, BsFillVolumeMuteFill } from "react-icons/bs"
 
 type Props = {
   muted: boolean

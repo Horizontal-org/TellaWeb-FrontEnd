@@ -1,4 +1,4 @@
-import { MdEdit } from "@react-icons/all-files/md/MdEdit";
+import { MdEdit } from "react-icons/md";
 import { FunctionComponent } from "react";
 
 export interface ConfigOption {

@@ -1,5 +1,5 @@
 import { storiesOf } from "@storybook/react";
-import { MdDelete } from "@react-icons/all-files/md/MdDelete";
+import { MdDelete } from "react-icons/md";
 import { ButtonMenu, ButtonOption } from "../../packages/ui";
 import { action } from "@storybook/addon-actions";
 
