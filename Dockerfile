@@ -1,6 +1,7 @@
-FROM node:lts-alpine AS base
+FROM node:14.18.1-alpine3.12 AS base
 ARG api_url
-ENV NEXT_PUBLIC_API_URL=${api_url}
+ENV NEXT_REDIRECT_API_URL=${api_url}
+ENV NEXT_PUBLIC_API_URL=/api
 
 # Install dependencies only when needed
 FROM base AS deps
