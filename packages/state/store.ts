@@ -2,21 +2,20 @@ import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/dist/query/react";
 import { authApi } from "./services/auth";
 import { authSlice } from "./features/auth/authSlice";
-import { authLocalStorageMiddleware } from "./features/auth/authLocalStorageMiddleware";
 import { userApi } from "./services/user";
 import { userSlice } from "./features/user/userSlice";
+import { reportsSlice } from "./features/reports/reportsSlice";
+import { reportsApi } from "./services/reports";
 
 const store = configureStore({
   reducer: {
     [authApi.reducerPath]: authApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
+    [reportsApi.reducerPath]: reportsApi.reducer,
     auth: authSlice.reducer,
     user: userSlice.reducer,
+    reports: reportsSlice.reducer,
   },
-  middleware: (getDefaultMiddleware) => [
-    ...getDefaultMiddleware(),
-    authLocalStorageMiddleware,
-  ],
 });
 
 setupListeners(store.dispatch);
