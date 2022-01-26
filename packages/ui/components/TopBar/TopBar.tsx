@@ -1,5 +1,5 @@
 import { FunctionComponent, PropsWithChildren } from "react";
-import { MdClose } from "@react-icons/all-files/md/MdClose";
+import { MdClose } from "react-icons/md";
 
 type Props = {
   title: string;

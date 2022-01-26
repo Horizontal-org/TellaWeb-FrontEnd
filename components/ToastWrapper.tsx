@@ -1,9 +1,9 @@
 import { FunctionComponent, Fragment, useState } from 'react'
 import { createContext } from '../common/Context'
 import cn from 'classnames'
-import { BsX } from "@react-icons/all-files/bs/BsX"
-import { AiOutlineInfoCircle } from "@react-icons/all-files/ai/AiOutlineInfoCircle"
-import { IoMdCheckmarkCircleOutline } from "@react-icons/all-files/io/IoMdCheckmarkCircleOutline"
+import { BsX } from "react-icons/bs"
+import { AiOutlineInfoCircle } from "react-icons/ai"
+import { IoMdCheckmarkCircleOutline } from "react-icons/io"
 
 type Props = {
   children: React.ReactNode

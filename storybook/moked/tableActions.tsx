@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { MdDelete } from "@react-icons/all-files/md/MdDelete";
+import { MdDelete } from "react-icons/md";
 import cn from "classnames";
 import { Row, Column } from "react-table";
 import { REPORT_COLUMNS } from "../../packages/ui/domain/ReportTableColumns";

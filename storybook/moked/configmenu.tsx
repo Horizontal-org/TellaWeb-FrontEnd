@@ -1,11 +1,6 @@
 import React from "react";
 
-import { MdCloudUpload } from "@react-icons/all-files/md/MdCloudUpload";
-import { MdPersonOutline } from "@react-icons/all-files/md/MdPersonOutline";
-import { MdSettings } from "@react-icons/all-files/md/MdSettings";
-import { MdDelete } from "@react-icons/all-files/md/MdDelete";
-import { MdExitToApp } from "@react-icons/all-files/md/MdExitToApp";
-import { MdHelp } from "@react-icons/all-files/md/MdHelp";
+import { MdCloudUpload, MdPersonOutline, MdSettings, MdDelete, MdExitToApp, MdHelp } from "react-icons/md";
 import { MenuDescription } from "../../packages/ui/domain/Menu";
 
 export const ExampleMenuMokedData: MenuDescription[] = [

@@ -1,6 +1,6 @@
 import { FunctionComponent, PropsWithChildren } from "react";
-import { MdNavigateBefore } from "@react-icons/all-files/md/MdNavigateBefore";
-import { MdNavigateNext } from "@react-icons/all-files/md/MdNavigateNext";
+import { MdNavigateBefore } from "react-icons/md";
+import { MdNavigateNext } from "react-icons/md";
 import { btnType, Button } from "../Button/Button";
 
 type Props = {

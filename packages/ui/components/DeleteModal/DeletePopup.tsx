@@ -4,7 +4,7 @@ import {
   useState,
   ReactNode,
 } from "react";
-import { MdClose } from "@react-icons/all-files/md/MdClose";
+import { MdClose } from "react-icons/md";
 import { ButtonOption } from '../ButtonMenu/ButtonOption'
 import ReactModal from "react-modal";
 

@@ -7,12 +7,7 @@ import {
   useState,
   ChangeEvent
 } from "react";
-
-import { MdOpenInNew } from "@react-icons/all-files/md/MdOpenInNew";
-import { MdRemoveRedEye } from "@react-icons/all-files/md/MdRemoveRedEye";
-import { MdSave } from "@react-icons/all-files/md/MdSave";
-import { MdDelete } from "@react-icons/all-files/md/MdDelete";
-
+import { MdOpenInNew, MdRemoveRedEye, MdSave } from "react-icons/md";
 import {
   ReportBar,
   Button,

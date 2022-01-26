@@ -1,6 +1,5 @@
 import { FunctionComponent } from "react";
-import { MdNavigateBefore } from "@react-icons/all-files/md/MdNavigateBefore";
-import { MdNavigateNext } from "@react-icons/all-files/md/MdNavigateNext";
+import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 
 type Props = {
   goPrev: () => void;

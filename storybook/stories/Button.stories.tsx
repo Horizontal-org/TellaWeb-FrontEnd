@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
 import { storiesOf } from "@storybook/react";
-import { MdRemoveRedEye } from "@react-icons/all-files/md/MdRemoveRedEye";
+import { MdRemoveRedEye } from "react-icons/md";
 
 import { Button, SidebarButton } from "../../packages/ui";
 import { btnType } from "../../packages/ui/components/Button/Button";

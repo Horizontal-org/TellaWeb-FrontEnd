@@ -5,7 +5,7 @@ import {
   ReactNode,
 } from "react";
 import cn from "classnames";
-import { MdClose } from "@react-icons/all-files/md/MdClose";
+import { MdClose } from "react-icons/md";
 import { btnType, Button } from "../Button/Button";
 import ReactModal from "react-modal";
 

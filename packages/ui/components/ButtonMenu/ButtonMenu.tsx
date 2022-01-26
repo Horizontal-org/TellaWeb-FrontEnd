@@ -1,6 +1,6 @@
 import { FunctionComponent, useEffect, useRef, useState } from "react";
 import cn from "classnames";
-import { BsThreeDots } from "@react-icons/all-files/bs/BsThreeDots";
+import { BsThreeDots } from "react-icons/bs";
 import { btnType, Button } from "../Button/Button";
 
 type Props = {

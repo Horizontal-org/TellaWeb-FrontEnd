@@ -1,8 +1,6 @@
 import { CSSProperties, FunctionComponent } from "react";
 import cn from "classnames";
-import { MdHeadset } from "@react-icons/all-files/md/MdHeadset";
-import { MdVideocam } from "@react-icons/all-files/md/MdVideocam";
-import { MdInsertDriveFile } from "@react-icons/all-files/md/MdInsertDriveFile";
+import { MdHeadset, MdVideocam, MdInsertDriveFile } from "react-icons/md";
 import { ReportFileType } from "../../domain/ReportFileType";
 import { IReportFile } from "../../domain/ReportFile";
 

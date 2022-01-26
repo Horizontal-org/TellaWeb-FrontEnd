@@ -3,7 +3,7 @@ import { ButtonOption } from '../ButtonMenu/ButtonOption'
 import { ButtonPopup } from '../ButtonPopup/ButtonPopup';
 import { btnType, Button } from '../Button/Button'
 import { TextInput } from '../Inputs/TextInput/TextInput';
-import { MdDelete } from "@react-icons/all-files/md/MdDelete";
+import { MdDelete } from "react-icons/md";
 
 
 type Props = {
