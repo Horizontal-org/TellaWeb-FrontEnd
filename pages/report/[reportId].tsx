@@ -6,44 +6,49 @@ import { usePlocState } from "../../common/usePlocState";
 import { usePloc } from "../_app";
 import { useToast } from "../../components/ToastWrapper";
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
+import {
+  useDeleteMutation,
+  useGetByIdQuery,
+} from "packages/state/services/reports";
 
 export const ReportById = () => {
   useAuthRequired();
 
   const { query, back } = useRouter();
-  const { report: reportPloc, file: filePloc } = usePloc();
-  const state = usePlocState(reportPloc);
-  const fileState = usePlocState(filePloc)
-  const handleToast = useToast()
+  const { file: filePloc } = usePloc();
+  const fileState = usePlocState(filePloc);
+  const handleToast = useToast();
 
+  const { data: currentReport, refetch } = useGetByIdQuery(
+    query.reportId.toString()
+  );
+  const [deleteReport, {}] = useDeleteMutation();
   useEffect(() => {
-    if (typeof query.reportId !== "string") return;
-    reportPloc.open(query.reportId);
-  }, [query.reportId, reportPloc]);
-
-  useEffect(() => {
-    if (fileState.kind === 'DeletedFileState') {
+    if (fileState.kind === "DeletedFileState") {
       if (typeof query.reportId !== "string") return;
-      reportPloc.open(query.reportId);
-    }  
-  }, [fileState.kind])
+      refetch();
+    }
+  }, [fileState.kind]);
 
-  return state && state.currentReport ? (
+  return currentReport ? (
     <ReportPage
-      report={toReport(state.currentReport)}
+      report={toReport(currentReport)}
       onDeleteFile={(_, file) => {
         if (file) {
-          filePloc.delete(file)
-          handleToast('File deleted')
+          filePloc.delete(file);
+          handleToast("File deleted");
         }
       }}
       onDownloadFile={(file) => {
-        filePloc.donwload(file)
+        filePloc.donwload(file);
       }}
-      onDeleteReport={(report) => {
-        reportPloc.delete(report.id);
-        handleToast('Report deleted')
-        back()
+      onDeleteReport={async (report) => {
+        const result = await deleteReport(report.id);
+        if ("data" in result) {
+          handleToast("Report deleted");
+          back();
+        }
+        //add error tast
       }}
       onClose={() => {
         back();
