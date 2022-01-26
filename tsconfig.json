@@ -19,10 +19,14 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@tellaweb/bloc": ["packages/bloc"],
-      "@tellaweb/ui": ["packages/ui"]
-
-    }
+      "@tellaweb/bloc": [
+        "packages/bloc"
+      ],
+      "@tellaweb/ui": [
+        "packages/ui"
+      ]
+    },
+    "incremental": true
   },
   "exclude": [
     "node_modules",
