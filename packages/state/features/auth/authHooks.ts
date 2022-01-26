@@ -2,8 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/dist/client/router";
 import { RootStore } from "../../store";
-import { useGetProfileQuery } from "packages/state/services/user";
-import { setCredentials } from "./authSlice";
+import { useLazyGetProfileQuery } from "packages/state/services/user";
 import { useUserProfile } from "../user/userHooks";
 import { setUser } from "../user/userSlice";
 
@@ -17,31 +16,25 @@ export const useAuthRequired = (loginUrl = "/login", redirectoTo?: string) => {
   const user = useUserProfile();
   const router = useRouter();
   const dispatch = useDispatch();
-  const { refetch, data, isError } = useGetProfileQuery();
+  const [loadUserProfile, data] = useLazyGetProfileQuery();
 
   // If the token was retrieved from the localstorage, we try to
   // get the profile of that user.
   useEffect(() => {
     if (accessToken && !user) {
-      refetch();
+      loadUserProfile().then((response) => dispatch(setUser(response.data)));
     }
   }, [accessToken, user]);
-
-  // If the profile is obtained, it is saved in the store.
-  useEffect(() => {
-    if (accessToken && data && !user) {
-      dispatch(setCredentials({ access_token: accessToken }));
-      dispatch(setUser(data));
-    }
-  }, [data, user, accessToken]);
 
   // If there is no user token or the profile cannot be obtained,
   // the user is not logged in.
   useEffect(() => {
-    if (isError || !accessToken) {
+    if (data?.isError || !accessToken) {
       router.replace(loginUrl);
       return;
     }
-    if (redirectoTo) router.replace(redirectoTo);
-  }, [user, loginUrl, router]);
+    if (redirectoTo && user) router.replace(redirectoTo);
+  }, [user, loginUrl, router, data]);
+
+  return user;
 };

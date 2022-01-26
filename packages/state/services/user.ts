@@ -25,8 +25,9 @@ type CustomFetchBaseQuery = BaseQueryFn<
 >;
 
 export const userApi = createApi({
+  reducerPath: "userApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_API_URL,
+    baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/user`,
     prepareHeaders: (headers, { getState }) => {
       const { accessToken } = (getState() as RootStore).auth;
       if (!accessToken) return headers;
@@ -37,18 +38,18 @@ export const userApi = createApi({
   }) as CustomFetchBaseQuery,
   endpoints: (builder) => ({
     getProfile: builder.query<User, void>({
-      query: () => ({ url: "/user" }),
+      query: () => ({ url: "/" }),
     }),
 
     validateEmail: builder.query<User, string>({
       query: (email) => ({
-        url: `/user/${email}`,
+        url: `/${email}`,
       }),
     }),
 
     updateUser: builder.mutation<User, { id: string; username: string }>({
       query: ({ id, username }) => ({
-        url: `/user/${id}`,
+        url: `/${id}`,
         method: "POST",
         body: {
           username,
@@ -60,7 +61,7 @@ export const userApi = createApi({
     updatePassword: builder.mutation<boolean, { current: string; new: string }>(
       {
         query: (passwords) => ({
-          url: `/user/change-password`,
+          url: `/change-password`,
           method: "POST",
           body: passwords,
         }),
@@ -70,6 +71,7 @@ export const userApi = createApi({
 });
 
 export const {
+  useLazyGetProfileQuery,
   useGetProfileQuery,
   useValidateEmailQuery,
   useUpdateUserMutation,
