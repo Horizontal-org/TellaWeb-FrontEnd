@@ -67,4 +67,8 @@ export const reportsApi = createApi({
   }),
 });
 
-export const { useGetByIdQuery, useListQuery, useDeleteMutation } = reportsApi;
+export const {
+  useLazyGetByIdQuery,
+  useListQuery,
+  useDeleteMutation,
+} = reportsApi;
