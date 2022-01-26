@@ -3,6 +3,7 @@ import { RootStore } from "packages/state/store";
 import { Credential, User } from "../domain/user";
 
 export const authApi = createApi({
+  reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_URL,
     prepareHeaders: (headers, { getState }) => {
