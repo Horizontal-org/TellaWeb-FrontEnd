@@ -1,9 +1,9 @@
 import { NextPage } from "next";
 import Head from "next/head";
-import { useAuthRequired } from "../common/useAuthRequired";
+import { useAuthRequired } from "packages/state/features/auth/authHooks";
 
 const Home: NextPage = () => {
-  useAuthRequired("/report");
+  useAuthRequired("/login", "/report");
 
   return (
     <div>

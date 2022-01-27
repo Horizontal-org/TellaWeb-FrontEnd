@@ -5,14 +5,20 @@ import { Credential } from "../../domain/Credential";
 type Props = {
   onSubmit: (credential: Credential) => void;
   errorMessage?: string;
+  isLoading?: boolean;
 };
 export const LoginPage: FunctionComponent<Props> = ({
   onSubmit,
   errorMessage,
+  isLoading,
 }) => {
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-white">
-      <LoginBox onSubmit={onSubmit} errorMessage={errorMessage} />
+      <LoginBox
+        onSubmit={onSubmit}
+        errorMessage={errorMessage}
+        isLoading={isLoading}
+      />
     </div>
   );
 };

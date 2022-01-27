@@ -2,5 +2,15 @@
   "extends": ["next", "next/core-web-vitals"],
   "rules": {
     "react-hooks/exhaustive-deps": "off"
-  }
+  },
+  "plugins": ["testing-library"],
+  "overrides": [
+    {
+      "files": [
+        "**/__tests__/**/*.[jt]s?(x)",
+        "**/?(*.)+(spec|test).[jt]s?(x)"
+      ],
+      "extends": ["plugin:testing-library/react"]
+    }
+  ]
 }

@@ -1,5 +1,4 @@
 import fetch from "isomorphic-fetch";
-import { CredentialRepository } from "..";
 import {
   DataError,
   Either,
@@ -8,24 +7,20 @@ import {
   UnexpectedError,
   NotFoundError,
   NotAllowedError,
-  ConflictError
+  ConflictError,
 } from "../domain";
 
 type Method = "GET" | "POST" | "DELETE" | "PUT";
 
 export class ApiDataFetcher {
-  constructor(
-    private baseUrl: string,
-    private credentialRepositroy?: CredentialRepository
-  ) {}
+  constructor(private baseUrl: string) {}
 
   private getAuthHeader = () => {
-    return this.credentialRepositroy?.isLoggedIn
-      ? {
-          credentials: "include",
-          Authorization: `Bearer ${this.credentialRepositroy?.token}`,
-        }
-      : { credentials: "include" };
+    const access_token = localStorage.getItem("access_token");
+    return {
+      credentials: "include",
+      Authorization: access_token ? `Bearer ${access_token}` : undefined,
+    };
   };
   private async request<P, D = undefined>(
     method: Method,
@@ -42,7 +37,7 @@ export class ApiDataFetcher {
         ...(body ? { body: JSON.stringify(body) } : {}),
       });
       if (!response.ok) {
-        const errorObject =  await response.json()
+        const errorObject = await response.json();
         switch (response.status) {
           case 401:
             return Either.left(
@@ -57,11 +52,11 @@ export class ApiDataFetcher {
           case 405:
             return Either.left(
               new NotAllowedError(new Error(errorObject.message))
-            )
+            );
           case 409:
             return Either.left(
               new ConflictError(new Error(errorObject.message))
-            )
+            );
           default:
             return Either.left(
               new UnexpectedError(new Error(response.statusText))

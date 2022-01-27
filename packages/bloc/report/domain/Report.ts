@@ -1,5 +1,5 @@
+import { User } from "packages/state/domain/user";
 import { File } from "../../file";
-import { User } from "../../user";
 
 export interface Report {
   reportId: string;
