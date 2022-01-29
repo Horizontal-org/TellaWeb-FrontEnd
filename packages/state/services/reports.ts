@@ -8,6 +8,7 @@ import {
 import { RootStore } from "../../state/store";
 import { Pagination } from "../domain/common";
 import { Report, ReportQuery } from "../domain/report";
+import { addThumbnail } from "../utils/addThumbnail";
 
 interface CustomError {
   status: string;
@@ -41,7 +42,9 @@ export const reportsApi = createApi({
       query: (reportId) => ({
         url: `/${reportId}`,
       }),
+      transformResponse: addThumbnail,
     }),
+
     list: builder.query<Pagination<Report>, ReportQuery>({
       query: (reportQuery) => {
         const params = {
@@ -57,11 +60,24 @@ export const reportsApi = createApi({
           params,
         };
       },
+      transformResponse: (response: Pagination<Report>) => ({
+        ...response,
+        results: response.results.map(addThumbnail),
+      }),
     }),
+
     delete: builder.mutation<boolean, string>({
       query: (reportId) => ({
         url: `/${reportId}`,
         method: "DELETE",
+      }),
+    }),
+
+    batchDelete: builder.mutation<boolean, string[]>({
+      query: (reportIds) => ({
+        url: `batch-delete`,
+        method: "POST",
+        body: reportIds,
       }),
     }),
   }),
@@ -71,4 +87,5 @@ export const {
   useLazyGetByIdQuery,
   useListQuery,
   useDeleteMutation,
+  useBatchDeleteMutation,
 } = reportsApi;

@@ -1,5 +1,5 @@
-import { FileType } from "../../file/domain/FileType.enum";
-import { Report } from "../domain";
+import { FileType } from "../domain/file";
+import { Report } from "../domain/report";
 
 export const addThumbnail = (report: Report) => {
   return {
