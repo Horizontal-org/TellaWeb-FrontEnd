@@ -9,7 +9,6 @@ import store from "packages/state/store";
 
 const ploc = {
   file: plocs.provideFilePloc(process.env.NEXT_PUBLIC_API_URL),
-  report: plocs.provideReportPloc(process.env.NEXT_PUBLIC_API_URL),
 };
 
 export const [blocContext, usePloc] = createContext<typeof ploc>();
