@@ -7,7 +7,7 @@ import { usePloc } from "../_app";
 import { useToast } from "../../components/ToastWrapper";
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import {
-  useDeleteMutation,
+  useDeleteReportMutation,
   useLazyGetByIdQuery,
 } from "packages/state/services/reports";
 
@@ -27,7 +27,8 @@ export const ReportById = () => {
   const handleToast = useToast();
 
   const [loadReport, { data: currentReport }] = useLazyGetByIdQuery();
-  const [deleteReport, {}] = useDeleteMutation();
+  const [deleteReport] = useDeleteReportMutation();
+
 
   useEffect(() => {
     reportId && loadReport(reportId);
