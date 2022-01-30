@@ -2,14 +2,14 @@ import { useEffect, useMemo } from "react";
 import { useRouter } from "next/router";
 import { ReportPage } from "packages/ui";
 import { toReport } from "../../common/toReport";
-import { usePlocState } from "../../common/usePlocState";
-import { usePloc } from "../_app";
 import { useToast } from "../../components/ToastWrapper";
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import {
   useDeleteReportMutation,
   useLazyGetByIdQuery,
 } from "packages/state/services/reports";
+import { useDeleteFileMutation } from "packages/state/services/files";
+import { useFileDownloader } from "packages/state/features/files/useFileDownloader";
 
 export const ReportById = () => {
   useAuthRequired();
@@ -22,35 +22,30 @@ export const ReportById = () => {
     return router.query.reportId as string;
   }, [router.query?.reportId]);
 
-  const { file: filePloc } = usePloc();
-  const fileState = usePlocState(filePloc);
   const handleToast = useToast();
 
   const [loadReport, { data: currentReport }] = useLazyGetByIdQuery();
   const [deleteReport] = useDeleteReportMutation();
 
+  const [downloadFile] = useFileDownloader();
+  const [deleteFile] = useDeleteFileMutation();
 
   useEffect(() => {
     reportId && loadReport(reportId);
   }, [reportId, loadReport]);
 
-  useEffect(() => {
-    if (fileState.kind === "DeletedFileState") {
-      loadReport(reportId);
-    }
-  }, [fileState.kind]);
-
   return currentReport ? (
     <ReportPage
       report={toReport(currentReport)}
-      onDeleteFile={(_, file) => {
+      onDeleteFile={async (_, file) => {
         if (file) {
-          filePloc.delete(file);
+          await deleteFile(file);
           handleToast("File deleted");
+          loadReport(reportId);
         }
       }}
       onDownloadFile={(file) => {
-        filePloc.donwload(file);
+        downloadFile(file);
       }}
       onDeleteReport={async (report) => {
         const result = await deleteReport(report.id);
