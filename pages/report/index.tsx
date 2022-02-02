@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from "react";
 import { ReportListPage, ItemQuery, Report as IReport } from "packages/ui";
-import { usePloc } from "../_app";
 import { Menu } from "../../components/Menu";
 import { toReport } from "../../common/toReport";
 import { useRouter } from "next/dist/client/router";
@@ -10,6 +9,7 @@ import {
   useListQuery,
 } from "packages/state/services/reports";
 import { ReportQuery } from "packages/state/domain/report";
+import { useReportFileDownloader } from "packages/state/features/files/useReportFileDownloader";
 
 const defaultQuery: ReportQuery = {
   page: 0,
@@ -47,7 +47,7 @@ export const Report = () => {
   const ready = useAuthRequired();
 
   const { push } = useRouter();
-  const { file: filePloc } = usePloc();
+  const [downloadReportFile] = useReportFileDownloader();
 
   const [query, setQuery] = useState<ReportQuery>(defaultQuery);
   const itemQuery = useMemo(() => toItemQuery(query), [query]);
@@ -70,7 +70,7 @@ export const Report = () => {
         push(`./report/${report.id}`);
       }}
       onDownload={(report) => {
-        filePloc.donwloadReportFiles(report.id);
+        downloadReportFile(report.id);
       }}
       reports={reports?.results.map(toReport) || []}
       sidebar={<Menu />}
