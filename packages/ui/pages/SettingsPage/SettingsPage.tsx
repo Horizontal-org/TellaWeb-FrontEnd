@@ -22,8 +22,9 @@ export const SettingsPage: FunctionComponent<Props> = ({
       title="Settings"
       subtitle="Change your user and password"
       leftbar={sidebar}
+      leftbarActive={false}
       content={
-        <div>
+        <div className='px-8'>
           <div className="flex h-10 mb-2"></div>
           <div className="flex justify-between items-center py-4 border-b">
             <div className="flex items-center">
@@ -32,7 +33,10 @@ export const SettingsPage: FunctionComponent<Props> = ({
               </p>
               <p>{user ? user.username : ""}</p>
             </div>
-            <EditEmailModal onSubmit={onUpdateUsername} />
+            <EditEmailModal 
+              onSubmit={onUpdateUsername}
+              title="Please enter the new email address you would like to use to log in Tella" 
+            />
           </div>
 
           <div className="flex justify-between items-center py-4 border-b">

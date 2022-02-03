@@ -73,20 +73,22 @@ export const ReportListPage: FunctionComponent<Props> = ({
       subtitle="All the files and reports sent by your users"
       content={
         <div>
-          <div className="flex h-10 space-x-2 mb-2 p-2">
+          <div className="flex space-x-2 mb-2 p-2">
             {selectedReports.length === 0 && (
-              <form onSubmit={search} className="flex">
-                <SearchInput
-                  onChange={(e) => {
-                    clearTimeout(searchTimeout)
-                    searchTimeout = setTimeout(() => {
-                      search(e)
-                    }, 500)
-                  }}
-                  ref={searchInput}
-                  defaultValue={currentQuery.search}
-                />
-              </form>
+              <>
+                <form onSubmit={search} className="flex">
+                  <SearchInput
+                    onChange={(e) => {
+                      clearTimeout(searchTimeout)
+                      searchTimeout = setTimeout(() => {
+                        search(e)
+                      }, 500)
+                    }}
+                    ref={searchInput}
+                    defaultValue={currentQuery.search}
+                  />
+                </form>
+              </>
             )}
             {selectedReports.length > 0 && (
               <>
@@ -139,7 +141,9 @@ export const ReportListPage: FunctionComponent<Props> = ({
         </div>
       }
       leftbar={sidebar}
+      leftbarActive={true}
       rightbar={<ReportBar report={currentReport} />}
+      rightbarActive={true}
       onClosePreview={() => setCurrentReport(undefined)}
       currentItem={currentReport}
     />

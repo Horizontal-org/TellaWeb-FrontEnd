@@ -32,6 +32,7 @@ export { DeleteModal } from './components/DeleteModal/DeleteModal'
 export { FileView } from "./components/FileView/FileView"
 export { ImageView } from "./components/ImageView/ImageView"
 export { Paginator } from './components/Paginator/Paginator'
+export { CreateUserModal } from './components/CreateUserModal/CreateUserModal'
 
 export { LoginPage } from "./pages/LoginPage/LoginPage";
 export { ReportListPage } from "./pages/ReportListPage/ReportListPage";

@@ -4,9 +4,10 @@ import { btnType } from '../Button/Button'
 
 type Props = {
   onSubmit: (username: string) => void
+  title: string
 }
 
-export const EditEmailModal: FunctionComponent<Props> = ({ onSubmit }) => {
+export const EditEmailModal: FunctionComponent<Props> = ({ onSubmit, title }) => {
   const [username, handleUsername] = useState<string>('')
   const [confirmUsername, handleConfirmUsername] = useState<string>('')
 
@@ -22,11 +23,11 @@ export const EditEmailModal: FunctionComponent<Props> = ({ onSubmit }) => {
       )}
       render={(toggle) => (
         <div className='p-4'>
-          <p className='font-bold'>
+          <p className='text-xxxl font-bold'>
             Edit email
           </p>
           <p className='text-base text-gray-600'>
-            Please enter the new email address you would like to use to log in Tella
+            { title }
           </p>
           <div className='py-4'>
             <TextInput
