@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { LoginPage } from "packages/ui";
 import { useRouter } from "next/dist/client/router";
 import { useDispatch } from "react-redux";
@@ -51,5 +51,14 @@ const Login = () => {
     />
   );
 };
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+      // Will be passed to the page component as props
+    },
+  };
+}
 
 export default Login;

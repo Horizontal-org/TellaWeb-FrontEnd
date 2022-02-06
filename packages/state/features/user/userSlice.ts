@@ -14,8 +14,11 @@ export const userSlice = createSlice({
     setUser: (_, { payload }: PayloadAction<User>) => ({
       user: payload,
     }),
+    clearUser: () => {
+      return { user: undefined };
+    },
   },
   extraReducers: {},
 });
 
-export const { setUser } = userSlice.actions;
+export const { setUser, clearUser } = userSlice.actions;
