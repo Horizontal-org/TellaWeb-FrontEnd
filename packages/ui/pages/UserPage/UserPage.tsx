@@ -12,11 +12,13 @@ import { User } from "packages/state/domain/user"
 import { EditEmailModal } from "../../components/EditEmailModal/EditEmailModal";
 import { EditPasswordModal } from "../../components/EditPasswordModal/EditPasswordModal";
 import { DeleteUserModal } from '../../components/DeleteUserModal/DeleteUserModal'
+import { EditUserNoteModal } from '../../components/EditUserNoteModal/EditUserNoteModal'
 
 type Props = {
   sidebar: React.ReactNode;
   onUpdateUsername: (username: string, isAdmin: boolean) => void;
   onUpdatePassword: (currentPassword: string, newPassword: string) => void;
+  onUpdateNote: (note: string, isAdmin: boolean) => void;
   deleteUser: () => void
   user: User | null;
 };
@@ -26,6 +28,7 @@ export const UserPage: FunctionComponent<Props> = ({
   user,
   onUpdateUsername,
   onUpdatePassword,
+  onUpdateNote,
   deleteUser
 }) => {
 
@@ -60,6 +63,20 @@ export const UserPage: FunctionComponent<Props> = ({
               <p>••••••••••</p>
             </div>
             <EditPasswordModal onSubmit={onUpdatePassword} />
+          </div>
+
+          <div className="flex justify-between items-center py-4 border-b">
+            <div className="flex items-center">
+              <p className="text-gray-600 uppercase" style={{ width: 200 }}>
+                Note
+              </p>
+              <p>{user ? user.note : '-'}</p>
+            </div>
+            <EditUserNoteModal 
+            onSubmit={(note: string) => {
+              onUpdateNote(note, !(user.role))
+              }} 
+            />
           </div>
 
           <div className="flex justify-between items-center py-4 border-b">

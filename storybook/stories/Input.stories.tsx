@@ -1,7 +1,7 @@
 /* eslint-disable no-alert */
 import { CSSProperties, useRef } from "react";
 import { storiesOf } from "@storybook/react";
-import { SearchInput, TextInput } from "../../packages/ui";
+import { SearchInput, TextInput, TextArea } from "../../packages/ui";
 import { action } from "@storybook/addon-actions";
 
 const titleStyle: CSSProperties = {
@@ -44,6 +44,25 @@ storiesOf("Inputs", module).add("Text input", () => {
         }}
       >
         <TextInput name="text-input" placeholder="Text input" ref={textRef} />
+      </form>
+    </div>
+  );
+});
+
+storiesOf("Inputs", module).add("Text area", () => {
+  const areaRef = useRef<HTMLTextAreaElement>();
+  return (
+    <div className="max-w-xs">
+      <h3 style={titleStyle} className="text-xl py-4">
+        Text area
+      </h3>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          action(`Text`)(areaRef.current.value);
+        }}
+      >
+        <TextArea name="text-input" placeholder="Text input" ref={areaRef} />
       </form>
     </div>
   );

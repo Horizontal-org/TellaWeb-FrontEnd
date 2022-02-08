@@ -8,6 +8,7 @@ export interface User {
   username: string;
   role: Roles;
   createdAt: string;
+  note?: string
 }
 
 export interface Credential {

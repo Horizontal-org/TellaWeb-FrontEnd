@@ -48,12 +48,19 @@ export const userApi = createApi({
       }),
     }),
 
-    updateUser: builder.mutation<User, { id: string; username: string, isAdmin: boolean }>({
-      query: ({ id, username, isAdmin }) => ({
+    updateUser: builder.mutation<User, 
+    { 
+      id: string, 
+      username?: string,
+      note?: string 
+      isAdmin: boolean 
+    }>({
+      query: ({ id, username = null, note, isAdmin }) => ({
         url: `/${id}`,
         method: "POST",
         body: {
-          username,
+          note: note,
+          username: username,
           isAdmin: isAdmin,
         },
       }),

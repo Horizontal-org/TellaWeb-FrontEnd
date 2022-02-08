@@ -33,6 +33,7 @@ export { FileView } from "./components/FileView/FileView"
 export { ImageView } from "./components/ImageView/ImageView"
 export { Paginator } from './components/Paginator/Paginator'
 export { CreateUserModal } from './components/CreateUserModal/CreateUserModal'
+export { TextArea } from './components/TextArea/TextArea'
 
 export { LoginPage } from "./pages/LoginPage/LoginPage";
 export { ReportListPage } from "./pages/ReportListPage/ReportListPage";

@@ -30,6 +30,7 @@ const UserById: FunctionComponent = () => {
 
   useEffect(() => {
     username && loadUser(username);
+    username && handleCurrentUsername(username)
   }, [username, loadUser]);  
 
   useEffect(() => {
@@ -43,7 +44,7 @@ const UserById: FunctionComponent = () => {
 
   useEffect(() => {
     if (updateUserResult.isSuccess) {
-      handleToast("Username updated!", "info");
+      handleToast("User updated!", "info");
       router.push(`./${currentUsername}`)
     }
     if (updateUserResult.error && "status" in updateUserResult.error) {
@@ -73,8 +74,16 @@ const UserById: FunctionComponent = () => {
         updateUser({ 
           id: currentUser.id, 
           username: username,
+          note: currentUser.note,
           isAdmin: isAdmin 
         });
+      }}
+      onUpdateNote={(note, isAdmin = false) => {
+        updateUser({
+          id: currentUser.id,
+          isAdmin: isAdmin,
+          note: note
+        })
       }}
       deleteUser={() => {
         deleteUser(currentUser.id)
