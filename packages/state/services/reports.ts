@@ -80,6 +80,17 @@ export const reportsApi = createApi({
         body: reportIds,
       }),
     }),
+
+    editReport: builder.mutation<Report, {id, title, description}>({
+      query: ({id, title, description}) => ({
+        url: `/${id}`,
+        method: 'POST',
+        body: {
+          title,
+          description
+        }
+      })
+    })
   }),
 });
 
@@ -88,4 +99,5 @@ export const {
   useListQuery,
   useDeleteMutation,
   useBatchDeleteMutation,
+  useEditReportMutation
 } = reportsApi;

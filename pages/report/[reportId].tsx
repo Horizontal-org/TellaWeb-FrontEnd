@@ -9,6 +9,7 @@ import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import {
   useDeleteMutation,
   useLazyGetByIdQuery,
+  useEditReportMutation
 } from "packages/state/services/reports";
 
 export const ReportById = () => {
@@ -28,10 +29,21 @@ export const ReportById = () => {
 
   const [loadReport, { data: currentReport }] = useLazyGetByIdQuery();
   const [deleteReport, {}] = useDeleteMutation();
+  const [editReport, editReportResult] = useEditReportMutation()
 
   useEffect(() => {
     reportId && loadReport(reportId);
   }, [reportId, loadReport]);
+
+  useEffect(() => {
+    if (editReportResult.isSuccess) {
+      handleToast("Title updated!", "info");
+      loadReport(reportId)
+    }
+    if (editReportResult.error && "status" in editReportResult.error) {
+      handleToast(editReportResult.error.data.message, "danger");
+    }
+  }, [editReportResult.status]);
 
   useEffect(() => {
     if (fileState.kind === "DeletedFileState") {
@@ -50,6 +62,13 @@ export const ReportById = () => {
       }}
       onDownloadFile={(file) => {
         filePloc.donwload(file);
+      }}
+      onEditTitle={(title) => {
+        editReport({
+          id: currentReport.id,
+          title: title,
+          description: null
+        })
       }}
       onDeleteReport={async (report) => {
         const result = await deleteReport(report.id);
