@@ -8,7 +8,9 @@ type Props = {
   title?: string;
   subtitle?: string;
   leftbar?: React.ReactNode;
+  leftbarActive?: boolean;
   rightbar?: React.ReactNode;
+  rightbarActive?: boolean;
   content: React.ReactNode;
   currentItem?: Item;
   onClosePreview?: () => void;
@@ -17,7 +19,9 @@ type Props = {
 export const MainLayout: FunctionComponent<Props> = ({
   content,
   leftbar,
+  leftbarActive,
   rightbar,
+  rightbarActive,
   title,
   subtitle,
   currentItem,
@@ -60,12 +64,12 @@ export const MainLayout: FunctionComponent<Props> = ({
           "transform mr-64": rightbar && rightSidebarOpen,
         })}
       >
-        <div className="py-4">
+        <div className="p-8">
           {title && <Title>{title}</Title>}
           {subtitle && <SubTitle>{subtitle}</SubTitle>}
         </div>
         <div className="flex">
-          {leftbar && (
+          {leftbar && leftbarActive && (
             <div>
               <SidebarButton 
                 onClick={toggleLeftSideBar}
@@ -73,7 +77,7 @@ export const MainLayout: FunctionComponent<Props> = ({
             </div>
           )}
           <div className="flex-1">{content}</div>
-          {rightbar && (
+          {rightbar && rightbarActive && (
             <div>
               <SidebarButton 
                 onClick={toggleRightSideBar}

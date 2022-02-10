@@ -14,10 +14,10 @@ export const SidebarButton: FunctionComponent<Props> = ({
     <div>
       <button
         type="button"
-        style={{ lineHeight: 1 }}
+        style={{ lineHeight: 1, height: 36 }}
         onClick={onClick}
         className={cn({
-          "focus:outline-none cursor-pointer border-r my-2 py-1 pr-3 stroke-current text-customgray-500 hover:text-customgray-400": true,
+          "flex flex-col justify-center focus:outline-none cursor-pointer border-r my-2 py-2 pr-3 stroke-current text-customgray-500 hover:text-customgray-400": true,
           "transform rotate-180": position && position === 'right'
         })}
       >
