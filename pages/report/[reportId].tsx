@@ -7,6 +7,7 @@ import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import {
   useDeleteReportMutation,
   useLazyGetByIdQuery,
+  useEditReportMutation
 } from "packages/state/services/reports";
 import { useDeleteFileMutation } from "packages/state/services/files";
 import { useFileDownloader } from "packages/state/features/files/useFileDownloader";
@@ -25,14 +26,30 @@ export const ReportById = () => {
   const handleToast = useToast();
 
   const [loadReport, { data: currentReport }] = useLazyGetByIdQuery();
+  const [editReport, editReportResult] = useEditReportMutation()
   const [deleteReport] = useDeleteReportMutation();
-
   const [downloadFile] = useFileDownloader();
   const [deleteFile] = useDeleteFileMutation();
 
   useEffect(() => {
     reportId && loadReport(reportId);
   }, [reportId, loadReport]);
+
+  useEffect(() => {
+    if (editReportResult.isSuccess) {
+      handleToast("Title updated!", "info");
+      loadReport(reportId)
+    }
+    if (editReportResult.error && "status" in editReportResult.error) {
+      handleToast(editReportResult.error.data.message, "danger");
+    }
+  }, [editReportResult.status]);
+
+  useEffect(() => {
+    if (fileState.kind === "DeletedFileState") {
+      loadReport(reportId);
+    }
+  }, [fileState.kind]);
 
   return currentReport ? (
     <ReportPage
@@ -46,6 +63,13 @@ export const ReportById = () => {
       }}
       onDownloadFile={(file) => {
         downloadFile(file);
+      }}
+      onEditTitle={(title) => {
+        editReport({
+          id: currentReport.id,
+          title: title,
+          description: null
+        })
       }}
       onDeleteReport={async (report) => {
         const result = await deleteReport(report.id);
