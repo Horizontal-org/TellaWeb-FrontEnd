@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { SettingsPage } from "../../packages/ui/pages/SettingsPage/SettingsPage";
 import { Menu } from "../../components/Menu";
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
@@ -57,5 +58,13 @@ const Settings = () => {
     />
   );
 };
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["settings"])),
+    },
+  };
+}
 
 export default Settings;
