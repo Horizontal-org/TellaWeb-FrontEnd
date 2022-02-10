@@ -29,9 +29,12 @@ export { Thumbnail } from "./components/Thumbnail/Thumbnail";
 export { ToggleButtonsBar } from "./components/ToggleButtonsBar/ToggleButtonsBar";
 export { TopBar } from "./components/TopBar/TopBar";
 export { DeleteModal } from './components/DeleteModal/DeleteModal'
+export { EditReportTitleModal } from './components/EditReportTitleModal/EditReportTitleModal'
 export { FileView } from "./components/FileView/FileView"
 export { ImageView } from "./components/ImageView/ImageView"
 export { Paginator } from './components/Paginator/Paginator'
+export { CreateUserModal } from './components/CreateUserModal/CreateUserModal'
+export { TextArea } from './components/TextArea/TextArea'
 
 export { LoginPage } from "./pages/LoginPage/LoginPage";
 export { ReportListPage } from "./pages/ReportListPage/ReportListPage";

@@ -16,11 +16,12 @@ import {
   MainContent,
   LeftCollapsingSidebar,
   FileView,
-  Paginator
+  Paginator,
+  EditReportTitleModal,
+  DeleteModal
 } from "../..";
 import { btnType } from "../../components/Button/Button";
 import { ButtonPopup } from "../../components/ButtonPopup/ButtonPopup";
-import { DeleteModal } from '../../components/DeleteModal/DeleteModal'
 
 type Props = {
   report: Report;
@@ -28,6 +29,7 @@ type Props = {
   onDeleteFile: (report: Report, file: IReportFile) => void;
   onDownloadFile: (file: IReportFile) => void;
   onClose: () => void;
+  onEditTitle: (title: string) => void
 };
 
 export const ReportPage: FunctionComponent<Props> = ({
@@ -36,6 +38,7 @@ export const ReportPage: FunctionComponent<Props> = ({
   onDeleteFile,
   onDownloadFile,
   onClose,
+  onEditTitle
 }) => {
   const [leftSidebarOpen, changeLeftSidebarOpenStatus] = useState(true);
   const [rightSidebarOpen, changeRightSidebarOpenStatus] = useState(true);
@@ -109,7 +112,7 @@ export const ReportPage: FunctionComponent<Props> = ({
                   onDownloadFile(report.files[current - 1])
                 }}
               />
-              <ButtonMenu openSide="right" type={btnType.Secondary} text="...">
+              <ButtonMenu openSide="right" type={btnType.Secondary} text="...">                
                 <DeleteModal 
                   render={(
                     <p>
@@ -117,7 +120,7 @@ export const ReportPage: FunctionComponent<Props> = ({
                     </p>
                   )}
                   onDelete={() => onDeleteFile(report, report.files[current - 1])}
-                />              
+                />                              
               </ButtonMenu>
             </div>
           )}          
@@ -153,6 +156,12 @@ export const ReportPage: FunctionComponent<Props> = ({
 
       <TopBar title={report.title} onClose={onClose}>
         <ButtonMenu openSide="left">
+          <EditReportTitleModal 
+            onSubmit={(name) => {
+              console.log('new name', name)
+              onEditTitle(name)
+            }}
+          />
           <DeleteModal 
             render={(
               <p>

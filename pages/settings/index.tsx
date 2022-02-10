@@ -48,7 +48,11 @@ const Settings = () => {
         updatePassword({ current, new: newPassword });
       }}
       onUpdateUsername={(username) => {
-        updateUser({ id: user.id, username });
+        updateUser({ 
+          id: user.id, 
+          username: username,
+          isAdmin: true 
+        });
       }}
     />
   );

@@ -29,6 +29,8 @@ export const SearchInput = forwardRef<
       <input
         type="text"
         ref={ref}
+        placeholder="Search"
+        style={{height: 36}}
         className="
           text-sm
           sm:text-base

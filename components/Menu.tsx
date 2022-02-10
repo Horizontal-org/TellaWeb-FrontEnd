@@ -4,7 +4,7 @@ import { SidebarLayout } from "packages/ui";
 import { IoMdExit } from 'react-icons/io'
 
 import { MdOutlineSettings } from 'react-icons/md'
-import { BsFillCloudArrowUpFill } from 'react-icons/bs'
+import { BsFillCloudArrowUpFill, BsPerson } from 'react-icons/bs'
 
 export const Menu: FunctionComponent = () => {
   const router = useRouter();
@@ -17,6 +17,12 @@ export const Menu: FunctionComponent = () => {
           icon: <BsFillCloudArrowUpFill />,
           onClick: () => router.replace("/report"),
           selected: router.route.includes("/report"),
+        },
+        {
+          text: "Users",
+          icon: <BsPerson />,
+          onClick: () => router.replace("/user"),
+          selected: router.route.includes("/user"),
         }
       ]}
       bottomMenu={[

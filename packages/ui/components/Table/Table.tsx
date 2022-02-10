@@ -16,6 +16,7 @@ type Props = {
   onSelection?: (items: Item[]) => void;
   onFetch?: (itemQuery: ItemQuery) => void;
   itemQuery?: ItemQuery;
+  icon?: React.ReactNode;
 };
 
 export const Table: FunctionComponent<Props> = ({
@@ -24,6 +25,7 @@ export const Table: FunctionComponent<Props> = ({
   onSelection,
   onFetch,
   itemQuery,
+  icon
 }: Props) => {
   const tColumns = useMemo<Column[]>(() => columns, []);
   const tData = useMemo(() => data, [data]);
@@ -76,9 +78,7 @@ export const Table: FunctionComponent<Props> = ({
                 <div style={{width: 20}}>
                   { row.isSelected ? (
                     <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-                  ) : (
-                    <FaRegFolder size={14} color="#8B8E8F"/>
-                  )}
+                  ) : icon || <FaRegFolder size={14} color="#8B8E8F"/>}
                 </div>
               </div>
             )
