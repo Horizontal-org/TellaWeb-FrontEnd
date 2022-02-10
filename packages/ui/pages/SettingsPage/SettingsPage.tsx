@@ -70,7 +70,6 @@ export const SettingsPage: FunctionComponent<Props> = ({
               <ButtonOption
                 text={t(`settings.language.es`)}
                 onClick={() => { 
-                  console.log('lang es')
                   i18n.changeLanguage('es')
                   router.push(router.pathname, router.pathname, { locale: 'es' })
                 }}
@@ -79,9 +78,7 @@ export const SettingsPage: FunctionComponent<Props> = ({
               <ButtonOption
                 text={t(`settings.language.en`)}
                 onClick={() => { 
-                  // router.locale = 'en' 
                   i18n.changeLanguage('en')
-                  console.log('lang en')
                   router.push(router.pathname, router.pathname, { locale: 'en' })
                 }}
                 color='#8B8E8F'
