@@ -66,7 +66,7 @@ export const reportsApi = createApi({
       }),
     }),
 
-    delete: builder.mutation<boolean, string>({
+    deleteReport: builder.mutation<boolean, string>({
       query: (reportId) => ({
         url: `/${reportId}`,
         method: "DELETE",
@@ -97,7 +97,7 @@ export const reportsApi = createApi({
 export const {
   useLazyGetByIdQuery,
   useListQuery,
-  useDeleteMutation,
+  useDeleteReportMutation,
   useBatchDeleteMutation,
   useEditReportMutation
 } = reportsApi;
