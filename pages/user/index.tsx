@@ -66,6 +66,10 @@ export const Report = () => {
     }
   }, [createUserResult.status]);
 
+  useEffect(() => {
+    refetch()
+  }, [])
+
   return ready ? (
     <UserListPage 
       currentQuery={itemQuery}

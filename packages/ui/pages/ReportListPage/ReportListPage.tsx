@@ -5,7 +5,8 @@ import {
   SetStateAction,
   useRef,
   useState,
-  ChangeEvent
+  ChangeEvent,
+  useEffect
 } from "react";
 import { MdOpenInNew, MdRemoveRedEye, MdSave } from "react-icons/md";
 import {
@@ -66,6 +67,7 @@ export const ReportListPage: FunctionComponent<Props> = ({
       search: name
     })
   };
+
 
   return (
     <MainLayout

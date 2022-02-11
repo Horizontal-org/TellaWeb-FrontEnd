@@ -46,6 +46,7 @@ const UserById: FunctionComponent = () => {
     if (updateUserResult.isSuccess) {
       handleToast("User updated!", "info");
       router.push(`./${currentUsername}`)
+      loadUser(currentUsername)
     }
     if (updateUserResult.error && "status" in updateUserResult.error) {
       handleToast(updateUserResult.error.data.message, "danger");

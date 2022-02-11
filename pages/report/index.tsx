@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { ReportListPage, ItemQuery, Report as IReport } from "packages/ui";
 import { Menu } from "../../components/Menu";
 import { toReport } from "../../common/toReport";
@@ -55,14 +55,18 @@ export const Report = () => {
   const { data: reports, refetch } = useListQuery(query);
   const [batchDelete] = useBatchDeleteMutation();
 
-  const onBatchDelete = async (reports: IReport[]) => {
-    const toDelete = reports.map((td) => td.id);
+  const onBatchDelete = async (reportsToDelete: IReport[]) => {
+    const toDelete = reportsToDelete.map((td) => td.id);
     const deleted = await batchDelete(toDelete).unwrap();
     if (deleted) refetch();
   };
 
+  useEffect(() => {
+    refetch()
+  }, [])
+
   return ready ? (
-    <ReportListPage
+    <ReportListPage      
       currentQuery={itemQuery}
       onQueryChange={(itemQuery) => setQuery(toReportQuery(itemQuery))}
       onDelete={onBatchDelete}

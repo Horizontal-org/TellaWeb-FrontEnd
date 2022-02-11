@@ -77,7 +77,9 @@ export const reportsApi = createApi({
       query: (reportIds) => ({
         url: `batch-delete`,
         method: "POST",
-        body: reportIds,
+        body: {
+          toDelete: reportIds
+        },
       }),
     }),
 
