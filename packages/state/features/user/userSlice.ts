@@ -14,7 +14,9 @@ export const userSlice = createSlice({
     setUser: (_, { payload }: PayloadAction<User>) => ({
       user: payload,
     }),
-    clearUser: () => initialState,
+    clearUser: () => {
+      return { user: undefined };
+    },
   },
   extraReducers: {},
 });

@@ -45,12 +45,6 @@ export const ReportById = () => {
     }
   }, [editReportResult.status]);
 
-  useEffect(() => {
-    if (fileState.kind === "DeletedFileState") {
-      loadReport(reportId);
-    }
-  }, [fileState.kind]);
-
   return currentReport ? (
     <ReportPage
       report={toReport(currentReport)}

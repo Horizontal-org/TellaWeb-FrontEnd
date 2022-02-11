@@ -2,7 +2,12 @@ import { FunctionComponent } from "react";
 import { MainLayout } from "../../layouts/MainLayout";
 import { EditEmailModal } from "../../components/EditEmailModal/EditEmailModal";
 import { EditPasswordModal } from "../../components/EditPasswordModal/EditPasswordModal";
+import { ButtonMenu } from '../../components/ButtonMenu/ButtonMenu'
+import { ButtonOption } from '../../components/ButtonMenu/ButtonOption'
 import { User } from "packages/state/domain/user";
+import { useRouter } from 'next/router'
+import { useTranslation } from "next-i18next";
+import { btnType } from "../../components/Button/Button";
 
 type Props = {
   sidebar: React.ReactNode;
@@ -11,12 +16,17 @@ type Props = {
   user: User | null;
 };
 
+// locale={router.locale === 'en' ? 'de' : 'en'}
+
 export const SettingsPage: FunctionComponent<Props> = ({
   sidebar,
   onUpdateUsername,
   onUpdatePassword,
   user,
 }) => {
+
+  const router = useRouter()
+  const { t, i18n } = useTranslation("settings");
   return (
     <MainLayout
       title="Settings"
@@ -47,6 +57,33 @@ export const SettingsPage: FunctionComponent<Props> = ({
               <p>••••••••••</p>
             </div>
             <EditPasswordModal onSubmit={onUpdatePassword} />
+          </div>
+
+          <div className="flex justify-between items-center py-4 border-b">
+            <div className="flex items-center">
+              <p className="text-gray-600 uppercase" style={{ width: 200 }}>
+                Language
+              </p>
+              <p>{t(`settings.language.${router.locale}`)}</p>
+            </div>
+            <ButtonMenu openSide="left" type={btnType.Secondary} text="CHANGE">
+              <ButtonOption
+                text={t(`settings.language.es`)}
+                onClick={() => { 
+                  i18n.changeLanguage('es')
+                  router.push(router.pathname, router.pathname, { locale: 'es' })
+                }}
+                color='#8B8E8F'
+              />
+              <ButtonOption
+                text={t(`settings.language.en`)}
+                onClick={() => { 
+                  i18n.changeLanguage('en')
+                  router.push(router.pathname, router.pathname, { locale: 'en' })
+                }}
+                color='#8B8E8F'
+              />
+            </ButtonMenu>
           </div>
         </div>
       }
