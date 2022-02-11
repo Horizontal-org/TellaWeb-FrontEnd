@@ -12,7 +12,8 @@ import {
   ButtonOption,
   SearchInput,
   DeleteModal,
-  CreateUserModal
+  CreateUserModal,
+  UserBar,
 } from "../..";
 import { MainLayout } from "../../layouts/MainLayout";
 import { User } from "packages/state/domain/user";
@@ -66,8 +67,12 @@ export const UserListPage: FunctionComponent<Props> = ({
     <MainLayout
       title="Users"
       subtitle="Manage who can upload Reports to Tella Web"
-      leftbar={sidebar}
+      onClosePreview={() => setCurrentUser(undefined)}
+      rightbar={<UserBar user={currentUser} />}
+      rightbarActive={true}
+      leftbar={sidebar}      
       leftbarActive={true}
+      currentItem={currentUser}
       content={
         <div>
           <div 

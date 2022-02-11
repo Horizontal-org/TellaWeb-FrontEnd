@@ -1,0 +1,67 @@
+.floatingLabelGroup {
+	position: relative;
+	margin: 5px 0;
+}
+
+.floatingLabelWrapper {  
+  position: absolute;
+  pointer-events: none;
+  top: 4px;
+  left: 12px;
+  opacity: 1;
+  transition: all 0.1s ease;
+}
+
+.floatingLabel { 
+  font-size: 12px;
+  color: #404040;
+}
+
+.floatingInput {
+  border-radius: 4px;
+  border: 1px solid #e5e5e5;
+}
+
+.labelWrapperWithFocus {
+  top: -13px;
+  bottom: 0px;
+  left: 8px;
+}
+
+.inputWithFocus {
+  outline: none;
+  border: 1px solid #008DEC;
+}
+
+.labelWithFocus { 
+  top: -0px;
+  bottom: 0px;
+  left: 5px;
+  font-size: 10px;
+  opacity: 1;
+  padding: 0 2px;
+  background: white;
+  color: #008DEC;
+}
+
+.floatingInput:focus {
+  outline: none;
+  border: 1px solid #008DEC;
+}
+
+.floatingInput:focus ~ .floatingLabelWrapper {
+  top: -13px;
+  bottom: 0px;
+  left: 8px;
+}
+
+.floatingInput:focus ~ .floatingLabelWrapper .floatingLabel {
+  top: -0px;
+  bottom: 0px;
+  left: 5px;
+  font-size: 10px;
+  opacity: 1;
+  padding: 0 2px;
+  background: white;
+  color: #008DEC;
+}

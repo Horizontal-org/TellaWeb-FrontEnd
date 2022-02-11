@@ -35,7 +35,8 @@ export { ImageView } from "./components/ImageView/ImageView"
 export { Paginator } from './components/Paginator/Paginator'
 export { CreateUserModal } from './components/CreateUserModal/CreateUserModal'
 export { TextArea } from './components/TextArea/TextArea'
-
+export { UserBar } from './components/UserBar/UserBar'
+ 
 export { LoginPage } from "./pages/LoginPage/LoginPage";
 export { ReportListPage } from "./pages/ReportListPage/ReportListPage";
 export { ReportPage } from "./pages/ReportPage/ReportPage";
