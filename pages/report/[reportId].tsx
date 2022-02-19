@@ -6,8 +6,8 @@ import { useToast } from "../../components/ToastWrapper";
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import {
   useDeleteReportMutation,
-  useLazyGetByIdQuery,
-  useEditReportMutation
+  useGetByIdQuery,
+  useEditReportMutation,
 } from "packages/state/services/reports";
 import { useDeleteFileMutation } from "packages/state/services/files";
 import { useFileDownloader } from "packages/state/features/files/useFileDownloader";
@@ -16,29 +16,20 @@ export const ReportById = () => {
   useAuthRequired();
 
   const router = useRouter();
-
-  const reportId = useMemo(() => {
-    if (router.query?.reportId && typeof router.query.reportId !== "string")
-      return router.query.reportId.toString();
-    return router.query.reportId as string;
-  }, [router.query?.reportId]);
-
   const handleToast = useToast();
 
-  const [loadReport, { data: currentReport }] = useLazyGetByIdQuery();
-  const [editReport, editReportResult] = useEditReportMutation()
+  const { data: currentReport, refetch } = useGetByIdQuery(
+    "" + router.query.reportId
+  );
+
+  const [editReport, editReportResult] = useEditReportMutation();
   const [deleteReport] = useDeleteReportMutation();
   const [downloadFile] = useFileDownloader();
   const [deleteFile] = useDeleteFileMutation();
 
   useEffect(() => {
-    reportId && loadReport(reportId);
-  }, [reportId, loadReport]);
-
-  useEffect(() => {
     if (editReportResult.isSuccess) {
       handleToast("Title updated!", "info");
-      loadReport(reportId)
     }
     if (editReportResult.error && "status" in editReportResult.error) {
       handleToast(editReportResult.error.data.message, "danger");
@@ -52,7 +43,7 @@ export const ReportById = () => {
         if (file) {
           await deleteFile(file);
           handleToast("File deleted");
-          loadReport(reportId);
+          refetch();
         }
       }}
       onDownloadFile={(file) => {
@@ -62,8 +53,8 @@ export const ReportById = () => {
         editReport({
           id: currentReport.id,
           title: title,
-          description: null
-        })
+          description: null,
+        });
       }}
       onDeleteReport={async (report) => {
         const result = await deleteReport(report.id);
