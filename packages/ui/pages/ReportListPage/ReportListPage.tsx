@@ -120,7 +120,7 @@ export const ReportListPage: FunctionComponent<Props> = ({
                     />
                   </>
                 )}                
-                <ButtonMenu openSide="right">
+                <ButtonMenu openSide="right" type={btnType.Secondary} text="...">
                   <DeleteModal 
                     render={(
                       <p>

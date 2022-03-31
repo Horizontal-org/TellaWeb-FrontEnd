@@ -49,11 +49,12 @@ export const ButtonMenu: FunctionComponent<Props> = ({
         "flex-row-reverse": !toRight,
       })}
     >
-      <div ref={ref}>
+      <div ref={ref} style={{ width: 36 }}>
         <Button
           text={text}
           icon={!icon && !text ? <BsThreeDots /> : icon}
-          type={type}
+          type={type}          
+          full={true}
           onClick={() => openMenu()}
           //TODO: Auto close
         />

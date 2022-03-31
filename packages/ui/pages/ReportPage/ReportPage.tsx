@@ -155,7 +155,7 @@ export const ReportPage: FunctionComponent<Props> = ({
       />
 
       <TopBar title={report.title} onClose={onClose}>
-        <ButtonMenu openSide="left">
+        <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
           <EditReportTitleModal 
             onSubmit={(name) => {
               console.log('new name', name)
