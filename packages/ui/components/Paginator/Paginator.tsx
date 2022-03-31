@@ -35,7 +35,7 @@ export const Paginator: FunctionComponent<Props> = ({
       
       <div className='flex w-auto text-customgray-500 py-1 px-2 space-x-2 items-center text-sm font-bold font-sans uppercase border border-gray-100'>
         <strong>
-        {(pageIndex + 1)} of {pageTotal}
+        {(pageIndex + 1)} of {pageTotal > 0 ? pageTotal : 1}
         </strong>
       </div>
       

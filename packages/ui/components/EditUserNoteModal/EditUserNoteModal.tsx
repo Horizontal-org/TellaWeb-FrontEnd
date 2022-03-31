@@ -20,10 +20,10 @@ export const EditUserNoteModal: FunctionComponent<Props> = ({ onSubmit }) => {
       )}
       render={(toggle) => (
         <div className='p-4'>
-          <p className='text-xxxl font-bold'>
+          <p className='font-sans py-2 text-gray-600 text-xxxl font-bold'>
             Edit note
           </p>
-          <p className='text-base text-gray-600'>
+          <p className='font-sans font-normal text-sm text-gray-500'>
             Add a note to keep track of information relevant to the user
           </p>
           <div className='py-4'>
