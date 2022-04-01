@@ -27,6 +27,7 @@ type CustomFetchBaseQuery = BaseQueryFn<
 
 export const reportsApi = createApi({
   reducerPath: "reportsApi",
+  tagTypes: ["Report"],
   baseQuery: fetchBaseQuery({
     baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/report`,
     prepareHeaders: (headers, { getState }) => {
@@ -43,6 +44,7 @@ export const reportsApi = createApi({
         url: `/${reportId}`,
       }),
       transformResponse: addThumbnail,
+      providesTags: ({ id }) => [{ id, type: "Report" }],
     }),
 
     list: builder.query<Pagination<Report>, ReportQuery>({
@@ -64,6 +66,11 @@ export const reportsApi = createApi({
         ...response,
         results: response.results.map(addThumbnail),
       }),
+      providesTags: ({ results }) =>
+        providesList(
+          results.map(({ id }) => ({ id })),
+          "Report"
+        ),
     }),
 
     deleteReport: builder.mutation<boolean, string>({
@@ -71,6 +78,7 @@ export const reportsApi = createApi({
         url: `/${reportId}`,
         method: "DELETE",
       }),
+      invalidatesTags: (_result, _error, id) => [{ id, type: "Report" }],
     }),
 
     batchDelete: builder.mutation<boolean, string[]>({
@@ -78,28 +86,47 @@ export const reportsApi = createApi({
         url: `batch-delete`,
         method: "POST",
         body: {
-          toDelete: reportIds
+          toDelete: reportIds,
         },
       }),
+      invalidatesTags: (_result, _error, reportIds) =>
+        reportIds.map((id) => ({ id, type: "Report" })),
     }),
 
-    editReport: builder.mutation<Report, {id, title, description}>({
-      query: ({id, title, description}) => ({
+    editReport: builder.mutation<
+      Report,
+      { id: string; title: string; description: string }
+    >({
+      query: ({ id, title, description }) => ({
         url: `/${id}`,
-        method: 'POST',
+        method: "POST",
         body: {
           title,
-          description
-        }
-      })
-    })
+          description,
+        },
+      }),
+      invalidatesTags: (_result, _error, { id }) => [{ id, type: "Report" }],
+    }),
   }),
 });
 
+function providesList<R extends { id: string | number }[], T extends string>(
+  resultsWithIds: R | undefined,
+  tagType: T
+) {
+  return resultsWithIds
+    ? [
+        { type: tagType, id: "LIST" },
+        ...resultsWithIds.map(({ id }) => ({ type: tagType, id })),
+      ]
+    : [{ type: tagType, id: "LIST" }];
+}
+
 export const {
   useLazyGetByIdQuery,
+  useGetByIdQuery,
   useListQuery,
   useDeleteReportMutation,
   useBatchDeleteMutation,
-  useEditReportMutation
+  useEditReportMutation,
 } = reportsApi;

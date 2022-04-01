@@ -18,6 +18,13 @@ const store = configureStore({
     user: userSlice.reducer,
     reports: reportsSlice.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(
+      authApi.middleware,
+      userApi.middleware,
+      reportsApi.middleware,
+      filesApi.middleware
+    ),
 });
 
 setupListeners(store.dispatch);
