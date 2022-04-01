@@ -67,10 +67,13 @@ export const UserPage: FunctionComponent<Props> = ({
 
           <div className="flex justify-between items-center py-4 border-b">
             <div className="flex items-center">
-              <p className="text-gray-600 uppercase" style={{ width: 200 }}>
+              <p className="text-gray-600 uppercase" style={{ 
+                  width: 200,
+                  minWidth: 200
+                }}>
                 Note
               </p>
-              <p>{user ? user.note : '-'}</p>
+              <p className='break-all'>{user ? user.note : '-'}</p>
             </div>
             <EditUserNoteModal 
             onSubmit={(note: string) => {
