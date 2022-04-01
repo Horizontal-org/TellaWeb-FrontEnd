@@ -11,8 +11,8 @@ export const ItemInformation: FunctionComponent<Props> = ({ title, dict }) => (
     <div className="text-sm text-gray-500 gap-y-2">
       {dict &&
         Object.entries(dict).map(([key, value]) => (
-          <div className="grid grid-cols-2" key={key}>
-            <span>{key}</span>
+          <div style={{padding: '2px 0'}} className="flex justify-between flex-wrap" key={key}>
+            <span style={{minWidth: 80}}>{key}</span>
             <span className="text-black text-opacity-80">{value}</span>
           </div>
         ))}
