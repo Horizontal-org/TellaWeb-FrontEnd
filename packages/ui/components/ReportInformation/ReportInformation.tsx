@@ -20,12 +20,8 @@ export const ReportInformation: FunctionComponent<Props> = ({ report }) => {
   return (
     <>
       <ItemInformation title="Report information" dict={dict} />
-      <p>
-        <h3 className="text-base font-bold text-gray-500 py-3">Description</h3>
-        <div className="text-sm text-gray-500 gap-y-2">
-          { report.description }
-        </div>
-      </p>
+      <h3 className="text-base font-bold text-gray-500 py-3">Description</h3>
+      <div className="text-sm text-gray-500 gap-y-2">{report.description}</div>
     </>
   );
 };
