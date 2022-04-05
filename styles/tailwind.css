@@ -1123,6 +1123,10 @@ video {
   overflow-wrap: break-word;
 }
 
+.break-all {
+  word-break: break-all;
+}
+
 .rounded-sm {
   border-radius: 0.125rem;
 }

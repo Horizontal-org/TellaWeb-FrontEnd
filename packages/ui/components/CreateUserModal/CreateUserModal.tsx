@@ -89,7 +89,7 @@ export const CreateUserModal: FunctionComponent<Props> = ({ onSubmit, title }) =
           </div>
 
           <div className='pt-4'>
-            <label className='pr-2 font-sans text-gray-500' htmlFor='is-admin'>Is admin ?</label>
+            <label className='pr-2 font-sans text-gray-500 text-sm' htmlFor='is-admin'>Is admin ?</label>
             <input
               name='is-admin' 
               type='checkbox'
