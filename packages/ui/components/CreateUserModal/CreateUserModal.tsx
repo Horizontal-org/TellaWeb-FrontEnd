@@ -12,6 +12,7 @@ export const CreateUserModal: FunctionComponent<Props> = ({ onSubmit, title }) =
   const [password, handlePassword] = useState<string>('')
   const [confirmPassword, handleConfirmPassword] = useState<string>('')
   const [isAdmin, handleIsAdmin] = useState<boolean>(false)
+  const [showValidations, handleShowValidations] = useState<boolean>(false)
 
   return (
     <ButtonPopup 
@@ -36,6 +37,16 @@ export const CreateUserModal: FunctionComponent<Props> = ({ onSubmit, title }) =
               placeholder='Email'
               value={username}
               onChange={(e) => { handleUsername(e.target.value) }}
+              onFocus={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget)) {
+                  handleShowValidations(false)
+                }
+              }}
+              onBlur={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget)) {
+                  handleShowValidations(true)
+                }
+              }}
             />
           </div>
           <div className='py-4'>
@@ -45,6 +56,16 @@ export const CreateUserModal: FunctionComponent<Props> = ({ onSubmit, title }) =
               value={password}
               type='password'
               onChange={(e) => { handlePassword(e.target.value) }}
+              onFocus={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget)) {
+                  handleShowValidations(false)
+                }
+              }}
+              onBlur={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget)) {
+                  handleShowValidations(true)
+                }
+              }}
             />
           </div>
           <div>
@@ -54,6 +75,16 @@ export const CreateUserModal: FunctionComponent<Props> = ({ onSubmit, title }) =
               value={confirmPassword}
               type='password'
               onChange={(e) => { handleConfirmPassword(e.target.value) }}
+              onFocus={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget)) {
+                  handleShowValidations(false)
+                }
+              }}
+              onBlur={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget)) {
+                  handleShowValidations(true)
+                }
+              }}
             />
           </div>
 
@@ -69,17 +100,21 @@ export const CreateUserModal: FunctionComponent<Props> = ({ onSubmit, title }) =
             />
           </div>
 
-          { username.length > 0 && !(/\S+@\S+\.\S+/.test(username)) && (
-            <div className="w-full p-2 mt-4 mb-4 bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200">
-              Please enter a valid email address.
-            </div>
-          )}
+          { showValidations && (
+            <>
+              { username.length > 0 && !(/\S+@\S+\.\S+/.test(username)) && (
+                <div className="w-full p-2 mt-4 mb-4 bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200">
+                  Please enter a valid email address.
+                </div>
+              )}
 
-          { !(confirmPassword === password) && (
-            <div className="w-full p-2 mt-4  bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200">
-              The passwords do not match
-            </div>
-          )}
+              { !(confirmPassword === password) && (
+                <div className="w-full p-2 mt-4  bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200">
+                  The passwords do not match
+                </div>
+              )}
+            </>
+          )}          
 
           <div className='py-4'>
             <Button 

@@ -27,23 +27,28 @@ export const Paginator: FunctionComponent<Props> = ({
   return (
     <div className='flex'>
       <button
+        style={{ height: 38 }}
         className='flex w-auto py-1 px-2 space-x-2 rounded-l items-center text-sm font-bold font-sans uppercase border border-gray-100 active:shadow-inbox' 
         onClick={() => previousPage()} disabled={!canPreviousPage}
       >
-        <HiChevronLeft size={14} color={'#8B8D8E'} />
+        <HiChevronLeft size={20} color={'#8B8D8E'} />
       </button>
       
-      <div className='flex w-auto text-customgray-500 py-1 px-2 space-x-2 items-center text-sm font-bold font-sans uppercase border border-gray-100'>
+      <div 
+        className='flex w-auto text-customgray-500 py-1 px-2 space-x-2 items-center text-sm font-bold font-sans uppercase border border-gray-100'
+        style={{ height: 38 }}
+      >
         <strong>
-        {(pageIndex + 1)} of {pageTotal}
+        {(pageIndex + 1)} of {pageTotal > 0 ? pageTotal : 1}
         </strong>
       </div>
       
       <button 
         className='flex w-auto py-1 px-2 space-x-2 rounded-r items-center text-sm font-bold font-sans uppercase border border-gray-100 active:shadow-inbox'
         onClick={() => nextPage()} disabled={!canNextPage}
+        style={{ height: 38 }}
       >
-        <HiChevronRight size={14} color={'#8B8D8E'} />
+        <HiChevronRight size={20} color={'#8B8D8E'} />
       </button>
       
     </div>

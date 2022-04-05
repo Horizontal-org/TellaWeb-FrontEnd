@@ -52,21 +52,16 @@ export const Report = () => {
   const [query, setQuery] = useState<ReportQuery>(defaultQuery);
   const itemQuery = useMemo(() => toItemQuery(query), [query]);
 
-  const { data: reports, refetch } = useListQuery(query);
+  const { data: reports } = useListQuery(query);
   const [batchDelete] = useBatchDeleteMutation();
 
   const onBatchDelete = async (reportsToDelete: IReport[]) => {
     const toDelete = reportsToDelete.map((td) => td.id);
-    const deleted = await batchDelete(toDelete).unwrap();
-    if (deleted) refetch();
+    batchDelete(toDelete).unwrap();
   };
 
-  useEffect(() => {
-    refetch()
-  }, [])
-
   return ready ? (
-    <ReportListPage      
+    <ReportListPage
       currentQuery={itemQuery}
       onQueryChange={(itemQuery) => setQuery(toReportQuery(itemQuery))}
       onDelete={onBatchDelete}

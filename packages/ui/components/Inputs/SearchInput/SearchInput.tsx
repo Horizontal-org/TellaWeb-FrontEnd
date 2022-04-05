@@ -33,6 +33,8 @@ export const SearchInput = forwardRef<
         style={{height: 36}}
         className="
           text-sm
+          font-sans
+          font-semibold
           sm:text-base
           relative
           w-full
@@ -40,7 +42,7 @@ export const SearchInput = forwardRef<
           rounded
           border-gray-100
           placeholder-gray-300
-          text-gray-500
+          text-gray-300
           hover:placeholder-gray-800
           hover:border-gray-500
           focus:border-blue-300

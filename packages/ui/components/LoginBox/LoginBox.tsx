@@ -25,9 +25,9 @@ export const LoginBox: FunctionComponent<Props> = ({
     password: "",
   });
 
-  const [canSubmit, handleCanSubmit] = useState<boolean>(false);
   const [showPass, handleShowPass] = useState<boolean>(false);
   const [showErrorMessage, handleShowError] = useState<boolean>(false);
+  const [showValidations, handleShowValidations] = useState<boolean>(false)
 
   const testMail = () => {
     return /\S+@\S+\.\S+/.test(credentail.username);
@@ -35,17 +35,9 @@ export const LoginBox: FunctionComponent<Props> = ({
 
   const { t } = useTranslation("common");
 
-  useEffect(() => {
-    const requiredFields =
-      credentail.username.length > 0 && credentail.password.length > 0;
-    const emailValid = testMail();
-
-    handleCanSubmit(requiredFields && emailValid);
-
-    if (showErrorMessage) {
-      handleShowError(false);
-    }
-  }, [credentail]);
+  const canSubmit = () => {
+    return !testMail() || credentail.password.length === 0 
+  }
 
   useEffect(() => {
     handleShowError(true);
@@ -72,6 +64,16 @@ export const LoginBox: FunctionComponent<Props> = ({
         required
         onChange={(e) => {
           setCredentail({ ...credentail, username: e.target.value });
+        }}
+        onFocus={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget)) {
+            handleShowValidations(false)
+          }
+        }}
+        onBlur={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget)) {
+            handleShowValidations(true)
+          }
         }}
       />
       <div className="relative">
@@ -103,7 +105,7 @@ export const LoginBox: FunctionComponent<Props> = ({
       <button
         className="bg-blue-300 hover:bg-blue py-2 text-white uppercase text-base font-bold rounded w-80 disabled:opacity-50"
         id="login"
-        disabled={!canSubmit || isLoading}
+        disabled={canSubmit() || isLoading}
         type={"submit"}
       >
         <span>{isLoading ? "Logging in..." : t("login.singup")}</span>
@@ -116,16 +118,16 @@ export const LoginBox: FunctionComponent<Props> = ({
           {errorMessage}
         </div>
       )}
-      {credentail.username.length > 0 &&
-        credentail.password.length > 0 &&
-        !testMail() && (
-          <div
-            className="w-full p-2 mt-2 mb-4 bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200"
-            role="alert"
-          >
-            Please enter a valid email address
-          </div>
-        )}
+
+
+      { showValidations && !testMail() && (
+        <div
+          className="w-full p-2 mt-2 mb-4 bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200"
+          role="alert"
+        >
+          Please enter a valid email address
+        </div>
+      )}
     </form>
   );
 };

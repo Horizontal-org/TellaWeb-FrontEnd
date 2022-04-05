@@ -20,11 +20,16 @@ export const ButtonOption: FunctionComponent<Props> = ({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      style={color ? { color } : {}}
+      style={color ? { 
+        color: color,
+        height: 36
+      } : {
+        height: 36
+      }}
       className="w-full flex py-2 px-3 uppercase space-x-2 items-center bg-white hover:bg-gray-50"
     >
       {icon}
-      <span className="text-sm font-semibold">{text}</span>
+      <span className="font-sans text-sm font-bold">{text}</span>
     </button>
   );
 };

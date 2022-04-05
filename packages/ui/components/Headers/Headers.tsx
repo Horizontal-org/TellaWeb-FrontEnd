@@ -5,5 +5,5 @@ export const Title: FunctionComponent = ({ children }) => (
 );
 
 export const SubTitle: FunctionComponent = ({ children }) => (
-  <h2 className="font-sans font-normal text-base text-gray-600">{children}</h2>
+  <h2 className="font-sans font-normal text-base text-gray-500">{children}</h2>
 );
