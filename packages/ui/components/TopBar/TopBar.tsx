@@ -14,7 +14,15 @@ export const TopBar: FunctionComponent<PropsWithChildren<Props>> = ({
   <div className="px-8 py-5 w-full border-b border-gray-100 flex font-xl items-center justify-items-start fixed top-0 right-0 bg-white justify-between">
     <div className="flex items-center">
       {onClose && (
-        <button type="button" onClick={onClose}>
+        <button 
+          className='active:shadow-inbox rounded flex justify-center items-center' 
+          type="button" 
+          onClick={onClose}
+          style={{
+            height: 36,
+            width: 36
+          }}
+        >
           <MdClose className="text-gray-300" />
         </button>
       )}
