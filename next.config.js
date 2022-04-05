@@ -12,5 +12,8 @@ module.exports = {
       },
     ];
   },
+  images: {
+    domains: ['localhost', 'tella-app.org'],
+  },
   i18n,
 };
