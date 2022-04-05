@@ -138,7 +138,7 @@ export const Table: FunctionComponent<Props> = ({
                     onFetch({
                       ...itemQuery,
                       sort: {
-                        key: column.Header,
+                        key: column.headerKey,
                         order: column.isSortedDesc ? 'asc' : 'desc'
                       },
                     })
