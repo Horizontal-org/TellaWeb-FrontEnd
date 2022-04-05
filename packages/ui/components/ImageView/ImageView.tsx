@@ -1,5 +1,6 @@
 import { FunctionComponent } from 'react'
 import { IReportFile } from '../../domain/ReportFile'
+import Image from "next/image";
 
 type Props = {
   file: IReportFile,
@@ -8,20 +9,26 @@ type Props = {
 
 export const ImageView: FunctionComponent<Props> = ({ file, onClick }) => {
   return (
-    <div 
-      onClick={onClick}
-      className="w-full h-full bg-gray-25 rounded-md cursor-pointer bg-cover bg-center"
-      style={{
-        backgroundImage: `url(${file.src})`
-      }}
-    >
-      <div 
-        className="border h-full w-full rounded-md border-gray-100 hover:border-gray-500 hover:bg-black hover:bg-opacity-10"
-      />
+    <div className='w-full h-full flex justify-center items-center'>
+
+      <div className=' relative flex justify-center w-full h-full'>
+        <Image
+          onClick={onClick}
+          className='cursor-pointer'
+          src={window.location.origin + file.src}
+          alt={file.fileName}
+          layout='fill'
+          objectFit='contain'
+          unoptimized={true}
+        />
+      </div>
     </div>
+    
   )
 } 
 
 ImageView.defaultProps = {
   onClick: () => {}
 }
+
+

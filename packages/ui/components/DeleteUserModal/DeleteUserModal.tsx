@@ -48,7 +48,7 @@ export const DeleteUserModal: FunctionComponent<Props> = ({
               text='DELETE'
               type={btnType.Danger}
               full={true}
-              disabled={confirmation === 'DELETE'}
+              disabled={confirmation !== 'DELETE'}
               onClick={() => {
                 onSubmit()
                 toggle()

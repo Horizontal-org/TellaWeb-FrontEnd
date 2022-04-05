@@ -31,17 +31,18 @@ export const DeleteModal: FunctionComponent<Props> = ({ render, onDelete }) => {
       render={(toggle) => (
         <>
           <div className='p-4'>
-            <h3 className='text-xxxl font-bold'>Delete file</h3>
-            <div className='text-base'>
+            <h3 className='py-2 text-xxxl font-sans font-bold text-gray-600'>Delete file</h3>
+            <div className='text-base font-normal font-sans text-gray-500'>
               { render }
             </div>
             <div className='py-4'>
-              <p className='text-base text-gray-500'>
-                <strong>{`To confirm, please type "DELETE"`}</strong>
+              <p className='font-sans font-normal text-sm text-gray-500'>
+              {`To confirm, please type "DELETE"`}
               </p>
               
               <div className='pt-4'>
                 <TextInput 
+                  placeholder='Type in DELETE'
                   onChange={(e) => {
                     if (!canDelete && e.target.value === 'DELETE') {
                       handleCanDelete(true)

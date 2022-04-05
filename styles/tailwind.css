@@ -1320,12 +1320,16 @@ video {
   --tw-bg-opacity: 0.1;
 }
 
-.bg-cover {
-  background-size: cover;
+.bg-contain {
+  background-size: contain;
 }
 
 .bg-center {
   background-position: center;
+}
+
+.bg-no-repeat {
+  background-repeat: no-repeat;
 }
 
 .stroke-current {
@@ -1499,7 +1503,7 @@ video {
 }
 
 .text-sm {
-  font-size: 11px;
+  font-size: 12px;
   line-height: 14px;
 }
 

@@ -21,10 +21,10 @@ export const EditReportTitleModal: FunctionComponent<Props> = ({ onSubmit }) => 
       )}
       render={(toggle) => (
         <div className='p-4'>
-          <p className='text-xxxl font-bold'>
+          <p className='py-2 font-sans text-gray-600 text-xxxl font-bold'>
             Rename report
           </p>
-          <p className='py-2 text-base text-gray-600'>
+          <p className='font-sans font-normal py-2 text-sm text-gray-500'>
           This will change the name of the report as it appears on Tella Web.
           </p>
           <div className='py-4'>
