@@ -10,7 +10,7 @@ export const EditPasswordModal: FunctionComponent<Props> = ({ onSubmit }) => {
   const [oldPassword, handleOldPassword] = useState<string>('')
   const [newPassword, handleNewPassword] = useState<string>('')
   const [confirmPassword, handleConfirmPassword] = useState<string>('')
-
+  const [showValidations, handleShowValidations] = useState<boolean>(false)
 
   return (
     <ButtonPopup       
@@ -37,6 +37,16 @@ export const EditPasswordModal: FunctionComponent<Props> = ({ onSubmit }) => {
               type='password'
               value={oldPassword}
               onChange={(e) => { handleOldPassword(e.target.value) }}
+              onFocus={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget)) {
+                  handleShowValidations(false)
+                }
+              }}
+              onBlur={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget)) {
+                  handleShowValidations(true)
+                }
+              }}
             />
           </div>
           
@@ -47,6 +57,16 @@ export const EditPasswordModal: FunctionComponent<Props> = ({ onSubmit }) => {
               type='password'
               value={newPassword}
               onChange={(e) => { handleNewPassword(e.target.value) }}
+              onFocus={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget)) {
+                  handleShowValidations(false)
+                }
+              }}
+              onBlur={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget)) {
+                  handleShowValidations(true)
+                }
+              }}
             />
           </div>
 
@@ -58,10 +78,20 @@ export const EditPasswordModal: FunctionComponent<Props> = ({ onSubmit }) => {
               value={confirmPassword}
               onChange={(e) => { handleConfirmPassword(e.target.value) }}
             /> 
+            onFocus={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget)) {
+                  handleShowValidations(false)
+                }
+              }}
+              onBlur={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget)) {
+                  handleShowValidations(true)
+                }
+              }}
           </div>
 
-          { newPassword.length > 0 && confirmPassword.length > 0 && !(newPassword === confirmPassword) && (
-            <div className="w-full p-2 mt-4  bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200">
+          { showValidations && newPassword.length > 0 && confirmPassword.length > 0 && !(newPassword === confirmPassword) && (
+            <div className="w-full p-2 my-4  bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200">
               Your new passwords do not match
             </div>
           )}
