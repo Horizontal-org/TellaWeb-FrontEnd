@@ -23,10 +23,10 @@ export const EditPasswordModal: FunctionComponent<Props> = ({ onSubmit }) => {
       )}
       render={(toggle) => (
         <div className='p-4'>
-          <p className='text-xxxl font-bold'>
+          <p className='py-2 font-sans text-gray-600 text-xxxl font-bold'>
             Edit password
           </p>
-          <p className='text-base text-gray-600'>
+          <p className='font-sans text-sm font-normal text-gray-500'>
             Please enter your current password and new password.           
           </p>
           

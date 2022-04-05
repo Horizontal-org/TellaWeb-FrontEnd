@@ -24,10 +24,10 @@ export const EditEmailModal: FunctionComponent<Props> = ({ onSubmit, title }) =>
       )}
       render={(toggle) => (
         <div className='p-4'>
-          <p className='text-xxxl font-bold'>
+          <p className='py-2 font-sans text-gray-600 text-xxxl font-bold'>
             Edit email
           </p>
-          <p className='text-base text-gray-600'>
+          <p className='font-sans text-sm font-normal text-gray-500'>
             { title }
           </p>
           <div className='py-4'>

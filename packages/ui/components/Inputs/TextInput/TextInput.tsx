@@ -21,7 +21,7 @@ export const TextInput = forwardRef<
             [style.floatingInput]: true,
             [style.inputWithFocus]: props.value && props.value !== ''           
           },
-          "text-sm sm:text-base w-full text-gray-500 hover:placeholder-gray-800 hover:border-gray-500 py-1 pr-2 pl-2"
+          "font-sans text-sm sm:text-base w-full text-gray-500 hover:placeholder-gray-800 hover:border-gray-500 py-1 pr-2 pl-2"
         )}
         {...props}
         placeholder=' '

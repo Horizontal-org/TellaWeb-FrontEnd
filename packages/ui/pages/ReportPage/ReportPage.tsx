@@ -158,7 +158,6 @@ export const ReportPage: FunctionComponent<Props> = ({
         <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
           <EditReportTitleModal 
             onSubmit={(name) => {
-              console.log('new name', name)
               onEditTitle(name)
             }}
           />
