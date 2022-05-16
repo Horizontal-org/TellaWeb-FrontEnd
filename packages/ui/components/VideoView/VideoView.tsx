@@ -1,90 +1,99 @@
-import { FunctionComponent, useState, useEffect, useRef } from 'react'
-import { IReportFile } from '../../domain/ReportFile'
-import { MediaControls } from '../MediaControls/MediaControls'
-import { VideoLoading } from './VideoLoading';
+import { useMediaPlayer } from "packages/ui/hooks/useMediaPlayer";
+import { FunctionComponent, useRef } from "react";
+import { IReportFile } from "../../domain/ReportFile";
+import { MediaButtons } from "../MediaControls/MediaButtons";
+import { MediaProgressBar } from "../MediaControls/MediaProgressBar";
+import { VideoLoading } from "./VideoLoading";
 
 type Props = {
-  file: IReportFile
+  file: IReportFile;
 };
 
-export const VideoView: FunctionComponent<Props> = ({file}) => {
-  const [canPlay, handleCanPlay] = useState<boolean>(false)
-  const fileRef = useRef<HTMLVideoElement | null>(null)
-
-  const listenerCanPlay = () => {
-    handleCanPlay(true)
-  }
-
-  useEffect(() => {
-    if (!fileRef) {
-      return
-    }
-
-    fileRef.current.addEventListener('canplay', listenerCanPlay)
-
-    return function cleanup () {
-      document.removeEventListener('canplay', listenerCanPlay)      
-    }
-  }, [])
-
-  useEffect(() => {
-    handleCanPlay(false) 
-    fileRef.current.load()
-
-    fileRef.current.addEventListener('canplay', listenerCanPlay)
-
-    return function cleanup () {
-      document.removeEventListener('canplay', listenerCanPlay)      
-    }
-  }, [file.src])
+export const VideoView: FunctionComponent<Props> = ({ file }) => {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const {
+    currentTime,
+    duration,
+    volume,
+    isPlaying,
+    isMuted,
+    addTime,
+    changeTime,
+    changeVolume,
+    toggleMuted,
+  } = useMediaPlayer(videoRef);
 
   const getFileType = () => {
-    const type = file.fileName.split('.')[1]
-    return `video/${type || 'mp4'}`
-  }
-
+    const type = file.fileName.split(".")[1];
+    return `video/${type || "mp4"}`;
+  };
 
   return (
     <div className=" w-full h-full flex flex-col items-center">
-      <div 
-        className='relative flex justify-center items-center'     
+      <div
+        className="relative flex justify-center items-center"
         style={{
-          width: '100%',
-          maxWidth: '40vw'
-        }}    
+          width: "100%",
+          maxWidth: "40vw",
+        }}
       >
-        <video 
-          className={'w-full'}
-          ref={fileRef} 
-          id={`${file.fileName}-video`}
-          key={file.src}
+        <video
+          preload="auto"
+          crossOrigin="use-credentials"
+          className={"w-full"}
+          ref={videoRef}
         >
-          <source src={file.src} key={file.src} type={getFileType()}/>
+          <source src={file.src} key={file.src} type={getFileType()} />
           Your browser does not support the <code>video</code> element.
         </video>
 
-        { !canPlay && (
+        {!duration && (
           <div>
             <VideoLoading />
           </div>
         )}
-       
-      </div>  
+      </div>
 
-      { canPlay && (
-        <div className='w-full flex justify-center'>
-          <div  style={{ 
-            width: '100%',
-            maxWidth: '40vw'
-          }}>
-            <MediaControls 
-              isVideo={true}
-              fileRef={fileRef}
-            />
+      {!!duration && (
+        <div className="w-full flex justify-center">
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "40vw",
+            }}
+          >
+            <div className="w-full flex justify-center">
+              <div style={{ width: "40vw" }}>
+                <div className="w-full py-4 pt-16">
+                  <div>
+                    <MediaButtons
+                      isVideo={true}
+                      isPlaying={isPlaying}
+                      muted={isMuted}
+                      volume={volume}
+                      addTen={() => addTime(10)}
+                      subTen={() => addTime(-10)}
+                      play={() => videoRef?.current?.play()}
+                      pause={() => videoRef?.current?.pause()}
+                      requestFullscreen={() =>
+                        videoRef?.current.requestFullscreen()
+                      }
+                      toggleMuted={toggleMuted}
+                      toggleVolume={changeVolume}
+                    />
+
+                    <MediaProgressBar
+                      currentTime={currentTime}
+                      duration={duration}
+                      onBarClick={changeTime}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
-
     </div>
-  )
-}
+  );
+};
