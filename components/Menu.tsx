@@ -5,6 +5,7 @@ import { IoMdExit } from 'react-icons/io'
 
 import { MdOutlineSettings } from 'react-icons/md'
 import { BsFillCloudArrowUpFill, BsPerson } from 'react-icons/bs'
+import RemoteConfigIcon from '../packages/ui/components/RemoteConfigIcon'
 
 export const Menu: FunctionComponent = () => {
   const router = useRouter();
@@ -23,6 +24,12 @@ export const Menu: FunctionComponent = () => {
           icon: <BsPerson />,
           onClick: () => router.replace("/user"),
           selected: router.route.includes("/user"),
+        },
+        {
+          text: "Configurations",
+          icon: <RemoteConfigIcon />,
+          onClick: () => router.replace("/configuration"),
+          selected: router.route.includes("/configuration"),
         }
       ]}
       bottomMenu={[

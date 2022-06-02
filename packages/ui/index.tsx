@@ -13,6 +13,8 @@ export { ConfigurationInformation } from "./components/ConfigurationInformation/
 export { ConfigurationPanel } from "./components/ConfigurationPanel/ConfigurationPanel";
 export { Title, SubTitle } from "./components/Headers/Headers";
 export { TextInput } from './components/Inputs/TextInput/TextInput'
+export { RadioGroupInput } from './components/Inputs/RadioGroupInput/RadioGroupInput';
+export { Checkbox } from './components/Inputs/Checkbox/Checkbox'; 
 export { SearchInput } from "./components/Inputs/SearchInput/SearchInput";
 export { ItemInformation } from "./components/ItemInformation/ItemInformation";
 export { MainContent } from "./components/MainContent/MainContent";
@@ -36,6 +38,7 @@ export { Paginator } from './components/Paginator/Paginator'
 export { CreateUserModal } from './components/CreateUserModal/CreateUserModal'
 export { TextArea } from './components/TextArea/TextArea'
 export { UserBar } from './components/UserBar/UserBar'
+export { CreateConfigurationModal } from './components/CreateConfigurationModal/CreateConfigurationModal'
  
 export { LoginPage } from "./pages/LoginPage/LoginPage";
 export { ReportListPage } from "./pages/ReportListPage/ReportListPage";

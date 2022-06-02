@@ -110,3 +110,76 @@ input[type=range]:focus::-ms-fill-lower {
 input[type=range]:focus::-ms-fill-upper {
   background: #8B8E8F;
 }
+
+/* Radio Styles  */
+
+.radio-label {  
+  line-height: 1.1;
+  display: grid;
+  grid-template-columns: 1em auto;
+  gap: 20px;
+}
+
+input[type="radio"] {
+  /* Add if not using autoprefixer */
+  -webkit-appearance: none;
+  /* Remove most all native input styles */
+  appearance: none;
+  /* For iOS < 15 */
+  background-color: white;
+  /* Not removed via appearance */
+  margin: 0;
+
+  font: inherit;
+  color: #5759FF;
+  width: 18px;
+  height: 18px;
+  border: 0.15em solid #5759FF;
+  border-radius: 50%;
+  transform: translateY(-1px);
+
+  display: grid;
+  place-content: center;
+}
+
+input[type="radio"]::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em #5759FF;
+  /* Windows High Contrast Mode */
+  background-color: #5759FF;
+}
+
+input[type="radio"]:checked::before {
+  transform: scale(1);
+}
+
+
+.checkbox-base {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.checkbox {
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  background: #fff;
+  border: 2px #ddd solid;
+  margin-right: 4px;
+  border-radius: 2px;
+}
+
+.checkbox--active {
+  border-color: #5759FF;  
+  background: #5759FF;
+}

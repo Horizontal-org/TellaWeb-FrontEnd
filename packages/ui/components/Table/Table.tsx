@@ -67,7 +67,7 @@ export const Table: FunctionComponent<Props> = ({
           id: "selection",
           Header: ({ getToggleAllRowsSelectedProps }) => (
             <div className='flex justify-center w-full'>
-              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
+              <IndeterminateCheckbox style={{width: 40, height: 40}} {...getToggleAllRowsSelectedProps()} />
             </div>
           ),
           className: "max-w-content text-center p-2",
@@ -77,7 +77,7 @@ export const Table: FunctionComponent<Props> = ({
               <div className='flex justify-center'>
                 <div style={{width: 20}}>
                   { row.isSelected ? (
-                    <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+                    <IndeterminateCheckbox style={{width: 40, height: 40}}  {...row.getToggleRowSelectedProps()} />
                   ) : icon || <FaRegFolder size={14} color="#8B8E8F"/>}
                 </div>
               </div>

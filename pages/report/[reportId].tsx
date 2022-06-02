@@ -62,7 +62,6 @@ export const ReportById = () => {
           handleToast("Report deleted");
           router.back();
         }
-        //add error toast
       }}
       onClose={() => {
         router.back();
