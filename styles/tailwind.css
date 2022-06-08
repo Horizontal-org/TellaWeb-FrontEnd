@@ -612,6 +612,10 @@ video {
   --tw-aspect-h: 4;
 }
 
+.visible {
+  visibility: visible;
+}
+
 .fixed {
   position: fixed;
 }
@@ -684,6 +688,11 @@ video {
 .my-2 {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+}
+
+.my-4 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .my-5 {
@@ -1324,18 +1333,6 @@ video {
   --tw-bg-opacity: 0.1;
 }
 
-.bg-contain {
-  background-size: contain;
-}
-
-.bg-center {
-  background-position: center;
-}
-
-.bg-no-repeat {
-  background-repeat: no-repeat;
-}
-
 .stroke-current {
   stroke: currentColor;
 }
@@ -1458,16 +1455,16 @@ video {
   padding-top: 5rem;
 }
 
+.pt-48 {
+  padding-top: 12rem;
+}
+
 .pt-2\.5 {
   padding-top: 0.625rem;
 }
 
 .pr-2 {
   padding-right: 0.5rem;
-}
-
-.pr-3 {
-  padding-right: 0.75rem;
 }
 
 .pb-4 {
@@ -1507,7 +1504,7 @@ video {
 }
 
 .text-sm {
-  font-size: 12px;
+  font-size: 11px;
   line-height: 14px;
 }
 

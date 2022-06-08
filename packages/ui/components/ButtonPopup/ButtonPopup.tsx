@@ -40,7 +40,7 @@ export const ButtonPopup: FunctionComponent<PropsWithChildren<Props>> = ({
         overlayClassName={
           "flex bg-black bg-opacity-50 absolute inset-0 justify-center items-center"
         }
-        className="bg-white font-thin w-4/12 py-4 px-3 rounded shadow-xl text-gray-800"
+        className="bg-white w-4/12 py-4 px-3 rounded shadow-xl text-gray-800"
       >
         <div className="flex-start items-center">
           <button type="button" onClick={requestClose}>

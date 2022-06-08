@@ -32,7 +32,7 @@
     "autoprefixer": "^10.3.7",
     "babel-jest": "^27.4.6",
     "chromatic": "^6.3.3",
-    "eslint": "8.0.1",
+    "eslint": "^8.0.1",
     "eslint-config-next": "11.1.2",
     "eslint-plugin-testing-library": "^5.0.4",
     "jest": "^27.4.7",
@@ -58,7 +58,8 @@
     "next": "^12.1.1",
     "next-i18next": "^10.2.0",
     "protobufjs": "^6.11.2",
-    "qrcode": "^1.4.4",
+    "qrcode": "^1.5.0",
+    "qrcode.react": "^3.0.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-icons": "^4.3.1",
@@ -66,6 +67,7 @@
     "react-openlayers": "^0.3.0",
     "react-redux": "^7.2.6",
     "react-table": "^7.7.0",
+    "react-to-print": "^2.14.7",
     "rxjs": "^7.3.0"
   }
 }

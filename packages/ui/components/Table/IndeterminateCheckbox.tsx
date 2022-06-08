@@ -19,7 +19,7 @@ export const IndeterminateCheckbox = forwardRef<HTMLInputElement, Props>(
 
     return (
       <>
-        <input type="checkbox" ref={combinedRef} {...rest} />
+        <input type="checkbox" style={{width: 40, height: 40}} ref={combinedRef} {...rest} />
       </>
     );
   }
