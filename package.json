@@ -33,7 +33,7 @@
     "babel-jest": "^27.4.6",
     "chromatic": "^6.3.3",
     "eslint": "^8.0.1",
-    "eslint-config-next": "11.1.2",
+    "eslint-config-next": "^12.1.6",
     "eslint-plugin-testing-library": "^5.0.4",
     "jest": "^27.4.7",
     "namor": "^2.0.3",
