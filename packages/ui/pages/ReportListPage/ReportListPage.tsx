@@ -26,6 +26,8 @@ import { REPORT_COLUMNS } from "../../domain/ReportTableColumns";
 import { ItemQuery } from "../../domain/ItemQuery";
 import { Item } from "../../domain/Item";
 import { Report } from "../../domain/Report";
+import { Can } from "common/casl/Can";
+import { ENTITIES } from "common/casl/Ability";
 
 type Props = {
   reports: Report[];
@@ -119,17 +121,19 @@ export const ReportListPage: FunctionComponent<Props> = ({
                       text="Download"
                     />
                   </>
-                )}                
-                <ButtonMenu openSide="right" type={btnType.Secondary} text="...">
-                  <DeleteModal 
-                    render={(
-                      <p>
-                        the selected reports will be permanently deleted.
-                      </p>
-                    )}
-                    onDelete={() => onDelete(selectedReports)}
-                  />  
-                </ButtonMenu>
+                )}
+                <Can I='delete' a={ENTITIES.Reports}>
+                  <ButtonMenu openSide="right" type={btnType.Secondary} text="...">
+                    <DeleteModal 
+                      render={(
+                        <p>
+                          the selected reports will be permanently deleted.
+                        </p>
+                      )}
+                      onDelete={() => onDelete(selectedReports)}
+                      />  
+                  </ButtonMenu>
+                </Can>                
               </>
             )}
           </div>

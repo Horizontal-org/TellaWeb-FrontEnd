@@ -16,6 +16,8 @@ import { EditServersModal } from "packages/ui/modals/remoteConfiguration/EditSer
 import { EditNameModal } from "packages/ui/modals/remoteConfiguration/EditNameModal/EditNameModal";
 import { ShareConfigurationModal } from 'packages/ui/modals/remoteConfiguration/ShareConfigurationModal/ShareConfigurationModal'
 import { format } from "date-fns";
+import { Can } from "common/casl/Can";
+import { ENTITIES } from "common/casl/Ability";
 type Props = {
   configuration: Configuration | null;
   onClose: () => void;
@@ -37,25 +39,29 @@ export const ConfigPage: FunctionComponent<Props> = ({
           <div>
 
             <TopBar title={configuration.name} onClose={onClose} >
-              <ButtonMenu openSide="left" type={btnType.Secondary} text="...">                
-                <DeleteModal 
-                  render={(
-                    <p>
-                      Are you sure you want to delete this remote configuration?
-                    </p>
-                  )}
-                  onDelete={() =>  { onDelete(configuration.id) }}
+              <Can I='delete' a={ENTITIES.RemoteConfigurations}>
+                <ButtonMenu openSide="left" type={btnType.Secondary} text="...">                               
+                  <DeleteModal 
+                    render={(
+                      <p>
+                        Are you sure you want to delete this remote configuration?
+                      </p>
+                    )}
+                    onDelete={() =>  { onDelete(configuration.id) }}
+                    />
+                </ButtonMenu>
+              </Can>   
+              <Can I='edit' a={ENTITIES.RemoteConfigurations}>
+                <EditNameModal 
+                  defaultName={configuration.name}
+                  onSubmit={(name) => {
+                    onUpdate({
+                      ...configuration,
+                      name
+                    })
+                  }}
                 />
-              </ButtonMenu>
-              <EditNameModal 
-                defaultName={configuration.name}
-                onSubmit={(name) => {
-                  onUpdate({
-                    ...configuration,
-                    name
-                  })
-                }}
-              />
+              </Can>
               
               <ShareConfigurationModal config={configuration}/>
             </TopBar>         
@@ -112,14 +118,16 @@ export const ConfigPage: FunctionComponent<Props> = ({
                   </p>
                 </div>
                 <div>
-                  <EditCamouflageModal 
-                    onSubmit={(camouflage) => {
-                      onUpdate({
-                        ...configuration,
-                        camouflage
-                      })
-                    }}
-                  />
+                  <Can I='edit' a={ENTITIES.RemoteConfigurations}>
+                    <EditCamouflageModal 
+                      onSubmit={(camouflage) => {
+                        onUpdate({
+                          ...configuration,
+                          camouflage
+                        })
+                      }}
+                    />
+                  </Can>
                 </div>
 
               </div>
@@ -136,14 +144,16 @@ export const ConfigPage: FunctionComponent<Props> = ({
                   </p>
                 </div>
                 <div>
-                  <EditCrashReportsModal 
-                    onSubmit={(crashReports) => {
-                      onUpdate({
-                        ...configuration,
-                        crashReports
-                      })
-                    }}
-                  />
+                  <Can I='edit' a={ENTITIES.RemoteConfigurations}>                                    
+                    <EditCrashReportsModal 
+                      onSubmit={(crashReports) => {
+                        onUpdate({
+                          ...configuration,
+                          crashReports
+                        })
+                      }}
+                    />
+                  </Can>
                 </div>                
               </div>
 
@@ -158,6 +168,7 @@ export const ConfigPage: FunctionComponent<Props> = ({
                   </p>
                 </div>
                 <div>
+                <Can I='edit' a={ENTITIES.RemoteConfigurations}>
                   <EditServersModal
                     onSubmit={(serverVisibility) => {
                       onUpdate({
@@ -166,6 +177,7 @@ export const ConfigPage: FunctionComponent<Props> = ({
                       })
                     }}
                   />
+                </Can>                                    
                 </div>                
               </div>
 

@@ -77,8 +77,7 @@ export const EditPasswordModal: FunctionComponent<Props> = ({ onSubmit }) => {
               type='password'          
               value={confirmPassword}
               onChange={(e) => { handleConfirmPassword(e.target.value) }}
-            /> 
-            onFocus={(e) => {
+              onFocus={(e) => {
                 if (!e.currentTarget.contains(e.relatedTarget)) {
                   handleShowValidations(false)
                 }
@@ -88,6 +87,7 @@ export const EditPasswordModal: FunctionComponent<Props> = ({ onSubmit }) => {
                   handleShowValidations(true)
                 }
               }}
+            /> 
           </div>
 
           { showValidations && newPassword.length > 0 && confirmPassword.length > 0 && !(newPassword === confirmPassword) && (

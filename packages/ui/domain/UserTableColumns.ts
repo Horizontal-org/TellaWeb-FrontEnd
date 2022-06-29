@@ -11,13 +11,10 @@ export const USER_COLUMNS: Column[] = [
     className: "px-3 py-3 w-40 font-semibold",
   },
   {
-    Header: "Date",
-    headerKey: 'user.createdAt',
+    Header: "Role",
+    headerKey: 'user.role',
     className: "px-3 py-3 w-40",
     id: "date",
-    accessor: (user: User): string => {
-      const date = new Date(user.createdAt)
-      return format(date, "dd MMM yyyy")
-    },
+    accessor: (user: User): string => user.role,
   }
 ];

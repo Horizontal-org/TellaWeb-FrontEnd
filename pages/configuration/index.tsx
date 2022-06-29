@@ -4,6 +4,7 @@ import { ConfigurationListPage } from 'packages/ui/pages/ConfigurationListPage/C
 import { Menu } from "../../components/Menu";
 import { ConfigurationQuery } from "packages/state/domain/configuration";
 import { useToast } from "../../components/ToastWrapper";
+import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import { 
   useCreateConfigurationMutation,
   useListQuery
@@ -44,6 +45,7 @@ const toConfigQuery = (itemQuery: ItemQuery): ConfigurationQuery => {
 
 
 const Configuration = () => {
+  // useAuthRequired()
   
   const { push } = useRouter();
 

@@ -12,7 +12,7 @@ import {
   ButtonOption,
   SearchInput,
   DeleteModal,
-  CreateUserModal,
+  // CreateUserModal,
   UserBar,
 } from "../..";
 import { MainLayout } from "../../layouts/MainLayout";
@@ -23,7 +23,9 @@ import { btnType } from "../../components/Button/Button";
 import { MdOpenInNew, MdRemoveRedEye, MdSave } from "react-icons/md";
 import { USER_COLUMNS } from "../../domain/UserTableColumns";
 import { BsPerson, BsPlusLg } from 'react-icons/bs'
-
+import { CreateUserModal } from '../../modals/user/CreateUserModal/CreateUserModal'
+import { Can } from "common/casl/Can";
+import { ENTITIES } from "common/casl/Ability";
 
 type Props = {
   sidebar: React.ReactNode;  
@@ -31,7 +33,11 @@ type Props = {
   currentQuery: ItemQuery;
   onOpen: (user: User) => void;
   onQueryChange: (iq: ItemQuery) => void;
-  onCreateUser: (username:  string, password: string, isAdmin: boolean) => void
+  onCreateUser: (newUser: {
+    username: string
+    password: string
+    role: string
+  }) => void
 };
 
 export const UserListPage: FunctionComponent<Props> = ({
@@ -80,10 +86,14 @@ export const UserListPage: FunctionComponent<Props> = ({
           >
             {selectedUsers.length === 0 && (
               <>
-                <CreateUserModal 
-                  title='Enter the user’s basic information here. You will be able to add additional information on the next screen.'
-                  onSubmit={onCreateUser}
-                />
+                <Can I='create' a={ENTITIES.Users}>
+                  <CreateUserModal 
+                    onSubmit={(newUser) => {
+                      onCreateUser(newUser)
+                    }}
+                  />
+                </Can>
+
                 <form onSubmit={search} className="flex">
                   <SearchInput
                     onChange={(e) => {

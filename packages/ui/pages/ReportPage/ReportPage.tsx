@@ -22,6 +22,8 @@ import {
 } from "../..";
 import { btnType } from "../../components/Button/Button";
 import { ButtonPopup } from "../../components/ButtonPopup/ButtonPopup";
+import { Can } from "common/casl/Can";
+import { ENTITIES } from "common/casl/Ability";
 
 type Props = {
   report: Report;
@@ -156,20 +158,24 @@ export const ReportPage: FunctionComponent<Props> = ({
 
       <TopBar title={report.title} onClose={onClose}>
         <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
-          <EditReportTitleModal 
-            onSubmit={(name) => {
-              onEditTitle(name)
-            }}
-          />
-          <DeleteModal 
-            render={(
-              <p>
-                Are you sure you want to delete the report? <br />
-                <strong>All files will be permanently deleted.</strong>
-              </p>
-            )}
-            onDelete={() => onDeleteReport(report)}
-          />
+          <Can I='edit' a={ENTITIES.Reports}>
+            <EditReportTitleModal 
+              onSubmit={(name) => {
+                onEditTitle(name)
+              }}
+            />
+          </Can>
+          <Can I='delete' a={ENTITIES.Reports}>
+            <DeleteModal 
+              render={(
+                <p>
+                  Are you sure you want to delete the report? <br />
+                  <strong>All files will be permanently deleted.</strong>
+                </p>
+              )}
+              onDelete={() => onDeleteReport(report)}
+            />
+          </Can>
         </ButtonMenu>
         <Button icon={<MdRemoveRedEye />} text="Preview" />
       </TopBar>
