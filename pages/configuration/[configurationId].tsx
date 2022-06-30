@@ -14,7 +14,7 @@ import {
 import { toRemoteConfiguration } from 'common/toRemoteConfiguration';
 
 const ConfigById: FunctionComponent = () => {
-  useAuthRequired();
+  // useAuthRequired();
   
   const router = useRouter();
   const handleToast = useToast()

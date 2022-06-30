@@ -5,9 +5,10 @@ import { btnType } from '../Button/Button'
 type Props = {
   onSubmit: (username: string) => void
   title: string
+  isEmail: boolean
 }
 
-export const EditEmailModal: FunctionComponent<Props> = ({ onSubmit, title }) => {
+export const EditEmailModal: FunctionComponent<Props> = ({ onSubmit, title, isEmail }) => {
   const [username, handleUsername] = useState<string>('')
   const [confirmUsername, handleConfirmUsername] = useState<string>('')
   const [showValidations, handleShowValidations] = useState<boolean>(false)
@@ -25,7 +26,7 @@ export const EditEmailModal: FunctionComponent<Props> = ({ onSubmit, title }) =>
       render={(toggle) => (
         <div className='p-4'>
           <p className='py-2 font-sans text-gray-600 text-xxxl font-bold'>
-            Edit email
+            Edit {isEmail ? 'email' : 'username'}
           </p>
           <p className='font-sans text-sm font-normal text-gray-500'>
             { title }
@@ -33,7 +34,7 @@ export const EditEmailModal: FunctionComponent<Props> = ({ onSubmit, title }) =>
           <div className='py-4'>
             <TextInput
               name='username'
-              placeholder='Email'
+              placeholder={isEmail ? 'Email' : 'Username'}
               value={username}
               onChange={(e) => { handleUsername(e.target.value) }}
               onFocus={(e) => {
@@ -51,7 +52,7 @@ export const EditEmailModal: FunctionComponent<Props> = ({ onSubmit, title }) =>
           <div>
             <TextInput
               name='confirm-username'
-              placeholder='Confirm email'
+              placeholder={isEmail ? 'Confirm email' : 'Confirm username'}
               value={confirmUsername}
               onChange={(e) => { handleConfirmUsername(e.target.value) }}
               onFocus={(e) => {
@@ -69,7 +70,7 @@ export const EditEmailModal: FunctionComponent<Props> = ({ onSubmit, title }) =>
 
           { showValidations && (
             <>
-              { username.length > 0 && !(/\S+@\S+\.\S+/.test(username)) && (
+              { isEmail && username.length > 0 && !(/\S+@\S+\.\S+/.test(username)) && (
                 <div className="w-full p-2 mt-4 mb-4 bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200">
                   Please enter a valid email address.
                 </div>
@@ -77,7 +78,7 @@ export const EditEmailModal: FunctionComponent<Props> = ({ onSubmit, title }) =>
 
               { !(username === confirmUsername) && (
                 <div className="w-full p-2 mt-4  bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200">
-                  The email addresses do not match
+                  The { isEmail ? 'email addresses' : 'names'} do not match
                 </div>
               )}
             </>
@@ -87,7 +88,7 @@ export const EditEmailModal: FunctionComponent<Props> = ({ onSubmit, title }) =>
             <Button 
               text='SAVE'
               full={true}
-              disabled={!(username.length > 0 && username === confirmUsername) || !(/\S+@\S+\.\S+/.test(username))}
+              disabled={!(username.length > 0 && username === confirmUsername) || (isEmail && !(/\S+@\S+\.\S+/.test(username)))}
               onClick={() => {
                 onSubmit(username)
                 toggle()

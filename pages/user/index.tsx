@@ -45,7 +45,8 @@ const toUserQuery = (itemQuery: ItemQuery): UserQuery => {
 
 
 export const Report = () => {
-  const ready = useAuthRequired();
+  const ready = true
+
   const handleToast = useToast()
   const { push } = useRouter();
   const [createUser, createUserResult] = useCreateUserMutation()
@@ -75,9 +76,7 @@ export const Report = () => {
       onOpen={(user) => {
         push(`./user/${user.username}`);
       }}
-      onCreateUser={(username, password, isAdmin) => {
-        createUser({username, password, isAdmin})
-      }}
+      onCreateUser={createUser}
     />
   ) : (
     false

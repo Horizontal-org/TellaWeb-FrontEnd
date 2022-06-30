@@ -8,17 +8,20 @@ import {
   ChangeEvent
 } from "react"
 import { MainLayout } from "../../layouts/MainLayout"
-import { User } from "packages/state/domain/user"
+import { ROLES, User } from "packages/state/domain/user"
 import { EditEmailModal } from "../../components/EditEmailModal/EditEmailModal";
 import { EditPasswordModal } from "../../components/EditPasswordModal/EditPasswordModal";
 import { DeleteUserModal } from '../../components/DeleteUserModal/DeleteUserModal'
 import { EditUserNoteModal } from '../../components/EditUserNoteModal/EditUserNoteModal'
+import { useUserProfile } from "packages/state/features/user/userHooks";
+import { EditRoleModal } from '../../modals/user/EditRoleModal/EditRoleModal'
 
 type Props = {
   sidebar: React.ReactNode;
-  onUpdateUsername: (username: string, isAdmin: boolean) => void;
+  onUpdateUsername: (username: string) => void;
   onUpdatePassword: (currentPassword: string, newPassword: string) => void;
-  onUpdateNote: (note: string, isAdmin: boolean) => void;
+  onUpdateNote: (note: string) => void;
+  onUpdateRole: (role: string) => void;
   deleteUser: () => void
   user: User | null;
 };
@@ -29,8 +32,10 @@ export const UserPage: FunctionComponent<Props> = ({
   onUpdateUsername,
   onUpdatePassword,
   onUpdateNote,
+  onUpdateRole,
   deleteUser
 }) => {
+  const loggedUser = useUserProfile()
 
   return (
     <MainLayout
@@ -48,8 +53,9 @@ export const UserPage: FunctionComponent<Props> = ({
               <p>{user ? user.username : ""}</p>
             </div>
             <EditEmailModal 
+              isEmail={user && user.role !== ROLES.REPORTER}
               onSubmit={(username: string) => {
-                onUpdateUsername(username, !!(user.role))
+                onUpdateUsername(username)
               }} 
               title="Edit the username of the user"
             />
@@ -76,8 +82,8 @@ export const UserPage: FunctionComponent<Props> = ({
               <p className='break-all'>{user ? user.note : '-'}</p>
             </div>
             <EditUserNoteModal 
-            onSubmit={(note: string) => {
-              onUpdateNote(note, !(user.role))
+              onSubmit={(note: string) => {
+                onUpdateNote(note)
               }} 
             />
           </div>
@@ -87,8 +93,18 @@ export const UserPage: FunctionComponent<Props> = ({
               <p className="text-gray-600 uppercase" style={{ width: 200 }}>
                 Role
               </p>
-              <p>{ user ? (user.role === 1 ? 'Guest' : 'Administrator') : ''}</p>
+              <p>{ user ? user.role : ' '}</p>
             </div>
+            { user && user.id !== loggedUser.id && (
+              <EditRoleModal 
+                defaultRole={user ? user.role + '' : 'admin'}
+                hasEmail={user && (/\S+@\S+\.\S+/.test(user.username))}
+                onSubmit={(role: string) => {
+                  // update role 
+                  onUpdateRole(role)
+                }} 
+              />
+            )}
           </div>          
 
 

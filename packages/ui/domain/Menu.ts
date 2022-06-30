@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 
 export interface MenuDescription {
+  permission: string
   text: string
   icon?: ReactNode
   disabled?: boolean

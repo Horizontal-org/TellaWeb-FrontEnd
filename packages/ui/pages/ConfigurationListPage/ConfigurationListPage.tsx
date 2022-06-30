@@ -18,6 +18,8 @@ import RemoteConfigIcon from '../../components/RemoteConfigIcon'
 import { btnType } from '../../components/Button/Button'
 import { MdOpenInNew, MdRemoveRedEye, MdSave } from "react-icons/md";
 import { ShareConfigurationModal } from "packages/ui/modals/remoteConfiguration/ShareConfigurationModal/ShareConfigurationModal";
+import { Can } from "common/casl/Can";
+import { ENTITIES } from "common/casl/Ability";
 
 interface Props {
   sidebar: ReactNode;
@@ -68,9 +70,11 @@ export const ConfigurationListPage: FunctionComponent<Props> = ({
         <div>
           { selectedConfigs.length === 0 && (
             <div className="flex space-x-2 mb-2 p-2">
-              <CreateConfigurationModal 
-                onSubmit={onCreateConfig}
-              />
+              <Can I='create' a={ENTITIES.RemoteConfigurations}>
+                <CreateConfigurationModal 
+                  onSubmit={onCreateConfig}
+                />
+              </Can>
               <div className="pl-2">
                 <form onSubmit={search} className="flex">
                   <SearchInput

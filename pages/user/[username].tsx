@@ -12,10 +12,10 @@ import {
 } from "packages/state/services/user";
 
 const UserById: FunctionComponent = () => {
-  useAuthRequired();
   
   const router = useRouter();
   const handleToast = useToast()
+   
   const [currentUsername, handleCurrentUsername] = useState<string>()
   const [loadUser, { data: currentUser }] = useLazyGetByUsernameQuery();
   const [updatePassword, updatePasswordResult] = useUpdatePasswordMutation();
@@ -67,6 +67,14 @@ const UserById: FunctionComponent = () => {
     <UserPage 
       sidebar={<Menu />}
       user={currentUser || null}
+      onUpdateRole={(role) => {
+        updateUser({ 
+          id: currentUser.id, 
+          username: currentUser.username,
+          note: currentUser.note,
+          role: role
+        });
+      }}
       onUpdatePassword={(current, newPassword) => {
         updatePassword({ current, new: newPassword });
       }}
@@ -76,14 +84,14 @@ const UserById: FunctionComponent = () => {
           id: currentUser.id, 
           username: username,
           note: currentUser.note,
-          isAdmin: isAdmin 
+          role: currentUser.role
         });
       }}
       onUpdateNote={(note, isAdmin = false) => {
         updateUser({
           id: currentUser.id,
-          isAdmin: isAdmin,
-          note: note
+          note: note,
+          role: currentUser.role
         })
       }}
       deleteUser={() => {

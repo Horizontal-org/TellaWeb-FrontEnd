@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
 
 const Home: NextPage = () => {
-  useAuthRequired("/login", "/report");
+  // useAuthRequired("/login", "/report");
 
   return (
     <div>
