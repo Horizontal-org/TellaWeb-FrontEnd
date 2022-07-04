@@ -34,15 +34,15 @@ export const SidebarLayout: FunctionComponent<Props> = ({
 
       <div className="flex flex-col flex-1 justify-between">
         <ul className="flex flex-1 flex-col gap-2 w-full">
-          {topMenu.map((data) => (
-            <Can I='read' a={data.permission}>
+          {topMenu.map((data, i) => (
+            <Can I='read' a={data.permission} key={i}>
               <NavButton key={data.text} {...data} />
             </Can>
           ))}
         </ul>
         <ul className="flex flex-col gap-2 w-full">
-          {bottomMenu.map((data) => (
-            <Can I='read' a={data.permission}>
+          {bottomMenu.map((data, i) => (
+            <Can I='read' a={data.permission} key={i}>
               <NavButton key={data.text} {...data} />
             </Can>
           ))}

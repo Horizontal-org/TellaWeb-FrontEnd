@@ -126,19 +126,21 @@ export const ReportPage: FunctionComponent<Props> = ({
               </ButtonMenu>
             </div>
           )}          
-          <div className="flex space-x-4 mb-2 px-4 py-2 items-center">
-            <Button type={btnType.Secondary} icon={<BsArrowsAngleExpand />} />
-            <div >
-              <Paginator 
-                previousPage={goPrev}
-                nextPage={goNext}
-                canNextPage={true}
-                canPreviousPage={true}
-                pageIndex={current - 1}
-                pageTotal={report.files.length}
-              />
+          { report.files.length > 0 && (
+            <div className="flex space-x-4 mb-2 px-4 py-2 items-center">
+              <Button type={btnType.Secondary} icon={<BsArrowsAngleExpand />} />
+              <div >
+                <Paginator 
+                  previousPage={goPrev}
+                  nextPage={goNext}
+                  canNextPage={true}
+                  canPreviousPage={true}
+                  pageIndex={current - 1}
+                  pageTotal={report.files.length}
+                />
+              </div>
             </div>
-          </div>
+          )}
         </ToggleButtonsBar>
 
         <MainContent>
