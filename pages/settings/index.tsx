@@ -53,7 +53,7 @@ const Settings = () => {
         updateUser({ 
           id: user.id, 
           username: username,
-          isAdmin: true 
+          role: user.role
         });
       }}
     />
