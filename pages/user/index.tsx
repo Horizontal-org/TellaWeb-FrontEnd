@@ -1,12 +1,13 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/dist/client/router";
-import { ItemQuery } from 'packages/ui'
+import { ItemQuery, User as IUser } from 'packages/ui'
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import { Menu } from "../../components/Menu";
 import { useToast } from "components/ToastWrapper";
 import {
   useListQuery,
-  useCreateUserMutation
+  useCreateUserMutation,
+  useBatchDeleteUserMutation
 } from "packages/state/services/user";
 import { UserQuery } from "packages/state/domain/user";
 import { UserListPage } from '../../packages/ui/pages/UserListPage/UserListPage'
@@ -54,6 +55,12 @@ export const Report = () => {
   const itemQuery = useMemo(() => toItemQuery(query), [query]);
 
   const { data: users, refetch } = useListQuery(query);
+  const [batchDeleteUsers] = useBatchDeleteUserMutation();
+
+  const onBatchDeleteUsers = async (usersToDelete: IUser[]) => {
+    const toDelete = usersToDelete.map((td) => td.id);
+    batchDeleteUsers(toDelete).unwrap();
+  };
 
 
   useEffect(() => {
@@ -78,6 +85,7 @@ export const Report = () => {
       onCreateUser={(username, password, isAdmin) => {
         createUser({username, password, isAdmin})
       }}
+      onDelete={onBatchDeleteUsers}
     />
   ) : (
     false

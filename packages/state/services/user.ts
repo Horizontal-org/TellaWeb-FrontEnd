@@ -108,6 +108,16 @@ export const userApi = createApi({
       }),
     }),
 
+    batchDeleteUser: builder.mutation<boolean, string[]>({
+      query: (userIds) => ({
+        url: `/batch-delete`,
+        method: "POST",
+        body: {
+          toDelete: userIds,
+        }
+      }),
+    }),
+
     createUser: builder.mutation<User, { username: string, password: string, isAdmin: boolean }>({
       query: ({ username, password, isAdmin }) => ({
         url: `/`,
@@ -132,5 +142,6 @@ export const {
   useListQuery,
   useLazyGetByUsernameQuery,
   useDeleteMutation,
+  useBatchDeleteUserMutation,
   useCreateUserMutation
 } = userApi;
