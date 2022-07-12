@@ -55,7 +55,7 @@ export const Report = () => {
   const itemQuery = useMemo(() => toItemQuery(query), [query]);
 
   const { data: users, refetch } = useListQuery(query);
-  const [batchDeleteUsers] = useBatchDeleteUserMutation();
+  const [batchDeleteUsers, batchDeleteUsersResult] = useBatchDeleteUserMutation();
 
   const onBatchDeleteUsers = async (usersToDelete: IUser[]) => {
     const toDelete = usersToDelete.map((td) => td.id);
@@ -72,6 +72,16 @@ export const Report = () => {
       handleToast(createUserResult.error.data.message, "danger");
     }
   }, [createUserResult.status]);
+
+  useEffect(() => {
+    if (batchDeleteUsersResult.isSuccess) {
+      handleToast("User deleted", "info");
+      refetch()
+    }
+    if (batchDeleteUsersResult.error && "status" in batchDeleteUsersResult.error) {
+      handleToast(batchDeleteUsersResult.error.data.message, "danger");
+    }
+  }, [batchDeleteUsersResult.status])
 
   return ready ? (
     <UserListPage 
