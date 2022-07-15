@@ -62,16 +62,4 @@ export const Project = () => {
 
 export default Project;
 
-// <ReportListPage
-    //   currentQuery={itemQuery}
-    //   onQueryChange={(itemQuery) => setQuery(toReportQuery(itemQuery))}
-    //   onDelete={onBatchDelete}
-    //   onOpen={(report) => {
-    //     push(`./report/${report.id}`);
-    //   }}
-    //   onDownload={(report) => {
-    //     downloadReportFile(report.id);
-    //   }}
-    //   reports={reports?.results.map(toReport) || []}
-    //   sidebar={<Menu />}
-    // />
+
