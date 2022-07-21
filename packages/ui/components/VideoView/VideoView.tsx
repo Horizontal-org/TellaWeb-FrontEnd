@@ -3,6 +3,7 @@ import { FunctionComponent, useRef } from "react";
 import { IReportFile } from "../../domain/ReportFile";
 import { MediaButtons } from "../MediaControls/MediaButtons";
 import { MediaProgressBar } from "../MediaControls/MediaProgressBar";
+import MediaLoader from "../MediaLoader/MediaLoader";
 import { VideoLoading } from "./VideoLoading";
 
 type Props = {
@@ -48,8 +49,8 @@ export const VideoView: FunctionComponent<Props> = ({ file }) => {
         </video>
 
         {!duration && (
-          <div>
-            <VideoLoading />
+          <div className="absolute">
+            <MediaLoader />
           </div>
         )}
       </div>
