@@ -33,6 +33,7 @@ type Props = {
   currentQuery: ItemQuery;
   onOpen: (user: User) => void;
   onQueryChange: (iq: ItemQuery) => void;
+  onDelete: (users: User[]) => void;
   onCreateUser: (newUser: {
     username: string
     password: string
@@ -46,7 +47,8 @@ export const UserListPage: FunctionComponent<Props> = ({
   onQueryChange,
   currentQuery,
   onCreateUser,
-  onOpen
+  onOpen,
+  onDelete
 }) => {
 
   const [currentUser, setCurrentUser] = useState<User | undefined>();
@@ -130,7 +132,7 @@ export const UserListPage: FunctionComponent<Props> = ({
                     />              
                   </div>
                 )}                
-                {/* <ButtonMenu openSide="right">
+                {<ButtonMenu openSide="right">
                   <DeleteModal 
                     render={(
                       <p>
@@ -138,10 +140,10 @@ export const UserListPage: FunctionComponent<Props> = ({
                       </p>
                     )}
                     onDelete={() => {
-                      // onDelete(selectedReports)
+                      onDelete(selectedUsers)
                     }}
                   />  
-                </ButtonMenu> */}
+                </ButtonMenu>}
               </>
             )}
           </div>
