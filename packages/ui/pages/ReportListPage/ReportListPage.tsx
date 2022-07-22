@@ -26,6 +26,8 @@ import { REPORT_COLUMNS } from "../../domain/ReportTableColumns";
 import { ItemQuery } from "../../domain/ItemQuery";
 import { Item } from "../../domain/Item";
 import { Report } from "../../domain/Report";
+import { Can } from "common/casl/Can";
+import { ENTITIES } from "common/casl/Ability";
 
 type Props = {
   reports: Report[];
@@ -119,17 +121,19 @@ export const ReportListPage: FunctionComponent<Props> = ({
                       text="Download"
                     />
                   </>
-                )}                
-                <ButtonMenu openSide="right" type={btnType.Secondary} text="...">
-                  <DeleteModal 
-                    render={(
-                      <p>
-                        the selected reports will be permanently deleted.
-                      </p>
-                    )}
-                    onDelete={() => onDelete(selectedReports)}
-                  />  
-                </ButtonMenu>
+                )}
+                <Can I='delete' a={ENTITIES.Reports}>
+                  <ButtonMenu openSide="right" type={btnType.Secondary} text="...">
+                    <DeleteModal 
+                      render={(
+                        <p>
+                          the selected reports will be permanently deleted.
+                        </p>
+                      )}
+                      onDelete={() => onDelete(selectedReports)}
+                      />  
+                  </ButtonMenu>
+                </Can>
               </>
             )}
           </div>
@@ -139,6 +143,42 @@ export const ReportListPage: FunctionComponent<Props> = ({
             itemQuery={currentQuery}
             onSelection={setSelectedReports as Dispatch<SetStateAction<Item[]>>}
             onFetch={onQueryChange}
+            rowOptions={(hoveredRow) => (
+              <>
+                <Button
+                  type={btnType.Secondary}
+                  icon={<MdRemoveRedEye />}
+                  text="Preview"
+                  onClick={(e: ChangeEvent) => {
+                    e.stopPropagation()
+                    setCurrentReport(hoveredRow);
+                  }}
+                />
+                <div className="px-2">
+                  <Button
+                    type={btnType.Secondary}
+                    icon={<MdSave />}
+                    onClick={(event: MouseEvent) => {
+                      event.stopPropagation()
+                      onDownload(hoveredRow)
+                    }}
+                    text="Download"
+                  />
+                </div>
+                <Can I='delete' a={ENTITIES.Reports}>
+                  <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
+                    <DeleteModal 
+                      render={(
+                        <p>
+                          the selected reports will be permanently deleted.
+                        </p>
+                      )}
+                      onDelete={() => onDelete([hoveredRow])}
+                    />  
+                  </ButtonMenu>
+                </Can>
+              </>
+            )}
           />
         </div>
       }

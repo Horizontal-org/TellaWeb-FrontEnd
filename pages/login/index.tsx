@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { LoginPage } from "packages/ui";
 import { useRouter } from "next/dist/client/router";
@@ -13,6 +13,8 @@ import { useUserProfile } from "packages/state/features/user/userHooks";
 import { Credential } from "packages/state/domain/user";
 import { setUser } from "packages/state/features/user/userSlice";
 import { useLazyGetProfileQuery } from "packages/state/services/user";
+import { AbilityContext } from "common/casl/Can";
+import { updateAbility } from "common/casl/Ability";
 
 const Login = () => {
   const { errorMessage, accessToken } = useAuth();
@@ -21,6 +23,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const [login, { isLoading }] = useLoginMutation();
   const [loadUserProfile, { data }] = useLazyGetProfileQuery();
+  const ability = useContext(AbilityContext);
 
   useEffect(() => {
     if (user) router.replace("/report");
@@ -31,7 +34,10 @@ const Login = () => {
       loadUserProfile();
       return;
     }
-    if (data) dispatch(setUser(data));
+    if (data) {
+      updateAbility(data, ability)
+      dispatch(setUser(data))
+    };
   }, [accessToken, user, data]);
 
   const doLogin = async (credential: Credential) => {

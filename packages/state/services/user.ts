@@ -52,16 +52,16 @@ export const userApi = createApi({
     { 
       id: string, 
       username?: string,
-      note?: string 
-      isAdmin: boolean 
+      note?: string     
+      role: string
     }>({
-      query: ({ id, username = null, note, isAdmin }) => ({
+      query: ({ id, username = null, note, role }) => ({
         url: `/${id}`,
         method: "POST",
         body: {
           note: note,
           username: username,
-          isAdmin: isAdmin,
+          role: role
         },
       }),
     }),
@@ -118,14 +118,14 @@ export const userApi = createApi({
       }),
     }),
 
-    createUser: builder.mutation<User, { username: string, password: string, isAdmin: boolean }>({
-      query: ({ username, password, isAdmin }) => ({
+    createUser: builder.mutation<User, { username: string, password: string, role: string }>({
+      query: ({ username, password, role }) => ({
         url: `/`,
         method: "POST",
         body: {
           username,
           password,
-          isAdmin: isAdmin,
+          role
         },
       }),
     }),

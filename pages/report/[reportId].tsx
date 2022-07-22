@@ -13,7 +13,7 @@ import { useDeleteFileMutation } from "packages/state/services/files";
 import { useFileDownloader } from "packages/state/features/files/useFileDownloader";
 
 export const ReportById = () => {
-  useAuthRequired();
+  // useAuthRequired();
 
   const router = useRouter();
   const handleToast = useToast();

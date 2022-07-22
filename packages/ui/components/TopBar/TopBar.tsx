@@ -15,7 +15,7 @@ export const TopBar: FunctionComponent<PropsWithChildren<Props>> = ({
     <div className="flex items-center">
       {onClose && (
         <button 
-          className='active:shadow-inbox rounded flex justify-center items-center' 
+          className='active:shadow-inbox hover:bg-gray-50 rounded flex justify-center items-center' 
           type="button" 
           onClick={onClose}
           style={{

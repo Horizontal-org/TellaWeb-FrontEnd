@@ -13,7 +13,8 @@ import { useDispatch } from "react-redux";
 import { setUser } from "packages/state/features/user/userSlice";
 
 const Settings = () => {
-  useAuthRequired();
+  // useAuthRequired();
+  
   const user = useUserProfile();
   const dispatch = useDispatch();
 
@@ -52,7 +53,7 @@ const Settings = () => {
         updateUser({ 
           id: user.id, 
           username: username,
-          isAdmin: true 
+          role: user.role
         });
       }}
     />

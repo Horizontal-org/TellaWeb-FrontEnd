@@ -1,12 +1,14 @@
-enum Roles {
-  ADMIN,
-  USER,
+export const ROLES = {
+  ADMIN: 'admin',
+  REPORTER: 'reporter',
+  VIEWER: 'viewer',
+  EDITOR: 'editor'
 }
 
 export interface User {
   id: string;
   username: string;
-  role: Roles;
+  role: string;
   createdAt: string;
   note?: string
 }

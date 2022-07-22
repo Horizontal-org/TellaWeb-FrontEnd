@@ -1,5 +1,7 @@
 node_modules
 .next
 .env
+.env.development
+.env.production
 build-storybook.log
 .vercel

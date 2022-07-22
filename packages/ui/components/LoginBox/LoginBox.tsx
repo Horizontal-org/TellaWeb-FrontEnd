@@ -120,7 +120,7 @@ export const LoginBox: FunctionComponent<Props> = ({
       )}
 
 
-      { showValidations && !testMail() && (
+      { showValidations && credentail.username.length > 0 && !testMail() && (
         <div
           className="w-full p-2 mt-2 mb-4 bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200"
           role="alert"

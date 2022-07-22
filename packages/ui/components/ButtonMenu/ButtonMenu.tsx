@@ -55,7 +55,10 @@ export const ButtonMenu: FunctionComponent<Props> = ({
           icon={!icon && !text ? <BsThreeDots /> : icon}
           type={type}          
           full={true}
-          onClick={() => openMenu()}
+          onClick={(e: Event) => {
+            e.stopPropagation()
+            openMenu()
+          }}
           //TODO: Auto close
         />
       </div>

@@ -44,8 +44,8 @@ const toReportQuery = (itemQuery: ItemQuery): ReportQuery => {
 };
 
 export const Report = () => {
-  const ready = useAuthRequired();
-
+  const ready = true 
+  
   const { push } = useRouter();
   const [downloadReportFile] = useReportFileDownloader();
 

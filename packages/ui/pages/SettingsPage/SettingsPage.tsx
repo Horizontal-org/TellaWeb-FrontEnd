@@ -4,7 +4,7 @@ import { EditEmailModal } from "../../components/EditEmailModal/EditEmailModal";
 import { EditPasswordModal } from "../../components/EditPasswordModal/EditPasswordModal";
 import { ButtonMenu } from '../../components/ButtonMenu/ButtonMenu'
 import { ButtonOption } from '../../components/ButtonMenu/ButtonOption'
-import { User } from "packages/state/domain/user";
+import { ROLES, User } from "packages/state/domain/user";
 import { useRouter } from 'next/router'
 import { useTranslation } from "next-i18next";
 import { btnType } from "../../components/Button/Button";
@@ -44,6 +44,7 @@ export const SettingsPage: FunctionComponent<Props> = ({
               <p>{user ? user.username : ""}</p>
             </div>
             <EditEmailModal 
+              isEmail={user && user.role !== ROLES.REPORTER}
               onSubmit={onUpdateUsername}
               title="Please enter the new email address you would like to use to log in Tella" 
             />

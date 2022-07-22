@@ -18,7 +18,7 @@ export const SidebarButton: FunctionComponent<Props> = ({
         onClick={onClick}
         className={cn({
           "active:shadow-inbox rounded": true,
-          "flex flex-col justify-center items-center focus:outline-none cursor-pointer border-r my-2 stroke-current text-customgray-500 hover:text-customgray-400": true,
+          "flex flex-col justify-center items-center focus:outline-none cursor-pointer border-r my-2 stroke-current text-customgray-500 hover:bg-gray-50": true,
           "transform rotate-180": position && position === 'right'
         })}
       >
