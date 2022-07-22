@@ -1,13 +1,17 @@
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useState } from 'react'
 import { IReportFile } from '../../domain/ReportFile'
 import Image from "next/image";
+import MediaLoader from '../MediaLoader/MediaLoader';
 
 type Props = {
   file: IReportFile,
-  onClick?: () => void
+  onClick?: () => void,
 };
 
 export const ImageView: FunctionComponent<Props> = ({ file, onClick }) => {
+
+  const [loading, handleLoading] = useState(true)
+
   return (
     <div className='w-full h-full flex justify-center items-center'>
 
@@ -20,7 +24,15 @@ export const ImageView: FunctionComponent<Props> = ({ file, onClick }) => {
           layout='fill'
           objectFit='contain'
           unoptimized={true}
+          onLoadingComplete={() => {
+            handleLoading(false)
+          }}
         />
+
+        { loading && (
+          <MediaLoader />
+        )}
+        
       </div>
     </div>
     
