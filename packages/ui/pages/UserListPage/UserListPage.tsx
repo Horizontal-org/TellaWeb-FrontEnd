@@ -153,6 +153,30 @@ export const UserListPage: FunctionComponent<Props> = ({
               onSelection={setSelectedUsers as Dispatch<SetStateAction<Item[]>>}
               onFetch={onQueryChange}
               icon={<BsPerson/>}
+              rowOptions={(hoverRow) => (
+                <>
+                    <div className='pr-2'>
+                      <Button
+                        icon={<MdOpenInNew />}
+                        text="Open"
+                        onClick={(event: MouseEvent) => {
+                          event.preventDefault();
+                          event.stopPropagation()
+                          onOpen(hoverRow);
+                        }}
+                      />
+                    </div>
+                    <Button
+                      type={btnType.Secondary}
+                      icon={<MdRemoveRedEye />}
+                      text="Preview"
+                      onClick={(e: ChangeEvent) => {
+                        e.stopPropagation()
+                        setCurrentUser(hoverRow);
+                      }}
+                    />            
+                </>
+              )}
             />
           </div>
          
