@@ -59,7 +59,7 @@ export const Report = () => {
 
   const onBatchDeleteUsers = async (usersToDelete: IUser[]) => {
     const toDelete = usersToDelete.map((td) => td.id);
-    batchDeleteUsers(toDelete).unwrap();
+    batchDeleteUsers(toDelete)
   };
 
 
