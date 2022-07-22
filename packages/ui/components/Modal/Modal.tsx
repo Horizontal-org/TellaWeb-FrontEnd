@@ -32,7 +32,10 @@ export const Modal: FunctionComponent<Props> = ({
         <Button
           icon={buttonIcon}
           text={button}
-          onClick={toggle}
+          onClick={(e: Event) => {
+            e.stopPropagation()
+            toggle()
+          }}
           type={btnType}
         />
       )}
