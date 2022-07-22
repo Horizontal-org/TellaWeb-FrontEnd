@@ -43,7 +43,11 @@ export const ButtonPopup: FunctionComponent<PropsWithChildren<Props>> = ({
         className="bg-white w-4/12 py-4 px-3 rounded shadow-xl text-gray-800"
       >
         <div className="flex-start items-center">
-          <button type="button" onClick={requestClose}>
+          <button 
+            type="button" 
+            onClick={requestClose}
+            className='active:shadow-inbox rounded flex flex-col justify-center items-center focus:outline-none cursor-pointer p-2 stroke-current text-customgray-500 hover:bg-gray-50'
+          >
             <MdClose className="text-gray-300" />
           </button>
         </div>
