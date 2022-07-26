@@ -34,7 +34,7 @@ pipeline {
         steps {
           script {
             sh '''            
-              ssh -o StrictHostKeyChecking=no root@beta.web.tella-app.or "cd /home/tellaweb-beta ; docker-compose pull app ; docker-compose up -d app"
+              ssh -o StrictHostKeyChecking=no root@beta.web.tella-app.org "cd /home/tellaweb-beta ; docker-compose pull app ; docker-compose up -d app"
             '''
           }
         }
