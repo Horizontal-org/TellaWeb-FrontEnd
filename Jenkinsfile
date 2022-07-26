@@ -1,7 +1,8 @@
 pipeline {
     agent any
+    
     stages {
-      stage {
+      stage('Test') {
         steps {
           script {
             echo 'first jenkinsfile'
