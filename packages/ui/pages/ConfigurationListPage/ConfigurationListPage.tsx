@@ -8,7 +8,7 @@ import {
   Dispatch,
   SetStateAction
 } from "react";
-import { CreateConfigurationModal, SearchInput, Table, Button } from "../../../ui/";
+import { CreateConfigurationModal, SearchInput, Table, Button, ButtonMenu, ButtonOption } from "../../../ui/";
 import { MainLayout } from "../../layouts/MainLayout";
 import { ItemQuery } from "../../domain/ItemQuery";
 import { Item } from "../../domain/Item";
@@ -129,9 +129,9 @@ export const ConfigurationListPage: FunctionComponent<Props> = ({
                   <div className='pr-2'>
                     <ShareConfigurationModal config={hoverRow}/>
                   </div>
-                  <div>
-                    <Button
-                      type={btnType.Secondary}
+                  <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
+                    <ButtonOption
+                      color='#8B8E8F'
                       icon={<MdOpenInNew />}
                       text="Open"
                       onClick={(event: MouseEvent) => {
@@ -140,7 +140,7 @@ export const ConfigurationListPage: FunctionComponent<Props> = ({
                         onOpen(hoverRow);
                       }}
                     />
-                  </div>
+                  </ButtonMenu>
                 </>
               )}
             />

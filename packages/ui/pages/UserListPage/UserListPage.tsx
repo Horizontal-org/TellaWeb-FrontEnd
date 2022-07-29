@@ -133,16 +133,18 @@ export const UserListPage: FunctionComponent<Props> = ({
                   </div>
                 )}                
                 {<ButtonMenu openSide="right">
-                  <DeleteModal 
-                    render={(
-                      <p>
-                        the selected users will be permanently deleted.
-                      </p>
-                    )}
-                    onDelete={() => {
-                      onDelete(selectedUsers)
-                    }}
-                  />  
+                  <Can I='delete' a={ENTITIES.Users}>
+                    <DeleteModal 
+                      render={(
+                        <p>
+                          the selected users will be permanently deleted.
+                        </p>
+                      )}
+                      onDelete={() => {
+                        onDelete(selectedUsers)
+                      }}
+                    />                    
+                  </Can>
                 </ButtonMenu>}
               </>
             )}
@@ -168,15 +170,29 @@ export const UserListPage: FunctionComponent<Props> = ({
                         }}
                       />
                     </div>
-                    <Button
-                      type={btnType.Secondary}
-                      icon={<MdRemoveRedEye />}
-                      text="Preview"
-                      onClick={(e: ChangeEvent) => {
-                        e.stopPropagation()
-                        setCurrentUser(hoverRow);
-                      }}
-                    />            
+                    <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
+                      <ButtonOption
+                        icon={<MdRemoveRedEye />}
+                        color='#8B8E8F'
+                        text="Preview"
+                        onClick={(e: ChangeEvent) => {
+                          e.stopPropagation()
+                          setCurrentUser(hoverRow);
+                        }}
+                      />
+                      <Can I='delete' a={ENTITIES.Users}>
+                        <DeleteModal 
+                          render={(
+                            <p>
+                              the selected users will be permanently deleted.
+                            </p>
+                          )}
+                          onDelete={() => {
+                            onDelete(selectedUsers)
+                          }}
+                        />                    
+                      </Can>
+                    </ButtonMenu>
                 </>
               )}
             />

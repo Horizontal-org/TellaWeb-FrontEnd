@@ -145,38 +145,38 @@ export const ReportListPage: FunctionComponent<Props> = ({
             onFetch={onQueryChange}
             rowOptions={(hoveredRow) => (
               <>
-                <Button
-                  type={btnType.Secondary}
-                  icon={<MdRemoveRedEye />}
-                  text="Preview"
-                  onClick={(e: ChangeEvent) => {
-                    e.stopPropagation()
-                    setCurrentReport(hoveredRow);
-                  }}
-                />
                 <div className="px-2">
                   <Button
                     type={btnType.Secondary}
-                    icon={<MdSave />}
-                    onClick={(event: MouseEvent) => {
-                      event.stopPropagation()
-                      onDownload(hoveredRow)
+                    icon={<MdRemoveRedEye />}
+                    text="Preview"
+                    onClick={(e: ChangeEvent) => {
+                      e.stopPropagation()
+                      setCurrentReport(hoveredRow);
                     }}
-                    text="Download"
                   />
                 </div>
-                <Can I='delete' a={ENTITIES.Reports}>
                   <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
-                    <DeleteModal 
-                      render={(
-                        <p>
-                          the selected reports will be permanently deleted.
-                        </p>
-                      )}
-                      onDelete={() => onDelete([hoveredRow])}
-                    />  
+                    <ButtonOption
+                      icon={<MdSave />}
+                      onClick={(event: MouseEvent) => {
+                        event.stopPropagation()
+                        onDownload(hoveredRow)
+                      }}
+                      text="Download"
+                      color='#8B8E8F'
+                    />
+                    <Can I='delete' a={ENTITIES.Reports}>
+                      <DeleteModal 
+                        render={(
+                          <p>
+                            the selected reports will be permanently deleted.
+                          </p>
+                        )}
+                        onDelete={() => onDelete([hoveredRow])}
+                      />  
+                    </Can>
                   </ButtonMenu>
-                </Can>
               </>
             )}
           />
