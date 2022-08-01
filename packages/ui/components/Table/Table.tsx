@@ -173,11 +173,9 @@ export const Table: FunctionComponent<Props> = ({
             return (
               <tr
                 onMouseEnter={() => {
-                  console.log('enter', row)
                   handleHover(i)
                 }}
                 onMouseLeave={() => {
-                  console.log('back', i )
                   if (hovering === i) {
                     handleHover(null)
                   }

@@ -20,7 +20,11 @@ export const authSlice = createSlice({
       { payload: { access_token } }: PayloadAction<{ access_token: string }>
     ) => {
       localStorage.setItem("access_token", access_token);
-      Cookies.set("access_token", access_token);
+
+      if (process.env.NODE_ENV === 'development') {
+        Cookies.set("access_token", access_token);
+      }
+      
       return {
         accessToken: access_token,
       };
