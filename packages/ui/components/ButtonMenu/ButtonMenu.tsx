@@ -49,7 +49,7 @@ export const ButtonMenu: FunctionComponent<Props> = ({
         "flex-row-reverse": !toRight,
       })}
     >
-      <div ref={ref} style={{ width: 36 }}>
+      <div ref={ref} style={{ minWidth: 36 }}>
         <Button
           text={text}
           icon={!icon && !text ? <BsThreeDots /> : icon}
