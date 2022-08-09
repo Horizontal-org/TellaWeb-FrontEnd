@@ -35,7 +35,7 @@ export const Paginator: FunctionComponent<Props> = ({
       </button>
       
       <div 
-        className='flex w-auto text-customgray-500 py-1 px-2 space-x-2 items-center text-sm font-bold font-sans uppercase border border-gray-100'
+        className='flex w-auto text-customgray-500 py-1 px-2 space-x-2 items-center text-sm font-bold font-sans uppercase border border-gray-100 whitespace-nowrap'
         style={{ height: 38 }}
       >
         <strong>

@@ -1,4 +1,4 @@
-import { FunctionComponent, useRef, useState } from "react";
+import { FunctionComponent, useRef, useState, useEffect, SetStateAction } from "react";
 import cn from "classnames";
 import { MdInfoOutline, MdSave, MdRemoveRedEye } from "react-icons/md";
 import { BsArrowsAngleExpand } from "react-icons/bs";
@@ -24,6 +24,7 @@ import { btnType } from "../../components/Button/Button";
 import { ButtonPopup } from "../../components/ButtonPopup/ButtonPopup";
 import { Can } from "common/casl/Can";
 import { ENTITIES } from "common/casl/Ability";
+import useWindowDimensions from "packages/ui/hooks/useWindowDimensions";
 
 type Props = {
   report: Report;
@@ -44,8 +45,9 @@ export const ReportPage: FunctionComponent<Props> = ({
 }) => {
   const [leftSidebarOpen, changeLeftSidebarOpenStatus] = useState(true);
   const [rightSidebarOpen, changeRightSidebarOpenStatus] = useState(true);
-
+  const [compact, handleCompact] = useState(false)
   const [current, setCurrent] = useState(1);
+  const { height, width } = useWindowDimensions()
 
   const goNext = () => {
     if (current === report.files.length) {
@@ -63,7 +65,20 @@ export const ReportPage: FunctionComponent<Props> = ({
     setCurrent(current - 1);
   };
 
-  const toggleLeftSideBar = () => changeLeftSidebarOpenStatus(!leftSidebarOpen);
+  useEffect(() => {
+    onScreenResize()
+  }, [width, leftSidebarOpen, rightSidebarOpen]);
+
+  const onScreenResize = () => {
+    if (width <= 1200 && leftSidebarOpen && rightSidebarOpen && !compact) {
+      handleCompact(true)
+    } 
+    if (compact && (width > 1200 || !leftSidebarOpen || !rightSidebarOpen)) {
+      handleCompact(false)
+    }  
+  }
+
+  const toggleLeftSideBar = () => changeLeftSidebarOpenStatus(!leftSidebarOpen)
   const toggleRightSideBar = () => changeRightSidebarOpenStatus(!rightSidebarOpen);
 
   return (
@@ -106,15 +121,28 @@ export const ReportPage: FunctionComponent<Props> = ({
                 icon={<MdInfoOutline />}
                 text="File Information"
               />
-              <Button
-                type={btnType.Secondary}
-                icon={<MdSave />}
-                text="Download file"
-                onClick={() => {
-                  onDownloadFile(report.files[current - 1])
-                }}
-              />
-              <ButtonMenu openSide="right" type={btnType.Secondary} text="...">                
+              { !compact && (
+                <Button
+                  type={btnType.Secondary}
+                  icon={<MdSave />}
+                  text="Download file"
+                  onClick={() => {
+                    onDownloadFile(report.files[current - 1])
+                  }}
+                />
+              )}
+              <ButtonMenu openSide="right" type={btnType.Secondary} text="...">         
+                { compact && (
+                  <ButtonOption
+                    text="Download file"
+                    icon={<MdSave />}
+                    onClick={() => { 
+                      onDownloadFile(report.files[current - 1])
+
+                    }}
+                    color='#8B8E8F'
+                  />
+                )}       
                 <DeleteModal 
                   render={(
                     <p>

@@ -26,6 +26,7 @@ import { BsPerson, BsPlusLg } from 'react-icons/bs'
 import { CreateUserModal } from '../../modals/user/CreateUserModal/CreateUserModal'
 import { Can } from "common/casl/Can";
 import { ENTITIES } from "common/casl/Ability";
+import HoveredRowWrapper from "packages/ui/components/Table/HoveredRowWrapper";
 
 type Props = {
   sidebar: React.ReactNode;  
@@ -133,16 +134,18 @@ export const UserListPage: FunctionComponent<Props> = ({
                   </div>
                 )}                
                 {<ButtonMenu openSide="right">
-                  <DeleteModal 
-                    render={(
-                      <p>
-                        the selected users will be permanently deleted.
-                      </p>
-                    )}
-                    onDelete={() => {
-                      onDelete(selectedUsers)
-                    }}
-                  />  
+                  <Can I='delete' a={ENTITIES.Users}>
+                    <DeleteModal 
+                      render={(
+                        <p>
+                          the selected users will be permanently deleted.
+                        </p>
+                      )}
+                      onDelete={() => {
+                        onDelete(selectedUsers)
+                      }}
+                    />                    
+                  </Can>
                 </ButtonMenu>}
               </>
             )}
@@ -155,8 +158,9 @@ export const UserListPage: FunctionComponent<Props> = ({
               onSelection={setSelectedUsers as Dispatch<SetStateAction<Item[]>>}
               onFetch={onQueryChange}
               icon={<BsPerson/>}
-              rowOptions={(hoverRow) => (
-                <>
+              rowOptions={(hoverRow, isHoverSelected) => (
+                <HoveredRowWrapper isHoverSelected={isHoverSelected}>
+                  <>
                     <div className='pr-2'>
                       <Button
                         icon={<MdOpenInNew />}
@@ -168,16 +172,31 @@ export const UserListPage: FunctionComponent<Props> = ({
                         }}
                       />
                     </div>
-                    <Button
-                      type={btnType.Secondary}
-                      icon={<MdRemoveRedEye />}
-                      text="Preview"
-                      onClick={(e: ChangeEvent) => {
-                        e.stopPropagation()
-                        setCurrentUser(hoverRow);
-                      }}
-                    />            
-                </>
+                    <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
+                      <ButtonOption
+                        icon={<MdRemoveRedEye />}
+                        color='#8B8E8F'
+                        text="Preview"
+                        onClick={(e: ChangeEvent) => {
+                          e.stopPropagation()
+                          setCurrentUser(hoverRow);
+                        }}
+                      />
+                      <Can I='delete' a={ENTITIES.Users}>
+                        <DeleteModal 
+                          render={(
+                            <p>
+                              the selected users will be permanently deleted.
+                            </p>
+                          )}
+                          onDelete={() => {
+                            onDelete(selectedUsers)
+                          }}
+                        />                    
+                      </Can>
+                    </ButtonMenu>
+                  </>
+                </HoveredRowWrapper>
               )}
             />
           </div>
