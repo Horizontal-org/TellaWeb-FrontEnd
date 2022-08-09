@@ -124,6 +124,25 @@ export const ConfigurationListPage: FunctionComponent<Props> = ({
                   <RemoteConfigIcon/>
                 </div>
               )}
+              rowOptions={(hoverRow) => (
+                <>
+                  <div className='pr-2'>
+                    <ShareConfigurationModal config={hoverRow}/>
+                  </div>
+                  <div>
+                    <Button
+                      type={btnType.Secondary}
+                      icon={<MdOpenInNew />}
+                      text="Open"
+                      onClick={(event: MouseEvent) => {
+                        event.preventDefault();
+                        event.stopPropagation()
+                        onOpen(hoverRow);
+                      }}
+                    />
+                  </div>
+                </>
+              )}
             />
           </div>
         </div>

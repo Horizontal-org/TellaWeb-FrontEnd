@@ -8,6 +8,7 @@ import { ROLES, User } from "packages/state/domain/user";
 import { useRouter } from 'next/router'
 import { useTranslation } from "next-i18next";
 import { btnType } from "../../components/Button/Button";
+import { version } from 'package.json'
 
 type Props = {
   sidebar: React.ReactNode;
@@ -26,7 +27,8 @@ export const SettingsPage: FunctionComponent<Props> = ({
 }) => {
 
   const router = useRouter()
-  const { t, i18n } = useTranslation("settings");
+  const { t, i18n } = useTranslation("settings")
+
   return (
     <MainLayout
       title="Settings"
@@ -88,6 +90,17 @@ export const SettingsPage: FunctionComponent<Props> = ({
           </div>
         </div>
       }
+      footer={(
+        <div
+          className="flex text-sm justify-center w-full p-6" 
+          style={{ 
+            position: 'absolute', 
+            bottom: '0',
+            marginLeft: '-60px'
+          }}>
+            Server version: v{version}
+        </div>
+      )}
     />
   );
 };

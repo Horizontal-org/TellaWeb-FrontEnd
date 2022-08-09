@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { FunctionComponent, useEffect, useMemo } from "react";
+import { FunctionComponent, useEffect, useState, useMemo } from "react";
 import { Column, useTable, useRowSelect, useSortBy, usePagination } from "react-table";
 import cn from "classnames";
 import { MdExpandMore } from "react-icons/md";
@@ -17,6 +17,7 @@ type Props = {
   onFetch?: (itemQuery: ItemQuery) => void;
   itemQuery?: ItemQuery;
   icon?: React.ReactNode;
+  rowOptions: React.ReactNode
 };
 
 export const Table: FunctionComponent<Props> = ({
@@ -25,10 +26,12 @@ export const Table: FunctionComponent<Props> = ({
   onSelection,
   onFetch,
   itemQuery,
-  icon
+  icon,
+  rowOptions
 }: Props) => {
   const tColumns = useMemo<Column[]>(() => columns, []);
   const tData = useMemo(() => data, [data]);
+  const [hovering, handleHover] = useState()
   const {
     getTableProps,
     getTableBodyProps,
@@ -169,11 +172,25 @@ export const Table: FunctionComponent<Props> = ({
             prepareRow(row);
             return (
               <tr
+                onMouseEnter={() => {
+                  console.log('enter', row)
+                  handleHover(i)
+                }}
+                onMouseLeave={() => {
+                  console.log('back', i )
+                  if (hovering === i) {
+                    handleHover(null)
+                  }
+                }}
                 key={i}
+                style={{
+                  height: 50
+                }}
                 onClick={() => { row.toggleRowSelected() }}
                 {...row.getRowProps()}
                 className={cn(
                   "border-b border-gray-200 hover:border-transparent",
+                  'relative',
                   {
                     "bg-blue-light": row.isSelected,
                     "hover:bg-gray-50": !row.isSelected,
@@ -192,6 +209,25 @@ export const Table: FunctionComponent<Props> = ({
                     </td>
                   );
                 })}
+
+                { hovering === i && (
+                  <div 
+                    className="absolute top-0"
+                    style={{
+                      right: 20
+                    }}
+                  >
+                    <div 
+                      className="flex items-center"
+                      style={{
+                        height: 50,
+                        paddingRight: '20'
+                      }}
+                    >
+                      { rowOptions(row.original) }
+                    </div>
+                  </div>
+                )}
               </tr>
             );
           })}

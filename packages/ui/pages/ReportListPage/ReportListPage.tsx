@@ -70,6 +70,7 @@ export const ReportListPage: FunctionComponent<Props> = ({
     })
   };
 
+  console.log(reports)
 
   return (
     <MainLayout
@@ -133,7 +134,7 @@ export const ReportListPage: FunctionComponent<Props> = ({
                       onDelete={() => onDelete(selectedReports)}
                       />  
                   </ButtonMenu>
-                </Can>                
+                </Can>
               </>
             )}
           </div>
@@ -143,6 +144,42 @@ export const ReportListPage: FunctionComponent<Props> = ({
             itemQuery={currentQuery}
             onSelection={setSelectedReports as Dispatch<SetStateAction<Item[]>>}
             onFetch={onQueryChange}
+            rowOptions={(hoveredRow) => (
+              <>
+                <Button
+                  type={btnType.Secondary}
+                  icon={<MdRemoveRedEye />}
+                  text="Preview"
+                  onClick={(e: ChangeEvent) => {
+                    e.stopPropagation()
+                    setCurrentReport(hoveredRow);
+                  }}
+                />
+                <div className="px-2">
+                  <Button
+                    type={btnType.Secondary}
+                    icon={<MdSave />}
+                    onClick={(event: MouseEvent) => {
+                      event.stopPropagation()
+                      onDownload(hoveredRow)
+                    }}
+                    text="Download"
+                  />
+                </div>
+                <Can I='delete' a={ENTITIES.Reports}>
+                  <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
+                    <DeleteModal 
+                      render={(
+                        <p>
+                          the selected reports will be permanently deleted.
+                        </p>
+                      )}
+                      onDelete={() => onDelete([hoveredRow])}
+                    />  
+                  </ButtonMenu>
+                </Can>
+              </>
+            )}
           />
         </div>
       }
