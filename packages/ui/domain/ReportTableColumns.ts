@@ -21,6 +21,6 @@ export const REPORT_COLUMNS: Column[] = [
     Header: "User",
     headerKey: 'author.username',
     className: "px-3 py-3 w-auto",
-    accessor: (report: Report) => report.author.username,
+    accessor: (report: Report) => { return report.author.username + (report.author.deletedAt ? ' (deleted)' : '') },
   },
 ];

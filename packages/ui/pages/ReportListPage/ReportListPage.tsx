@@ -70,6 +70,7 @@ export const ReportListPage: FunctionComponent<Props> = ({
     })
   };
 
+  console.log(reports)
 
   return (
     <MainLayout
