@@ -28,6 +28,7 @@ import { Item } from "../../domain/Item";
 import { Report } from "../../domain/Report";
 import { Can } from "common/casl/Can";
 import { ENTITIES } from "common/casl/Ability";
+import HoveredRowWrapper from "packages/ui/components/Table/HoveredRowWrapper";
 
 type Props = {
   reports: Report[];
@@ -143,19 +144,20 @@ export const ReportListPage: FunctionComponent<Props> = ({
             itemQuery={currentQuery}
             onSelection={setSelectedReports as Dispatch<SetStateAction<Item[]>>}
             onFetch={onQueryChange}
-            rowOptions={(hoveredRow) => (
-              <>
-                <div className="px-2">
-                  <Button
-                    type={btnType.Secondary}
-                    icon={<MdRemoveRedEye />}
-                    text="Preview"
-                    onClick={(e: ChangeEvent) => {
-                      e.stopPropagation()
-                      setCurrentReport(hoveredRow);
-                    }}
-                  />
-                </div>
+            rowOptions={(hoveredRow, isHoverSelected) => (
+              <HoveredRowWrapper isHoverSelected={isHoverSelected}>
+                <>
+                  <div className="px-2">
+                    <Button
+                      type={btnType.Secondary}
+                      icon={<MdRemoveRedEye />}
+                      text="Preview"
+                      onClick={(e: ChangeEvent) => {
+                        e.stopPropagation()
+                        setCurrentReport(hoveredRow);
+                      }}
+                    />
+                  </div>
                   <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
                     <ButtonOption
                       icon={<MdSave />}
@@ -177,7 +179,8 @@ export const ReportListPage: FunctionComponent<Props> = ({
                       />  
                     </Can>
                   </ButtonMenu>
-              </>
+                </>
+              </HoveredRowWrapper>
             )}
           />
         </div>

@@ -20,6 +20,7 @@ import { MdOpenInNew, MdRemoveRedEye, MdSave } from "react-icons/md";
 import { ShareConfigurationModal } from "packages/ui/modals/remoteConfiguration/ShareConfigurationModal/ShareConfigurationModal";
 import { Can } from "common/casl/Can";
 import { ENTITIES } from "common/casl/Ability";
+import HoveredRowWrapper from "packages/ui/components/Table/HoveredRowWrapper";
 
 interface Props {
   sidebar: ReactNode;
@@ -124,24 +125,26 @@ export const ConfigurationListPage: FunctionComponent<Props> = ({
                   <RemoteConfigIcon/>
                 </div>
               )}
-              rowOptions={(hoverRow) => (
-                <>
-                  <div className='pr-2'>
-                    <ShareConfigurationModal config={hoverRow}/>
-                  </div>
-                  <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
-                    <ButtonOption
-                      color='#8B8E8F'
-                      icon={<MdOpenInNew />}
-                      text="Open"
-                      onClick={(event: MouseEvent) => {
-                        event.preventDefault();
-                        event.stopPropagation()
-                        onOpen(hoverRow);
-                      }}
-                    />
-                  </ButtonMenu>
-                </>
+              rowOptions={(hoverRow, isHoverSelected) => (
+                <HoveredRowWrapper isHoverSelected={isHoverSelected}>
+                  <>
+                    <div className='pr-2'>
+                      <ShareConfigurationModal config={hoverRow}/>
+                    </div>
+                    <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
+                      <ButtonOption
+                        color='#8B8E8F'
+                        icon={<MdOpenInNew />}
+                        text="Open"
+                        onClick={(event: MouseEvent) => {
+                          event.preventDefault();
+                          event.stopPropagation()
+                          onOpen(hoverRow);
+                        }}
+                      />
+                    </ButtonMenu>
+                  </>
+                </HoveredRowWrapper>
               )}
             />
           </div>
