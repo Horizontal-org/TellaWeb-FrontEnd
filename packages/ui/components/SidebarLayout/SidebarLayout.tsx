@@ -22,7 +22,7 @@ export const SidebarLayout: FunctionComponent<Props> = ({
       <div className="pb-16">
         <Img
           onClick={() => {
-            push('/')
+            push('/project')
           }} 
           className='cursor-pointer'
           src={logo} 

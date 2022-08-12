@@ -13,6 +13,7 @@ import { Paginator } from "../Paginator/Paginator";
 type Props = {
   columns: Array<Column>;
   data: Array<Item>;
+  withPagination?: boolean;
   onSelection?: (items: Item[]) => void;
   onFetch?: (itemQuery: ItemQuery) => void;
   itemQuery?: ItemQuery;
@@ -27,7 +28,8 @@ export const Table: FunctionComponent<Props> = ({
   onFetch,
   itemQuery,
   icon,
-  rowOptions
+  rowOptions,
+  withPagination
 }: Props) => {
   const tColumns = useMemo<Column[]>(() => columns, []);
   const tData = useMemo(() => data, [data]);
@@ -234,18 +236,20 @@ export const Table: FunctionComponent<Props> = ({
         </tbody>
       </table>
 
-      <div className='w-full flex justify-center item-center py-8'>
-        <Paginator 
-          gotoPage={gotoPage}
-          previousPage={previousPage}
-          nextPage={nextPage}
-          canNextPage={canNextPage}
-          canPreviousPage={canPreviousPage}
-          pageCount={pageCount}
-          pageIndex={pageIndex}
-          pageTotal={pageOptions.length}
-        />
-      </div>      
+      { withPagination && (
+        <div className='w-full flex justify-center item-center py-8'>
+          <Paginator 
+            gotoPage={gotoPage}
+            previousPage={previousPage}
+            nextPage={nextPage}
+            canNextPage={canNextPage}
+            canPreviousPage={canPreviousPage}
+            pageCount={pageCount}
+            pageIndex={pageIndex}
+            pageTotal={pageOptions.length}
+          />
+        </div>
+      )}
       
     </>
   );
@@ -254,6 +258,7 @@ export const Table: FunctionComponent<Props> = ({
 Table.defaultProps = {
   onSelection: () => null,
   onFetch: () => null,
+  withPagination: true,
   itemQuery: {
     filter: {},
     sort: [],

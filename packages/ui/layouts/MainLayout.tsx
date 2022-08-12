@@ -12,14 +12,14 @@ type Props = {
   rightbar?: React.ReactNode;
   rightbarActive?: boolean;
   content: React.ReactNode;
-  footer?: React.ReactNode
+  absoluteContent?: React.ReactNode
   currentItem?: Item;
   onClosePreview?: () => void;
 };
 
 export const MainLayout: FunctionComponent<Props> = ({
   content,
-  footer,
+  absoluteContent,
   leftbar,
   leftbarActive,
   rightbar,
@@ -81,7 +81,7 @@ export const MainLayout: FunctionComponent<Props> = ({
           <div className="flex-1">
             {content}
 
-            { footer }
+            { absoluteContent }
           </div>
           {rightbar && rightbarActive && (
             <div>

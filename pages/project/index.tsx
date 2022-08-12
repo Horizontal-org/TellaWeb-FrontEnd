@@ -5,12 +5,14 @@ import { toReport } from "../../common/toReport";
 import { useRouter } from "next/dist/client/router";
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import {
+  useCreateProjectMutation,
   useListQuery,
 } from "packages/state/services/project";
 import { ReportQuery } from "packages/state/domain/report";
 import { useReportFileDownloader } from "packages/state/features/files/useReportFileDownloader";
 import { ProjectQuery } from "packages/state/domain/project";
 import { ProjectListPage } from "packages/ui/pages/ProjectListPage/ProjectListPage";
+import { useToast } from "components/ToastWrapper";
 
 const defaultQuery: ProjectQuery = {
   page: 0,
@@ -45,16 +47,33 @@ const toProjectQuery = (itemQuery: ItemQuery): ProjectQuery => {
 };
 
 export const Project = () => {
-  const [query, setQuery] = useState<ProjectQuery>(defaultQuery);
-  const itemQuery = useMemo(() => toItemQuery(query), [query]);
+  const handleToast = useToast()
+  const [query, setQuery] = useState<ProjectQuery>(defaultQuery)
+  const itemQuery = useMemo(() => toItemQuery(query), [query])
+  const { push } = useRouter()
 
-  const { data: projects } = useListQuery(query);
+  const [createProject, createProjectResult] = useCreateProjectMutation()
+  const { data: projects, refetch } = useListQuery(query);
   
+  useEffect(() => {
+    if (createProjectResult.isSuccess) {
+      handleToast("Project created!", "info");
+      refetch()
+    }
+    if (createProjectResult.error && "status" in createProjectResult.error) {
+      handleToast(createProjectResult.error.data.message, "danger");
+    }
+  }, [createProjectResult.status]);
+
   return (
     <ProjectListPage 
       currentQuery={itemQuery}
       projects={projects?.results || []}
       sidebar={<Menu />}
+      onCreateProject={createProject}
+      onOpen={(id) => {
+        push(`./project/${id}`)
+      }}
       onQueryChange={(itemQuery) => setQuery(toProjectQuery(itemQuery))}
     />
   );

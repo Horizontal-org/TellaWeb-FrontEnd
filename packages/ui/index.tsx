@@ -43,6 +43,7 @@ export { CreateConfigurationModal } from './components/CreateConfigurationModal/
 export { LoginPage } from "./pages/LoginPage/LoginPage";
 export { ReportListPage } from "./pages/ReportListPage/ReportListPage";
 export { ReportPage } from "./pages/ReportPage/ReportPage";
+export { ProjectPage } from './pages/ProjectPage/ProjectPage'
 //export { VerificationInformation } from "./components/VerificationInformation/VerificationInformation";
 //export { VerificationMap } from "./components/VerificationInformation/VerificationMap";
 
