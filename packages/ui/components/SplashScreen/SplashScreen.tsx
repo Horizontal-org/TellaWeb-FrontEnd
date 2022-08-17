@@ -26,7 +26,7 @@ export const SplashScreen: FunctionComponent<Props> = ({ children }) => {
       }
 
       if (router.pathname == '/') {
-        await router.replace('/report')
+        await router.replace('/project')
       }
       handleReady(true)
     })

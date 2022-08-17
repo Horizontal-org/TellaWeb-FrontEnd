@@ -90,7 +90,7 @@ export const SettingsPage: FunctionComponent<Props> = ({
           </div>
         </div>
       }
-      footer={(
+      absoluteContent={(
         <div
           className="flex text-sm justify-center w-full p-6" 
           style={{ 

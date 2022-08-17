@@ -12,6 +12,8 @@ type Props = {
   disabled?: boolean;
   render: () => ReactNode;
   btnType?: btnType;
+  externalOpen?: boolean,
+  onClose?: () => void
 }
 
 export const Modal: FunctionComponent<Props> = ({ 
@@ -23,18 +25,22 @@ export const Modal: FunctionComponent<Props> = ({
   button,
   submit,
   btnType,
-  buttonIcon
+  buttonIcon,
+  externalOpen,
+  onClose
 }) => {
 
   return (
     <ButtonPopup 
+      externalOpen={externalOpen}
+      onClose={onClose}
       toggleButton={(toggle) => (
         <Button
           icon={buttonIcon}
           text={button}
           onClick={(e: Event) => {
-            e.stopPropagation()
-            toggle()
+            e.stopPropagation()            
+            toggle()            
           }}
           type={btnType}
         />
@@ -60,7 +66,9 @@ export const Modal: FunctionComponent<Props> = ({
                 disabled={disabled}
                 onClick={() => {
                   onSubmit()
-                  toggle()
+                  if (!externalOpen) {
+                    toggle()
+                  }
                 }}
               />
             </div>

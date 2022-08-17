@@ -14,11 +14,11 @@ export const Menu: FunctionComponent = () => {
     <SidebarLayout
       topMenu={[
         {
-          permission: ENTITIES.Reports,
-          text: "Reports",
+          permission: ENTITIES.Projects,
+          text: "Projects",
           icon: <BsFillCloudArrowUpFill />,
-          onClick: () => router.replace("/report"),
-          selected: router.route.includes("/report"),
+          onClick: () => router.replace("/project"),
+          selected: router.route.includes("/project"),
         },
         {
           permission: ENTITIES.Users,
