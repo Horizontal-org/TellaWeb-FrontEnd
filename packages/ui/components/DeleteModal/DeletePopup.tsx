@@ -17,7 +17,7 @@ type Props = {
   color?: string
 };
 
-export const DeletePopup: FunctionComponent<PropsWithChildren<Props>> = ({
+export const DeletePopup: FunctionComponent<React.PropsWithChildren<PropsWithChildren<Props>>> = ({
   disabled,
   icon,
   text,

@@ -38,10 +38,11 @@ type Props = {
     username: string
     password: string
     role: string
-  }) => void
+  }) => void;
+  children: React.ReactNode
 };
 
-export const UserListPage: FunctionComponent<Props> = ({
+export const UserListPage = ({
   sidebar,
   users,
   onQueryChange,
@@ -49,7 +50,7 @@ export const UserListPage: FunctionComponent<Props> = ({
   onCreateUser,
   onOpen,
   onDelete
-}) => {
+}: Props) => {
 
   const [currentUser, setCurrentUser] = useState<User | undefined>();
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);

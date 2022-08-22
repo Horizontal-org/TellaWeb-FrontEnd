@@ -15,10 +15,12 @@ import {
   ToggleButtonsBar,
   MainContent,
   LeftCollapsingSidebar,
+  RightCollapsingSidebar,
   FileView,
   Paginator,
   EditReportTitleModal,
-  DeleteModal
+  DeleteModal,
+  VerificationInformation
 } from "../..";
 import { btnType } from "../../components/Button/Button";
 import { ButtonPopup } from "../../components/ButtonPopup/ButtonPopup";
@@ -34,7 +36,7 @@ type Props = {
   onEditTitle: (title: string) => void
 };
 
-export const ReportPage: FunctionComponent<Props> = ({
+export const ReportPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   report,
   onDeleteReport,
   onDeleteFile,
@@ -66,6 +68,7 @@ export const ReportPage: FunctionComponent<Props> = ({
   const toggleLeftSideBar = () => changeLeftSidebarOpenStatus(!leftSidebarOpen);
   const toggleRightSideBar = () => changeRightSidebarOpenStatus(!rightSidebarOpen);
 
+  console.log(rightSidebarOpen)
   return (
     <div className="flex flex-grow min-h-screen">
       <LeftCollapsingSidebar collapsed={!leftSidebarOpen}>
@@ -86,7 +89,7 @@ export const ReportPage: FunctionComponent<Props> = ({
         </div>
       </LeftCollapsingSidebar>
 
-      <div
+      <div 
         className={cn(
           "flex flex-col flex-1 pt-20 transition-all duration-300 ease-in-out",
           {
@@ -149,14 +152,15 @@ export const ReportPage: FunctionComponent<Props> = ({
           )}
         </MainContent>
       </div>
-      <div
-        className={cn(
-          "w-64 border-l px-6 pt-20 border-gray-100 transition-all transform duration-300 h-screen overflow-y-scroll fixed right-0 top-0",
-          {
-            "translate-x-64": !rightSidebarOpen,
-          }
+      
+      <RightCollapsingSidebar collapsed={!rightSidebarOpen}>
+        { !!(report.files.length) && (
+          <VerificationInformation 
+            deviceInfo={report.deviceInfo}
+            fileInfo={report.files[current - 1].fileInfo}
+          />
         )}
-      />
+      </RightCollapsingSidebar>
 
       <TopBar title={report.title} onClose={onClose}>
         <ButtonMenu openSide="left" type={btnType.Secondary} text="...">

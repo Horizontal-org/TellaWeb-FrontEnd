@@ -26,7 +26,7 @@ const Login = () => {
   const ability = useContext(AbilityContext);
 
   useEffect(() => {
-    if (user) router.replace("/report");
+    if (user) router.replace("/project");
   }, [user]);
 
   useEffect(() => {

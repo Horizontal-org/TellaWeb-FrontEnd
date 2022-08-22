@@ -19,7 +19,7 @@ type Props = {
 
 // locale={router.locale === 'en' ? 'de' : 'en'}
 
-export const SettingsPage: FunctionComponent<Props> = ({
+export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   sidebar,
   onUpdateUsername,
   onUpdatePassword,

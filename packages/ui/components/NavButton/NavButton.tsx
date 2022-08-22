@@ -9,7 +9,7 @@ type Props = {
   onClick?: (event: unknown) => void;
 };
 
-export const NavButton: FunctionComponent<Props> = ({
+export const NavButton: FunctionComponent<React.PropsWithChildren<Props>> = ({
   text,
   icon,
   disabled,

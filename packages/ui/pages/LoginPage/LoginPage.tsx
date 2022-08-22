@@ -7,7 +7,7 @@ type Props = {
   errorMessage?: string;
   isLoading?: boolean;
 };
-export const LoginPage: FunctionComponent<Props> = ({
+export const LoginPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   onSubmit,
   errorMessage,
   isLoading,

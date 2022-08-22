@@ -2,7 +2,7 @@ import { FunctionComponent  } from "react";
 
 interface Props {}
 
-const MediaLoader: FunctionComponent<Props> = () => {
+const MediaLoader: FunctionComponent<React.PropsWithChildren<Props>> = () => {
   return (
     <div
       style={{height: 'calc(40vw / 1.35)'}}

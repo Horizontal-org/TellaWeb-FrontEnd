@@ -13,7 +13,7 @@ interface Props {
   onClose: () => void
 }
 
-export const CreateProjectModal: FunctionComponent<Props> = ({
+export const CreateProjectModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
   onSubmit,
   existingNames,
   open,

@@ -8,7 +8,7 @@ type Props = {
   disabled?: boolean
 };
 
-export const ButtonOption: FunctionComponent<Props> = ({
+export const ButtonOption: FunctionComponent<React.PropsWithChildren<Props>> = ({
   text,
   icon,
   color,

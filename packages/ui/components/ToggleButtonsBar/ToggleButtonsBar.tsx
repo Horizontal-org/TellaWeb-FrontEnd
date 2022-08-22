@@ -6,7 +6,7 @@ type Props = {
   rightToggle: () => void;
 };
 
-export const ToggleButtonsBar: FunctionComponent<PropsWithChildren<Props>> = ({
+export const ToggleButtonsBar: FunctionComponent<React.PropsWithChildren<PropsWithChildren<Props>>> = ({
   leftToggle,
   rightToggle,
   children,

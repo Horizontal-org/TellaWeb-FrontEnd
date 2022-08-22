@@ -9,7 +9,7 @@ interface Props {
   data: Project;
 }
 
-const ProjectCard: FunctionComponent<Props> = ({ data }) => {
+const ProjectCard: FunctionComponent<React.PropsWithChildren<Props>> = ({ data }) => {
   return (
     <div 
       className="border border-gray-100 flex flex-col justify-between cursor-pointer hover:border-blue-light"

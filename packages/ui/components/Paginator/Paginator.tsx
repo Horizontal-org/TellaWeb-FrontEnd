@@ -14,7 +14,7 @@ type Props = {
   pageTotal: number
 }
 
-export const Paginator: FunctionComponent<Props> = ({
+export const Paginator: FunctionComponent<React.PropsWithChildren<Props>> = ({
   gotoPage,
   previousPage,
   nextPage,

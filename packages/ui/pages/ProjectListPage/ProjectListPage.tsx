@@ -32,7 +32,7 @@ type Props = {
 };
 
 
-export const ProjectListPage: FunctionComponent<Props> = ({
+export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   projects,
   onQueryChange,
   sidebar,

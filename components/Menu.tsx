@@ -7,7 +7,7 @@ import { MdOutlineSettings } from 'react-icons/md'
 import { BsFillCloudArrowUpFill, BsPerson } from 'react-icons/bs'
 import RemoteConfigIcon from '../packages/ui/components/RemoteConfigIcon'
 import { ENTITIES } from "common/casl/Ability";
-export const Menu: FunctionComponent = () => {
+export const Menu: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
   const router = useRouter();
 
   return (

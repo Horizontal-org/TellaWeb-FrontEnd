@@ -11,4 +11,5 @@ export interface File {
   bucket: string;
   type: FileType;
   thumbnail?: string;
+  fileInfo?: unknown
 }

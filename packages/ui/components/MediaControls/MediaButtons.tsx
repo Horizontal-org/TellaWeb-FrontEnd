@@ -20,7 +20,7 @@ type Props = {
   toggleVolume: (volume: number) => void
 }
 
-export const MediaButtons: FunctionComponent<Props> = ({
+export const MediaButtons: FunctionComponent<React.PropsWithChildren<Props>> = ({
   play,
   pause,
   isVideo,

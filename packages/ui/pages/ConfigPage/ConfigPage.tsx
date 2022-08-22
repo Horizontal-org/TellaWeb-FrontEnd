@@ -25,7 +25,7 @@ type Props = {
   onDelete: (id: string) => void
 };
 
-export const ConfigPage: FunctionComponent<Props> = ({
+export const ConfigPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   configuration,
   onClose,
   onUpdate,

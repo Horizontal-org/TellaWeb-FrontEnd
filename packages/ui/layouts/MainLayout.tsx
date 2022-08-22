@@ -17,7 +17,7 @@ type Props = {
   onClosePreview?: () => void;
 };
 
-export const MainLayout: FunctionComponent<Props> = ({
+export const MainLayout: FunctionComponent<React.PropsWithChildren<Props>> = ({
   content,
   absoluteContent,
   leftbar,

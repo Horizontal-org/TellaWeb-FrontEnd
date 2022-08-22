@@ -1,57 +1,58 @@
 import { FunctionComponent } from "react";
-import { File } from "../../domain/File";
-import { Device } from "../../domain/Device";
-import { Environment } from "../../domain/Environment";
-import { VerificationMap } from "./VerificationMap";
+import VerificationMap from "../VerificationMap";
 
-type Props = {
-  file: File;
-  device: Device;
-  env: Environment;
-};
+interface Props {
+  deviceInfo: string;
+  fileInfo: string;
+}
 
-export const VerificationInformation: FunctionComponent<Props> = ({
-  file = {},
-  device = {},
-  env = {},
+export const VerificationInformation: FunctionComponent<React.PropsWithChildren<Props>> = ({
+  deviceInfo,
+  fileInfo
 }) => {
-  const getVerificationTitleAndValue = (verificationSection = {}) =>
-    Object.entries(verificationSection).map(([key, value]) => (
-      <div
-        className="font-normal grid grid-cols-2 text-sm text-gray-500 gap-y-2 py-1"
-        key={key}
-      >
-        <span>{key}</span>
-        <span className="text-black text-opacity-80">{value}</span>
-      </div>
-    ));
-
   return (
-    <>
-      <h3 className="text-center font-bold text-gray-500 py-3">
-        File Information
-      </h3>
-      {env && (
-        <VerificationMap longitude={env.longitude} latitude={env.latitude} />
+    <div>
+      <div className="text-base font-bold text-gray-500 py-3 text-center">
+        Verification Information
+      </div>
+
+      { deviceInfo && (
+        <div className="py-2">
+          <VerificationMap 
+            longitude={JSON.parse(deviceInfo).longitude}
+            latitude={JSON.parse(deviceInfo).latitude}
+          />
+        </div>
       )}
-      <div className="text-base font-bold text-gray-500 break-words">
-        <div className="py-3">
-          <span>File</span>
+
+      { fileInfo && (
+        <div>        
+          <h3 className="text-base font-bold text-gray-500 py-3">File</h3>
+          { Object.entries(JSON.parse(fileInfo)).map(([key, value]: [string, string]) => (
+            <div className="text-sm text-gray-500 gap-y-2">
+              <div style={{padding: '2px 0'}} className="flex justify-between flex-wrap" key={key}>
+                <span style={{minWidth: 80}}>{key}</span>
+                <span className="text-black text-opacity-80">{value}</span>
+              </div>            
+            </div>
+          ))}
         </div>
-        {file && getVerificationTitleAndValue(file)}
-      </div>
-      <div className="text-base font-bold text-gray-500">
-        <div className="py-3">
-          <span>Device</span>
+      )}
+
+      { deviceInfo && (
+        <div>
+          <h3 className="text-base font-bold text-gray-500 py-3">Device</h3>
+          { Object.entries(JSON.parse(deviceInfo))
+            .map(([key, value]: [string, string]) => (
+              <div className="text-sm text-gray-500 gap-y-2">
+                <div style={{padding: '2px 0'}} className="flex justify-between flex-wrap" key={key}>
+                  <span style={{minWidth: 80}}>{key}</span>
+                  <span className="text-black text-opacity-80">{value}</span>
+                </div>            
+              </div>
+          ))}
         </div>
-        {device && getVerificationTitleAndValue(device)}
-      </div>
-      <div className="text-base font-bold text-gray-500">
-        <div className="py-3">
-          <span>Environment</span>
-        </div>
-        {env && getVerificationTitleAndValue(env)}
-      </div>
-    </>
-  );
-};
+      )}
+    </div>
+  )
+}

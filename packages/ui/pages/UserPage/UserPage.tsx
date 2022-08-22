@@ -26,7 +26,7 @@ type Props = {
   user: User | null;
 };
 
-export const UserPage: FunctionComponent<Props> = ({
+export const UserPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   sidebar,
   user,
   onUpdateUsername,
@@ -126,5 +126,5 @@ export const UserPage: FunctionComponent<Props> = ({
         </div>
       }
     />
-  )
+  );
 }

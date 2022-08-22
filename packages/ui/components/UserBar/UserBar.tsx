@@ -5,7 +5,7 @@ type Props = {
   user?: User;
 };
 
-export const UserBar: FunctionComponent<Props> = ({ user }) => {
+export const UserBar: FunctionComponent<React.PropsWithChildren<Props>> = ({ user }) => {
   return (
     <div className="flex flex-1 flex-col justify-center overflow-y-scroll">
       {user && (

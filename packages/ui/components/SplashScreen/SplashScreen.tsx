@@ -12,7 +12,7 @@ interface Props {
 
 
 
-export const SplashScreen: FunctionComponent<Props> = ({ children }) => {  
+export const SplashScreen: FunctionComponent<React.PropsWithChildren<Props>> = ({ children }) => {  
   const user = useAuthRequired("/login");
   const router = useRouter()
   const ability = useContext(AbilityContext);

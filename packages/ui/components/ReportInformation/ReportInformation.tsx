@@ -8,7 +8,7 @@ type Props = {
   report: Report;
 };
 
-export const ReportInformation: FunctionComponent<Props> = ({ report }) => {
+export const ReportInformation: FunctionComponent<React.PropsWithChildren<Props>> = ({ report }) => {
   const dict = {
     ...(report.date ? { Date: format(report.date, "dd MMM yyyy") } : {}),
     ...(report.date ? { Time: format(report.date, "h:mm:ss a") } : {}),

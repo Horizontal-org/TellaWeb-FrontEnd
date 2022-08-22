@@ -12,7 +12,7 @@ type Props = {
   selected?: boolean
 };
 
-export const Thumbnail: FunctionComponent<Props> = ({
+export const Thumbnail: FunctionComponent<React.PropsWithChildren<Props>> = ({
   file,
   onClick,
   full,

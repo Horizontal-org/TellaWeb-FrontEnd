@@ -12,7 +12,7 @@ interface Props {
   config: Configuration
 }
 
-export const ShareConfigurationModal: FunctionComponent<Props> = ({config}) => {
+export const ShareConfigurationModal: FunctionComponent<React.PropsWithChildren<Props>> = ({config}) => {
 
   const componentRef = useRef();
   const handlePrint = useReactToPrint({

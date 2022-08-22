@@ -7,7 +7,7 @@ type Props = {
   title: string
 }
 
-export const CreateUserModal: FunctionComponent<Props> = ({ onSubmit, title }) => {
+export const CreateUserModal: FunctionComponent<React.PropsWithChildren<Props>> = ({ onSubmit, title }) => {
   const [username, handleUsername] = useState<string>('')
   const [password, handlePassword] = useState<string>('')
   const [confirmPassword, handleConfirmPassword] = useState<string>('')
@@ -135,5 +135,5 @@ export const CreateUserModal: FunctionComponent<Props> = ({ onSubmit, title }) =
         </div>
       )}
     />
-  )
+  );
 }

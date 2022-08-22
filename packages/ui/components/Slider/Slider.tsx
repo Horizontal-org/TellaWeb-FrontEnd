@@ -5,7 +5,7 @@ type Props = {
   items: React.ReactNode[];
 };
 
-export const Slider: FunctionComponent<Props> = ({ items }) => {
+export const Slider: FunctionComponent<React.PropsWithChildren<Props>> = ({ items }) => {
   const [current, setCurrent] = useState(1);
 
   const goNext = () => {

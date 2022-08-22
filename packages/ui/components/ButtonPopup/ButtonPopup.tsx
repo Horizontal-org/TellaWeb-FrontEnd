@@ -14,7 +14,7 @@ type Props = {
   externalOpen?: boolean
 };
 
-export const ButtonPopup: FunctionComponent<PropsWithChildren<Props>> = ({
+export const ButtonPopup: FunctionComponent<React.PropsWithChildren<PropsWithChildren<Props>>> = ({
   children,
   render,
   onClose,

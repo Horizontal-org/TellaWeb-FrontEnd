@@ -17,7 +17,7 @@ interface Props {
   onBlur?: (event: unknown) => void;
 }
 
-export const Button: FunctionComponent<Props> = ({
+export const Button: FunctionComponent<React.PropsWithChildren<Props>> = ({
   text,
   disabled,
   icon,

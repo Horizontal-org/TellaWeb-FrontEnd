@@ -9,9 +9,10 @@ type Props = {
   icon?: React.ReactNode;
   type?: btnType;
   openSide?: "left" | "right";
+  children: React.ReactNode
 };
 
-export const ButtonMenu: FunctionComponent<Props> = ({
+export const ButtonMenu: FunctionComponent<React.PropsWithChildren<Props>> = ({
   children,
   text,
   icon,

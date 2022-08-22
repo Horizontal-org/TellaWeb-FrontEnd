@@ -11,7 +11,7 @@ type Props = {
   onDelete: () => void
 }
 
-export const DeleteModal: FunctionComponent<Props> = ({ render, onDelete }) => {
+export const DeleteModal: FunctionComponent<React.PropsWithChildren<Props>> = ({ render, onDelete }) => {
 
   const [canDelete, handleCanDelete] = useState(false)
 

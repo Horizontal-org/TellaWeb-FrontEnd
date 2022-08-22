@@ -13,7 +13,7 @@ interface Props {
   }) => void;
 }
 
-export const CreateUserModal: FunctionComponent<Props> = ({
+export const CreateUserModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
   onSubmit,
 }) => {
 
@@ -154,5 +154,5 @@ export const CreateUserModal: FunctionComponent<Props> = ({
         </div>
       )}
     />
-  )
+  );
 }

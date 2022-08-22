@@ -6,7 +6,7 @@ type Props = {
   onSubmit: (note: string) => void
 }
 
-export const EditUserNoteModal: FunctionComponent<Props> = ({ onSubmit }) => {
+export const EditUserNoteModal: FunctionComponent<React.PropsWithChildren<Props>> = ({ onSubmit }) => {
   const [note, handleNote] = useState<string>('')
 
   return (

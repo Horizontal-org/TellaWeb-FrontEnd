@@ -16,7 +16,7 @@ type Props = {
   onClose?: () => void
 }
 
-export const Modal: FunctionComponent<Props> = ({ 
+export const Modal: FunctionComponent<React.PropsWithChildren<Props>> = ({ 
   onSubmit, 
   title, 
   subtitle, 

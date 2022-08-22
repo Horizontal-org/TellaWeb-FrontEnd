@@ -40,7 +40,7 @@ type Props = {
 
 const voidFunction = () => {};
 
-export const ProjectPage: FunctionComponent<Props> = ({
+export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   reports,
   project,
   onOpen,

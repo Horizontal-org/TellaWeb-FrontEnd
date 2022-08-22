@@ -11,7 +11,7 @@ type Props = {
   bottomMenu: MenuDescription[];
 };
 
-export const SidebarLayout: FunctionComponent<Props> = ({
+export const SidebarLayout: FunctionComponent<React.PropsWithChildren<Props>> = ({
   topMenu,
   bottomMenu,
 }) => {
