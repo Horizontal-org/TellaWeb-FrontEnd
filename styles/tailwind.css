@@ -450,6 +450,11 @@ input::-moz-placeholder, textarea::-moz-placeholder {
   color: #9ca3af;
 }
 
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+  opacity: 1;
+  color: #9ca3af;
+}
+
 input::placeholder,
 textarea::placeholder {
   opacity: 1;
@@ -1127,8 +1132,12 @@ video {
   overflow-y: scroll;
 }
 
-.break-words {
-  overflow-wrap: break-word;
+.overflow-ellipsis {
+  text-overflow: ellipsis;
+}
+
+.whitespace-nowrap {
+  white-space: nowrap;
 }
 
 .break-all {
@@ -1489,6 +1498,10 @@ video {
   padding-right: 1rem;
 }
 
+.pr-8 {
+  padding-right: 2rem;
+}
+
 .pb-2 {
   padding-bottom: 0.5rem;
 }
@@ -1665,12 +1678,22 @@ video {
   color: rgba(139, 142, 143, var(--tw-placeholder-opacity));
 }
 
+.placeholder-gray-300:-ms-input-placeholder {
+  --tw-placeholder-opacity: 1;
+  color: rgba(139, 142, 143, var(--tw-placeholder-opacity));
+}
+
 .placeholder-gray-300::placeholder {
   --tw-placeholder-opacity: 1;
   color: rgba(139, 142, 143, var(--tw-placeholder-opacity));
 }
 
 .hover\:placeholder-gray-800:hover::-moz-placeholder {
+  --tw-placeholder-opacity: 1;
+  color: rgba(31, 41, 55, var(--tw-placeholder-opacity));
+}
+
+.hover\:placeholder-gray-800:hover:-ms-input-placeholder {
   --tw-placeholder-opacity: 1;
   color: rgba(31, 41, 55, var(--tw-placeholder-opacity));
 }

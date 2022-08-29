@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
-import { ItemQuery, ProjectPage, ReportPage } from "packages/ui";
-import { toReport } from "../../common/toReport";
-import { useToast } from "../../components/ToastWrapper";
+import { ItemQuery, ProjectSettingsPage } from "packages/ui";
+import { toReport } from "../../../common/toReport";
+import { useToast } from "../../../components/ToastWrapper";
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import {
   useGetByIdQuery,
@@ -63,6 +63,7 @@ export const ProjectById = () => {
   const { data: currentProject, refetch } = useGetByIdQuery(
     "" + router.query.projectId
     );
+  console.log("🚀 ~ file: settings.tsx ~ line 64 ~ ProjectById ~ currentProject", currentProject)
   
   const { push } = useRouter();
   const [downloadReportFile] = useReportFileDownloader();
@@ -71,7 +72,7 @@ export const ProjectById = () => {
   const itemQuery = useMemo(() => toItemQuery(query), [query]);
 
   return currentProject ? (
-    <ProjectPage
+    <ProjectSettingsPage
       project={currentProject}
       currentQuery={itemQuery}
       onQueryChange={(itemQuery) => setQuery(toReportQuery(itemQuery))}
@@ -83,8 +84,9 @@ export const ProjectById = () => {
       }}
       reports={processReports(currentProject.reports, query)}
       sidebar={<Menu />}
-    />
+    /> 
   ) : null;
 };
+
 
 export default ProjectById;

@@ -12,7 +12,6 @@ const VerificationMap: FunctionComponent<React.PropsWithChildren<Props>> = ({
   longitude,
   latitude,
 }) => {
-  console.log(process.env.NEXT_PUBLIC_MAPBOX_TOKEN)
   
   return (
     <div className="relative">

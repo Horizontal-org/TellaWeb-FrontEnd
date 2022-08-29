@@ -44,6 +44,7 @@ export { LoginPage } from "./pages/LoginPage/LoginPage";
 export { ReportListPage } from "./pages/ReportListPage/ReportListPage";
 export { ReportPage } from "./pages/ReportPage/ReportPage";
 export { ProjectPage } from './pages/ProjectPage/ProjectPage'
+export { ProjectSettingsPage } from './pages/ProjectSettingsPage/ProjectSettingsPage'
 export { VerificationInformation } from "./components/VerificationInformation/VerificationInformation";
 //export { VerificationMap } from "./components/VerificationInformation/VerificationMap";
 

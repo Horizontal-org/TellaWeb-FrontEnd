@@ -1,6 +1,6 @@
 import { FunctionComponent, ReactNode } from 'react'
 import { ButtonPopup, Button, TextInput } from '../../'
-import { btnType } from '../Button/Button'
+import { btnType as  btnTypes} from '../Button/Button'
 
 type Props = {
   onSubmit?: () => void
@@ -11,7 +11,8 @@ type Props = {
   subtitle?: string | ReactNode;
   disabled?: boolean;
   render: () => ReactNode;
-  btnType?: btnType;
+  btnType?: btnTypes;
+  submitButtonType?: btnTypes;
   externalOpen?: boolean,
   onClose?: () => void
 }
@@ -27,7 +28,8 @@ export const Modal: FunctionComponent<React.PropsWithChildren<Props>> = ({
   btnType,
   buttonIcon,
   externalOpen,
-  onClose
+  onClose,
+  submitButtonType
 }) => {
 
   return (
@@ -63,6 +65,7 @@ export const Modal: FunctionComponent<React.PropsWithChildren<Props>> = ({
               <Button 
                 text='SAVE'
                 full={true}
+                type={submitButtonType ? submitButtonType : btnTypes.Primary}
                 disabled={disabled}
                 onClick={() => {
                   onSubmit()

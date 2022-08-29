@@ -3,7 +3,6 @@ import { FunctionComponent } from "react";
 import { MdOutlineSettings } from 'react-icons/md'
 import { format } from 'date-fns'
 import { btnType, Button } from "../Button/Button";
-import da from "date-fns/esm/locale/da/index.js";
 
 interface Props {
   data: Project;
@@ -44,7 +43,12 @@ const ProjectCard: FunctionComponent<React.PropsWithChildren<Props>> = ({ data }
           >
             Created { format(new Date(data.createdAt), "dd MMM yyyy")}
           </span>
-          <div className="p-2 cursor-pointer text-gray-500 active:shadow-inbox rounded">
+          <div 
+            className="p-2 cursor-pointer text-gray-500 active:shadow-inbox rounded"
+            onClick={(e) => {
+              e.stopPropagation()              
+            }}
+          >
             <MdOutlineSettings />
           </div>
         </div>
