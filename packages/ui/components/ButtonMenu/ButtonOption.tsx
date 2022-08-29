@@ -4,7 +4,7 @@ type Props = {
   text: string;
   color?: string;
   icon?: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (event) => void;
   disabled?: boolean
 };
 
@@ -18,7 +18,10 @@ export const ButtonOption: FunctionComponent<React.PropsWithChildren<Props>> = (
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={(event) => {
+        event.preventDefault();
+        onClick(event);
+      }}
       disabled={disabled}
       style={color ? { 
         color: color,

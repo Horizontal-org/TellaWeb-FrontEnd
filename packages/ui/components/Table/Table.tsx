@@ -18,7 +18,7 @@ type Props = {
   onFetch?: (itemQuery: ItemQuery) => void;
   itemQuery?: ItemQuery;
   icon?: React.ReactNode;
-  rowOptions: (hoveredRow) => React.ReactNode
+  rowOptions: (hoveredRow) => React.ReactNode;
 };
 
 export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
@@ -175,11 +175,9 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
             return (
               <tr
                 onMouseEnter={() => {
-                  console.log('enter', row)
                   handleHover(i)
                 }}
                 onMouseLeave={() => {
-                  console.log('back', i )
                   if (hovering === i) {
                     handleHover(null)
                   }
@@ -220,13 +218,13 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
                     }}
                   >
                     <div 
-                      className="flex items-center"
+                      className="flex items-center "
                       style={{
                         height: 50,
                         paddingRight: '20'
                       }}
                     >
-                      { rowOptions(row.original) }
+                      { rowOptions(row.original, row.isSelected) }
                     </div>
                   </div>
                 )}

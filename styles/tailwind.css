@@ -450,11 +450,6 @@ input::-moz-placeholder, textarea::-moz-placeholder {
   color: #9ca3af;
 }
 
-input:-ms-input-placeholder, textarea:-ms-input-placeholder {
-  opacity: 1;
-  color: #9ca3af;
-}
-
 input::placeholder,
 textarea::placeholder {
   opacity: 1;
@@ -1140,6 +1135,10 @@ video {
   white-space: nowrap;
 }
 
+.break-words {
+  overflow-wrap: break-word;
+}
+
 .break-all {
   word-break: break-all;
 }
@@ -1678,22 +1677,12 @@ video {
   color: rgba(139, 142, 143, var(--tw-placeholder-opacity));
 }
 
-.placeholder-gray-300:-ms-input-placeholder {
-  --tw-placeholder-opacity: 1;
-  color: rgba(139, 142, 143, var(--tw-placeholder-opacity));
-}
-
 .placeholder-gray-300::placeholder {
   --tw-placeholder-opacity: 1;
   color: rgba(139, 142, 143, var(--tw-placeholder-opacity));
 }
 
 .hover\:placeholder-gray-800:hover::-moz-placeholder {
-  --tw-placeholder-opacity: 1;
-  color: rgba(31, 41, 55, var(--tw-placeholder-opacity));
-}
-
-.hover\:placeholder-gray-800:hover:-ms-input-placeholder {
   --tw-placeholder-opacity: 1;
   color: rgba(31, 41, 55, var(--tw-placeholder-opacity));
 }
@@ -1797,6 +1786,9 @@ video {
 }
 
 @media (min-width: 1280px) {
+  .xl\:block {
+    display: block;
+  }
 }
 
 @media (min-width: 1536px) {
