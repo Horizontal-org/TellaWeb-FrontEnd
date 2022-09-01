@@ -25,7 +25,7 @@ export const Menu: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
           text: "Users",
           icon: <BsPerson />,
           onClick: () => router.replace("/user"),
-          selected: router.route.includes("/user"),
+          selected: router.route === '/user',
         },
         {
           permission: ENTITIES.RemoteConfigurations,
@@ -41,7 +41,7 @@ export const Menu: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
           text: "Settings",
           icon: <MdOutlineSettings />,
           onClick: () => router.replace("/settings"),
-          selected: router.route.includes("/settings"),
+          selected: router.route == "/settings",
         },
         {
           permission: ENTITIES.Web,

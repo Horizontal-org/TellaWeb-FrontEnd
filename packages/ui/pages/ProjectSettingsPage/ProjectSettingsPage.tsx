@@ -29,27 +29,24 @@ import { format } from "date-fns";
 import { useToast } from "components/ToastWrapper";
 import { RenameProjectModal } from "packages/ui/modals/project/RenameProjectModal/RenameProjectModal";
 import { DeleteProjectModal } from "packages/ui/modals/project/DeleteProjectModal/DeleteProjectModal";
+import { ManageUsersProjectModal } from "packages/ui/modals/project/ManageUsersProjectModal/ManageUsersProjectModal";
 
 type Props = {
   project: Project
-  reports: Report[];
-  onQueryChange: (iq: ItemQuery) => void;
-  onOpen: (report: Report) => void;
-  onDownload?: (report: Report) => void;
+  onRename: (name: string) => void;
+  onDelete: () => void;
+  onManage: () => void;
   sidebar: React.ReactNode;
-  currentQuery: ItemQuery;
 };
 
 const voidFunction = () => {};
 
 export const ProjectSettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
-  reports,
-  project,
-  onOpen,
-  onDownload = voidFunction,
-  onQueryChange,
+  project,  
   sidebar,
-  currentQuery,
+  onRename,
+  onDelete,
+  onManage
 }) => {
   const [currentReport, setCurrentReport] = useState<Report | undefined>();
   const [domain, handleDomain] = useState<string>('')
@@ -85,7 +82,7 @@ export const ProjectSettingsPage: FunctionComponent<React.PropsWithChildren<Prop
               <RenameProjectModal
                 currentName={project.name}
                 onSubmit={(newName) => {
-                  console.log("🚀 ~ file: ProjectSettingsPage.tsx ~ line 90 ~ newName", newName)                  
+                  onRename(newName)
                 }}
               />                        
             </div>                
@@ -147,13 +144,11 @@ export const ProjectSettingsPage: FunctionComponent<React.PropsWithChildren<Prop
                 </p>
               </div>
               <div>
-              <Button 
-                type={btnType.Secondary}
-                text='MANAGE'
-                onClick={() => {
-                  console.log('click')
-                }}
-              />               
+                <Button 
+                  type={btnType.Secondary}
+                  text='MANAGE'
+                  onClick={onManage}  
+                />
               </div>                
             </div>
           </div>
@@ -176,9 +171,7 @@ export const ProjectSettingsPage: FunctionComponent<React.PropsWithChildren<Prop
               <div>
                 <DeleteProjectModal
                   currentName={project.name}
-                  onSubmit={() => {
-                    console.log('delete')
-                  }}
+                  onSubmit={onDelete}
                 />                              
               </div>                
             </div>
@@ -193,8 +186,4 @@ export const ProjectSettingsPage: FunctionComponent<React.PropsWithChildren<Prop
       currentItem={currentReport}
     />
   );
-};
-
-ProjectSettingsPage.defaultProps = {
-  reports: [],
 };

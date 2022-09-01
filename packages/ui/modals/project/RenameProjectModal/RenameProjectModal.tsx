@@ -6,9 +6,7 @@ import { IoMdAdd } from 'react-icons/io'
 
 interface Props {
   currentName: string;
-  onSubmit: (newProject: {
-    name: string;
-  }) => void;
+  onSubmit: (name: string) => void;
 }
 
 export const RenameProjectModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
@@ -32,9 +30,7 @@ export const RenameProjectModal: FunctionComponent<React.PropsWithChildren<Props
       submit='SAVE'
       disabled={!(name.length > 0)}
       onSubmit={() => {
-        onSubmit({
-          name,         
-        })
+        onSubmit(name)
 
         handleName('')
       }}

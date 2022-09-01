@@ -5,7 +5,8 @@ import {
   SetStateAction, 
   useRef,
   FormEvent,
-  ChangeEvent
+  ChangeEvent,
+  PropsWithChildren
 } from "react";
 import {
   ButtonMenu,
@@ -43,7 +44,7 @@ type Props = {
   children: React.ReactNode
 };
 
-export const UserListPage = ({
+export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   sidebar,
   users,
   onQueryChange,
@@ -51,7 +52,7 @@ export const UserListPage = ({
   onCreateUser,
   onOpen,
   onDelete
-}: Props) => {
+}) => {
 
   const [currentUser, setCurrentUser] = useState<User | undefined>();
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);

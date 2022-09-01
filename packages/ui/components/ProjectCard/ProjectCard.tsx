@@ -3,12 +3,14 @@ import { FunctionComponent } from "react";
 import { MdOutlineSettings } from 'react-icons/md'
 import { format } from 'date-fns'
 import { btnType, Button } from "../Button/Button";
+import { useRouter } from "next/router";
 
 interface Props {
   data: Project;
 }
 
 const ProjectCard: FunctionComponent<React.PropsWithChildren<Props>> = ({ data }) => {
+  const router = useRouter()
   return (
     <div 
       className="border border-gray-100 flex flex-col justify-between cursor-pointer hover:border-blue-light"
@@ -47,6 +49,7 @@ const ProjectCard: FunctionComponent<React.PropsWithChildren<Props>> = ({ data }
             className="p-2 cursor-pointer text-gray-500 active:shadow-inbox rounded"
             onClick={(e) => {
               e.stopPropagation()              
+              router.push(`/project/${data.id}/settings`)
             }}
           >
             <MdOutlineSettings />

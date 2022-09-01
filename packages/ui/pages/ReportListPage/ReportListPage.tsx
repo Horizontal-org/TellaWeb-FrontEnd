@@ -71,8 +71,6 @@ export const ReportListPage: FunctionComponent<React.PropsWithChildren<Props>> =
     })
   };
 
-  console.log(reports)
-
   return (
     <MainLayout
       title="Reports"

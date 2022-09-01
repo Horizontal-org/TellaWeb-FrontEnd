@@ -40,7 +40,7 @@ export const ButtonPopup: FunctionComponent<React.PropsWithChildren<PropsWithChi
         overlayClassName={
           "flex bg-black bg-opacity-50 absolute inset-0 justify-center items-center"
         }
-        className="bg-white w-4/12 py-4 px-3 rounded shadow-xl text-gray-800"
+        className="bg-white w-5/12 py-4 px-3 rounded shadow-xl text-gray-800"
       >
         <div className="flex-start items-center">
           <button 

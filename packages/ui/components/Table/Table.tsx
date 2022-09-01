@@ -18,7 +18,7 @@ type Props = {
   onFetch?: (itemQuery: ItemQuery) => void;
   itemQuery?: ItemQuery;
   icon?: React.ReactNode;
-  rowOptions: (hoveredRow) => React.ReactNode;
+  rowOptions: (hoveredRow, isHoverSelected) => React.ReactNode
 };
 
 export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({

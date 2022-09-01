@@ -16,7 +16,8 @@ import {
   ButtonMenu,
   ButtonOption,
   SearchInput,
-  DeleteModal
+  DeleteModal,
+  UserBar
 } from "../..";
 import { btnType } from "../../components/Button/Button";
 
@@ -30,110 +31,96 @@ import { Project } from "packages/state/domain/project";
 import HoveredRowWrapper from "packages/ui/components/Table/HoveredRowWrapper";
 import { Can } from "common/casl/Can";
 import { ENTITIES } from "common/casl/Ability";
+import { User } from "packages/state/domain/user";
+import { ManageUsersProjectModal } from "packages/ui/modals/project/ManageUsersProjectModal/ManageUsersProjectModal";
+import { USER_COLUMNS } from "packages/ui/domain/UserTableColumns";
+import { BsPerson } from "react-icons/bs";
 
 type Props = {
   project: Project
-  reports: Report[];
+  users: User[];
   onQueryChange: (iq: ItemQuery) => void;
-  onOpen: (report: Report) => void;
-  onDownload?: (report: Report) => void;
+  onOpen: (user: User) => void;
+  onAddUsers: (newUsers:  string[]) => void;
   sidebar: React.ReactNode;
   currentQuery: ItemQuery;
+  removeSelected: (selectedUsers: string[]) => void;
 };
 
-const voidFunction = () => {};
-
-export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
-  reports,
+export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   project,
   onOpen,
-  onDownload = voidFunction,
   onQueryChange,
+  onAddUsers,
+  users,
   sidebar,
   currentQuery,
+  removeSelected
 }) => {
-  const [currentReport, setCurrentReport] = useState<Report | undefined>();
-  const [selectedReports, setSelectedReports] = useState<Report[]>([]);
+  const [currentUser, setCurrentUser] = useState<User | undefined>();
+  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
 
-  const searchInput = useRef<HTMLInputElement>();
-  let searchTimeout = null
-
-  const openReport = () => {
-    setCurrentReport(selectedReports[0]);
+  const openUser = () => {
+    setCurrentUser(selectedUsers[0]);
   };
 
-  const search = (e: FormEvent<HTMLFormElement> | ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const name = searchInput.current.value;
-
-    onQueryChange({
-      ...currentQuery,
-      search: name
-    })
-  };
 
   return (
     <MainLayout
       title={project.name}
-      subtitle="All the files and reports sent by your users"
+      subtitle="Manage the project's users"
       content={
         <div>
           <div className="flex space-x-2 mb-2 p-2">
-            {selectedReports.length === 0 && (
+            {selectedUsers.length === 0 && (
               <>
-                <form onSubmit={search} className="flex">
-                  <SearchInput
-                    onChange={(e) => {
-                      //TODO change this
-                      clearTimeout(searchTimeout)
-                      searchTimeout = setTimeout(() => {
-                        search(e)
-                      }, 500)
-                    }}
-                    ref={searchInput}
-                    defaultValue={currentQuery.search}
-                  />
-                </form>
+                <ManageUsersProjectModal 
+                  onSubmit={(newUsers) => {
+                    onAddUsers(newUsers)
+                  }}
+                  userList={users}
+                />
               </>
             )}
-            {selectedReports.length > 0 && (
+
+            {selectedUsers.length > 0 && (
               <>
-                {selectedReports.length === 1 && (
+                {selectedUsers.length === 1 && (
                   <>
                     <Button
                       icon={<MdOpenInNew />}
-                      text="Open"
+                      text="Edit"
                       onClick={(event: MouseEvent) => {
                         event.preventDefault();
-                        onOpen(selectedReports[0]);
+                        onOpen(selectedUsers[0]);
                       }}
                     />
                     <Button
                       type={btnType.Secondary}
                       icon={<MdRemoveRedEye />}
                       text="Preview"
-                      onClick={openReport}
-                    />
-                    <Button
-                      type={btnType.Secondary}
-                      icon={<MdSave />}
-                      onClick={(event: MouseEvent) =>
-                        onDownload(selectedReports[0])
-                      }
-                      text="Download"
-                    />
+                      onClick={openUser}
+                    />                    
                   </>
                 )}             
+                <Button
+                  type={btnType.Secondary}
+                  text="Remove from project"
+                  onClick={() => {
+                    removeSelected(selectedUsers.map(su => su.id))
+                  }}
+                />         
               </>
             )}
           </div>
           <Table
-            columns={REPORT_COLUMNS}
-            data={reports}
+            columns={USER_COLUMNS}
+            data={users}
             withPagination={false}
             itemQuery={currentQuery}
-            onSelection={setSelectedReports as Dispatch<SetStateAction<Item[]>>}
+            onSelection={setSelectedUsers as Dispatch<SetStateAction<Item[]>>}
             onFetch={onQueryChange}
+            icon={<BsPerson/>}
             rowOptions={(hoveredRow, isHoverSelected) => (
               <HoveredRowWrapper isHoverSelected={isHoverSelected}>
                 <>
@@ -144,12 +131,12 @@ export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
                       text="Preview"
                       onClick={(e: ChangeEvent) => {
                         e.stopPropagation()
-                        setCurrentReport(hoveredRow);
+                        setCurrentUser(hoveredRow);
                       }}
                     />
                   </div>
                   <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
-                    <ButtonOption
+                    {/* <ButtonOption
                       icon={<MdSave />}
                       onClick={(event: MouseEvent) => {
                         event.stopPropagation()
@@ -157,17 +144,7 @@ export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
                       }}
                       text="Download"
                       color='#8B8E8F'
-                    />
-                    {/* <Can I='delete' a={ENTITIES.Reports}>
-                      <DeleteModal 
-                        render={(
-                          <p>
-                            the selected reports will be permanently deleted.
-                          </p>
-                        )}
-                        onDelete={() => onDelete([hoveredRow])}
-                      />  
-                    </Can> */}
+                    /> */}
                   </ButtonMenu>
                 </>
               </HoveredRowWrapper>
@@ -177,14 +154,14 @@ export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
       }
       leftbar={sidebar}
       leftbarActive={true}
-      rightbar={<ReportBar report={currentReport} />}
+      rightbar={<UserBar user={currentUser} />}
       rightbarActive={true}
-      onClosePreview={() => setCurrentReport(undefined)}
-      currentItem={currentReport}
+      onClosePreview={() => setCurrentUser(undefined)}
+      currentItem={currentUser}
     />
   );
 };
 
-ProjectPage.defaultProps = {
-  reports: [],
+ProjectUsersPage.defaultProps = {
+  users: [],
 };

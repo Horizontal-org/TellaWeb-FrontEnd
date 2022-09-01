@@ -83,7 +83,6 @@ export const ReportPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   const toggleLeftSideBar = () => changeLeftSidebarOpenStatus(!leftSidebarOpen)
   const toggleRightSideBar = () => changeRightSidebarOpenStatus(!rightSidebarOpen);
 
-  console.log(rightSidebarOpen)
   return (
     <div className="flex flex-grow min-h-screen">
       <LeftCollapsingSidebar collapsed={!leftSidebarOpen}>

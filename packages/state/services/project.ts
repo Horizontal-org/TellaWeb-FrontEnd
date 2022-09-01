@@ -69,7 +69,43 @@ export const projectApi = createApi({
       query: (projectId) => ({
         url: `/${projectId}`,
       }),
-    })
+    }),
+
+    editProject: builder.mutation<
+      Project,
+      { id: string; name: string; }
+    >({
+      query: ({ id, name }) => ({
+        url: `/${id}`,
+        method: "PUT",
+        body: {
+          name,
+        },
+      }),
+    }),
+
+    addUsers: builder.mutation<
+      Project,
+      { id: string; users: string[]; }
+    >({
+      query: ({ id, users }) => ({
+        url: `/${id}`,
+        method: "PUT",
+        body: {
+          users,
+        },
+      }),
+    }),
+
+    deleteProject: builder.mutation<
+      Project,
+      { id: string; }
+    >({
+      query: ({ id }) => ({
+        url: `/${id}`,
+        method: "DELETE",
+      }),
+    }),
 
   }),
 });
@@ -77,5 +113,8 @@ export const projectApi = createApi({
 export const {
   useListQuery,
   useCreateProjectMutation,
-  useGetByIdQuery
+  useGetByIdQuery,
+  useEditProjectMutation,
+  useAddUsersMutation,
+  useDeleteProjectMutation
 } = projectApi;

@@ -1,88 +1,67 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
-import { ItemQuery, ProjectSettingsPage } from "packages/ui";
-import { toReport } from "../../../common/toReport";
+import { ProjectSettingsPage } from "packages/ui";
 import { useToast } from "../../../components/ToastWrapper";
-import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import {
+  useDeleteProjectMutation,
+  useEditProjectMutation,
   useGetByIdQuery,
 } from "packages/state/services/project";
 import { ReportQuery } from "packages/state/domain/report";
 import { useReportFileDownloader } from "packages/state/features/files/useReportFileDownloader";
 import { Menu } from "components/Menu";
 
-const defaultQuery: ReportQuery = {
-  page: 0,
-  size: 25,
-};
-
-const toItemQuery = (reportQuery: ReportQuery): ItemQuery => {
-  return {
-    sort: {
-      key: reportQuery.sortKey,
-      order: reportQuery.sortOrder,
-    },
-    search: reportQuery.search,
-    filter: {},
-    pagination: {
-      page: reportQuery.page,
-      total: reportQuery.total,
-      size: reportQuery.size,
-    },
-  };
-};
-
-const toReportQuery = (itemQuery: ItemQuery): ReportQuery => {
-  return {
-    sortKey: itemQuery.sort?.key,
-    sortOrder: itemQuery.sort?.order,
-    search: itemQuery.search,
-    page: itemQuery.pagination?.page,
-    total: itemQuery.pagination?.total,
-    size: itemQuery.pagination?.size,
-  };
-};
-
-const processReports = (reports, query) => {
-  if (!reports) {
-    return []
-  }
-
-  let newReports = reports
-  if ( query.search && query.search.length > 0 ) {
-    newReports = reports.filter((r) => { return r.title.toLowerCase().includes(query.search.toLowerCase()) })
-  }
-
-  return newReports.map(toReport)
-}
-
 export const ProjectById = () => {
 
   const router = useRouter();
+  const handleToast = useToast()
 
   const { data: currentProject, refetch } = useGetByIdQuery(
     "" + router.query.projectId
-    );
-  console.log("🚀 ~ file: settings.tsx ~ line 64 ~ ProjectById ~ currentProject", currentProject)
-  
+  );
+  const [editProject, editProjectResult] = useEditProjectMutation()
+  const [deleteProject, deleteProjectResult] = useDeleteProjectMutation()
+
   const { push } = useRouter();
   const [downloadReportFile] = useReportFileDownloader();
 
-  const [query, setQuery] = useState<ReportQuery>(defaultQuery);
-  const itemQuery = useMemo(() => toItemQuery(query), [query]);
+  useEffect(() => {
+    if (editProjectResult.isSuccess) {
+      handleToast("Name updated!");
+      refetch()
+    }
+    if (editProjectResult.error && "status" in editProjectResult.error) {
+      handleToast(editProjectResult.error.data.message, "danger");
+    }
+  }, [editProjectResult.status]);
+
+
+  useEffect(() => {
+    if (deleteProjectResult.isSuccess) {
+      handleToast("Project deleted");
+      router.push("/project")
+    }
+    if (deleteProjectResult.error && "status" in deleteProjectResult.error) {
+      handleToast(deleteProjectResult.error.data.message, "danger");
+    }
+  }, [deleteProjectResult.status]);
+
 
   return currentProject ? (
     <ProjectSettingsPage
       project={currentProject}
-      currentQuery={itemQuery}
-      onQueryChange={(itemQuery) => setQuery(toReportQuery(itemQuery))}
-      onOpen={(report) => {
-        push(`/report/${report.id}`);
+      onManage={() => {
+        push(`/project/${currentProject.id}/users`);
+      }}      
+      onRename={(newName) => {
+        editProject({
+          id: currentProject.id,
+          name: newName
+        })
       }}
-      onDownload={(report) => {
-        downloadReportFile(report.id);
+      onDelete={() => {
+        deleteProject({id: currentProject.id})
       }}
-      reports={processReports(currentProject.reports, query)}
       sidebar={<Menu />}
     /> 
   ) : null;
