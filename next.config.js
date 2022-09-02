@@ -10,10 +10,22 @@ module.exports = {
         basePath: false,
         // locale: false,
       },
+      // {
+      //   source: "/:path*",
+      //   destination: "http://localhost:3000/:path*",
+      //   basePath: false,
+      //   // locale: false,
+      // },
     ];
   },
   images: {
     domains: ['localhost', 'tella-app.org'],
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true
   },
   i18n,
 };
