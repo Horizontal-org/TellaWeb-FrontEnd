@@ -95,8 +95,7 @@ export const Report = () => {
       }}
       onDelete={onBatchDeleteUsers}
       onCreateUser={createUser} 
-      children={""}   
-    />
+    ></UserListPage>
   ) : (
     false
   );

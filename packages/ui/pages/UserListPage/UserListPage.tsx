@@ -41,7 +41,6 @@ type Props = {
     password: string
     role: string
   }) => void;
-  children: React.ReactNode
 };
 
 export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
