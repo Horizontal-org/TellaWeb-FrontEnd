@@ -11,7 +11,7 @@ type Props = {
 
 export const [toastContext, useToast] = createContext<(text: string, type?: string) => void>()
 
-export const ToastWrapper: FunctionComponent<Props> = ({ children }) => {
+export const ToastWrapper: FunctionComponent<React.PropsWithChildren<Props>> = ({ children }) => {
 
   const [showToast, toggleToast] = useState<boolean>(false)
   const [isFading, toggleFading] = useState<boolean>(false)

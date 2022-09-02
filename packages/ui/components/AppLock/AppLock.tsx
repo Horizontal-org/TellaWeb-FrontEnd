@@ -15,7 +15,7 @@ type Props = {
   goNext: (selected: AppLockConfig) => void;
 };
 
-export const AppLock: FunctionComponent<Props> = ({
+export const AppLock: FunctionComponent<React.PropsWithChildren<Props>> = ({
   config,
   goPrev,
   goNext,

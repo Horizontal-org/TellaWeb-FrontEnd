@@ -13,7 +13,7 @@ interface Props {
   }) => void;
 }
 
-export const CreateUserModal: FunctionComponent<Props> = ({
+export const CreateUserModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
   onSubmit,
 }) => {
 
@@ -32,7 +32,7 @@ export const CreateUserModal: FunctionComponent<Props> = ({
       btnType={btnType.Primary}
       subtitle='Enter the user’s basic information here. You will be able to add additional information on the next screen.'
       submit='SAVE'
-      disabled={!((role !== ROLES.REPORTER && username.length > 0 && (/\S+@\S+\.\S+/.test(username))) && password === confirmPassword)}
+      disabled={!((username.length > 0) && password === confirmPassword)}
       onSubmit={() => {
         onSubmit({
           username,
@@ -154,5 +154,5 @@ export const CreateUserModal: FunctionComponent<Props> = ({
         </div>
       )}
     />
-  )
+  );
 }

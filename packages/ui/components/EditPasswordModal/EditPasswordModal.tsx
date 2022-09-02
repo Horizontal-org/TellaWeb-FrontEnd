@@ -6,7 +6,7 @@ type Props = {
   onSubmit: (currentPassword: string, newPassword: string) => void
 }
 
-export const EditPasswordModal: FunctionComponent<Props> = ({ onSubmit }) => {
+export const EditPasswordModal: FunctionComponent<React.PropsWithChildren<Props>> = ({ onSubmit }) => {
   const [oldPassword, handleOldPassword] = useState<string>('')
   const [newPassword, handleNewPassword] = useState<string>('')
   const [confirmPassword, handleConfirmPassword] = useState<string>('')

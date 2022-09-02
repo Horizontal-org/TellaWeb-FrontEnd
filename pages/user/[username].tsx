@@ -11,7 +11,7 @@ import {
   useDeleteMutation
 } from "packages/state/services/user";
 
-const UserById: FunctionComponent = () => {
+const UserById: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
   
   const router = useRouter();
   const handleToast = useToast()

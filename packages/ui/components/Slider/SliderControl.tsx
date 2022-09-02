@@ -8,7 +8,7 @@ type Props = {
   total: number;
 };
 
-export const SliderControl: FunctionComponent<Props> = ({
+export const SliderControl: FunctionComponent<React.PropsWithChildren<Props>> = ({
   goPrev,
   goNext,
   current,

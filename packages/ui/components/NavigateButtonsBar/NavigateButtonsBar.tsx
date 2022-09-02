@@ -8,9 +8,7 @@ type Props = {
   goNext: () => void;
 };
 
-export const NavigateButtonsBar: FunctionComponent<
-  PropsWithChildren<Props>
-> = ({ goPrev, goNext, children }) => (
+export const NavigateButtonsBar: FunctionComponent<React.PropsWithChildren<PropsWithChildren<Props>>> = ({ goPrev, goNext, children }) => (
   <div id="navigate-bar" className="flex px-4">
     <Button
       text="Back"

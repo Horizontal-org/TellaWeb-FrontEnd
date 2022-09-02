@@ -7,4 +7,5 @@ export interface Report extends Item {
   date?: number;
   files: IReportFile[];
   description: string;
+  deviceInfo: string;
 }

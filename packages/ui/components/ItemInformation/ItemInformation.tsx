@@ -5,7 +5,7 @@ type Props = {
   dict: { [k: string]: string };
 };
 
-export const ItemInformation: FunctionComponent<Props> = ({ title, dict }) => (
+export const ItemInformation: FunctionComponent<React.PropsWithChildren<Props>> = ({ title, dict }) => (
   <>
     <h3 className="text-base font-bold text-gray-500 py-3">{title}</h3>
     <div className="text-sm text-gray-500 gap-y-2">

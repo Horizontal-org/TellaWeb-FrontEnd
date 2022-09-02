@@ -11,7 +11,7 @@ type Props = {
   name: string;
 };
 
-export const ConfigurationPanel: FunctionComponent<Props> = ({
+export const ConfigurationPanel: FunctionComponent<React.PropsWithChildren<Props>> = ({
   configuration,
   name,
 }) => {

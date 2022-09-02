@@ -13,7 +13,7 @@ import {
 } from "packages/state/services/configuration";
 import { toRemoteConfiguration } from 'common/toRemoteConfiguration';
 
-const ConfigById: FunctionComponent = () => {
+const ConfigById: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
   // useAuthRequired();
   
   const router = useRouter();

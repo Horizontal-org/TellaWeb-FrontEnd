@@ -8,7 +8,7 @@ interface Props {
   onSubmit: (name: string) => void
 }
 
-export const CreateConfigurationModal: FunctionComponent<Props> = ({
+export const CreateConfigurationModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
   onSubmit
 }) => {
 

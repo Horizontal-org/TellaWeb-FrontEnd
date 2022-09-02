@@ -12,12 +12,14 @@ type Props = {
   rightbar?: React.ReactNode;
   rightbarActive?: boolean;
   content: React.ReactNode;
+  absoluteContent?: React.ReactNode
   currentItem?: Item;
   onClosePreview?: () => void;
 };
 
-export const MainLayout: FunctionComponent<Props> = ({
+export const MainLayout: FunctionComponent<React.PropsWithChildren<Props>> = ({
   content,
+  absoluteContent,
   leftbar,
   leftbarActive,
   rightbar,
@@ -59,7 +61,7 @@ export const MainLayout: FunctionComponent<Props> = ({
         </div>
       )}
       <div
-        className={cn("p-6 flex-1 transition-all duration-300 ease-in-out", {
+        className={cn("p-6 flex-1 transition-all duration-300 ease-in-out relative", {
           "transform ml-56": leftbar && leftSidebarOpen,
           "transform mr-64": rightbar && rightSidebarOpen,
         })}
@@ -76,7 +78,11 @@ export const MainLayout: FunctionComponent<Props> = ({
               />          
             </div>
           )}
-          <div className="flex-1">{content}</div>
+          <div className="flex-1">
+            {content}
+
+            { absoluteContent }
+          </div>
           {rightbar && rightbarActive && (
             <div>
               <SidebarButton 
@@ -86,6 +92,7 @@ export const MainLayout: FunctionComponent<Props> = ({
             </div>
           )}
         </div>
+
       </div>
       {rightbar && (
         <div

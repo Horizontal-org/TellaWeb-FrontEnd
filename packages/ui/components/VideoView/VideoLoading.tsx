@@ -1,6 +1,6 @@
 import { FunctionComponent} from 'react'
 
-export const VideoLoading: FunctionComponent = () => {
+export const VideoLoading: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
   return (
     <div style={{ height: 'calc(40vw / 1.35)' }} className='absolute top-0 left-0 w-full flex justify-center items-center bg-black opacity-40'>
       <svg width="58" height="58" viewBox="0 0 58 58" xmlns="http://www.w3.org/2000/svg">

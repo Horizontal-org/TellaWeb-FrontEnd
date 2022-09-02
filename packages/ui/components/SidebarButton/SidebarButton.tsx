@@ -6,7 +6,7 @@ interface Props {
   position?: string
 }
 
-export const SidebarButton: FunctionComponent<Props> = ({ 
+export const SidebarButton: FunctionComponent<React.PropsWithChildren<Props>> = ({ 
   onClick,
   position
 }) => {

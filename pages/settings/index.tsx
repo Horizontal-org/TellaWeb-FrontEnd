@@ -13,7 +13,6 @@ import { useDispatch } from "react-redux";
 import { setUser } from "packages/state/features/user/userSlice";
 
 const Settings = () => {
-  // useAuthRequired();
   
   const user = useUserProfile();
   const dispatch = useDispatch();

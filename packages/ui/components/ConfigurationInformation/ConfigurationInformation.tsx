@@ -7,7 +7,7 @@ type Props = {
   config: Configuration;
 };
 
-export const ConfigurationInformation: FunctionComponent<Props> = ({
+export const ConfigurationInformation: FunctionComponent<React.PropsWithChildren<Props>> = ({
   config,
 }) => {
   const dict = {

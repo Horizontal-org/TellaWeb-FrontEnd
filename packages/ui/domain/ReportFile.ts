@@ -6,4 +6,5 @@ export interface IReportFile extends FileDto {
   size: number;
   thumbnail?: string;
   type: ReportFileType;
+  fileInfo: string;
 }

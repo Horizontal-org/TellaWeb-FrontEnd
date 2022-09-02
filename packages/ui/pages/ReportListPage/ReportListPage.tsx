@@ -42,7 +42,7 @@ type Props = {
 
 const voidFunction = () => {};
 
-export const ReportListPage: FunctionComponent<Props> = ({
+export const ReportListPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   reports,
   onDelete,
   onOpen,
@@ -70,7 +70,6 @@ export const ReportListPage: FunctionComponent<Props> = ({
       search: name
     })
   };
-
 
   return (
     <MainLayout

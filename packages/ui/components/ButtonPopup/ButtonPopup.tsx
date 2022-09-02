@@ -4,29 +4,29 @@ import {
   useState,
   ReactNode,
 } from "react";
-import cn from "classnames";
 import { MdClose } from "react-icons/md";
-import { btnType, Button } from "../Button/Button";
 import ReactModal from "react-modal";
 
 type Props = {
   render?: (toggle: () => void) => ReactNode;
   onClose?: () => void
   toggleButton: (toggle: () => void) => ReactNode
+  externalOpen?: boolean
 };
 
-export const ButtonPopup: FunctionComponent<PropsWithChildren<Props>> = ({
+export const ButtonPopup: FunctionComponent<React.PropsWithChildren<PropsWithChildren<Props>>> = ({
   children,
   render,
   onClose,
-  toggleButton
+  toggleButton,
+  externalOpen
 }) => {
   const [popupOpen, changePopupStatus] = useState(false);
 
   const togglePopup = () => changePopupStatus(!popupOpen);
 
   const requestClose = () => {
-    togglePopup()
+    changePopupStatus(false)
     onClose && onClose()
   }
 
@@ -36,11 +36,11 @@ export const ButtonPopup: FunctionComponent<PropsWithChildren<Props>> = ({
 
       <ReactModal
         onRequestClose={requestClose}
-        isOpen={popupOpen}
+        isOpen={popupOpen || externalOpen}
         overlayClassName={
           "flex bg-black bg-opacity-50 absolute inset-0 justify-center items-center"
         }
-        className="bg-white w-4/12 py-4 px-3 rounded shadow-xl text-gray-800"
+        className="bg-white w-5/12 py-4 px-3 rounded shadow-xl text-gray-800"
       >
         <div className="flex-start items-center">
           <button 

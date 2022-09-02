@@ -31,7 +31,7 @@ interface Props {
   onOpen: (config: Configuration) => void;
 }
 
-export const ConfigurationListPage: FunctionComponent<Props> = ({
+export const ConfigurationListPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   sidebar,
   onQueryChange,
   currentQuery,

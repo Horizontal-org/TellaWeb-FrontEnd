@@ -450,6 +450,11 @@ input::-moz-placeholder, textarea::-moz-placeholder {
   color: #9ca3af;
 }
 
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+  opacity: 1;
+  color: #9ca3af;
+}
+
 input::placeholder,
 textarea::placeholder {
   opacity: 1;
@@ -879,6 +884,10 @@ video {
   width: 33.333333%;
 }
 
+.w-5\/12 {
+  width: 41.666667%;
+}
+
 .w-6\/12 {
   width: 50%;
 }
@@ -1127,12 +1136,12 @@ video {
   overflow-y: scroll;
 }
 
-.whitespace-nowrap {
-  white-space: nowrap;
+.overflow-ellipsis {
+  text-overflow: ellipsis;
 }
 
-.break-words {
-  overflow-wrap: break-word;
+.whitespace-nowrap {
+  white-space: nowrap;
 }
 
 .break-all {
@@ -1240,6 +1249,11 @@ video {
   border-color: rgba(12, 122, 191, var(--tw-border-opacity));
 }
 
+.hover\:border-blue-light:hover {
+  --tw-border-opacity: 1;
+  border-color: rgba(233, 242, 255, var(--tw-border-opacity));
+}
+
 .focus\:border-blue-300:focus {
   --tw-border-opacity: 1;
   border-color: rgba(0, 141, 236, var(--tw-border-opacity));
@@ -1267,6 +1281,11 @@ video {
 .bg-gray-25 {
   --tw-bg-opacity: 1;
   background-color: rgba(241, 241, 241, var(--tw-bg-opacity));
+}
+
+.bg-gray-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgba(245, 245, 245, var(--tw-bg-opacity));
 }
 
 .bg-gray-100 {
@@ -1402,6 +1421,11 @@ video {
   padding-right: 2.5rem;
 }
 
+.px-12 {
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+
 .px-20 {
   padding-left: 5rem;
   padding-right: 5rem;
@@ -1450,6 +1474,10 @@ video {
   padding-top: 1rem;
 }
 
+.pt-6 {
+  padding-top: 1.5rem;
+}
+
 .pt-8 {
   padding-top: 2rem;
 }
@@ -1468,6 +1496,18 @@ video {
 
 .pr-2 {
   padding-right: 0.5rem;
+}
+
+.pr-4 {
+  padding-right: 1rem;
+}
+
+.pr-8 {
+  padding-right: 2rem;
+}
+
+.pb-2 {
+  padding-bottom: 0.5rem;
 }
 
 .pb-4 {
@@ -1642,12 +1682,22 @@ video {
   color: rgba(139, 142, 143, var(--tw-placeholder-opacity));
 }
 
+.placeholder-gray-300:-ms-input-placeholder {
+  --tw-placeholder-opacity: 1;
+  color: rgba(139, 142, 143, var(--tw-placeholder-opacity));
+}
+
 .placeholder-gray-300::placeholder {
   --tw-placeholder-opacity: 1;
   color: rgba(139, 142, 143, var(--tw-placeholder-opacity));
 }
 
 .hover\:placeholder-gray-800:hover::-moz-placeholder {
+  --tw-placeholder-opacity: 1;
+  color: rgba(31, 41, 55, var(--tw-placeholder-opacity));
+}
+
+.hover\:placeholder-gray-800:hover:-ms-input-placeholder {
   --tw-placeholder-opacity: 1;
   color: rgba(31, 41, 55, var(--tw-placeholder-opacity));
 }
@@ -1751,9 +1801,6 @@ video {
 }
 
 @media (min-width: 1280px) {
-  .xl\:block {
-    display: block;
-  }
 }
 
 @media (min-width: 1536px) {

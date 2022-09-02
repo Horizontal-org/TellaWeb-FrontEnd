@@ -15,7 +15,7 @@ type Props = {
   goNext: (camouflage: CamouflageConfig) => void;
 };
 
-export const CamouflageWizard: FunctionComponent<Props> = ({
+export const CamouflageWizard: FunctionComponent<React.PropsWithChildren<Props>> = ({
   config,
   goPrev,
   goNext,

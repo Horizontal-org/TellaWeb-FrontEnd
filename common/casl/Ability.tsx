@@ -12,6 +12,7 @@ export const ENTITIES = {
   Reports: 'reports',
   RemoteConfigurations: 'remoteConfigurations',
   Users: 'users',
+  Projects: 'projects',
   Web: 'web',
 }
 
@@ -26,9 +27,11 @@ export const updateAbility = (user, ability) => {
     can('manage', 'all');
   } else if (user.role === ROLES.Editor) {
     can('manage', ENTITIES.Reports);
+    can('manage', ENTITIES.Projects)
     can('read', ENTITIES.RemoteConfigurations)
     can('read', ENTITIES.Web)
   } else if (user.role === ROLES.Viewer) {
+    can('read', ENTITIES.Projects)
     can('read', ENTITIES.Reports)
     can('read', ENTITIES.RemoteConfigurations)
     can('read', ENTITIES.Web)
@@ -46,6 +49,9 @@ export const validateRoute = (ability, route) => {
   }
   if (route.includes('user')) {
     entity = ENTITIES.Users
+  }
+  if (route.includes('project')) {
+    entity = ENTITIES.Projects
   }
   if (route.includes('configuration')) {
     entity = ENTITIES.RemoteConfigurations
