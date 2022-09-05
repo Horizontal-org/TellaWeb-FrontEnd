@@ -6,7 +6,7 @@ type Props = {
   onSubmit: (name: string) => void
 }
 
-export const EditReportTitleModal: FunctionComponent<Props> = ({ onSubmit }) => {
+export const EditReportTitleModal: FunctionComponent<React.PropsWithChildren<Props>> = ({ onSubmit }) => {
   const [name, handleName] = useState<string>('')
 
   return (

@@ -7,7 +7,7 @@ type Props = {
   title: string
 }
 
-export const DeleteUserModal: FunctionComponent<Props> = ({
+export const DeleteUserModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
   onSubmit,
   title
 }) => {

@@ -94,8 +94,8 @@ export const Report = () => {
         push(`./user/${user.username}`);
       }}
       onDelete={onBatchDeleteUsers}
-      onCreateUser={createUser}
-    />
+      onCreateUser={createUser} 
+    ></UserListPage>
   ) : (
     false
   );

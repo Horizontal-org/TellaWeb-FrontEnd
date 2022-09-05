@@ -1,0 +1,190 @@
+import {
+  Dispatch,
+  FormEvent,
+  FunctionComponent,
+  SetStateAction,
+  useRef,
+  useState,
+  ChangeEvent,
+  useEffect
+} from "react";
+import { MdOpenInNew, MdRemoveRedEye, MdSave } from "react-icons/md";
+import {
+  ReportBar,
+  Button,
+  Table,
+  ButtonMenu,
+  ButtonOption,
+  SearchInput,
+  DeleteModal
+} from "../..";
+import { btnType } from "../../components/Button/Button";
+
+import { MainLayout } from "../../layouts/MainLayout";
+
+import { REPORT_COLUMNS } from "../../domain/ReportTableColumns";
+import { ItemQuery } from "../../domain/ItemQuery";
+import { Item } from "../../domain/Item";
+import { Report } from "../../domain/Report";
+import { Project } from "packages/state/domain/project";
+import HoveredRowWrapper from "packages/ui/components/Table/HoveredRowWrapper";
+import { Can } from "common/casl/Can";
+import { ENTITIES } from "common/casl/Ability";
+
+type Props = {
+  project: Project
+  reports: Report[];
+  onQueryChange: (iq: ItemQuery) => void;
+  onOpen: (report: Report) => void;
+  onDownload?: (report: Report) => void;
+  sidebar: React.ReactNode;
+  currentQuery: ItemQuery;
+};
+
+const voidFunction = () => {};
+
+export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
+  reports,
+  project,
+  onOpen,
+  onDownload = voidFunction,
+  onQueryChange,
+  sidebar,
+  currentQuery,
+}) => {
+  const [currentReport, setCurrentReport] = useState<Report | undefined>();
+  const [selectedReports, setSelectedReports] = useState<Report[]>([]);
+
+  const searchInput = useRef<HTMLInputElement>();
+  let searchTimeout = null
+
+  const openReport = () => {
+    setCurrentReport(selectedReports[0]);
+  };
+
+  const search = (e: FormEvent<HTMLFormElement> | ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const name = searchInput.current.value;
+
+    onQueryChange({
+      ...currentQuery,
+      search: name
+    })
+  };
+
+  return (
+    <MainLayout
+      title={project.name}
+      subtitle="All the files and reports sent by your users"
+      content={
+        <div>
+          <div className="flex space-x-2 mb-2 p-2">
+            {selectedReports.length === 0 && (
+              <>
+                <form onSubmit={search} className="flex">
+                  <SearchInput
+                    onChange={(e) => {
+                      //TODO change this
+                      clearTimeout(searchTimeout)
+                      searchTimeout = setTimeout(() => {
+                        search(e)
+                      }, 500)
+                    }}
+                    ref={searchInput}
+                    defaultValue={currentQuery.search}
+                  />
+                </form>
+              </>
+            )}
+            {selectedReports.length > 0 && (
+              <>
+                {selectedReports.length === 1 && (
+                  <>
+                    <Button
+                      icon={<MdOpenInNew />}
+                      text="Open"
+                      onClick={(event: MouseEvent) => {
+                        event.preventDefault();
+                        onOpen(selectedReports[0]);
+                      }}
+                    />
+                    <Button
+                      type={btnType.Secondary}
+                      icon={<MdRemoveRedEye />}
+                      text="Preview"
+                      onClick={openReport}
+                    />
+                    <Button
+                      type={btnType.Secondary}
+                      icon={<MdSave />}
+                      onClick={(event: MouseEvent) =>
+                        onDownload(selectedReports[0])
+                      }
+                      text="Download"
+                    />
+                  </>
+                )}             
+              </>
+            )}
+          </div>
+          <Table
+            columns={REPORT_COLUMNS}
+            data={reports}
+            withPagination={false}
+            itemQuery={currentQuery}
+            onSelection={setSelectedReports as Dispatch<SetStateAction<Item[]>>}
+            onFetch={onQueryChange}
+            rowOptions={(hoveredRow, isHoverSelected) => (
+              <HoveredRowWrapper isHoverSelected={isHoverSelected}>
+                <>
+                  <div className="px-2">
+                    <Button
+                      type={btnType.Secondary}
+                      icon={<MdRemoveRedEye />}
+                      text="Preview"
+                      onClick={(e: ChangeEvent) => {
+                        e.stopPropagation()
+                        setCurrentReport(hoveredRow);
+                      }}
+                    />
+                  </div>
+                  <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
+                    <ButtonOption
+                      icon={<MdSave />}
+                      onClick={(event: MouseEvent) => {
+                        event.stopPropagation()
+                        onDownload(hoveredRow)
+                      }}
+                      text="Download"
+                      color='#8B8E8F'
+                    />
+                    {/* <Can I='delete' a={ENTITIES.Reports}>
+                      <DeleteModal 
+                        render={(
+                          <p>
+                            the selected reports will be permanently deleted.
+                          </p>
+                        )}
+                        onDelete={() => onDelete([hoveredRow])}
+                      />  
+                    </Can> */}
+                  </ButtonMenu>
+                </>
+              </HoveredRowWrapper>
+            )}
+          />
+        </div>
+      }
+      leftbar={sidebar}
+      leftbarActive={true}
+      rightbar={<ReportBar report={currentReport} />}
+      rightbarActive={true}
+      onClosePreview={() => setCurrentReport(undefined)}
+      currentItem={currentReport}
+    />
+  );
+};
+
+ProjectPage.defaultProps = {
+  reports: [],
+};

@@ -10,7 +10,7 @@ interface Props {
   onChange: ChangeEventHandler<HTMLInputElement>
 }
 
-export const RadioGroupInput: FunctionComponent<Props> = ({ elements, onChange, value }) => {
+export const RadioGroupInput: FunctionComponent<React.PropsWithChildren<Props>> = ({ elements, onChange, value }) => {
   return (
     <div>
       { elements.map((e, i) => (

@@ -8,7 +8,7 @@ type Props = {
   isEmail: boolean
 }
 
-export const EditEmailModal: FunctionComponent<Props> = ({ onSubmit, title, isEmail }) => {
+export const EditEmailModal: FunctionComponent<React.PropsWithChildren<Props>> = ({ onSubmit, title, isEmail }) => {
   const [username, handleUsername] = useState<string>('')
   const [confirmUsername, handleConfirmUsername] = useState<string>('')
   const [showValidations, handleShowValidations] = useState<boolean>(false)
@@ -99,5 +99,5 @@ export const EditEmailModal: FunctionComponent<Props> = ({ onSubmit, title, isEm
         </div>
       )}
     />
-  )
+  );
 }

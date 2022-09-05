@@ -9,9 +9,10 @@ type Props = {
   icon?: React.ReactNode;
   type?: btnType;
   openSide?: "left" | "right";
+  children: React.ReactNode
 };
 
-export const ButtonMenu: FunctionComponent<Props> = ({
+export const ButtonMenu: FunctionComponent<React.PropsWithChildren<Props>> = ({
   children,
   text,
   icon,
@@ -49,7 +50,7 @@ export const ButtonMenu: FunctionComponent<Props> = ({
         "flex-row-reverse": !toRight,
       })}
     >
-      <div ref={ref} style={{ width: 36 }}>
+      <div ref={ref} style={{ minWidth: 36 }}>
         <Button
           text={text}
           icon={!icon && !text ? <BsThreeDots /> : icon}

@@ -3,7 +3,7 @@ import { useRouter } from "next/dist/client/router";
 import Img from "next/image";
 import logo from "../../assets/tella-logo.png";
 
-export const LogoutPage: FunctionComponent = () => {
+export const LogoutPage: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
   const { push } = useRouter();
 
   return (

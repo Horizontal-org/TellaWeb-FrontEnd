@@ -7,7 +7,7 @@ interface Props {
   onSubmit: ({}) => void
 }
 
-export const EditCrashReportsModal: FunctionComponent<Props> = ({
+export const EditCrashReportsModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
   onSubmit
 }) => {
 

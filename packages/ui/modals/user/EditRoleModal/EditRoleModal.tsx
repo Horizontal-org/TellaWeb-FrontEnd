@@ -11,7 +11,7 @@ interface Props {
   hasEmail: boolean
 }
 
-export const EditRoleModal: FunctionComponent<Props> = ({
+export const EditRoleModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
   onSubmit,
   defaultRole,
   hasEmail

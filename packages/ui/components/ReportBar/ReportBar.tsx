@@ -8,7 +8,7 @@ type Props = {
   report?: Report;
 };
 
-export const ReportBar: FunctionComponent<Props> = ({ report }) => {
+export const ReportBar: FunctionComponent<React.PropsWithChildren<Props>> = ({ report }) => {
   return (
     <div className="flex flex-1 flex-col justify-center overflow-y-scroll">
       {report && (

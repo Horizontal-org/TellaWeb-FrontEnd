@@ -10,7 +10,7 @@ type Props = {
   file: IReportFile;
 };
 
-export const VideoView: FunctionComponent<Props> = ({ file }) => {
+export const VideoView: FunctionComponent<React.PropsWithChildren<Props>> = ({ file }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const {
     currentTime,

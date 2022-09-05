@@ -24,5 +24,6 @@ export interface UserQuery {
   search?: string;
   page: number;
   total?: number;
+  exclude?: Array<string>;
   size: number;
 }

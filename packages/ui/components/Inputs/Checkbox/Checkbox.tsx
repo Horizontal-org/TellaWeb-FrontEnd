@@ -7,7 +7,7 @@ interface Props {
   label: string;
 }
 
-export const Checkbox: FunctionComponent<Props> = ({ 
+export const Checkbox: FunctionComponent<React.PropsWithChildren<Props>> = ({ 
   checked, 
   onChange,
   label

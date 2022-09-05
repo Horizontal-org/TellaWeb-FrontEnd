@@ -5,7 +5,7 @@ type Props = {
   options: ConfigOption[];
 };
 
-export const ConfigSelect: FunctionComponent<Props> = ({ options }) => {
+export const ConfigSelect: FunctionComponent<React.PropsWithChildren<Props>> = ({ options }) => {
   return (
     <div className="w-96 fixed inset-y-1/3 inset-x-1/3">
       <p className="font-sans  font-bold text-xxxl"> Configuration </p>

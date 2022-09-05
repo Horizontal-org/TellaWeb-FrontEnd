@@ -5,7 +5,8 @@ import {
   SetStateAction, 
   useRef,
   FormEvent,
-  ChangeEvent
+  ChangeEvent,
+  PropsWithChildren
 } from "react";
 import {
   ButtonMenu,
@@ -39,10 +40,10 @@ type Props = {
     username: string
     password: string
     role: string
-  }) => void
+  }) => void;
 };
 
-export const UserListPage: FunctionComponent<Props> = ({
+export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   sidebar,
   users,
   onQueryChange,

@@ -7,25 +7,25 @@ import { MdOutlineSettings } from 'react-icons/md'
 import { BsFillCloudArrowUpFill, BsPerson } from 'react-icons/bs'
 import RemoteConfigIcon from '../packages/ui/components/RemoteConfigIcon'
 import { ENTITIES } from "common/casl/Ability";
-export const Menu: FunctionComponent = () => {
+export const Menu: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
   const router = useRouter();
 
   return (
     <SidebarLayout
       topMenu={[
         {
-          permission: ENTITIES.Reports,
-          text: "Reports",
+          permission: ENTITIES.Projects,
+          text: "Projects",
           icon: <BsFillCloudArrowUpFill />,
-          onClick: () => router.replace("/report"),
-          selected: router.route.includes("/report"),
+          onClick: () => router.replace("/project"),
+          selected: router.route.includes("/project"),
         },
         {
           permission: ENTITIES.Users,
           text: "Users",
           icon: <BsPerson />,
           onClick: () => router.replace("/user"),
-          selected: router.route.includes("/user"),
+          selected: router.route === '/user',
         },
         {
           permission: ENTITIES.RemoteConfigurations,
@@ -41,7 +41,7 @@ export const Menu: FunctionComponent = () => {
           text: "Settings",
           icon: <MdOutlineSettings />,
           onClick: () => router.replace("/settings"),
-          selected: router.route.includes("/settings"),
+          selected: router.route == "/settings",
         },
         {
           permission: ENTITIES.Web,

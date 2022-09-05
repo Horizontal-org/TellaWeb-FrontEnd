@@ -8,6 +8,7 @@ import { reportsSlice } from "./features/reports/reportsSlice";
 import { reportsApi } from "./services/reports";
 import { filesApi } from "./services/files";
 import { configurationApi } from './services/configuration'
+import { projectApi } from "./services/project";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     [reportsApi.reducerPath]: reportsApi.reducer,
     [filesApi.reducerPath]: filesApi.reducer,
     [configurationApi.reducerPath]: configurationApi.reducer,
+    [projectApi.reducerPath]: projectApi.reducer,
     auth: authSlice.reducer,
     user: userSlice.reducer,
     reports: reportsSlice.reducer,
@@ -26,7 +28,8 @@ const store = configureStore({
       userApi.middleware,
       reportsApi.middleware,
       filesApi.middleware,
-      configurationApi.middleware
+      configurationApi.middleware,
+      projectApi.middleware
     ),
 });
 

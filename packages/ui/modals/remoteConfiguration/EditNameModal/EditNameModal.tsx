@@ -9,7 +9,7 @@ interface Props {
   defaultName: string
 }
 
-export const EditNameModal: FunctionComponent<Props> = ({
+export const EditNameModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
   onSubmit,
   defaultName
 }) => {

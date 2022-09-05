@@ -1,6 +1,6 @@
 import { FunctionComponent, ReactNode } from 'react'
 import { ButtonPopup, Button, TextInput } from '../../'
-import { btnType } from '../Button/Button'
+import { btnType as  btnTypes} from '../Button/Button'
 
 type Props = {
   onSubmit?: () => void
@@ -11,10 +11,13 @@ type Props = {
   subtitle?: string | ReactNode;
   disabled?: boolean;
   render: () => ReactNode;
-  btnType?: btnType;
+  btnType?: btnTypes;
+  submitButtonType?: btnTypes;
+  externalOpen?: boolean,
+  onClose?: () => void
 }
 
-export const Modal: FunctionComponent<Props> = ({ 
+export const Modal: FunctionComponent<React.PropsWithChildren<Props>> = ({ 
   onSubmit, 
   title, 
   subtitle, 
@@ -23,18 +26,23 @@ export const Modal: FunctionComponent<Props> = ({
   button,
   submit,
   btnType,
-  buttonIcon
+  buttonIcon,
+  externalOpen,
+  onClose,
+  submitButtonType
 }) => {
 
   return (
     <ButtonPopup 
+      externalOpen={externalOpen}
+      onClose={onClose}
       toggleButton={(toggle) => (
         <Button
           icon={buttonIcon}
           text={button}
           onClick={(e: Event) => {
-            e.stopPropagation()
-            toggle()
+            e.stopPropagation()            
+            toggle()            
           }}
           type={btnType}
         />
@@ -57,10 +65,13 @@ export const Modal: FunctionComponent<Props> = ({
               <Button 
                 text='SAVE'
                 full={true}
+                type={submitButtonType ? submitButtonType : btnTypes.Primary}
                 disabled={disabled}
                 onClick={() => {
                   onSubmit()
-                  toggle()
+                  if (!externalOpen) {
+                    toggle()
+                  }
                 }}
               />
             </div>

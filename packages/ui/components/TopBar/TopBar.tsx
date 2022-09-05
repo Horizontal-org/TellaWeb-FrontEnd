@@ -6,7 +6,7 @@ type Props = {
   onClose?: () => void;
 };
 
-export const TopBar: FunctionComponent<PropsWithChildren<Props>> = ({
+export const TopBar: FunctionComponent<React.PropsWithChildren<PropsWithChildren<Props>>> = ({
   title,
   onClose,
   children,

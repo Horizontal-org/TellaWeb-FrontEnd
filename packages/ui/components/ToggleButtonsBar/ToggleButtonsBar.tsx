@@ -1,15 +1,12 @@
 import { FunctionComponent, MouseEventHandler, PropsWithChildren } from "react";
 import { SidebarButton } from '../SidebarButton/SidebarButton'
 
-// import Img from "next/image";
-// import handbarImg from "../../assets/handbar-toggle.png";
-
 type Props = {
   leftToggle: () => void; 
   rightToggle: () => void;
 };
 
-export const ToggleButtonsBar: FunctionComponent<PropsWithChildren<Props>> = ({
+export const ToggleButtonsBar: FunctionComponent<React.PropsWithChildren<PropsWithChildren<Props>>> = ({
   leftToggle,
   rightToggle,
   children,

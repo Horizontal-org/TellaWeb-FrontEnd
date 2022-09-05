@@ -7,7 +7,7 @@ interface Props {
   onSubmit: ({}) => void
 }
 
-export const EditServersModal: FunctionComponent<Props> = ({
+export const EditServersModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
   onSubmit
 }) => {
 

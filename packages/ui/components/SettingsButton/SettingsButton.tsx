@@ -10,7 +10,7 @@ type Props = {
   onClick: (event: MouseEvent<HTMLButtonElement>) => void;
 };
 
-export const SettingsButton: FunctionComponent<Props> = ({
+export const SettingsButton: FunctionComponent<React.PropsWithChildren<Props>> = ({
   selected,
   type,
   description,
