@@ -34,7 +34,7 @@ const VerificationMap: FunctionComponent<React.PropsWithChildren<Props>> = ({
           />           
         ) : (
           <TileLayer
-            url={`https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/512/{z}/{x}/{y}?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`}
+            url={`https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/512/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaG9yaXpvbnRhbG9yZyIsImEiOiJjbDc0d2hhMmEwMDQ0M3ZscWw0Nmh0aXB4In0.jr9aOKznaHix4OQBe5VRpQ`}
           />
         )}        
       </MapContainer>
