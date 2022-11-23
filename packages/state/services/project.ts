@@ -73,14 +73,12 @@ export const projectApi = createApi({
 
     editProject: builder.mutation<
       Project,
-      { id: string; name: string; }
+      { id: string; name?: string; url?: string; slug?: string }
     >({
-      query: ({ id, name }) => ({
-        url: `/${id}`,
+      query: (toEdit) => ({
+        url: `/${toEdit.id}`,
         method: "PUT",
-        body: {
-          name,
-        },
+        body: toEdit,
       }),
     }),
 

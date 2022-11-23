@@ -7,6 +7,8 @@ export interface Project {
   users: User[];
   reports: Report[];
   createdAt: string;
+  url?: string;
+  slug?: string;
   id?: string;
 }
 

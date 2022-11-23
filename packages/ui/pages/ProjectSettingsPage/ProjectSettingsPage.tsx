@@ -30,10 +30,12 @@ import { useToast } from "components/ToastWrapper";
 import { RenameProjectModal } from "packages/ui/modals/project/RenameProjectModal/RenameProjectModal";
 import { DeleteProjectModal } from "packages/ui/modals/project/DeleteProjectModal/DeleteProjectModal";
 import { ManageUsersProjectModal } from "packages/ui/modals/project/ManageUsersProjectModal/ManageUsersProjectModal";
+import { EditUrlProjectModal } from "packages/ui/modals/project/EditUrlProjectModal/EditUrlProjectModal";
 
 type Props = {
   project: Project
   onRename: (name: string) => void;
+  onEdit: ({}) => void
   onDelete: () => void;
   onManage: () => void;
   sidebar: React.ReactNode;
@@ -46,7 +48,8 @@ export const ProjectSettingsPage: FunctionComponent<React.PropsWithChildren<Prop
   sidebar,
   onRename,
   onDelete,
-  onManage
+  onManage,
+  onEdit
 }) => {
   const [currentReport, setCurrentReport] = useState<Report | undefined>();
   const [domain, handleDomain] = useState<string>('')
@@ -112,19 +115,28 @@ export const ProjectSettingsPage: FunctionComponent<React.PropsWithChildren<Prop
                   style={{ maxWidth: '100%'}}
                   className="overflow-ellipsis overflow-hidden whitespace-nowrap pr-8"
                 >
-                  {`${domain}/project/${project.id}`}
+                  {project.url  ? project.url : 'No URL set'}
                 </div>
+             
               </div>     
             </div>
-            <div>
+            <div className="flex items-center">
               <Button 
                 type={btnType.Secondary}
                 text='COPY'
                 onClick={() => {
-                  navigator.clipboard.writeText(`${domain}/project/${project.id}`)
+                  navigator.clipboard.writeText(`${project.url || ''}`)
                   handleToast('URL copied to clipboard')
                 }}
               />
+              <div className="pl-2">
+                <EditUrlProjectModal
+                  currentUrl={project.slug}
+                  onSubmit={(newUrl) => {
+                    onEdit({ slug: newUrl })
+                  }}
+                />
+              </div>
             </div>                
           </div>
 

@@ -27,7 +27,7 @@ export const ProjectById = () => {
 
   useEffect(() => {
     if (editProjectResult.isSuccess) {
-      handleToast("Name updated!");
+      handleToast("Values updated!");
       refetch()
     }
     if (editProjectResult.error && "status" in editProjectResult.error) {
@@ -57,6 +57,12 @@ export const ProjectById = () => {
         editProject({
           id: currentProject.id,
           name: newName
+        })
+      }}
+      onEdit={(editObject) => {
+        editProject({
+          id: currentProject.id,
+          ...editObject
         })
       }}
       onDelete={() => {
