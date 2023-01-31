@@ -2,6 +2,7 @@ import { FunctionComponent } from "react";
 import { MainLayout } from "../../layouts/MainLayout";
 import { EditEmailModal } from "../../components/EditEmailModal/EditEmailModal";
 import { EditPasswordModal } from "../../components/EditPasswordModal/EditPasswordModal";
+import { TwoFactorAuthModal } from "packages/ui/components/TwoFactorAuthModal/TwoFactorAuthModal";
 import { ButtonMenu } from '../../components/ButtonMenu/ButtonMenu'
 import { ButtonOption } from '../../components/ButtonMenu/ButtonOption'
 import { ROLES, User } from "packages/state/domain/user";
@@ -60,6 +61,16 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
               <p>••••••••••</p>
             </div>
             <EditPasswordModal onSubmit={onUpdatePassword} />
+          </div>
+
+          <div className="flex justify-between items-center py-4 border-b">
+            <div className="flex items-center">
+              <p className="text-gray-600 uppercase" style={{ width: 200 }}>
+                TWO-FACTOR AUTHENTICATION
+              </p>
+              <p>DISABLED</p>
+            </div>
+            <TwoFactorAuthModal onSubmit={onUpdatePassword} />
           </div>
 
           <div className="flex justify-between items-center py-4 border-b">
