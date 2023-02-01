@@ -10,9 +10,9 @@ type Props = {
 }
 
 export const TwoFactorAuthModal: FunctionComponent<React.PropsWithChildren<Props>> = ({ onSubmit }) => {
-  const [step, handleSteps] = useState<number>(1)
+  const [step, handleSteps] = useState<number>(2)
   const [otpUrl, handleOtpUrl] = useState<string>('')
-  const [otpCode, handleOtpCode] = useState<string>('')
+  const [otpCode, handleOtpCode] = useState<string>('CYDK YPDR FRTM ZE7D FRTM IANE')
 
 
   return (
