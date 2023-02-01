@@ -22,6 +22,16 @@ const Settings = () => {
   const [updatePassword, updatePasswordResult] = useUpdatePasswordMutation();
   const [updateUser, updateUserResult] = useUpdateUserMutation();
 
+  // mock2FactorFunction
+  const twoFactorAuthGenerate = (currentPassword: string) => {
+    if(currentPassword) {
+      return {
+        otpUrl: 'someurl',
+        otpCode: 'CYDK YPDR FRTM ZE7D FRTM IANE'
+      }
+    }
+  }
+
   useEffect(() => {
     if (updatePasswordResult.isSuccess) {
       handleToast("Password updated!", "info");
@@ -54,6 +64,9 @@ const Settings = () => {
           username: username,
           role: user.role
         });
+      }}
+      onTwoFactorAuthGenerate={(currentPassword) => {
+        return twoFactorAuthGenerate(currentPassword)
       }}
     />
   );

@@ -15,6 +15,7 @@ type Props = {
   sidebar: React.ReactNode;
   onUpdateUsername: (username: string) => void;
   onUpdatePassword: (currentPassword: string, newPassword: string) => void;
+  onTwoFactorAuthGenerate: (currentPassword: string) => { otpUrl: string, otpCode: string}
   user: User | null;
 };
 
@@ -24,6 +25,7 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
   sidebar,
   onUpdateUsername,
   onUpdatePassword,
+  onTwoFactorAuthGenerate,
   user,
 }) => {
 
@@ -70,7 +72,7 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
               </p>
               <p>DISABLED</p>
             </div>
-            <TwoFactorAuthModal onSubmit={onUpdatePassword} />
+            <TwoFactorAuthModal onSubmit={onTwoFactorAuthGenerate} />
           </div>
 
           <div className="flex justify-between items-center py-4 border-b">
