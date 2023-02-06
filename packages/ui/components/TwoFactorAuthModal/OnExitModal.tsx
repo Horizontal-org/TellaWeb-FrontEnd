@@ -1,8 +1,7 @@
 import { FunctionComponent } from 'react'
+import styled from 'styled-components'
 import { Button } from '../..'
-import { QRCodeCanvas} from 'qrcode.react'
 import ReactModal from "react-modal";
-import { MdClose } from "react-icons/md";
 import { btnType } from '../Button/Button';
 
 type Props = {
@@ -34,16 +33,31 @@ export const OnExitModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
             If you exit, you will have to restart setting up two-factor authentication from the beginning.        
           </p>
 
-          <div className='flex justify-end py-4'>
-            <div>
-              <Button text='continue set up' type={btnType.Secondary} onClick={onClose}/>
+          <ButtonsContainer>
+            <div className='pr-4'>
+              <Button
+                text='continue set up' 
+                type={btnType.Secondary} 
+                onClick={onClose}
+              />
             </div>
             <div>
-              <Button text='EXIT' type={btnType.Danger} onClick={onExitProgress}/>
+              <Button 
+                text='EXIT' 
+                type={btnType.Danger} 
+                onClick={onExitProgress}
+              />
             </div>
-          </div>
+          </ButtonsContainer>
         </div>
       </ReactModal>
     </>
   )
 }
+
+const ButtonsContainer = styled.div`
+  display: flex;
+  justify-content: end;
+  padding-top: 32px;
+  padding-bottom: 8px;
+`
