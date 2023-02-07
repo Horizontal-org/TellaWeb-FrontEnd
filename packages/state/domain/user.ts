@@ -13,6 +13,12 @@ export interface User {
   note?: string
 }
 
+export interface LoginResponse {
+  access_token: string
+  two_factor_enabled: boolean
+  user: User
+}
+
 export interface Credential {
   username: string;
   password: string;
