@@ -7,6 +7,7 @@ type Props = {
   handleOtpUrl: (otpUrl: string) => void
   handleOtpCode: (otpCode: string) => void
   handleSteps: () => void
+  errorMessage?: string
 }
 
 export const EnableTwoFactor: FunctionComponent<React.PropsWithChildren<Props>> = ({ 
@@ -14,6 +15,7 @@ export const EnableTwoFactor: FunctionComponent<React.PropsWithChildren<Props>> 
   handleOtpUrl,
   handleOtpCode,
   handleSteps,
+  errorMessage,
 }) => {
   const [currentPassword, handleCurrentPassword] = useState<string>('')
 
@@ -35,6 +37,15 @@ export const EnableTwoFactor: FunctionComponent<React.PropsWithChildren<Props>> 
           onChange={(e) => { handleCurrentPassword(e.target.value) }}
         />
       </div>
+
+      {errorMessage && (
+        <div
+          className="w-full p-2 mt-4 mb-2 bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200"
+          role="alert"
+        >
+          {errorMessage}
+      </div>
+      )}
 
       <div className='pb-4'>
         <Button 
