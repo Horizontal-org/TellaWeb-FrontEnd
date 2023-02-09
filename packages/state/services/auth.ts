@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootStore } from "packages/state/store";
-import { Credential, User, OtpEnableRes } from "../domain/user";
+import { Credential, User, OtpEnableRes, LoginResponse } from "../domain/user";
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -35,8 +35,15 @@ export const authApi = createApi({
         method: "POST",
         body: code
       })
+    }),
+    otpLogin: builder.mutation<LoginResponse, {code: string, userId: string}>({
+      query: (credential) => ({
+        url: "auth/otp/login",
+        method: "POST",
+        body: credential
+      })
     })
   }),
 });
 
-export const { useLoginMutation, useEnableMutation, useActivateMutation } = authApi;
+export const { useLoginMutation, useEnableMutation, useActivateMutation, useOtpLoginMutation } = authApi;

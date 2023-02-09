@@ -4,7 +4,7 @@ import { LoginPage } from "packages/ui";
 import { useRouter } from "next/dist/client/router";
 import { useDispatch } from "react-redux";
 import { useAuth } from "packages/state/features/auth/authHooks";
-import { useLoginMutation } from "packages/state/services/auth";
+import { useLoginMutation, useOtpLoginMutation } from "packages/state/services/auth";
 import {
   setCredentials,
   setError,
@@ -22,6 +22,7 @@ const Login = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [login, { isLoading }] = useLoginMutation();
+  const [otpLogin, otpLoginResult] = useOtpLoginMutation()
   const [loadUserProfile, { data }] = useLazyGetProfileQuery();
   const ability = useContext(AbilityContext);
   const [loginResponse, handleLoginResponse] = useState<LoginResponse|null>(null)
@@ -60,14 +61,13 @@ const Login = () => {
     }
   };
 
-  const handleTwoFactorAuth = (otpValue: string) => {
-    //some async operation to validate otp
-    if(otpValue === '123456') {
-      return dispatch(setCredentials(loginResponse))
+  const handleTwoFactorAuth = async (otpValue: string) => {
+    try{
+      const data = await otpLogin({ userId: loginResponse.user.id, code: otpValue}).unwrap()
+      dispatch(setCredentials(data))
+    } catch(err) {
+      handleTwoFactorErrors('The verification code is incorrect. Please try again')
     }
-
-    handleTwoFactorErrors('The verification code is incorrect. Please try again')
-
   }
 
   return (
