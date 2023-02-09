@@ -36,6 +36,13 @@ export const authApi = createApi({
         body: code
       })
     }),
+    disable: builder.mutation<boolean, {code: string}> ({
+      query: (code) => ({
+        url: "/auth/otp/disable",
+        method: "POST",
+        body: code
+      })
+    }),
     otpLogin: builder.mutation<LoginResponse, {code: string, userId: string}>({
       query: (credential) => ({
         url: "auth/otp/login",
@@ -46,4 +53,10 @@ export const authApi = createApi({
   }),
 });
 
-export const { useLoginMutation, useEnableMutation, useActivateMutation, useOtpLoginMutation } = authApi;
+export const { 
+  useLoginMutation,
+  useEnableMutation,
+  useActivateMutation,
+  useDisableMutation,
+  useOtpLoginMutation 
+} = authApi;

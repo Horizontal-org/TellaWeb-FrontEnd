@@ -6,6 +6,7 @@ import { Connect } from './Connect'
 import { FinalStep } from './FinalStep'
 import { OnExitModal } from './OnExitModal'
 import { OtpData } from 'packages/state/domain/user'
+import { ConfirmPassword } from '../ConfirmPasswordModal/ConfirmPasswordModal'
 
 type Props = {
   onSubmit: (currentPassword: string) =>  void
@@ -47,7 +48,8 @@ export const TwoFactorAuthModal: FunctionComponent<React.PropsWithChildren<Props
           
           />}
           {step === 1 && (
-            <EnableTwoFactor 
+            <ConfirmPassword
+              title="Enable two-factor authentication" 
               onSubmit={onSubmit}
               handleSteps={() => handleSteps(step + 1)}
             />

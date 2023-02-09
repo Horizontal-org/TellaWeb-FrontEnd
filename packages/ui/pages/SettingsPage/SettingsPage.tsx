@@ -10,6 +10,7 @@ import { useRouter } from 'next/router'
 import { useTranslation } from "next-i18next";
 import { btnType } from "../../components/Button/Button";
 import { version } from 'package.json'
+import { DisableTwoFactorModal } from "packages/ui/components/DisableTwoFactor/DisableTwoFactor";
 
 type Props = {
   sidebar: React.ReactNode;
@@ -17,6 +18,8 @@ type Props = {
   onUpdatePassword: (currentPassword: string, newPassword: string) => void;
   onTwoFactorAuthGenerate: (currentPassword: string) => void
   onActivateTwoFactor: (code: string) => void
+  onConfirmPassword: (currentPassword: string) => void
+  onDisableOtp: (currentPassword: string) => void
   user: User | null;
   otpData: OtpData | null
 };
@@ -31,6 +34,8 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
   user,
   otpData,
   onActivateTwoFactor,
+  onConfirmPassword,
+  onDisableOtp
 }) => {
 
   const router = useRouter()
@@ -76,11 +81,17 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
               </p>
               <p>{user.otp_active ? 'ENABLED' : 'DISABLED'}</p>
             </div>
-            <TwoFactorAuthModal 
-              onSubmit={onTwoFactorAuthGenerate} 
-              otpData={otpData}
-              onActivate={onActivateTwoFactor}
-            />
+            { user.otp_active ? 
+              <DisableTwoFactorModal 
+                onConfirmPassword={onConfirmPassword}
+                onDisableOtp={onDisableOtp} 
+              /> :
+              <TwoFactorAuthModal 
+                onSubmit={onTwoFactorAuthGenerate} 
+                otpData={otpData}
+                onActivate={onActivateTwoFactor}
+              />
+            }
           </div>
 
           <div className="flex justify-between items-center py-4 border-b">
