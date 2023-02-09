@@ -3,13 +3,13 @@ import { Button } from '../..'
 import OtpInput from '../OtpInput.tsx/OtpInput'
 
 type Props = {
-  toggle: () => void 
   errorMessage?: string
+  onActivate: (code: string) => void
 }
 
 export const FinalStep: FunctionComponent<React.PropsWithChildren<Props>> = ({ 
-  toggle,
-  errorMessage
+  errorMessage,
+  onActivate
 }) => {
   const [otp, handleOtp] = useState<string>('')
   return (
@@ -36,7 +36,7 @@ export const FinalStep: FunctionComponent<React.PropsWithChildren<Props>> = ({
           text='VERIFY'
           full={true}
           onClick={() => {
-            toggle()
+            onActivate(otp)
           }}
         />
       </div>

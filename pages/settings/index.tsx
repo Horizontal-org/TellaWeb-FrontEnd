@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { SettingsPage } from "../../packages/ui/pages/SettingsPage/SettingsPage";
 import { Menu } from "../../components/Menu";
@@ -9,6 +9,7 @@ import {
   useUpdatePasswordMutation,
   useUpdateUserMutation,
 } from "packages/state/services/user";
+import { useEnableMutation, useActivateMutation } from "packages/state/services/auth";
 import { useDispatch } from "react-redux";
 import { setUser } from "packages/state/features/user/userSlice";
 
@@ -21,16 +22,11 @@ const Settings = () => {
 
   const [updatePassword, updatePasswordResult] = useUpdatePasswordMutation();
   const [updateUser, updateUserResult] = useUpdateUserMutation();
+  const [enableOtp, enableOtpResult] = useEnableMutation();
+  const [activateOtp, activateOtpResult] = useActivateMutation();
 
-  // mock2FactorFunction
-  const twoFactorAuthGenerate = (currentPassword: string) => {
-    if(currentPassword) {
-      return {
-        otpUrl: 'someurl',
-        otpCode: 'CYDK YPDR FRTM ZE7D FRTM IANE'
-      }
-    }
-  }
+  const [otpData, handleOtpData] = useState<{otpCode: string, otpUrl: string} | null>(null)
+
 
   useEffect(() => {
     if (updatePasswordResult.isSuccess) {
@@ -40,6 +36,23 @@ const Settings = () => {
       handleToast(updatePasswordResult.error.data.message, "danger");
     }
   }, [updatePasswordResult.status]);
+
+  useEffect(() => {
+    if(enableOtpResult.isSuccess) {
+      handleOtpData({
+        otpCode: enableOtpResult.data.otp_code,
+        otpUrl: enableOtpResult.data.otp_url
+      })
+    }
+    console.log('enableOtpResult', enableOtpResult)
+  }, [enableOtpResult])
+
+  useEffect(() => {
+    console.log(activateOtpResult)
+    if(activateOtpResult.isSuccess) {
+      handleToast("You have succesfully enabled two-factor authentication!" , "success")
+    }
+  }, [activateOtpResult])
 
   useEffect(() => {
     if (updateUserResult.isSuccess) {
@@ -66,8 +79,16 @@ const Settings = () => {
         });
       }}
       onTwoFactorAuthGenerate={(currentPassword) => {
-        return twoFactorAuthGenerate(currentPassword)
+        enableOtp({
+          password: currentPassword
+        })
       }}
+      onActivateTwoFactor={(code) => {
+        activateOtp({
+          code: code
+        })
+      }}
+      otpData={otpData}
     />
   );
 };

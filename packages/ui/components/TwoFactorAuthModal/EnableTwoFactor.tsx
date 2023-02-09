@@ -3,17 +3,13 @@ import { Button, TextInput } from '../..'
 
 
 type Props = {
-  onSubmit: (currentPassword: string) =>  { otpUrl: string, otpCode: string }
-  handleOtpUrl: (otpUrl: string) => void
-  handleOtpCode: (otpCode: string) => void
+  onSubmit: (currentPassword: string) =>  void
   handleSteps: () => void
   errorMessage?: string
 }
 
 export const EnableTwoFactor: FunctionComponent<React.PropsWithChildren<Props>> = ({ 
   onSubmit, 
-  handleOtpUrl,
-  handleOtpCode,
   handleSteps,
   errorMessage,
 }) => {
@@ -53,9 +49,7 @@ export const EnableTwoFactor: FunctionComponent<React.PropsWithChildren<Props>> 
           full={true}
           disabled={!currentPassword}
           onClick={() => {
-            const res = onSubmit(currentPassword)
-            handleOtpUrl(res.otpUrl)
-            handleOtpCode(res.otpCode)
+            onSubmit(currentPassword)
             handleSteps()
           }}
         />

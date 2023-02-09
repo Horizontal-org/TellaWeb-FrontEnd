@@ -5,7 +5,7 @@ import { EditPasswordModal } from "../../components/EditPasswordModal/EditPasswo
 import { TwoFactorAuthModal } from "packages/ui/components/TwoFactorAuthModal/TwoFactorAuthModal";
 import { ButtonMenu } from '../../components/ButtonMenu/ButtonMenu'
 import { ButtonOption } from '../../components/ButtonMenu/ButtonOption'
-import { ROLES, User } from "packages/state/domain/user";
+import { ROLES, User, OtpData } from "packages/state/domain/user";
 import { useRouter } from 'next/router'
 import { useTranslation } from "next-i18next";
 import { btnType } from "../../components/Button/Button";
@@ -15,8 +15,10 @@ type Props = {
   sidebar: React.ReactNode;
   onUpdateUsername: (username: string) => void;
   onUpdatePassword: (currentPassword: string, newPassword: string) => void;
-  onTwoFactorAuthGenerate: (currentPassword: string) => { otpUrl: string, otpCode: string}
+  onTwoFactorAuthGenerate: (currentPassword: string) => void
+  onActivateTwoFactor: (code: string) => void
   user: User | null;
+  otpData: OtpData | null
 };
 
 // locale={router.locale === 'en' ? 'de' : 'en'}
@@ -27,6 +29,8 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
   onUpdatePassword,
   onTwoFactorAuthGenerate,
   user,
+  otpData,
+  onActivateTwoFactor,
 }) => {
 
   const router = useRouter()
@@ -70,9 +74,13 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
               <p className="text-gray-600 uppercase" style={{ width: 200 }}>
                 TWO-FACTOR AUTHENTICATION
               </p>
-              <p>DISABLED</p>
+              <p>{user.otp_active ? 'ENABLED' : 'DISABLED'}</p>
             </div>
-            <TwoFactorAuthModal onSubmit={onTwoFactorAuthGenerate} />
+            <TwoFactorAuthModal 
+              onSubmit={onTwoFactorAuthGenerate} 
+              otpData={otpData}
+              onActivate={onActivateTwoFactor}
+            />
           </div>
 
           <div className="flex justify-between items-center py-4 border-b">

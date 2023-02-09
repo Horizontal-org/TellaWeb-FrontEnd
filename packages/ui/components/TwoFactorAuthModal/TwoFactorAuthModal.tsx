@@ -5,15 +5,16 @@ import { EnableTwoFactor } from './EnableTwoFactor'
 import { Connect } from './Connect'
 import { FinalStep } from './FinalStep'
 import { OnExitModal } from './OnExitModal'
+import { OtpData } from 'packages/state/domain/user'
 
 type Props = {
-  onSubmit: (currentPassword: string) =>  { otpUrl: string, otpCode: string }
+  onSubmit: (currentPassword: string) =>  void
+  onActivate: (code: string) => void
+  otpData: OtpData | null
 }
 
-export const TwoFactorAuthModal: FunctionComponent<React.PropsWithChildren<Props>> = ({ onSubmit }) => {
+export const TwoFactorAuthModal: FunctionComponent<React.PropsWithChildren<Props>> = ({ onSubmit, otpData, onActivate }) => {
   const [step, handleSteps] = useState<number>(1)
-  const [otpUrl, handleOtpUrl] = useState<string>('')
-  const [otpCode, handleOtpCode] = useState<string>('CYDK YPDR FRTM ZE7D FRTM IANE')
   const [onExitModal, handleOnExitModal] = useState<boolean>(false) 
   const [externalOpen, handleExternalOpen] = useState<boolean>(false)
 
@@ -48,8 +49,6 @@ export const TwoFactorAuthModal: FunctionComponent<React.PropsWithChildren<Props
           {step === 1 && (
             <EnableTwoFactor 
               onSubmit={onSubmit}
-              handleOtpUrl={handleOtpUrl}
-              handleOtpCode={handleOtpCode}
               handleSteps={() => handleSteps(step + 1)}
             />
           )}
@@ -57,8 +56,8 @@ export const TwoFactorAuthModal: FunctionComponent<React.PropsWithChildren<Props
           {step === 2 && (
             <>
               <Connect 
-                otpCode={otpCode}
-                otpUrl={otpUrl}
+                otpCode={otpData?.otpCode}
+                otpUrl={otpData?.otpUrl}
                 handleSteps={() => handleSteps(step + 1)}
               />
             </>
@@ -67,7 +66,7 @@ export const TwoFactorAuthModal: FunctionComponent<React.PropsWithChildren<Props
           {step === 3 && (
             <>
               <FinalStep 
-                toggle={() => toggle()}
+                onActivate={onActivate}
               />
             </>
           )}

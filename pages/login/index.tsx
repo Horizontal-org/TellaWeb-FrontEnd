@@ -47,17 +47,14 @@ const Login = () => {
   const doLogin = async (credential: Credential) => {
     try {
       const data = await login(credential).unwrap();
-      // mocked data that should be removed
-      const parsedData = {
-        ...data,
-        two_factor_enabled: true
-      }
+      console.log(data)
+  
 
-      if(!parsedData.two_factor_enabled) {
+      if(!data.user?.otp_active) {
         return dispatch(setCredentials(data));
       }
 
-      handleLoginResponse(parsedData)
+      handleLoginResponse(data)
     } catch (err) {
       dispatch(setError(err.data.message || "Something went wrong, try again"));
     }

@@ -4,8 +4,8 @@ import { QRCodeCanvas} from 'qrcode.react'
 
 type Props = {
   handleSteps: () => void
-  otpCode: string
-  otpUrl: string
+  otpCode: string | null
+  otpUrl: string | null
 }
 
 export const Connect: FunctionComponent<React.PropsWithChildren<Props>> = ({ 
@@ -24,21 +24,25 @@ export const Connect: FunctionComponent<React.PropsWithChildren<Props>> = ({
           Use your authentication app to scan this QR code:        
         </p>
 
-        <div className='py-4'>
-          <QRCodeCanvas 
-            id='qrcode'
+        {(otpCode && otpUrl) && (
+          <>
+            <div className='py-4'>
+              <QRCodeCanvas 
+                id='qrcode'
 
-            value='https://tella-app.org/'
-          />
-        </div>
+                value={otpUrl}
+              />
+            </div>
 
-        <p className='pb-4 font-sans text-base font-normal text-gray-500'>
-          Or enter the code into the app (spaces don’t matter):     
-        </p>
+            <p className='pb-4 font-sans text-base font-normal text-gray-500'>
+              Or enter the code into the app (spaces don’t matter):     
+            </p>
 
-        <div className='p-4 bg-gray-25'>
-          <span className="text-gray-500">{otpCode}</span>
-        </div>
+            <div className='p-4 bg-gray-25'>
+              <span className="text-gray-500">{otpCode}</span>
+            </div>
+          </>
+        )}
       </div>
 
       <div className='pb-4'>
