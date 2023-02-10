@@ -4,15 +4,14 @@ import { Button, TextInput } from '../..'
 
 type Props = {
   onSubmit: (currentPassword: string) =>  void
-  handleSteps: () => void
-  errorMessage?: string
+  handleSteps?: () => void
+  errorMessage?: boolean
   title: string
 }
 
 export const ConfirmPassword: FunctionComponent<React.PropsWithChildren<Props>> = ({ 
   title,
   onSubmit, 
-  handleSteps,
   errorMessage,
 }) => {
   const [currentPassword, handleCurrentPassword] = useState<string>('')
@@ -21,7 +20,6 @@ export const ConfirmPassword: FunctionComponent<React.PropsWithChildren<Props>> 
     <form onSubmit={(e) => {
       e.preventDefault();
       onSubmit(currentPassword)
-      handleSteps()
     }}>
       <p className='py-2 font-sans text-gray-600 text-xxxl font-bold'>
         {title}
@@ -45,7 +43,7 @@ export const ConfirmPassword: FunctionComponent<React.PropsWithChildren<Props>> 
           className="w-full p-2 mt-4 mb-2 bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200"
           role="alert"
         >
-          {errorMessage}
+          Password is incorrect. Please try again
       </div>
       )}
 

@@ -18,8 +18,6 @@ type Props = {
   onUpdatePassword: (currentPassword: string, newPassword: string) => void;
   onTwoFactorAuthGenerate: (currentPassword: string) => void
   onActivateTwoFactor: (code: string) => void
-  onConfirmPassword: (currentPassword: string) => void
-  onDisableOtp: (currentPassword: string) => void
   user: User | null;
   otpData: OtpData | null
 };
@@ -34,8 +32,6 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
   user,
   otpData,
   onActivateTwoFactor,
-  onConfirmPassword,
-  onDisableOtp
 }) => {
 
   const router = useRouter()
@@ -82,10 +78,7 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
               <p>{user.otp_active ? 'ENABLED' : 'DISABLED'}</p>
             </div>
             { user.otp_active ? 
-              <DisableTwoFactorModal 
-                onConfirmPassword={onConfirmPassword}
-                onDisableOtp={onDisableOtp} 
-              /> :
+              <DisableTwoFactorModal /> :
               <TwoFactorAuthModal 
                 onSubmit={onTwoFactorAuthGenerate} 
                 otpData={otpData}
