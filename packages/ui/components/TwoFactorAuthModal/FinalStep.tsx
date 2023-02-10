@@ -3,7 +3,7 @@ import { Button } from '../..'
 import OtpInput from '../OtpInput.tsx/OtpInput'
 
 type Props = {
-  errorMessage?: string
+  errorMessage?: boolean
   onActivate: (code: string) => void
 }
 
@@ -31,7 +31,7 @@ export const FinalStep: FunctionComponent<React.PropsWithChildren<Props>> = ({
           className="w-full p-2 mt-4 mb-2 bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200"
           role="alert"
         >
-          {errorMessage}
+          The verification code is incorrect. Please try again.
       </div>
       )}
       <div className='pb-4'>

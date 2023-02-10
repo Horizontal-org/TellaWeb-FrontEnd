@@ -16,10 +16,7 @@ type Props = {
   sidebar: React.ReactNode;
   onUpdateUsername: (username: string) => void;
   onUpdatePassword: (currentPassword: string, newPassword: string) => void;
-  onTwoFactorAuthGenerate: (currentPassword: string) => void
-  onActivateTwoFactor: (code: string) => void
   user: User | null;
-  otpData: OtpData | null
 };
 
 // locale={router.locale === 'en' ? 'de' : 'en'}
@@ -28,10 +25,7 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
   sidebar,
   onUpdateUsername,
   onUpdatePassword,
-  onTwoFactorAuthGenerate,
   user,
-  otpData,
-  onActivateTwoFactor,
 }) => {
 
   const router = useRouter()
@@ -79,11 +73,7 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
             </div>
             { user.otp_active ? 
               <DisableTwoFactorModal /> :
-              <TwoFactorAuthModal 
-                onSubmit={onTwoFactorAuthGenerate} 
-                otpData={otpData}
-                onActivate={onActivateTwoFactor}
-              />
+              <TwoFactorAuthModal  />
             }
           </div>
 

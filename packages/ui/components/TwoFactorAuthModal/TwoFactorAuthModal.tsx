@@ -1,29 +1,51 @@
-import { FunctionComponent, useState } from 'react'
-import { ButtonPopup, Button, TextInput } from '../..'
+import { FunctionComponent, useState, useEffect } from 'react'
+import { ButtonPopup, Button } from '../..'
 import { btnType } from '../Button/Button'
-import { EnableTwoFactor } from './EnableTwoFactor'
 import { Connect } from './Connect'
 import { FinalStep } from './FinalStep'
 import { OnExitModal } from './OnExitModal'
 import { OtpData } from 'packages/state/domain/user'
 import { ConfirmPassword } from '../ConfirmPasswordModal/ConfirmPasswordModal'
+import { useEnableMutation, useActivateMutation } from "packages/state/services/auth"
 
-type Props = {
-  onSubmit: (currentPassword: string) =>  void
-  onActivate: (code: string) => void
-  otpData: OtpData | null
-}
-
-export const TwoFactorAuthModal: FunctionComponent<React.PropsWithChildren<Props>> = ({ onSubmit, otpData, onActivate }) => {
+export const TwoFactorAuthModal: FunctionComponent = () => {
   const [step, handleSteps] = useState<number>(1)
   const [onExitModal, handleOnExitModal] = useState<boolean>(false) 
   const [externalOpen, handleExternalOpen] = useState<boolean>(false)
+  const [otpData, handleOtpData] = useState<{otpCode: string, otpUrl: string} | null>(null)
 
   const handleExitProgress = () =>{
     handleSteps(1)
     handleOnExitModal(false)
     handleExternalOpen(false)
   }
+
+  const [
+    enableOtp, 
+    {isError: enableOtpError, isSuccess: enableOtpSuccess, data: enableOtpData}
+  ] = useEnableMutation();
+
+  const [
+    activateOtp,
+    {isError: onActivateError, isSuccess: onActivateSuccess}
+  ] = useActivateMutation();
+
+  useEffect(() => {
+    if(enableOtpSuccess) {
+      handleOtpData({
+        otpCode: enableOtpData.otp_code,
+        otpUrl: enableOtpData.otp_url
+      })
+      handleSteps(step + 1)
+    }
+  }, [enableOtpSuccess])
+
+  useEffect(() => {
+    if(onActivateSuccess) {
+      window.location.reload()
+    }
+  }, [onActivateSuccess])
+
 
   return (
     <ButtonPopup 
@@ -49,9 +71,13 @@ export const TwoFactorAuthModal: FunctionComponent<React.PropsWithChildren<Props
           />}
           {step === 1 && (
             <ConfirmPassword
+              errorMessage={enableOtpError}
               title="Enable two-factor authentication" 
-              onSubmit={onSubmit}
-              handleSteps={() => handleSteps(step + 1)}
+              onSubmit={(currentPassword) => {
+                enableOtp({
+                  password: currentPassword
+                })
+              }}
             />
           )}
 
@@ -67,8 +93,13 @@ export const TwoFactorAuthModal: FunctionComponent<React.PropsWithChildren<Props
 
           {step === 3 && (
             <>
-              <FinalStep 
-                onActivate={onActivate}
+              <FinalStep
+                errorMessage={onActivateError} 
+                onActivate={(code) => {
+                  activateOtp({
+                    code: code
+                  })
+                }}
               />
             </>
           )}

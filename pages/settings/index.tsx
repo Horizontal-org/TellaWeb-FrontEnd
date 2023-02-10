@@ -9,7 +9,6 @@ import {
   useUpdatePasswordMutation,
   useUpdateUserMutation
 } from "packages/state/services/user";
-import { useEnableMutation, useActivateMutation } from "packages/state/services/auth";
 import { useDispatch } from "react-redux";
 import { setUser } from "packages/state/features/user/userSlice";
 
@@ -22,8 +21,6 @@ const Settings = () => {
 
   const [updatePassword, updatePasswordResult] = useUpdatePasswordMutation();
   const [updateUser, updateUserResult] = useUpdateUserMutation();
-  const [enableOtp, enableOtpResult] = useEnableMutation();
-  const [activateOtp, activateOtpResult] = useActivateMutation();
 
   const [otpData, handleOtpData] = useState<{otpCode: string, otpUrl: string} | null>(null)
 
@@ -36,23 +33,6 @@ const Settings = () => {
       handleToast(updatePasswordResult.error.data.message, "danger");
     }
   }, [updatePasswordResult.status]);
-
-  useEffect(() => {
-    if(enableOtpResult.isSuccess) {
-      handleOtpData({
-        otpCode: enableOtpResult.data.otp_code,
-        otpUrl: enableOtpResult.data.otp_url
-      })
-    }
-    console.log('enableOtpResult', enableOtpResult)
-  }, [enableOtpResult])
-
-  useEffect(() => {
-    console.log(activateOtpResult)
-    if(activateOtpResult.isSuccess) {
-      handleToast("You have succesfully enabled two-factor authentication!" , "success")
-    }
-  }, [activateOtpResult])
 
   useEffect(() => {
     if (updateUserResult.isSuccess) {
@@ -78,17 +58,6 @@ const Settings = () => {
           role: user.role
         });
       }}
-      onTwoFactorAuthGenerate={(currentPassword) => {
-        enableOtp({
-          password: currentPassword
-        })
-      }}
-      onActivateTwoFactor={(code) => {
-        activateOtp({
-          code: code
-        })
-      }}
-      otpData={otpData}
     />
   );
 };
