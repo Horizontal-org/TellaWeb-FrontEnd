@@ -13,7 +13,10 @@ export const FinalStep: FunctionComponent<React.PropsWithChildren<Props>> = ({
 }) => {
   const [otp, handleOtp] = useState<string>('')
   return (
-    <>
+    <form onSubmit={(e) => {
+      e.preventDefault();
+      onActivate(otp)
+    }}>
       <p className='py-2 font-sans text-gray-600 text-xxxl font-bold'>
         Final step
       </p>
@@ -32,14 +35,13 @@ export const FinalStep: FunctionComponent<React.PropsWithChildren<Props>> = ({
       </div>
       )}
       <div className='pb-4'>
-        <Button 
-          text='VERIFY'
-          full={true}
-          onClick={() => {
-            onActivate(otp)
-          }}
-        />
+        <button
+          className="bg-blue-300 hover:bg-blue py-2 text-white uppercase text-base font-bold rounded w-full disabled:opacity-50"
+          type={"submit"}
+        >
+          <span>VERIFY</span>
+        </button>
       </div>
-    </>
+    </form>
   )
 }

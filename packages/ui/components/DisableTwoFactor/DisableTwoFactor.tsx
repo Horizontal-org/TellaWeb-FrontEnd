@@ -29,7 +29,7 @@ export const DisableTwoFactorModal: FunctionComponent<React.PropsWithChildren<Pr
         <div className='p-4'>
           {step === 1 && (
             <ConfirmPassword 
-              title="Enable two-factor authentication" 
+              title="Disable two-factor authentication" 
               onSubmit={onConfirmPassword}
               handleSteps={() => handleSteps(step + 1)}
             />

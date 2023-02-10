@@ -22,7 +22,7 @@ const Login = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [login, { isLoading }] = useLoginMutation();
-  const [otpLogin, otpLoginResult] = useOtpLoginMutation()
+  const [otpLogin, {isLoading: otpLoading}] = useOtpLoginMutation()
   const [loadUserProfile, { data }] = useLazyGetProfileQuery();
   const ability = useContext(AbilityContext);
   const [loginResponse, handleLoginResponse] = useState<LoginResponse|null>(null)
@@ -75,9 +75,11 @@ const Login = () => {
       onSubmit={doLogin}
       errorMessage={errorMessage}
       isLoading={isLoading}
+      otpLoading={otpLoading}
       loginResponse={loginResponse}
       handleTwoFactorAuth={handleTwoFactorAuth}
       twoFactorErrorMessage={twoFactorError}
+      clearLoginResponse={() => handleLoginResponse(null)}
     />
   );
 };

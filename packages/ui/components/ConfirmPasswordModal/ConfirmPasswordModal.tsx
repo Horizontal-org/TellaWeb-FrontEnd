@@ -18,7 +18,11 @@ export const ConfirmPassword: FunctionComponent<React.PropsWithChildren<Props>> 
   const [currentPassword, handleCurrentPassword] = useState<string>('')
 
   return (
-    <>
+    <form onSubmit={(e) => {
+      e.preventDefault();
+      onSubmit(currentPassword)
+      handleSteps()
+    }}>
       <p className='py-2 font-sans text-gray-600 text-xxxl font-bold'>
         {title}
       </p>
@@ -46,16 +50,15 @@ export const ConfirmPassword: FunctionComponent<React.PropsWithChildren<Props>> 
       )}
 
       <div className='pb-4'>
-        <Button 
-          text='NEXT'
-          full={true}
+        <button
+          className="bg-blue-300 hover:bg-blue py-2 text-white uppercase text-base font-bold rounded w-full disabled:opacity-50"
+          id="login"
           disabled={!currentPassword}
-          onClick={() => {
-            onSubmit(currentPassword)
-            handleSteps()
-          }}
-        />
+          type={"submit"}
+        >
+          <span>NEXT</span>
+        </button>
       </div>
-      </>
+    </form>
   )
 }

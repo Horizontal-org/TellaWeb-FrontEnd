@@ -7,8 +7,10 @@ import { TwoFactor } from "./TwoFactor";
 type Props = {
   onSubmit: (credential: Credential) => void;
   handleTwoFactorAuth: (otpValue: string) => void;
+  clearLoginResponse: () => void;
   errorMessage?: string;
   isLoading?: boolean;
+  otpLoading?: boolean
   loginResponse: LoginResponse | null;
   twoFactorErrorMessage?: string
 };
@@ -16,8 +18,10 @@ export const LoginPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   onSubmit,
   errorMessage,
   isLoading,
+  otpLoading,
   loginResponse,
   handleTwoFactorAuth,
+  clearLoginResponse,
   twoFactorErrorMessage
 }) => {
 
@@ -32,6 +36,8 @@ export const LoginPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
       )}
       {loginResponse && (
         <TwoFactor 
+          clearLoginResponse={clearLoginResponse}
+          isLoading={otpLoading}
           handleTwoFactorAuth={handleTwoFactorAuth}
           errorMessage={twoFactorErrorMessage}
         />
