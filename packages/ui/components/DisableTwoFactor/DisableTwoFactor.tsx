@@ -1,5 +1,5 @@
 import { FunctionComponent, useState, useEffect } from 'react'
-
+import styled from 'styled-components';
 import { ConfirmPassword } from '../ConfirmPasswordModal/ConfirmPasswordModal'
 import { ConfirmOtp } from './ConfirmOtp'
 
@@ -65,8 +65,12 @@ export const DisableTwoFactorModal: FunctionComponent<React.PropsWithChildren<Pr
             One-time passcode
           </p>
           <p className='font-sans text-base font-normal text-gray-500'>
-            Enter the 6-digit code from your authentication app or 
-            <span onClick={() => handleSteps(3)}>use a backup code instead</span>   
+            Enter the 6-digit code from your authentication app or <span> </span>
+            <Link
+              className='cursor-pointer'
+              onClick={() => handleSteps(3)}>
+               use a backup code instead
+            </Link>   
           </p>
         </ConfirmOtp>
       )}
@@ -90,3 +94,10 @@ export const DisableTwoFactorModal: FunctionComponent<React.PropsWithChildren<Pr
     </>
   )
 }
+
+const Link = styled.span`
+  cursor: pointer;
+  color: #0000FF;
+  font-weight: 600;
+  font-size: 12px;
+`

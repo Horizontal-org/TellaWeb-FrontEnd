@@ -16,24 +16,32 @@ export const TwoFactor: FunctionComponent<React.PropsWithChildren<Props>> = ({
   isLoading
 }) => {
   const [ otpValue, handleOtpValue ] = useState<string>('')
+  const [isOtp, handleIsOtp] = useState<boolean>(true)
   return (
     <form 
       className="p-10 bg-white rounded flex justify-center items-center flex-col shadow-md border"
       onSubmit={(e) => {
         e.preventDefault()
-        handleTwoFactorAuth(otpValue)
+        if(isOtp) {
+          return handleTwoFactorAuth(otpValue)
+        }
+        console.log('backup code endpoint')
       }}
     >
       <p className="text-xl text-gray-600 font-bold pb-4">
-        Two-factor Authentication
+        {isOtp ? 'One-time passcode' : 'Backup code'}
       </p>
       <p className='font-sans text-base font-normal text-center text-gray-500 pb-8'>
-      Enter the 6-digit code from your authentication app. If you <br/> don’t have access to your authentication app, you can <Link>use a <br/> backup code instead.</Link>      
+       {isOtp ? 
+        <span>Enter the 6-digit code from your authentication app. If you <br/> don’t have access to your authentication app, you can <Link onClick={() => handleIsOtp(false)}>use a <br/> backup code instead.</Link></span>
+        :
+        <span>Enter here the 8-digit backup code you saved when you first <br/> enabled two-factor authentication. <Link onClick={() => handleIsOtp(true)}>You can also go back to use <br/>your authentication app.</Link></span>
+       }      
       </p>
       <OtpInput 
         value={otpValue}
         onChange={(value) => handleOtpValue(value)}
-        valueLength={6}
+        valueLength={isOtp ? 6 : 8}
       />
       <div className="w-full pt-8 pb-4">
         {errorMessage && (
