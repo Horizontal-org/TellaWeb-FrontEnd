@@ -4,11 +4,16 @@ import { btnType } from '../Button/Button'
 import { Connect } from './Connect'
 import { FinalStep } from './FinalStep'
 import { OnExitModal } from './OnExitModal'
-import { OtpData } from 'packages/state/domain/user'
 import { ConfirmPassword } from '../ConfirmPasswordModal/ConfirmPasswordModal'
 import { useEnableMutation, useActivateMutation } from "packages/state/services/auth"
 
-export const TwoFactorAuthModal: FunctionComponent = () => {
+type Props = {
+  handleOtpActive: (value: boolean) => void
+};
+
+export const TwoFactorAuthModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
+  handleOtpActive
+}) => {
   const [step, handleSteps] = useState<number>(1)
   const [onExitModal, handleOnExitModal] = useState<boolean>(false) 
   const [externalOpen, handleExternalOpen] = useState<boolean>(false)
@@ -42,7 +47,7 @@ export const TwoFactorAuthModal: FunctionComponent = () => {
 
   useEffect(() => {
     if(onActivateSuccess) {
-      window.location.reload()
+      handleOtpActive(true)
     }
   }, [onActivateSuccess])
 

@@ -10,13 +10,15 @@ import { useRouter } from 'next/router'
 import { useTranslation } from "next-i18next";
 import { btnType } from "../../components/Button/Button";
 import { version } from 'package.json'
-import { DisableTwoFactorModal } from "packages/ui/components/DisableTwoFactor/DisableTwoFactor";
+import { EditTwoFactorAuthModal } from "packages/ui/components/EditTwoFactorAuthModal/EditTwoFactorAuthModal";
 
 type Props = {
   sidebar: React.ReactNode;
   onUpdateUsername: (username: string) => void;
   onUpdatePassword: (currentPassword: string, newPassword: string) => void;
+  handleOtpActive: (value: boolean) => void
   user: User | null;
+  otpActive: boolean
 };
 
 // locale={router.locale === 'en' ? 'de' : 'en'}
@@ -25,7 +27,9 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
   sidebar,
   onUpdateUsername,
   onUpdatePassword,
+  handleOtpActive,
   user,
+  otpActive
 }) => {
 
   const router = useRouter()
@@ -69,11 +73,11 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
               <p className="text-gray-600 uppercase" style={{ width: 200 }}>
                 TWO-FACTOR AUTHENTICATION
               </p>
-              <p>{user.otp_active ? 'ENABLED' : 'DISABLED'}</p>
+              <p>{otpActive ? 'ENABLED' : 'DISABLED'}</p>
             </div>
-            { user.otp_active ? 
-              <DisableTwoFactorModal /> :
-              <TwoFactorAuthModal  />
+            { otpActive ? 
+              <EditTwoFactorAuthModal handleOtpActive={handleOtpActive}/> :
+              <TwoFactorAuthModal handleOtpActive={handleOtpActive} />
             }
           </div>
 

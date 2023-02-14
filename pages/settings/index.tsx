@@ -22,7 +22,11 @@ const Settings = () => {
   const [updatePassword, updatePasswordResult] = useUpdatePasswordMutation();
   const [updateUser, updateUserResult] = useUpdateUserMutation();
 
-  const [otpData, handleOtpData] = useState<{otpCode: string, otpUrl: string} | null>(null)
+  const [otpActive, handleOtpActive] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    handleOtpActive(user.otp_active)
+  }, [user])
 
 
   useEffect(() => {
@@ -58,6 +62,8 @@ const Settings = () => {
           role: user.role
         });
       }}
+      otpActive={otpActive}
+      handleOtpActive={handleOtpActive}
     />
   );
 };

@@ -98,7 +98,7 @@ export default function OtpInput({ value, valueLength, onChange }: Props) {
           autoComplete="one-time-code"
           pattern="\d{1}"
           maxLength={valueLength}
-          className={`otp-input-${idx}`}
+          className={`otp-input-${idx} ${idx === valueLength/2 && 'middle-input'}`}
           onChange={(e) => inputOnChange(e, idx)}
           value={digit}
           onKeyDown={inputOnKeyDown}
@@ -116,11 +116,8 @@ const OtpGroup = styled.div`
   column-gap: 10px;
   justify-content: center;
 
-  .otp-input-3 {
-    margin-left: 10px;
-  }
-  .otp-input-2 {
-    margin-right: 10px;
+  .middle-input {
+    margin-left: 20px;
   }
 `
 

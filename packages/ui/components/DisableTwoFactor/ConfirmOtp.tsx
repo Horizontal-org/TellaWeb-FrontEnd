@@ -3,13 +3,16 @@ import { Button } from '../..'
 import OtpInput from '../OtpInput.tsx/OtpInput'
 
 type Props = {
-  errorMessage?: boolean
+  errorMessage?: boolean,
+  valueLength: number
   onSubmit: (code: string) => void
 }
 
 export const ConfirmOtp: FunctionComponent<React.PropsWithChildren<Props>> = ({ 
   errorMessage,
-  onSubmit
+  onSubmit,
+  valueLength,
+  children
 }) => {
   const [otp, handleOtp] = useState<string>('')
   return (
@@ -17,14 +20,9 @@ export const ConfirmOtp: FunctionComponent<React.PropsWithChildren<Props>> = ({
       e.preventDefault()
       onSubmit(otp)
     }}>
-      <p className='py-2 font-sans text-gray-600 text-xxxl font-bold'>
-        One-time passcode
-      </p>
-      <p className='font-sans text-base font-normal text-gray-500'>
-        Enter the 6-digit code from your authentication app or use a backup code instead        
-      </p>
+      {children}
       <div className='flex justify-center py-4'>
-        <OtpInput value={otp} valueLength={6} onChange={(value) => handleOtp(value)}/>
+        <OtpInput value={otp} valueLength={valueLength} onChange={(value) => handleOtp(value)}/>
       </div>
       {errorMessage && (
         <div
@@ -41,7 +39,7 @@ export const ConfirmOtp: FunctionComponent<React.PropsWithChildren<Props>> = ({
           disabled={otp.length < 6}
           type={"submit"}
         >
-          <span>VERIFY</span>
+          <span>DISABLE</span>
         </button>
       </div>
     </form>
