@@ -9,10 +9,12 @@ import { useEnableMutation, useActivateMutation } from "packages/state/services/
 
 type Props = {
   handleOtpActive: (value: boolean) => void
+  handleEditOpen: (value: boolean) => void
 };
 
 export const TwoFactorAuthModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
-  handleOtpActive
+  handleOtpActive,
+  handleEditOpen
 }) => {
   const [step, handleSteps] = useState<number>(1)
   const [onExitModal, handleOnExitModal] = useState<boolean>(false) 
@@ -32,7 +34,7 @@ export const TwoFactorAuthModal: FunctionComponent<React.PropsWithChildren<Props
 
   const [
     activateOtp,
-    {isError: onActivateError, isSuccess: onActivateSuccess}
+    {isError: onActivateError, isSuccess: onActivateSuccess, data: activateOtpData}
   ] = useActivateMutation();
 
   useEffect(() => {
@@ -48,6 +50,7 @@ export const TwoFactorAuthModal: FunctionComponent<React.PropsWithChildren<Props
   useEffect(() => {
     if(onActivateSuccess) {
       handleOtpActive(true)
+      handleEditOpen(true)
     }
   }, [onActivateSuccess])
 

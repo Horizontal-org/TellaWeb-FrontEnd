@@ -11,17 +11,24 @@ export enum Steps  {
 }
 
 type Props = {
-  handleOtpActive: (value: boolean) => void
+  handleOtpActive: (value: boolean) => void;
+  handleExternalOpen: (value: boolean) => void;
+  externalOpen: boolean;
 };
 
 export const EditTwoFactorAuthModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
-  handleOtpActive
+  handleOtpActive,
+  handleExternalOpen,
+  externalOpen
 }) => { 
   const [steps, handleSteps] = useState<Steps>(Steps.INIT)
-
   return (
     <ButtonPopup
-      onClose={() =>  handleSteps(Steps.INIT)}
+       externalOpen={externalOpen}
+      onClose={() =>  {
+        handleSteps(Steps.INIT)
+        handleExternalOpen(false)
+      }}
       toggleButton={(toggle) => (
         <Button
           text="EDIT"

@@ -1,11 +1,11 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 import { MainLayout } from "../../layouts/MainLayout";
 import { EditEmailModal } from "../../components/EditEmailModal/EditEmailModal";
 import { EditPasswordModal } from "../../components/EditPasswordModal/EditPasswordModal";
 import { TwoFactorAuthModal } from "packages/ui/components/TwoFactorAuthModal/TwoFactorAuthModal";
 import { ButtonMenu } from '../../components/ButtonMenu/ButtonMenu'
 import { ButtonOption } from '../../components/ButtonMenu/ButtonOption'
-import { ROLES, User, OtpData } from "packages/state/domain/user";
+import { ROLES, User } from "packages/state/domain/user";
 import { useRouter } from 'next/router'
 import { useTranslation } from "next-i18next";
 import { btnType } from "../../components/Button/Button";
@@ -34,6 +34,8 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
 
   const router = useRouter()
   const { t, i18n } = useTranslation("settings")
+
+  const [editTwoFactorOpen, handleditTwoFactorOpen] = useState<boolean>(false)
 
   return (
     <MainLayout
@@ -76,8 +78,8 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
               <p>{otpActive ? 'ENABLED' : 'DISABLED'}</p>
             </div>
             { otpActive ? 
-              <EditTwoFactorAuthModal handleOtpActive={handleOtpActive}/> :
-              <TwoFactorAuthModal handleOtpActive={handleOtpActive} />
+              <EditTwoFactorAuthModal handleExternalOpen={handleditTwoFactorOpen} externalOpen={editTwoFactorOpen} handleOtpActive={handleOtpActive}/> :
+              <TwoFactorAuthModal handleEditOpen={handleditTwoFactorOpen} handleOtpActive={handleOtpActive} />
             }
           </div>
 

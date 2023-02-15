@@ -4,6 +4,7 @@ import OtpInput from "packages/ui/components/OtpInput.tsx/OtpInput";
 
 type Props = {
   handleTwoFactorAuth: (otpValue: string) => void; 
+  handleRecoveryKeyAuth: (recoveryKey: string) => void;
   clearLoginResponse: () => void;
   errorMessage?: string;
   isLoading?: boolean;
@@ -11,6 +12,7 @@ type Props = {
 
 export const TwoFactor: FunctionComponent<React.PropsWithChildren<Props>> = ({
   handleTwoFactorAuth,
+  handleRecoveryKeyAuth,
   clearLoginResponse,
   errorMessage,
   isLoading
@@ -24,7 +26,8 @@ export const TwoFactor: FunctionComponent<React.PropsWithChildren<Props>> = ({
         e.preventDefault()
         if(isOtp) {
           return handleTwoFactorAuth(otpValue)
-        }
+        } 
+        handleRecoveryKeyAuth(otpValue)
         console.log('backup code endpoint')
       }}
     >

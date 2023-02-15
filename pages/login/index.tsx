@@ -4,7 +4,7 @@ import { LoginPage } from "packages/ui";
 import { useRouter } from "next/dist/client/router";
 import { useDispatch } from "react-redux";
 import { useAuth } from "packages/state/features/auth/authHooks";
-import { useLoginMutation, useOtpLoginMutation } from "packages/state/services/auth";
+import { useLoginMutation, useOtpLoginMutation, useAuthRecoveryKeyMutation } from "packages/state/services/auth";
 import {
   setCredentials,
   setError,
@@ -23,9 +23,11 @@ const Login = () => {
   const dispatch = useDispatch();
   const [login, { isLoading }] = useLoginMutation();
   const [otpLogin, {isLoading: otpLoading}] = useOtpLoginMutation()
+  const [authRecoveryKey, {isLoading: recoveryKeyLoading}] = useAuthRecoveryKeyMutation()
   const [loadUserProfile, { data }] = useLazyGetProfileQuery();
   const ability = useContext(AbilityContext);
   const [loginResponse, handleLoginResponse] = useState<LoginResponse|null>(null)
+  const [password, handlePassword] = useState<string>('')
   
   //twofactor
   const [twoFactorError, handleTwoFactorErrors] = useState('')
@@ -48,13 +50,11 @@ const Login = () => {
   const doLogin = async (credential: Credential) => {
     try {
       const data = await login(credential).unwrap();
-      console.log(data)
-  
 
       if(!data.user?.otp_active) {
         return dispatch(setCredentials(data));
       }
-
+      handlePassword(credential.password)
       handleLoginResponse(data)
     } catch (err) {
       dispatch(setError(err.data.message || "Something went wrong, try again"));
@@ -70,6 +70,16 @@ const Login = () => {
     }
   }
 
+  const handleRecoveryKeyAuth = async(recoveryKey: string) => {
+    try {
+      const data = await authRecoveryKey({ userId: loginResponse.user.id, code: recoveryKey, password}).unwrap()
+
+      dispatch(setCredentials(data))
+    } catch (err) {
+      handleTwoFactorErrors('The backup code is incorrect. Please try again')
+    }
+  }
+
   return (
     <LoginPage
       onSubmit={doLogin}
@@ -78,6 +88,7 @@ const Login = () => {
       otpLoading={otpLoading}
       loginResponse={loginResponse}
       handleTwoFactorAuth={handleTwoFactorAuth}
+      handleRecoveryKeyAuth={handleRecoveryKeyAuth}
       twoFactorErrorMessage={twoFactorError}
       clearLoginResponse={() => handleLoginResponse(null)}
     />

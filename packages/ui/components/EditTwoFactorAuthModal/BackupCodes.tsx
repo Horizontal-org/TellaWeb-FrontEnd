@@ -1,21 +1,14 @@
 import { FunctionComponent, useState, useEffect } from 'react'
-
+import { useRecoveryKeyQuery } from 'packages/state/services/auth'
 export const BackupCodes: FunctionComponent = () => {
-  const [backupCodes, setBackupCodes] = useState([])
+
+  const [backupCodes, setBackupCodes] = useState<[string] | undefined>()
+  const { data } = useRecoveryKeyQuery()
+
   useEffect(() => {
-    setBackupCodes([
-    '9988 7449', 
-    '6045 4131', 
-    '0149 6478',
-    '8836 9138',
-    '2807 0921',
-    '4376 8817',
-    '4461 8491',
-    '5304 2302',
-    '5934 7471',
-    '5665 4383',
-    ])
-  }, [])
+    setBackupCodes(data)
+  }, [data])
+
   return (
     <>
       <p className='py-2 font-sans text-gray-600 text-xxxl font-bold'>
@@ -27,7 +20,7 @@ export const BackupCodes: FunctionComponent = () => {
       </p>
       <div className='flex flex-col items-center'>
         <div className='border w-96 flex flex-col items-center bg-gray-200 py-3'>
-          {backupCodes.map((bc, key) => (
+          {backupCodes && backupCodes.map((bc, key) => (
             <div className='pb-1' key={key}>
               <span className='text-gray-500'>{bc}</span>
             </div>

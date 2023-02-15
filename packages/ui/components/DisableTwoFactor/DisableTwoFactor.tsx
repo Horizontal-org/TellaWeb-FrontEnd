@@ -57,7 +57,8 @@ export const DisableTwoFactorModal: FunctionComponent<React.PropsWithChildren<Pr
           errorMessage={otpConfirmError}
           onSubmit={(code) => {
             disableOtp({
-              code
+              code,
+              is_otp: true
             })
           }}
         >
@@ -80,7 +81,10 @@ export const DisableTwoFactorModal: FunctionComponent<React.PropsWithChildren<Pr
           valueLength={8}
           errorMessage={otpConfirmError}
           onSubmit={(code) => {
-            console.log(code)
+            disableOtp({
+              code,
+              is_otp: false
+            })
           }}
         >
           <p className='py-2 font-sans text-gray-600 text-xxxl font-bold'>

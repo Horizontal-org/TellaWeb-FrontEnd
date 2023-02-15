@@ -36,11 +36,23 @@ export const authApi = createApi({
         body: code
       })
     }),
-    disable: builder.mutation<boolean, {code: string}> ({
+    disable: builder.mutation<boolean, {code: string, is_otp: boolean}> ({
       query: (code) => ({
         url: "/auth/otp/disable",
         method: "POST",
         body: code
+      })
+    }),
+    recoveryKey: builder.query<[string], void>({
+      query: () => ({
+        url: '/auth/otp/recovery-key'
+      })
+    }),
+    authRecoveryKey: builder.mutation<LoginResponse, {code: string, userId: string, password: string}>({
+      query: (credential) => ({
+        url: "auth/otp/recovery-key",
+        method: "POST",
+        body: credential
       })
     }),
     otpLogin: builder.mutation<LoginResponse, {code: string, userId: string}>({
@@ -58,5 +70,7 @@ export const {
   useEnableMutation,
   useActivateMutation,
   useDisableMutation,
+  useRecoveryKeyQuery,
+  useAuthRecoveryKeyMutation,
   useOtpLoginMutation 
 } = authApi;
