@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { SettingsPage } from "../../packages/ui/pages/SettingsPage/SettingsPage";
 import { Menu } from "../../components/Menu";
@@ -7,7 +7,7 @@ import { useUserProfile } from "packages/state/features/user/userHooks";
 import { useToast } from "components/ToastWrapper";
 import {
   useUpdatePasswordMutation,
-  useUpdateUserMutation,
+  useUpdateUserMutation
 } from "packages/state/services/user";
 import { useDispatch } from "react-redux";
 import { setUser } from "packages/state/features/user/userSlice";
@@ -21,6 +21,13 @@ const Settings = () => {
 
   const [updatePassword, updatePasswordResult] = useUpdatePasswordMutation();
   const [updateUser, updateUserResult] = useUpdateUserMutation();
+
+  const [otpActive, handleOtpActive] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    handleOtpActive(user.otp_active)
+  }, [user])
+
 
   useEffect(() => {
     if (updatePasswordResult.isSuccess) {
@@ -55,6 +62,8 @@ const Settings = () => {
           role: user.role
         });
       }}
+      otpActive={otpActive}
+      handleOtpActive={handleOtpActive}
     />
   );
 };

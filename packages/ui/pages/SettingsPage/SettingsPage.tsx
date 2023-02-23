@@ -1,7 +1,8 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 import { MainLayout } from "../../layouts/MainLayout";
 import { EditEmailModal } from "../../components/EditEmailModal/EditEmailModal";
 import { EditPasswordModal } from "../../components/EditPasswordModal/EditPasswordModal";
+import { TwoFactorAuthModal } from "packages/ui/components/TwoFactorAuthModal/TwoFactorAuthModal";
 import { ButtonMenu } from '../../components/ButtonMenu/ButtonMenu'
 import { ButtonOption } from '../../components/ButtonMenu/ButtonOption'
 import { ROLES, User } from "packages/state/domain/user";
@@ -9,12 +10,15 @@ import { useRouter } from 'next/router'
 import { useTranslation } from "next-i18next";
 import { btnType } from "../../components/Button/Button";
 import { version } from 'package.json'
+import { EditTwoFactorAuthModal } from "packages/ui/components/EditTwoFactorAuthModal/EditTwoFactorAuthModal";
 
 type Props = {
   sidebar: React.ReactNode;
   onUpdateUsername: (username: string) => void;
   onUpdatePassword: (currentPassword: string, newPassword: string) => void;
+  handleOtpActive: (value: boolean) => void
   user: User | null;
+  otpActive: boolean
 };
 
 // locale={router.locale === 'en' ? 'de' : 'en'}
@@ -23,11 +27,15 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
   sidebar,
   onUpdateUsername,
   onUpdatePassword,
+  handleOtpActive,
   user,
+  otpActive
 }) => {
 
   const router = useRouter()
   const { t, i18n } = useTranslation("settings")
+
+  const [editTwoFactorOpen, handleditTwoFactorOpen] = useState<boolean>(false)
 
   return (
     <MainLayout
@@ -60,6 +68,19 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
               <p>••••••••••</p>
             </div>
             <EditPasswordModal onSubmit={onUpdatePassword} />
+          </div>
+
+          <div className="flex justify-between items-center py-4 border-b">
+            <div className="flex items-center">
+              <p className="text-gray-600 uppercase" style={{ width: 200 }}>
+                TWO-FACTOR AUTHENTICATION
+              </p>
+              <p>{otpActive ? 'ENABLED' : 'DISABLED'}</p>
+            </div>
+            { otpActive ? 
+              <EditTwoFactorAuthModal handleExternalOpen={handleditTwoFactorOpen} externalOpen={editTwoFactorOpen} handleOtpActive={handleOtpActive}/> :
+              <TwoFactorAuthModal handleEditOpen={handleditTwoFactorOpen} handleOtpActive={handleOtpActive} />
+            }
           </div>
 
           <div className="flex justify-between items-center py-4 border-b">
