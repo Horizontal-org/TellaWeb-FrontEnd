@@ -8,7 +8,7 @@ import { MdDelete } from "react-icons/md";
 
 type Props = {
   render: React.ReactNode
-  onDelete: () => void
+  onDelete: (e) => void
 }
 
 export const DeleteModal: FunctionComponent<React.PropsWithChildren<Props>> = ({ render, onDelete }) => {
@@ -22,10 +22,14 @@ export const DeleteModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
           icon={<MdDelete />}
           color="#D6933B"
           text="DELETE"
-          onClick={toggle}
+          onClick={(e) => {
+            e.stopPropagation()
+            toggle()
+          }}
         />      
       )}                
       onClose={() => {
+        console.log('here')
         handleCanDelete(false)
       }}
       render={(toggle) => (
@@ -60,10 +64,10 @@ export const DeleteModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
                 full={true}
                 text={"Confirm"}
                 disabled={!canDelete}
-                onClick={() => {
+                onClick={(e) => {
                   handleCanDelete(false)
                   toggle()
-                  onDelete()
+                  onDelete(e)
                 }}
               />
             </div>          

@@ -190,8 +190,8 @@ export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = (
                               the selected users will be permanently deleted.
                             </p>
                           )}
-                          onDelete={() => {
-                            onDelete(selectedUsers)
+                          onDelete={(e) => {
+                            onDelete([hoverRow])
                           }}
                         />                    
                       </Can>
