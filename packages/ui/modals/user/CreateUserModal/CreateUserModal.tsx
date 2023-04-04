@@ -39,6 +39,11 @@ export const CreateUserModal: FunctionComponent<React.PropsWithChildren<Props>> 
           password,
           role
         })
+
+        handleUsername('')
+        handlePassword('')
+        handleConfirmPassword('')
+        handleRole('reporter')
       }}
       render={() => (
         <div>

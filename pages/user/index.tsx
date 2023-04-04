@@ -63,7 +63,10 @@ export const Report = () => {
     batchDeleteUsers(toDelete)
   };
 
-
+  // useEffect(() => {
+    // use refetch here 
+  // }, [])
+  
   useEffect(() => {
     if (createUserResult.isSuccess) {
       handleToast("User created!", "info");

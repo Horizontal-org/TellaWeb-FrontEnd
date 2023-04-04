@@ -27,13 +27,14 @@ export const Menu: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
           onClick: () => router.replace("/user"),
           selected: router.route === '/user',
         },
-        {
-          permission: ENTITIES.RemoteConfigurations,
-          text: "Configurations",
-          icon: <RemoteConfigIcon />,
-          onClick: () => router.replace("/configuration"),
-          selected: router.route.includes("/configuration"),
-        }
+        // WAITING FOR MOBILE
+        // {
+        //   permission: ENTITIES.RemoteConfigurations,
+        //   text: "Configurations",
+        //   icon: <RemoteConfigIcon />,
+        //   onClick: () => router.replace("/configuration"),
+        //   selected: router.route.includes("/configuration"),
+        // }
       ]}
       bottomMenu={[
         {

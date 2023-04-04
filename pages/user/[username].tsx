@@ -55,7 +55,7 @@ const UserById: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
 
   useEffect(() => {
     if (deleteUserResult.isSuccess) {
-      handleToast("Deleted updated!", "info");
+      handleToast("User deleted", "info");
       router.back()
     }
     if (deleteUserResult.error && "status" in deleteUserResult.error) {

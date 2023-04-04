@@ -2,15 +2,14 @@ import { FunctionComponent, useState, ReactNode, useEffect, useContext } from 'r
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import { useRouter } from "next/router";
 import { AbilityContext } from 'common/casl/Can';
-import { ENTITIES, validateRoute } from 'common/casl/Ability'
+import { validateRoute } from 'common/casl/Ability'
 import Img from "next/image";
 import logo from "../../assets/tella-sidelogo.png";
+import PUBLIC_ROUTES from '../../utilities/publicRoutes'
 
 interface Props {
   children: ReactNode
 }
-
-
 
 export const SplashScreen: FunctionComponent<React.PropsWithChildren<Props>> = ({ children }) => {  
   const user = useAuthRequired("/login");
@@ -36,7 +35,7 @@ export const SplashScreen: FunctionComponent<React.PropsWithChildren<Props>> = (
       return
     }
 
-    if (router.pathname == '/login') {
+    if (PUBLIC_ROUTES.includes(router.pathname)) {
       handleReady(true)
     }
   }, [user])
