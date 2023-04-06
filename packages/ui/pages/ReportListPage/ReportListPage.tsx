@@ -94,9 +94,7 @@ export const ReportListPage: FunctionComponent<React.PropsWithChildren<Props>> =
                 </form>
               </>
             )}
-            {selectedReports.length > 0 && (
-              <>
-                {selectedReports.length === 1 && (
+             {selectedReports.length === 1 && (
                   <>
                     <Button
                       icon={<MdOpenInNew />}
@@ -120,19 +118,31 @@ export const ReportListPage: FunctionComponent<React.PropsWithChildren<Props>> =
                       }
                       text="Download"
                     />
+                    <Can I='delete' a={ENTITIES.Reports}>
+                      <ButtonMenu openSide="right" type={btnType.Secondary} text="...">
+                        <DeleteModal 
+                          render={(
+                            <p>
+                              the selected reports will be permanently deleted.
+                            </p>
+                          )}
+                          onDelete={() => onDelete(selectedReports)}
+                          />  
+                      </ButtonMenu>
+                    </Can>
                   </>
                 )}
+            {selectedReports.length > 1 && (
+              <>               
                 <Can I='delete' a={ENTITIES.Reports}>
-                  <ButtonMenu openSide="right" type={btnType.Secondary} text="...">
-                    <DeleteModal 
-                      render={(
-                        <p>
-                          the selected reports will be permanently deleted.
-                        </p>
-                      )}
-                      onDelete={() => onDelete(selectedReports)}
-                      />  
-                  </ButtonMenu>
+                  <DeleteModal 
+                    render={(
+                      <p>
+                        the selected reports will be permanently deleted.
+                      </p>
+                    )}
+                    onDelete={() => onDelete(selectedReports)}
+                    />
                 </Can>
               </>
             )}

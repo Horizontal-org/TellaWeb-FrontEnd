@@ -21,11 +21,14 @@ const Login = () => {
   const user = useUserProfile();
   const router = useRouter();
   const dispatch = useDispatch();
+  const { verification_successful } = router.query  
   const [login, { isLoading }] = useLoginMutation();
   const [otpLogin, {isLoading: otpLoading}] = useOtpLoginMutation()
   const [authRecoveryKey, {isLoading: recoveryKeyLoading}] = useAuthRecoveryKeyMutation()
   const [loadUserProfile, { data }] = useLazyGetProfileQuery();
   const ability = useContext(AbilityContext);
+
+  const [isSuspicious, handleSuspicious] = useState(false)
   const [loginResponse, handleLoginResponse] = useState<LoginResponse|null>(null)
   const [password, handlePassword] = useState<string>('')
   
@@ -51,6 +54,11 @@ const Login = () => {
     try {
       const data = await login(credential).unwrap();
 
+      if (data.flagged) {
+        handleSuspicious(true)
+        return
+      }
+      
       if(!data.user?.otp_active) {
         return dispatch(setCredentials(data));
       }
@@ -81,17 +89,21 @@ const Login = () => {
   }
 
   return (
+    <>
     <LoginPage
       onSubmit={doLogin}
       errorMessage={errorMessage}
       isLoading={isLoading}
+      isSuspicious={isSuspicious}
       otpLoading={otpLoading}
       loginResponse={loginResponse}
       handleTwoFactorAuth={handleTwoFactorAuth}
       handleRecoveryKeyAuth={handleRecoveryKeyAuth}
       twoFactorErrorMessage={twoFactorError}
       clearLoginResponse={() => handleLoginResponse(null)}
-    />
+      verificationSuccessful={verification_successful}
+      />    
+    </>
   );
 };
 

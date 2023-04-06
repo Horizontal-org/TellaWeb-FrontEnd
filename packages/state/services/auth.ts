@@ -15,9 +15,9 @@ export const authApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    login: builder.mutation<{ access_token: string; user: User }, Credential>({
+    login: builder.mutation<{ access_token: string; user: User, flagged?: boolean }, Credential>({
       query: (credential) => ({
-        url: "/login",
+        url: "/login/web",
         method: "POST",
         body: credential,
       }),

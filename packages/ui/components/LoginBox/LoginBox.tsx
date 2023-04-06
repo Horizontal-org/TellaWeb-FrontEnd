@@ -45,6 +45,7 @@ export const LoginBox: FunctionComponent<React.PropsWithChildren<Props>> = ({
 
   return (
     <form
+      style={{ width: 400 }}
       className="p-10 bg-white rounded flex justify-center items-center flex-col shadow-md border"
       onSubmit={(e) => {
         e.preventDefault();

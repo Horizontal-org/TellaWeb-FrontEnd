@@ -16,7 +16,8 @@ export interface User {
 
 export interface LoginResponse {
   access_token: string
-  user: User
+  user: User,
+  flagged?: boolean
 }
 
 export interface OtpEnableRes {

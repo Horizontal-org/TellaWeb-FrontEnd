@@ -28,7 +28,6 @@ export const TwoFactor: FunctionComponent<React.PropsWithChildren<Props>> = ({
           return handleTwoFactorAuth(otpValue)
         } 
         handleRecoveryKeyAuth(otpValue)
-        console.log('backup code endpoint')
       }}
     >
       <p className="text-xl text-gray-600 font-bold pb-4">

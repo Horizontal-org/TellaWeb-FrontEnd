@@ -83,7 +83,8 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
             }
           </div>
 
-          <div className="flex justify-between items-center py-4 border-b">
+          {/* HIDE FOR NOW */}
+          {/* <div className="flex justify-between items-center py-4 border-b">
             <div className="flex items-center">
               <p className="text-gray-600 uppercase" style={{ width: 200 }}>
                 Language
@@ -108,7 +109,7 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
                 color='#8B8E8F'
               />
             </ButtonMenu>
-          </div>
+          </div> */}
         </div>
       }
       absoluteContent={(

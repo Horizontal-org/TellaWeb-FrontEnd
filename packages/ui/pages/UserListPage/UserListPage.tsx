@@ -112,29 +112,28 @@ export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = (
                 </form>
               </>
             )}
-            {selectedUsers.length > 0 && (
+            {selectedUsers.length === 1 && (
+
               <>
-                {selectedUsers.length === 1 && (
-                  <div className='flex'>
-                    <div className='pr-2 h-full'>
-                      <Button
-                        icon={<MdOpenInNew />}
-                        text="Open"
-                        onClick={(event: MouseEvent) => {
-                          event.preventDefault();
-                          onOpen(selectedUsers[0]);
-                        }}
-                      />
-                    </div>
+                <div className='flex'>
+                  <div className='pr-2 h-full'>
                     <Button
-                      type={btnType.Secondary}
-                      icon={<MdRemoveRedEye />}
-                      text="Preview"
-                      onClick={openUser}
-                    />              
+                      icon={<MdOpenInNew />}
+                      text="Open"
+                      onClick={(event: MouseEvent) => {
+                        event.preventDefault();
+                        onOpen(selectedUsers[0]);
+                      }}
+                    />
                   </div>
-                )}                
-                {<ButtonMenu openSide="right">
+                  <Button
+                    type={btnType.Secondary}
+                    icon={<MdRemoveRedEye />}
+                    text="Preview"
+                    onClick={openUser}
+                  />              
+                </div>
+                <ButtonMenu openSide="right">
                   <Can I='delete' a={ENTITIES.Users}>
                     <DeleteModal 
                       render={(
@@ -147,7 +146,23 @@ export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = (
                       }}
                     />                    
                   </Can>
-                </ButtonMenu>}
+                </ButtonMenu>
+              </>                                  
+            )}                
+            {selectedUsers.length > 1 && (
+              <>
+                <Can I='delete' a={ENTITIES.Users}>
+                  <DeleteModal 
+                    render={(
+                      <p>
+                        the selected users will be permanently deleted.
+                      </p>
+                    )}
+                    onDelete={() => {
+                      onDelete(selectedUsers)
+                    }}
+                  />                    
+                </Can>
               </>
             )}
           </div>
@@ -190,8 +205,8 @@ export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = (
                               the selected users will be permanently deleted.
                             </p>
                           )}
-                          onDelete={() => {
-                            onDelete(selectedUsers)
+                          onDelete={(e) => {
+                            onDelete([hoverRow])
                           }}
                         />                    
                       </Can>

@@ -8,6 +8,7 @@ import { setUser } from "../user/userSlice";
 
 import { AbilityContext } from "common/casl/Can";
 import { updateAbility } from "common/casl/Ability";
+import PUBLIC_ROUTES from '../../../ui/utilities/publicRoutes'
 
 export const useAuth = () => {
   const authState = useSelector((store: RootStore) => store.auth);
@@ -41,7 +42,7 @@ export const useAuthRequired = (loginUrl = "/login", redirectTo?: string) => {
   // If there is no user token or the profile cannot be obtained,
   // the user is not logged in.
   useEffect(() => {
-    if ((data?.isError || !accessToken) && router.pathname !== loginUrl) {
+    if ((data?.isError || !accessToken) && router.pathname !== loginUrl && !PUBLIC_ROUTES.includes(router.pathname)) {
       router.replace(loginUrl);
       return;
     }

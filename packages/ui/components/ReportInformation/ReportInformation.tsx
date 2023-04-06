@@ -12,7 +12,7 @@ export const ReportInformation: FunctionComponent<React.PropsWithChildren<Props>
   const dict = {
     ...(report.date ? { Date: format(report.date, "dd MMM yyyy") } : {}),
     ...(report.date ? { Time: format(report.date, "h:mm:ss a") } : {}),
-    Size: filesize(report.files.reduce((p = 0, a) => a.size + p, 0)),
+    // Size: filesize(report.files.reduce((p = 0, a) => a.size + p, 0)),
     "Number of files": report.files.length.toString(),
     Author: report.author.username,
     ID: report.id.toString(),
