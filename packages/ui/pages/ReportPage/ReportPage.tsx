@@ -108,7 +108,8 @@ export const ReportPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
           "flex flex-col flex-1 pt-20 transition-all duration-300 ease-in-out",
           {
             "transform ml-64": leftSidebarOpen,
-            "transform mr-64": rightSidebarOpen,
+            //HIDE FOR NOW
+            "transform mr-64": rightSidebarOpen && false,
           }
         )}
       >
@@ -179,7 +180,7 @@ export const ReportPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
           )}
         </MainContent>
       </div>
-      
+{/*       
       <RightCollapsingSidebar collapsed={!rightSidebarOpen}>
         { !!(report.files.length) && (
           <VerificationInformation 
@@ -187,7 +188,7 @@ export const ReportPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
             fileInfo={report.files[current - 1].fileInfo}
           />
         )}
-      </RightCollapsingSidebar>
+      </RightCollapsingSidebar> */}
 
       <TopBar title={report.title} onClose={onClose}>
         <ButtonMenu openSide="left" type={btnType.Secondary} text="...">

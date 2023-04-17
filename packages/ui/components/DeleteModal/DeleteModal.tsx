@@ -29,7 +29,6 @@ export const DeleteModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
         />      
       )}                
       onClose={() => {
-        console.log('here')
         handleCanDelete(false)
       }}
       render={(toggle) => (

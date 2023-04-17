@@ -1,11 +1,11 @@
 import { useMediaPlayer } from "packages/ui/hooks/useMediaPlayer";
-import { FunctionComponent, useRef } from "react";
+import { FunctionComponent, useEffect, useRef } from "react";
 import { IReportFile } from "../../domain/ReportFile";
 import { MediaButtons } from "../MediaControls/MediaButtons";
 import { MediaProgressBar } from "../MediaControls/MediaProgressBar";
 import MediaLoader from "../MediaLoader/MediaLoader";
 import { VideoLoading } from "./VideoLoading";
-
+import LazyLoad from 'react-lazyload'
 type Props = {
   file: IReportFile;
 };
@@ -38,21 +38,23 @@ export const VideoView: FunctionComponent<React.PropsWithChildren<Props>> = ({ f
           maxWidth: "40vw",
         }}
       >
-        <video
-          preload="auto"
-          crossOrigin="use-credentials"
-          className={"w-full"}
-          ref={videoRef}
-        >
-          <source src={file.src} key={file.src} type={getFileType()} />
-          Your browser does not support the <code>video</code> element.
-        </video>
+          <video
+            preload="metadata"
+            crossOrigin="use-credentials"
+            className={"w-full"}
+            ref={videoRef}
+            >
+            <source src={file.src} key={file.src} type={getFileType()} />
+            Your browser does not support the <code>video</code> element.
+          </video>
 
-        {!duration && (
-          <div className="absolute">
-            <MediaLoader />
-          </div>
-        )}
+          {!duration && (
+            <div className="absolute">
+              <MediaLoader />
+            </div>
+          )}
+        {/* <LazyLoad>
+        </LazyLoad> */}
       </div>
 
       {!!duration && (
