@@ -5,7 +5,7 @@ import { MediaButtons } from "../MediaControls/MediaButtons";
 import { MediaProgressBar } from "../MediaControls/MediaProgressBar";
 import MediaLoader from "../MediaLoader/MediaLoader";
 import { VideoLoading } from "./VideoLoading";
-import LazyLoad from 'react-lazyload'
+
 type Props = {
   file: IReportFile;
 };
