@@ -10,7 +10,6 @@ type Props = {
 };
 
 export const VideoView: FunctionComponent<React.PropsWithChildren<Props>> = ({ file }) => {
-  console.log(file)
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const {
     currentTime,
