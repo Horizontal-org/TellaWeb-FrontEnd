@@ -4,13 +4,13 @@ import { IReportFile } from "../../domain/ReportFile";
 import { MediaButtons } from "../MediaControls/MediaButtons";
 import { MediaProgressBar } from "../MediaControls/MediaProgressBar";
 import MediaLoader from "../MediaLoader/MediaLoader";
-import { VideoLoading } from "./VideoLoading";
 
 type Props = {
   file: IReportFile;
 };
 
 export const VideoView: FunctionComponent<React.PropsWithChildren<Props>> = ({ file }) => {
+  console.log(file)
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const {
     currentTime,
@@ -23,11 +23,6 @@ export const VideoView: FunctionComponent<React.PropsWithChildren<Props>> = ({ f
     changeVolume,
     toggleMuted,
   } = useMediaPlayer(videoRef);
-
-  const getFileType = () => {
-    const type = file.fileName.split(".")[1];
-    return `video/${type || "mp4"}`;
-  };
 
   return (
     <div className=" w-full h-full flex flex-col items-center">
@@ -44,7 +39,7 @@ export const VideoView: FunctionComponent<React.PropsWithChildren<Props>> = ({ f
             className={"w-full"}
             ref={videoRef}
             >
-            <source src={file.src} key={file.src} type={getFileType()} />
+            <source src={file.src} key={file.src} type='video/mp4' />
             Your browser does not support the <code>video</code> element.
           </video>
 
