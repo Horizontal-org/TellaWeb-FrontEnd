@@ -1,5 +1,5 @@
 import { useMediaPlayer } from "packages/ui/hooks/useMediaPlayer";
-import { FunctionComponent, useEffect, useRef } from "react";
+import { FunctionComponent, useRef } from "react";
 import { IReportFile } from "../../domain/ReportFile";
 import { MediaButtons } from "../MediaControls/MediaButtons";
 import { MediaProgressBar } from "../MediaControls/MediaProgressBar";
@@ -33,6 +33,7 @@ export const VideoView: FunctionComponent<React.PropsWithChildren<Props>> = ({ f
         }}
       >
           <video
+            key={file.src}
             preload="metadata"
             crossOrigin="use-credentials"
             className={"w-full"}
