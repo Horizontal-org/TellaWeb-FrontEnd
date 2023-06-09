@@ -6,7 +6,7 @@ export const toReport = (report: any) => ({
     ...file,
     src: `${process.env.NEXT_PUBLIC_API_URL}/file/asset/${report.id}/${file.id}/`,
     thumbnail: ["VIDEO", "IMAGE"].includes(file.type)
-      ? `${process.env.NEXT_PUBLIC_API_URL}/file/asset/${report.id}/${file.id}/200`
+      ? `${process.env.NEXT_PUBLIC_API_URL}/file/asset/${report.id}/${file.id}/`
       : undefined,
   })),
 });
