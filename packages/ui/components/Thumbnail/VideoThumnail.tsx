@@ -18,7 +18,6 @@ export const VideoThumbnail: FunctionComponent<React.PropsWithChildren<Props>> =
   box,
   selected,
 }) => {
-  console.log('file', file)
   return (
     <div
         onClick={onClick}
