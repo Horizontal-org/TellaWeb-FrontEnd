@@ -1,6 +1,8 @@
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent, useState, useEffect } from 'react'
 import { ButtonPopup, Button, TextInput } from '../../'
 import { btnType } from '../Button/Button'
+import PasswordMeter from '../PasswordMeter/PasswordMeter'
+import zxcvbn from 'zxcvbn'
 
 type Props = {
   onSubmit: (currentPassword: string, newPassword: string) => void
@@ -11,6 +13,11 @@ export const EditPasswordModal: FunctionComponent<React.PropsWithChildren<Props>
   const [newPassword, handleNewPassword] = useState<string>('')
   const [confirmPassword, handleConfirmPassword] = useState<string>('')
   const [showValidations, handleShowValidations] = useState<boolean>(false)
+  const [passwordStrength, handlePasswordStrength] = useState<number>(0)
+
+  useEffect(() => {
+    handlePasswordStrength(zxcvbn(newPassword).score)
+  }, [newPassword])
 
   return (
     <ButtonPopup       
@@ -70,6 +77,12 @@ export const EditPasswordModal: FunctionComponent<React.PropsWithChildren<Props>
             />
           </div>
 
+          {newPassword.length > 0 && (
+            <div>
+              <PasswordMeter score={passwordStrength} />
+            </div>
+          )}
+
           <div className='py-4'>
             <TextInput 
               name='confirm-password'
@@ -100,7 +113,7 @@ export const EditPasswordModal: FunctionComponent<React.PropsWithChildren<Props>
             <Button 
               text='SAVE'
               full={true}
-              disabled={!(newPassword.length > 0 && newPassword === confirmPassword)}
+              disabled={!(newPassword.length > 0 && newPassword === confirmPassword && passwordStrength > 3)}
               onClick={() => {
                 onSubmit(oldPassword, newPassword)
                 toggle()
