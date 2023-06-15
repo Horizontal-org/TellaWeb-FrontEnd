@@ -1,9 +1,11 @@
-import { FunctionComponent, useState, ChangeEventHandler } from 'react'
+import { FunctionComponent, useState, ChangeEventHandler, useEffect } from 'react'
+import zxcvbn from 'zxcvbn'
 import { Modal, ErrorMessage } from '../../../components/Modal'
 import { TextInput, RadioGroupInput } from '../../../'
 import { btnType } from '../../../components/Button/Button'
 import { MdEdit } from 'react-icons/md'
 import { ROLES } from 'packages/state/domain/user'
+import PasswordMeter from 'packages/ui/components/PasswordMeter/PasswordMeter'
 
 interface Props {
   onSubmit: (newUser: {
@@ -22,8 +24,12 @@ export const CreateUserModal: FunctionComponent<React.PropsWithChildren<Props>> 
   const [confirmPassword, handleConfirmPassword] = useState<string>('')
   const [role, handleRole] = useState<string>('reporter')
   const [isAdmin, handleIsAdmin] = useState<boolean>(false)
-
   const [showValidations, handleShowValidations] = useState(false)
+  const [paswordStrength, handlePasswordStrength] = useState<number>(0)
+
+  useEffect(() => {
+    handlePasswordStrength(zxcvbn(password).score)
+  }, [password])
   
   return (
     <Modal 
@@ -32,7 +38,7 @@ export const CreateUserModal: FunctionComponent<React.PropsWithChildren<Props>> 
       btnType={btnType.Primary}
       subtitle='Enter the user’s basic information here. You will be able to add additional information on the next screen.'
       submit='SAVE'
-      disabled={!((username.length > 0) && password === confirmPassword)}
+      disabled={!((username.length > 0) && password === confirmPassword && paswordStrength > 3)}
       onSubmit={() => {
         onSubmit({
           username,
@@ -83,6 +89,13 @@ export const CreateUserModal: FunctionComponent<React.PropsWithChildren<Props>> 
                 }
               }}
             />
+            {password.length > 0 && (
+              <div>
+                <PasswordMeter
+                  score={paswordStrength}
+                />
+              </div>
+            )}
           </div>
           <div>
             <TextInput
