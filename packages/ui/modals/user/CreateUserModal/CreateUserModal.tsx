@@ -89,14 +89,14 @@ export const CreateUserModal: FunctionComponent<React.PropsWithChildren<Props>> 
                 }
               }}
             />
+            {password.length > 0 && (
+              <div>
+                <PasswordMeter
+                  score={paswordStrength}
+                />
+              </div>
+            )}
           </div>
-         {password.length > 0 && (
-          <div>
-            <PasswordMeter
-              score={paswordStrength}
-            />
-          </div>
-         )}
           <div>
             <TextInput
               name='confirm-password'
