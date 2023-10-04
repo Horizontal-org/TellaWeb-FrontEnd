@@ -67,8 +67,8 @@ export const FeedbackBox: FunctionComponent<Props> = () => {
                 </BoxText>
 
                 <TextArea
-                  name='note'
-                  placeholder='Note'
+                  name='feedback'
+                  placeholder='Feedback'
                   value={feedback}
                   onChange={(e) => { handleFeedback(e.target.value) }}
                 />
