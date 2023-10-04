@@ -23,8 +23,7 @@ const submitFeedback = async(feedback: string, handleToast, displaySuccess) => {
 
     displaySuccess()
   } catch (err) {
-    displaySuccess()
-    // handleToast('Your feedback could not be sent. Please try again.', 'danger')
+    handleToast('Your feedback could not be sent. Please try again.', 'danger')
   }
 }
 
