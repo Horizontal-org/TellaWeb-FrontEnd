@@ -66,7 +66,7 @@ export const ToastWrapper: FunctionComponent<React.PropsWithChildren<Props>> = (
             )}
             style={{
               bottom: 15,
-              right: 30,
+              left: 30,
               minWidth: '20rem'
             }}
           >
