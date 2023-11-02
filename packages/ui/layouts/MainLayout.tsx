@@ -3,6 +3,7 @@ import cn from "classnames";
 import { Title, SubTitle } from "..";
 import { Item } from "../domain/Item";
 import { SidebarButton } from '../components/SidebarButton/SidebarButton'
+import { FeedbackBox } from "../components/FeedbackBox/FeedbackBox";
 
 type Props = {
   title?: string;
@@ -106,6 +107,7 @@ export const MainLayout: FunctionComponent<React.PropsWithChildren<Props>> = ({
           {rightbar}
         </div>
       )}
+      <FeedbackBox />
     </div>
   );
 };
