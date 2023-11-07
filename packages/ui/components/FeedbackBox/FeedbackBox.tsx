@@ -11,7 +11,7 @@ interface Props {}
 
 const submitFeedback = async(feedback: string, handleToast, displaySuccess) => {
   try {
-    await axios.post(`${process.env.NEXT_PUBLIC_FEEDBACK_API_URL}/opinions`, {
+    await axios.post(`https://api.feedback.tella-app.org/opinions`, {
       platform: 'WEB',
       text: feedback
     }, {
@@ -29,7 +29,6 @@ const submitFeedback = async(feedback: string, handleToast, displaySuccess) => {
 
 
 export const FeedbackBox: FunctionComponent<Props> = () => {
-
   const [visible, handleVisible] = useState(false) 
   const [success, handleSuccess] = useState(false)
   const [feedback, handleFeedback] = useState<string>('')
