@@ -7,57 +7,60 @@ import { TbChevronDown } from 'react-icons/tb'
 import { useOnClickOutside } from "packages/ui/hooks/useOnClickOutside";
 
 interface Props {
-  users: User[];
+  entities: Partial<{
+    id: string;
+    label: string;
+  }>[];
   onSearch: (query: string, excluded?: Array<string>) => void;
   onSelect: (items: string[]) => void;
 }
 
 let timeoutToken = null
 
-// ROLE FUNCTION HIDDEN
-export const SearchUserInput: FunctionComponent<PropsWithChildren<Props>> = ({
-  users,
+export const SearchEntityInput: FunctionComponent<PropsWithChildren<Props>> = ({
+  entities,
   onSearch,
   onSelect
 }) => {
 
   
   const [selectedItems, handleSelectedItems] = useState([])
-  const [selectedRole, handleSelectedRole] = useState(null)
-  
   const [showResults, handleShowResults] = useState(false)
-  console.log("🚀 ~ file: SearchUserInput.tsx:29 ~ showResults:", showResults)
-  // const [showRoles, handleShowRoles] = useState(false)
+  
+  console.log("🚀 ~ file: SearchEntityInput.tsx:30 ~ showResults:", showResults)
   
   const searchInput = useRef(null)
   const wrapperRef = useRef(null)
 
   useOnClickOutside(wrapperRef, () => {
+    console.log('1')
     handleShowResults(false) 
-    // handleShowRoles(false)    
   })
 
   const clean = () => {
+    console.log('3')
     searchInput.current.textContent = ''
     handleShowResults(false)
   }
   
+  // this
   useEffect(() => {
-    // if (showRoles) handleShowRoles(false)
     handleShowResults(true)
-  }, [users])
+  }, [entities])
   
   useEffect(() => {
     onSelect(selectedItems.map(si => si.id))
   }, [selectedItems])
 
   useEffect(() => {
+    console.log('2')
     handleShowResults(false)
   }, [])
 
   return (
     <Wrapper ref={wrapperRef}>
       <MultiSelect resultsOpen={showResults || selectedItems.length > 0}>
+
         { selectedItems.map(si => (
           <Item key={si.label}>
             <span>
@@ -86,92 +89,31 @@ export const SearchUserInput: FunctionComponent<PropsWithChildren<Props>> = ({
           />
         </InputWrapper>
 
-        {/* <RolePicker onClick={() => {
-          if (showResults) handleShowResults(false)
-          handleShowRoles(!showRoles)
-        }}>
-          <span>{selectedRole || 'role'}</span>
-          <TbChevronDown size={18} color='#8B8E8F'/>
-        </RolePicker> */}
         
       </MultiSelect>
 
       <AbsoluteContent>
-          { users.length > 0 && showResults && ( 
+          { entities.length > 0 && showResults && ( 
             <SearchResults>
-              { users.map((user, key) => (
+              { entities.map((ent, key) => (
                 <SearchResult
-                  key={user.id}
+                  key={ent.id}
                   tabIndex={key}
                   onClick={() => {
                     let newItems = selectedItems
-                    newItems.push({id: user.id, label: user.username})
+                    newItems.push({id: ent.id, label: ent.label})
                     handleSelectedItems([...newItems])
                     clean()
                   }}
                 >
                   <BsPerson size='16' color="#8B8E8F"/>
                   <p>
-                    {user.username}
+                    {ent.label}
                   </p>
                 </SearchResult>
               ))}
             </SearchResults>
-          )}
-
-
-          {/* { showRoles && (
-            <RolesList>
-              <Role onClick={() => { 
-                handleSelectedRole('reporter')
-                handleShowRoles(false)
-              }}>
-                <RoleIconWrapper>
-                  <BsCheck size={24} color='#009688'/>
-                </RoleIconWrapper>
-                <RoleText>
-                  <span>Reporter</span>
-                  <p>can send in reports to this project from the Tella mobile apps</p>
-                </RoleText>
-              </Role>
-              <Role onClick={() => { 
-                handleSelectedRole('viewer')
-                handleShowRoles(false)
-              }}>
-                <RoleIconWrapper>
-                  <BsCheck size={24} color='#009688'/>
-                </RoleIconWrapper>
-                <RoleText>
-                  <span>Viewer</span>
-                  <p>can browse and view reports submitted to this project</p>
-                </RoleText>                
-              </Role>
-              <Role onClick={() => { 
-                handleSelectedRole('editor')
-                handleShowRoles(false)
-              }}>
-                <RoleIconWrapper>
-                  <BsCheck size={24} color='#009688'/>
-                </RoleIconWrapper>
-                <RoleText>
-                  <span>Editor</span>
-                  <p>can edit and delete reports in this project</p>                
-                </RoleText>
-              </Role>
-              <Role onClick={() => { 
-                handleSelectedRole('admin')
-                handleShowRoles(false)
-              }}>
-                <RoleIconWrapper>
-                  <BsCheck size={24} color='#009688'/>
-                </RoleIconWrapper>
-                <RoleText>
-                  <span>Admin</span>
-                  <p>can add and manage members, and delete the project</p>
-                </RoleText>
-              </Role>
-            </RolesList>
-          )} */}
+          )}       
       </AbsoluteContent>
     </Wrapper>
   )

@@ -82,15 +82,16 @@ export const projectApi = createApi({
       }),
     }),
 
-    addUsers: builder.mutation<
+    addEntities: builder.mutation<
       Project,
-      { id: string; users: string[]; }
+      { id: string; users?: string[]; resources?: string[] }
     >({
-      query: ({ id, users }) => ({
+      query: ({ id, users = [], resources = [] }) => ({
         url: `/${id}`,
         method: "PUT",
         body: {
           users,
+          resources
         },
       }),
     }),
@@ -113,6 +114,6 @@ export const {
   useCreateProjectMutation,
   useGetByIdQuery,
   useEditProjectMutation,
-  useAddUsersMutation,
+  useAddEntitiesMutation,
   useDeleteProjectMutation
 } = projectApi;
