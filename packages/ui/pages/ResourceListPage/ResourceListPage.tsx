@@ -35,6 +35,8 @@ import { RiDownload2Fill } from "react-icons/ri";
 import { format } from "date-fns";
 import { Column } from "react-table";
 import { DeleteResourceModal } from "packages/ui/modals/resource/DeleteResourceModal/DeleteResourceModal";
+import { ResourceBar } from "packages/ui/components/ResourceBar/ResourceBar";
+import { PdfView } from "packages/ui/components/PdfView/PdfView";
 
 type Props = {
   sidebar: React.ReactNode;  
@@ -60,7 +62,7 @@ export const RESOURCE_COLUMNS: Column[] = [
     headerKey: 'user.createdAt',
     className: "px-3 py-3 w-40",
     id: "date",
-    accessor: (resource: Resource): string => resource.createdAt,
+    accessor: (resource: Resource): string => format(new Date(resource.createdAt), "dd MMM yyyy"),
   }
 ];
 
@@ -77,7 +79,11 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
 }) => {
 
   const [currentResource, setCurrentResource] = useState<Resource | undefined>();
+  const [openViewer, handleViewer] = useState<boolean>(false)
+
+  console.log("🚀 ~ file: ResourceListPage.tsx:81 ~ currentResource:", currentResource)
   const [selectedResources, setSelectedResources] = useState<Resource[]>([]);
+  console.log("🚀 ~ file: ResourceListPage.tsx:83 ~ selectedResources:", selectedResources)
   
   const searchInput = useRef<HTMLInputElement>();
   let searchTimeout = null
@@ -97,7 +103,8 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
       title="Resources"
       subtitle="Manage all the resources available in your space"
       onClosePreview={() => setCurrentResource(undefined)}
-      rightbarActive={false}
+      rightbarActive={true}
+      rightbar={<ResourceBar resource={currentResource}/>}
       leftbar={sidebar}      
       leftbarActive={true}
       currentItem={currentResource}
@@ -106,6 +113,16 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
           <div 
             className="flex space-x-2 mb-2 p-2"
           >
+
+            <PdfView 
+              isOpen={openViewer}
+              fileName={currentResource ? currentResource.fileName : ''}
+              handleIsOpen={() => {
+                handleViewer(false)
+              }}
+            />
+
+
             {selectedResources.length === 0 && (
               <>
                 <Can I='create' a={ENTITIES.Resources}>
@@ -128,8 +145,8 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
                 </form>
               </>
             )}
-            {selectedResources.length === 1 && (
 
+            {selectedResources.length === 1 && (
               <>
                 <div className='flex'>
                   <div className='pr-2 h-full'>
@@ -138,7 +155,7 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
                       text="Preview"
                       onClick={(event: MouseEvent) => {
                         event.preventDefault();
-                        // onOpen(selectedUsers[0]);
+                        setCurrentResource(selectedResources[0]);
                       }}
                     />
                   </div>
@@ -174,16 +191,7 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
                       onDownload(selectedResources.map(f => f.fileName))
                     }}
                   />              
-                </div>
-                <ButtonMenu openSide="right">
-                  <Can I='delete' a={ENTITIES.Resources}>
-                    <DeleteResourceModal 
-                      onSubmit={() => { 
-                        onDelete(selectedResources[0].id)
-                      }}                      
-                    />                    
-                  </Can>
-                </ButtonMenu>
+                </div>                
               </>                                  
             )}                
            
@@ -207,6 +215,8 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
                           event.preventDefault();
                           event.stopPropagation()
                           // onOpen(hoverRow);
+                          setCurrentResource(hoverRow);
+                          handleViewer(true)
                         }}
                       />
                     </div>
@@ -220,23 +230,6 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
                           setCurrentResource(hoverRow);
                         }}
                       />
-                        {/* <DeleteModal 
-                          render={(
-                            <p>
-                              the selected users will be permanently deleted.
-                            </p>
-                          )}
-                          onDelete={(e) => {
-                            onDelete([hoverRow])
-                          }}
-                        />                     */} 
-                      <Can I='delete' a={ENTITIES.Resources}>
-                        <DeleteResourceModal 
-                          onSubmit={() => { 
-                            onDelete(hoverRow.id)
-                          }}                      
-                        />                    
-                      </Can>
                     </ButtonMenu>
                   </>
                 </HoveredRowWrapper>

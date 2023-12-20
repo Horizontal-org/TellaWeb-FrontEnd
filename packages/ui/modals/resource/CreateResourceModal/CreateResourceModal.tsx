@@ -22,7 +22,6 @@ export const CreateResourceModal: FunctionComponent<React.PropsWithChildren<Prop
   const [nameTaken, handleNameTaken] = useState(false)
   const [processing, handleProcessing] = useState(null)
 
-  console.log("🚀 ~ file: CreateResourceModal.tsx:22 ~ modalOpen:", modalOpen)
 
   const handleButtonPress = () => {
     hiddenFileInput.current.click();
@@ -62,6 +61,7 @@ export const CreateResourceModal: FunctionComponent<React.PropsWithChildren<Prop
     const token = localStorage.getItem("access_token")
     const reader = new FileReader()
     
+    console.log(file.size)
     reader.onload = async (ev: ProgressEvent<FileReader>): Promise<void> => {
       
       const controller = new AbortController()
@@ -82,6 +82,7 @@ export const CreateResourceModal: FunctionComponent<React.PropsWithChildren<Prop
 
       await fetch(`${process.env.NEXT_PUBLIC_API_URL}/resource/upload/${file.name}`, {
         method: 'POST',
+        body: JSON.stringify({size: file.size}),
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,

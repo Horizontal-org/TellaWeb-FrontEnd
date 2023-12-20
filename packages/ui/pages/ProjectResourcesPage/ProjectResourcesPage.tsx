@@ -38,6 +38,8 @@ import { BsPerson } from "react-icons/bs";
 import { Resource } from "packages/state/domain/resource";
 import { RESOURCE_COLUMNS } from "../ResourceListPage/ResourceListPage";
 import { ManageResourcesProjectModal } from "packages/ui/modals/project/ManageResourcesProjectModal/ManageResourcesProjectModal";
+import { ResourceBar } from "packages/ui/components/ResourceBar/ResourceBar";
+import { PdfView } from "packages/ui/components/PdfView/PdfView";
 
 type Props = {
   project: Project
@@ -60,8 +62,9 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
   currentQuery,
   removeSelected
 }) => {
-  console.log("🚀 ~ file: ProjectResourcesPage.tsx:63 ~ resources:", resources)
   const [currentResource, setCurrentResource] = useState<Resource | undefined>();
+  const [openViewer, handleViewer] = useState<boolean>(false)
+
   const [selectedResources, setSelectedResources] = useState<Resource[]>([]);
 
   const openUser = () => {
@@ -75,6 +78,16 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
       subtitle="Manage the project's resources"
       content={
         <div>
+
+
+          <PdfView 
+            isOpen={openViewer}
+            fileName={currentResource ? currentResource.fileName : ''}
+            handleIsOpen={() => {
+              handleViewer(false)
+            }}
+          />
+
           <div className="flex space-x-2 mb-2 p-2">
             {selectedResources.length === 0 && (
               <>
@@ -122,26 +135,17 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
                 <>
                   <div className="px-2">
                     <Button
-                      type={btnType.Secondary}
-                      icon={<MdRemoveRedEye />}
-                      text="Preview"
-                      onClick={(e: ChangeEvent) => {
-                        e.stopPropagation()
+                      icon={<MdOpenInNew />}
+                      text="Open"
+                      onClick={(event: MouseEvent) => {
+                        event.preventDefault();
+                        event.stopPropagation()
                         setCurrentResource(hoveredRow);
+                        handleViewer(true)
                       }}
                     />
                   </div>
-                  <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
-                    {/* <ButtonOption
-                      icon={<MdSave />}
-                      onClick={(event: MouseEvent) => {
-                        event.stopPropagation()
-                        onDownload(hoveredRow)
-                      }}
-                      text="Download"
-                      color='#8B8E8F'
-                    /> */}
-                  </ButtonMenu>
+             
                 </>
               </HoveredRowWrapper>
             )}
@@ -150,7 +154,8 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
       }
       leftbar={sidebar}
       leftbarActive={true}
-      rightbarActive={false}
+      rightbarActive={true}
+      rightbar={<ResourceBar resource={currentResource}/>}
       onClosePreview={() => setCurrentResource(undefined)}
       currentItem={currentResource}
     />
