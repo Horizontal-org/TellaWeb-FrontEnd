@@ -14,6 +14,7 @@ export const ENTITIES = {
   Users: 'users',
   Projects: 'projects',
   Web: 'web',
+  Resources: 'resources'
 }
 
 export const defaultAbility = defineAbility((can, cannot) => {
@@ -30,11 +31,13 @@ export const updateAbility = (user, ability) => {
     can('manage', ENTITIES.Projects)
     can('read', ENTITIES.RemoteConfigurations)
     can('read', ENTITIES.Web)
+    can('read', ENTITIES.Resources)
   } else if (user.role === ROLES.Viewer) {
     can('read', ENTITIES.Projects)
     can('read', ENTITIES.Reports)
     can('read', ENTITIES.RemoteConfigurations)
     can('read', ENTITIES.Web)
+    can('read', ENTITIES.Resources)
   }
 
   ability.update(rules);  
@@ -55,6 +58,10 @@ export const validateRoute = (ability, route) => {
   }
   if (route.includes('configuration')) {
     entity = ENTITIES.RemoteConfigurations
+  }
+
+  if (route.includes('resource')) {
+    entity = ENTITIES.Resources
   }
 
     

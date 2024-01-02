@@ -5,6 +5,8 @@ import { IoMdExit } from 'react-icons/io'
 
 import { MdOutlineSettings } from 'react-icons/md'
 import { BsFillCloudArrowUpFill, BsPerson } from 'react-icons/bs'
+import { MdOutlinePictureAsPdf } from "react-icons/md";
+
 import RemoteConfigIcon from '../packages/ui/components/RemoteConfigIcon'
 import { ENTITIES } from "common/casl/Ability";
 export const Menu: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
@@ -26,6 +28,13 @@ export const Menu: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
           icon: <BsPerson />,
           onClick: () => router.replace("/user"),
           selected: router.route === '/user',
+        },
+        {
+          permission: ENTITIES.Web,
+          text: "Resources",
+          icon: <MdOutlinePictureAsPdf />,
+          onClick: () => router.replace("/resource"),
+          selected: router.route === '/resource',
         },
         // WAITING FOR MOBILE
         // {
