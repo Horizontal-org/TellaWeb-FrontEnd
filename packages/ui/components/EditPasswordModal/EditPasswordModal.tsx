@@ -113,7 +113,7 @@ export const EditPasswordModal: FunctionComponent<React.PropsWithChildren<Props>
             <Button 
               text='SAVE'
               full={true}
-              disabled={!(newPassword.length > 0 && newPassword === confirmPassword && passwordStrength > 3)}
+              disabled={!(newPassword.length > 0 && newPassword === confirmPassword)}
               onClick={() => {
                 onSubmit(oldPassword, newPassword)
                 toggle()

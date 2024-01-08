@@ -38,7 +38,7 @@ export const CreateUserModal: FunctionComponent<React.PropsWithChildren<Props>> 
       btnType={btnType.Primary}
       subtitle='Enter the user’s basic information here. You will be able to add additional information on the next screen.'
       submit='SAVE'
-      disabled={!((username.length > 0) && password === confirmPassword && paswordStrength > 3)}
+      disabled={!((username.length > 0) && password === confirmPassword)}
       onSubmit={() => {
         onSubmit({
           username,
