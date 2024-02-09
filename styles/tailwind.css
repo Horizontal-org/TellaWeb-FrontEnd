@@ -1308,6 +1308,11 @@ video {
   background-color: rgba(220, 38, 38, var(--tw-bg-opacity));
 }
 
+.bg-green-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgba(5, 150, 105, var(--tw-bg-opacity));	
+}
+
 .bg-blue-300 {
   --tw-bg-opacity: 1;
   background-color: rgba(0, 141, 236, var(--tw-bg-opacity));

@@ -13,13 +13,15 @@ import { useReportFileDownloader } from "packages/state/features/files/useReport
 import { Menu } from "components/Menu";
 import { UserQuery } from "packages/state/domain/user";
 import { ProjectUsersPage } from "packages/ui/pages/ProjectUsersPage/ProjectUsersPage";
+import { ResourceQuery } from "packages/state/domain/resource";
+import { ProjectResourcesPage } from "packages/ui/pages/ProjectResourcesPage/ProjectResourcesPage";
 
-const defaultQuery: ReportQuery = {
+const defaultQuery: ResourceQuery = {
   page: 0,
   size: 25,
 };
 
-const toItemQuery = (userQuery: UserQuery): ItemQuery => {
+const toItemQuery = (userQuery: ResourceQuery): ItemQuery => {
   return {
     sort: {
       key: userQuery.sortKey,
@@ -35,7 +37,7 @@ const toItemQuery = (userQuery: UserQuery): ItemQuery => {
   };
 };
 
-const toUserQuery = (itemQuery: ItemQuery): UserQuery => {
+const toResourceQuery = (itemQuery: ItemQuery): ResourceQuery => {
   return {
     sortKey: itemQuery.sort?.key,
     sortOrder: itemQuery.sort?.order,
@@ -68,37 +70,37 @@ export const ProjectById = () => {
   const { data: currentProject, refetch } = useGetByIdQuery(
     "" + router.query.projectId
     );
-  
+    
   const { push } = useRouter();
-  const [query, setQuery] = useState<UserQuery>(defaultQuery);
+  const [query, setQuery] = useState<ResourceQuery>(defaultQuery);
   const itemQuery = useMemo(() => toItemQuery(query), [query]);
-  const [addUsers, addUsersResult] = useAddEntitiesMutation()
+  const [addResources, addResourcesResult] = useAddEntitiesMutation()
 
   useEffect(() => {
-    if (addUsersResult.isSuccess) {
-      handleToast("Users updated!");
+    if (addResourcesResult.isSuccess) {
+      handleToast("Resources updated!");
       refetch()
     }
-    if (addUsersResult.error && "status" in addUsersResult.error) {
-      handleToast(addUsersResult.error.data.message, "danger");
+    if (addResourcesResult.error && "status" in addResourcesResult.error) {
+      handleToast(addResourcesResult.error.data.message, "danger");
     }
-  }, [addUsersResult.status]);
+  }, [addResourcesResult.status]);
 
   return currentProject ? (
-    <ProjectUsersPage
+    <ProjectResourcesPage
       project={currentProject}
       currentQuery={itemQuery}
-      onAddUsers={(newUsers) => {
-        addUsers({ id: currentProject.id, users:newUsers })
+      onAddResources={(newR) => {
+        addResources({ id: currentProject.id, resources: newR })
       }}
-      onQueryChange={(itemQuery) => setQuery(toUserQuery(itemQuery))}
+      onQueryChange={(itemQuery) => setQuery(toResourceQuery(itemQuery))}
       onOpen={(user) => {
         push(`/user/${user.id}`);
       }}
       removeSelected={(selected) => {
-        addUsers({ id: currentProject.id, users: selected })
+        addResources({ id: currentProject.id, resources: selected })
       }}
-      users={processUsers(currentProject.users, query)}
+      resources={currentProject.resources}
       sidebar={<Menu />}
     />
   ) : null;

@@ -14,6 +14,7 @@ type Props = {
   btnType?: btnTypes;
   submitButtonType?: btnTypes;
   externalOpen?: boolean,
+  onExternalOpen?: () => void 
   onClose?: () => void
 }
 
@@ -28,6 +29,7 @@ export const Modal: FunctionComponent<React.PropsWithChildren<Props>> = ({
   btnType,
   buttonIcon,
   externalOpen,
+  onExternalOpen,
   onClose,
   submitButtonType
 }) => {
@@ -42,7 +44,11 @@ export const Modal: FunctionComponent<React.PropsWithChildren<Props>> = ({
           text={button}
           onClick={(e: Event) => {
             e.stopPropagation()            
-            toggle()            
+            if (onExternalOpen) {
+              onExternalOpen()
+            } else {
+              toggle()            
+            }
           }}
           type={btnType}
         />
@@ -63,7 +69,7 @@ export const Modal: FunctionComponent<React.PropsWithChildren<Props>> = ({
           { onSubmit && (
             <div className='py-4'>
               <Button 
-                text='SAVE'
+                text={submit || 'SAVE'}
                 full={true}
                 type={submitButtonType ? submitButtonType : btnTypes.Primary}
                 disabled={disabled}

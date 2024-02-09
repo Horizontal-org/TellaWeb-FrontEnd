@@ -9,6 +9,7 @@ import { reportsApi } from "./services/reports";
 import { filesApi } from "./services/files";
 import { configurationApi } from './services/configuration'
 import { projectApi } from "./services/project";
+import { resourcesApi } from "./services/resource";
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     [filesApi.reducerPath]: filesApi.reducer,
     [configurationApi.reducerPath]: configurationApi.reducer,
     [projectApi.reducerPath]: projectApi.reducer,
+    [resourcesApi.reducerPath]: resourcesApi.reducer,
     auth: authSlice.reducer,
     user: userSlice.reducer,
     reports: reportsSlice.reducer,
@@ -29,7 +31,8 @@ const store = configureStore({
       reportsApi.middleware,
       filesApi.middleware,
       configurationApi.middleware,
-      projectApi.middleware
+      projectApi.middleware,
+      resourcesApi.middleware
     ),
 });
 

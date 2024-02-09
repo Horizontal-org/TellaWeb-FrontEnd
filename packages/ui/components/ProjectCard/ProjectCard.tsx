@@ -4,6 +4,7 @@ import { MdOutlineSettings } from 'react-icons/md'
 import { format } from 'date-fns'
 import { btnType, Button } from "../Button/Button";
 import { useRouter } from "next/router";
+import { FaRegFileAlt, FaRegUser } from "react-icons/fa";
 
 interface Props {
   data: Project;
@@ -40,11 +41,27 @@ const ProjectCard: FunctionComponent<React.PropsWithChildren<Props>> = ({ data }
           className="px-6 py-2 flex items-center justify-between bg-gray-50"
           style={{ borderBottomLeftRadius: '8px', borderBottomRightRadius: '8px' }} 
         >
-          <span 
-            className="text-base font-sans font-normal text-gray-500"            
-          >
-            Created { format(new Date(data.createdAt), "dd MMM yyyy")}
-          </span>
+         <div className="flex items-center">
+            <div 
+                className="p-2  cursor-pointer text-gray-500 active:shadow-inbox rounded"
+                onClick={(e) => {
+                  e.stopPropagation()                  
+                  router.push(`/project/${data.id}/users`)
+                }}
+              >                
+                <FaRegUser size={14} />
+            </div>
+            <div 
+                className="p-2  cursor-pointer text-gray-500 active:shadow-inbox rounded"
+                onClick={(e) => {
+                  e.stopPropagation()              
+                  router.push(`/project/${data.id}/resources`)
+                }}
+              >
+                <FaRegFileAlt size={14} />
+            </div>
+         </div>
+
           <div 
             className="p-2 cursor-pointer text-gray-500 active:shadow-inbox rounded"
             onClick={(e) => {

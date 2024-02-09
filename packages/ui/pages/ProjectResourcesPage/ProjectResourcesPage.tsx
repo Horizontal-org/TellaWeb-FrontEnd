@@ -20,7 +20,7 @@ import {
   UserBar
 } from "../..";
 import { btnType } from "../../components/Button/Button";
-
+import { MdPictureAsPdf } from "react-icons/md";
 import { MainLayout } from "../../layouts/MainLayout";
 
 import { REPORT_COLUMNS } from "../../domain/ReportTableColumns";
@@ -35,65 +35,75 @@ import { User } from "packages/state/domain/user";
 import { ManageUsersProjectModal } from "packages/ui/modals/project/ManageUsersProjectModal/ManageUsersProjectModal";
 import { USER_COLUMNS } from "packages/ui/domain/UserTableColumns";
 import { BsPerson } from "react-icons/bs";
+import { Resource } from "packages/state/domain/resource";
+import { RESOURCE_COLUMNS } from "../ResourceListPage/ResourceListPage";
+import { ManageResourcesProjectModal } from "packages/ui/modals/project/ManageResourcesProjectModal/ManageResourcesProjectModal";
+import { ResourceBar } from "packages/ui/components/ResourceBar/ResourceBar";
+import { PdfView } from "packages/ui/components/PdfView/PdfView";
 
 type Props = {
   project: Project
-  users: User[];
+  resources: Resource[];
   onQueryChange: (iq: ItemQuery) => void;
-  onOpen: (user: User) => void;
-  onAddUsers: (newUsers:  string[]) => void;
+  onOpen: (resource: Resource) => void;
+  onAddResources: (newResources:  string[]) => void;
   sidebar: React.ReactNode;
   currentQuery: ItemQuery;
-  removeSelected: (selectedUsers: string[]) => void;
+  removeSelected: (selectedResources: string[]) => void;
 };
 
-export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
+export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   project,
   onOpen,
   onQueryChange,
-  onAddUsers,
-  users,
+  onAddResources,
+  resources,
   sidebar,
   currentQuery,
   removeSelected
 }) => {
-  const [currentUser, setCurrentUser] = useState<User | undefined>();
-  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+  const [currentResource, setCurrentResource] = useState<Resource | undefined>();
+  const [openViewer, handleViewer] = useState<boolean>(false)
+
+  const [selectedResources, setSelectedResources] = useState<Resource[]>([]);
 
   const openUser = () => {
-    setCurrentUser(selectedUsers[0]);
-  }
+    setCurrentResource(selectedResources[0]);
+  };
+
 
   return (
     <MainLayout
       title={project.name}
-      subtitle="Manage the project's users"
+      subtitle="Manage the project's resources"
       content={
         <div>
+
+
+          <PdfView 
+            isOpen={openViewer}
+            fileName={currentResource ? currentResource.fileName : ''}
+            handleIsOpen={() => {
+              handleViewer(false)
+            }}
+          />
+
           <div className="flex space-x-2 mb-2 p-2">
-            {selectedUsers.length === 0 && (
+            {selectedResources.length === 0 && (
               <>
-                <ManageUsersProjectModal 
-                  onSubmit={(newUsers) => {
-                    onAddUsers(newUsers)
+                <ManageResourcesProjectModal 
+                  onSubmit={(newResources) => {
+                    onAddResources(newResources)
                   }}
-                  userList={users}
+                  resourceList={resources}
                 />
               </>
             )}
 
-            {selectedUsers.length > 0 && (
+            {selectedResources.length > 0 && (
               <>
-                {selectedUsers.length === 1 && (
-                  <>
-                    <Button
-                      icon={<MdOpenInNew />}
-                      text="Edit"
-                      onClick={(event: MouseEvent) => {
-                        event.preventDefault();
-                        onOpen(selectedUsers[0]);
-                      }}
-                    />
+                {selectedResources.length === 1 && (
+                  <>                   
                     <Button
                       type={btnType.Secondary}
                       icon={<MdRemoveRedEye />}
@@ -106,45 +116,36 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
                   type={btnType.Secondary}
                   text="Remove from project"
                   onClick={() => {
-                    removeSelected(selectedUsers.map(su => su.id))
+                    removeSelected(selectedResources.map(su => su.id))
                   }}
                 />         
               </>
             )}
           </div>
           <Table
-            columns={USER_COLUMNS}
-            data={users}
+            columns={RESOURCE_COLUMNS}
+            data={resources}
             withPagination={false}
             itemQuery={currentQuery}
-            onSelection={setSelectedUsers as Dispatch<SetStateAction<Item[]>>}
+            onSelection={setSelectedResources as Dispatch<SetStateAction<Item[]>>}
             onFetch={onQueryChange}
-            icon={<BsPerson/>}
+            icon={<MdPictureAsPdf/>}
             rowOptions={(hoveredRow, isHoverSelected) => (
               <HoveredRowWrapper isHoverSelected={isHoverSelected}>
                 <>
                   <div className="px-2">
                     <Button
-                      type={btnType.Secondary}
-                      icon={<MdRemoveRedEye />}
-                      text="Preview"
-                      onClick={(e: ChangeEvent) => {
-                        e.stopPropagation()
-                        setCurrentUser(hoveredRow);
+                      icon={<MdOpenInNew />}
+                      text="Open"
+                      onClick={(event: MouseEvent) => {
+                        event.preventDefault();
+                        event.stopPropagation()
+                        setCurrentResource(hoveredRow);
+                        handleViewer(true)
                       }}
                     />
                   </div>
-                  <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
-                    {/* <ButtonOption
-                      icon={<MdSave />}
-                      onClick={(event: MouseEvent) => {
-                        event.stopPropagation()
-                        onDownload(hoveredRow)
-                      }}
-                      text="Download"
-                      color='#8B8E8F'
-                    /> */}
-                  </ButtonMenu>
+             
                 </>
               </HoveredRowWrapper>
             )}
@@ -153,14 +154,14 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
       }
       leftbar={sidebar}
       leftbarActive={true}
-      rightbar={<UserBar user={currentUser} />}
       rightbarActive={true}
-      onClosePreview={() => setCurrentUser(undefined)}
-      currentItem={currentUser}
+      rightbar={<ResourceBar resource={currentResource}/>}
+      onClosePreview={() => setCurrentResource(undefined)}
+      currentItem={currentResource}
     />
   );
 };
 
-ProjectUsersPage.defaultProps = {
-  users: [],
+ProjectResourcesPage.defaultProps = {
+  resources: [],
 };
