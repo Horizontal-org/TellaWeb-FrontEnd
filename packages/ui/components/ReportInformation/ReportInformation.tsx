@@ -14,7 +14,7 @@ export const ReportInformation: FunctionComponent<React.PropsWithChildren<Props>
     ...(report.date ? { Time: format(report.date, "h:mm:ss a") } : {}),
     // Size: filesize(report.files.reduce((p = 0, a) => a.size + p, 0)),
     "Number of files": report.files.length.toString(),
-    Author: report.author.username,
+    Author: report.author ? report.author.username : 'deleted user',
     ID: report.id.toString(),
   };
   return (
