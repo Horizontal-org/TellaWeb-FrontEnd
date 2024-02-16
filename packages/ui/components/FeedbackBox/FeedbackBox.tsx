@@ -123,6 +123,10 @@ const FeedbackButton = styled.div`
   > svg {
     margin-right: 8px;
   }
+
+  &:hover {
+    opacity: 0.8;
+  }
 `
 
 const Box = styled.div`
@@ -146,6 +150,7 @@ const BoxText = styled.p`
 const BottomBox = styled.div`
   display: flex;
   justify-content: flex-end;
+  padding-top: 10px;
 `
 
 const Thanks = styled.p`

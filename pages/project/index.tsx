@@ -56,6 +56,10 @@ export const Project = () => {
   const { data: projects, refetch, isLoading } = useListQuery(query);
   
   useEffect(() => {
+    refetch()
+  }, [])
+
+  useEffect(() => {
     if (createProjectResult.isSuccess) {
       handleToast("Project created!", "info");
       refetch()
