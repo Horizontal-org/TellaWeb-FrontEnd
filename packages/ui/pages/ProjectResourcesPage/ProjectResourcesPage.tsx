@@ -91,12 +91,14 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
           <div className="flex space-x-2 mb-2 p-2">
             {selectedResources.length === 0 && (
               <>
-                <ManageResourcesProjectModal 
-                  onSubmit={(newResources) => {
-                    onAddResources(newResources)
-                  }}
-                  resourceList={resources}
-                />
+                <Can I='attach' a={ENTITIES.Resources}>
+                  <ManageResourcesProjectModal 
+                    onSubmit={(newResources) => {
+                      onAddResources(newResources)
+                    }}
+                    resourceList={resources}
+                    />
+                </Can>
               </>
             )}
 
@@ -111,14 +113,16 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
                       onClick={openUser}
                     />                    
                   </>
-                )}             
-                <Button
-                  type={btnType.Secondary}
-                  text="Remove from project"
-                  onClick={() => {
-                    removeSelected(selectedResources.map(su => su.id))
-                  }}
-                />         
+                )}
+                 <Can I='attach' a={ENTITIES.Resources}>                                    
+                    <Button
+                      type={btnType.Secondary}
+                      text="Remove from project"
+                      onClick={() => {
+                        removeSelected(selectedResources.map(su => su.id))
+                      }}
+                    />
+                  </Can>             
               </>
             )}
           </div>
