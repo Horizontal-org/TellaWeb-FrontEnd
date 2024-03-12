@@ -50,8 +50,8 @@ export const ProjectById = () => {
   return currentProject ? (
     <ProjectSettingsPage
       project={currentProject}
-      onManage={() => {
-        push(`/project/${currentProject.id}/users`);
+      onManage={(entity) => {
+        push(`/project/${currentProject.id}/${entity}`);
       }}      
       onRename={(newName) => {
         editProject({

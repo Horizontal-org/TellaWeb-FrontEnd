@@ -67,10 +67,10 @@ export const ProjectById = () => {
 
   const router = useRouter();
   const handleToast = useToast()
-  const { data: currentProject, refetch } = useGetByIdQuery(
+  const { data: currentProject, refetch, isLoading } = useGetByIdQuery(
     "" + router.query.projectId
     );
-    
+
   const { push } = useRouter();
   const [query, setQuery] = useState<ResourceQuery>(defaultQuery);
   const itemQuery = useMemo(() => toItemQuery(query), [query]);
@@ -90,6 +90,7 @@ export const ProjectById = () => {
     <ProjectResourcesPage
       project={currentProject}
       currentQuery={itemQuery}
+      isLoading={isLoading}
       onAddResources={(newR) => {
         addResources({ id: currentProject.id, resources: newR })
       }}

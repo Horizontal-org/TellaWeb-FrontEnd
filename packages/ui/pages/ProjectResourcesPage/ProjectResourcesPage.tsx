@@ -50,6 +50,7 @@ type Props = {
   sidebar: React.ReactNode;
   currentQuery: ItemQuery;
   removeSelected: (selectedResources: string[]) => void;
+  isLoading: boolean
 };
 
 export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
@@ -60,7 +61,8 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
   resources,
   sidebar,
   currentQuery,
-  removeSelected
+  removeSelected,
+  isLoading
 }) => {
   const [currentResource, setCurrentResource] = useState<Resource | undefined>();
   const [openViewer, handleViewer] = useState<boolean>(false)
@@ -120,45 +122,72 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
                       text="Remove from project"
                       onClick={() => {
                         removeSelected(selectedResources.map(su => su.id))
+                        setSelectedResources([])
                       }}
                     />
                   </Can>             
               </>
             )}
           </div>
-          <Table
-            columns={RESOURCE_COLUMNS}
-            data={resources}
-            withPagination={false}
-            itemQuery={currentQuery}
-            onSelection={setSelectedResources as Dispatch<SetStateAction<Item[]>>}
-            onFetch={onQueryChange}
-            icon={<MdPictureAsPdf/>}
-            rowOptions={(hoveredRow, isHoverSelected) => (
-              <HoveredRowWrapper isHoverSelected={isHoverSelected}>
-                <>
-                  <div className="px-2">
-                    <Button
-                      icon={<MdOpenInNew />}
-                      text="Open"
-                      onClick={(event: MouseEvent) => {
-                        event.preventDefault();
-                        event.stopPropagation()
-                        setCurrentResource(hoveredRow);
-                        handleViewer(true)
-                      }}
-                    />
-                  </div>
-             
-                </>
-              </HoveredRowWrapper>
-            )}
-          />
+          { (resources.length > 0) && (
+              <Table
+                columns={RESOURCE_COLUMNS}
+                data={resources}
+                withPagination={false}
+                itemQuery={currentQuery}
+                onSelection={setSelectedResources as Dispatch<SetStateAction<Item[]>>}
+                onFetch={onQueryChange}
+                icon={<MdPictureAsPdf/>}
+                rowOptions={(hoveredRow, isHoverSelected) => (
+                  <HoveredRowWrapper isHoverSelected={isHoverSelected}>
+                    <>
+                      <div className="px-2">
+                        <Button
+                          icon={<MdOpenInNew />}
+                          text="Open"
+                          onClick={(event: MouseEvent) => {
+                            event.preventDefault();
+                            event.stopPropagation()
+                            setCurrentResource(hoveredRow);
+                            handleViewer(true)
+                          }}
+                        />
+                      </div>
+                
+                    </>
+                  </HoveredRowWrapper>
+                )}
+              />
+
+          )}
         </div>
       }
       leftbar={sidebar}
       leftbarActive={true}
       rightbarActive={true}
+      absoluteContent={ (resources.length === 0 && !isLoading) && (
+        <div 
+          className="flex text-sm justify-center w-full p-6" 
+          style={{ 
+            position: 'absolute', 
+            bottom: 'calc(50% - 50px)',
+            marginLeft: '-60px'
+          }}
+        >          
+          <div 
+            className="py-8 px-12 text-center"
+          >
+
+            <p className='text-xxxl text-gray-600 font-bold'>
+              Nothing to show
+            </p>
+            <p className='py-2 font-normal text-lg text-gray-500'>
+              Resources will show up here after they are added by your team
+            </p>
+    
+          </div>
+        </div>
+      )}
       rightbar={<ResourceBar resource={currentResource}/>}
       onClosePreview={() => setCurrentResource(undefined)}
       currentItem={currentResource}
