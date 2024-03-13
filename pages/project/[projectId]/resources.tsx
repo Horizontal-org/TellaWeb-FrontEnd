@@ -37,6 +37,8 @@ const toItemQuery = (userQuery: ResourceQuery): ItemQuery => {
   };
 };
 
+let RESOURCES_SYNC_MESSAGE = ''
+
 const toResourceQuery = (itemQuery: ItemQuery): ResourceQuery => {
   return {
     sortKey: itemQuery.sort?.key,
@@ -63,7 +65,7 @@ export const ProjectById = () => {
 
   useEffect(() => {
     if (addResourcesResult.isSuccess) {
-      handleToast("Resources updated!");
+      handleToast(RESOURCES_SYNC_MESSAGE);
       refetch()
     }
     if (addResourcesResult.error && "status" in addResourcesResult.error) {
@@ -77,6 +79,7 @@ export const ProjectById = () => {
       currentQuery={itemQuery}
       isLoading={isLoading}
       onAddResources={(newR) => {
+        RESOURCES_SYNC_MESSAGE='Resources added'
         addResources({ id: currentProject.id, resources: newR })
       }}
       onQueryChange={(itemQuery) => setQuery(toResourceQuery(itemQuery))}
@@ -84,6 +87,7 @@ export const ProjectById = () => {
         push(`/user/${user.id}`);
       }}
       removeSelected={(selected) => {
+        RESOURCES_SYNC_MESSAGE='Resources removed'
         addResources({ id: currentProject.id, resources: selected })
       }}
       resources={currentProject.resources}
