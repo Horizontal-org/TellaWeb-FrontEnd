@@ -66,8 +66,8 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
 
   return (
     <MainLayout
-      title={project.name}
-      subtitle="Manage the project's users"
+      title={"Project users"}
+      subtitle={`Manages users available in the project “${project.name}”`}            
       content={
         <div>
           <div className="flex space-x-2 mb-2 p-2">

@@ -48,21 +48,6 @@ const toResourceQuery = (itemQuery: ItemQuery): ResourceQuery => {
   };
 };
 
-const processUsers = (users, query) => {
-  return users
-}
-
-// const processReports = (reports, query) => {
-//   if (!reports) {
-//     return []
-//   }
-//   let newReports = reports
-//   if ( query.search && query.search.length > 0 ) {
-//     newReports = reports.filter((r) => { return r.title.toLowerCase().includes(query.search.toLowerCase()) })
-//   }
-//   return newReports.map(toReport)
-// }
-
 export const ProjectById = () => {
 
   const router = useRouter();
