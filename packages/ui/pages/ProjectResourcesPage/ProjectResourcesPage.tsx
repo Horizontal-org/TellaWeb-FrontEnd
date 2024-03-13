@@ -77,7 +77,7 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
   return (
     <MainLayout
       title={"Project resources"}
-      subtitle={`Manages resources available in the project “${project.name}”`}      
+      subtitle={`Manage resources available in the project “${project.name}”`}      
       content={
         <div>
 
