@@ -5,6 +5,8 @@ import { format } from 'date-fns'
 import { btnType, Button } from "../Button/Button";
 import { useRouter } from "next/router";
 import { FaRegFileAlt, FaRegUser } from "react-icons/fa";
+import { Can } from "common/casl/Can";
+import { ENTITIES } from "common/casl/Ability";
 
 interface Props {
   data: Project;
@@ -42,15 +44,17 @@ const ProjectCard: FunctionComponent<React.PropsWithChildren<Props>> = ({ data }
           style={{ borderBottomLeftRadius: '8px', borderBottomRightRadius: '8px' }} 
         >
          <div className="flex items-center">
-            <div 
-                className="p-2  cursor-pointer text-gray-500 active:shadow-inbox rounded"
-                onClick={(e) => {
-                  e.stopPropagation()                  
-                  router.push(`/project/${data.id}/users`)
-                }}
-              >                
-                <FaRegUser size={14} />
-            </div>
+            <Can I='read' a={ENTITIES.Users}>
+              <div 
+                  className="p-2  cursor-pointer text-gray-500 active:shadow-inbox rounded"
+                  onClick={(e) => {
+                    e.stopPropagation()                  
+                    router.push(`/project/${data.id}/users`)
+                  }}
+                >                
+                  <FaRegUser size={14} />
+              </div>              
+            </Can>
             <div 
                 className="p-2  cursor-pointer text-gray-500 active:shadow-inbox rounded"
                 onClick={(e) => {

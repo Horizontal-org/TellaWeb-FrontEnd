@@ -30,7 +30,7 @@ export const Menu: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
           selected: router.route === '/user',
         },
         {
-          permission: ENTITIES.Web,
+          permission: ENTITIES.Resources,
           text: "Resources",
           icon: <MdOutlinePictureAsPdf />,
           onClick: () => router.replace("/resource"),

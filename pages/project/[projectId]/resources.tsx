@@ -37,6 +37,8 @@ const toItemQuery = (userQuery: ResourceQuery): ItemQuery => {
   };
 };
 
+let RESOURCES_SYNC_MESSAGE = ''
+
 const toResourceQuery = (itemQuery: ItemQuery): ResourceQuery => {
   return {
     sortKey: itemQuery.sort?.key,
@@ -48,29 +50,14 @@ const toResourceQuery = (itemQuery: ItemQuery): ResourceQuery => {
   };
 };
 
-const processUsers = (users, query) => {
-  return users
-}
-
-// const processReports = (reports, query) => {
-//   if (!reports) {
-//     return []
-//   }
-//   let newReports = reports
-//   if ( query.search && query.search.length > 0 ) {
-//     newReports = reports.filter((r) => { return r.title.toLowerCase().includes(query.search.toLowerCase()) })
-//   }
-//   return newReports.map(toReport)
-// }
-
 export const ProjectById = () => {
 
   const router = useRouter();
   const handleToast = useToast()
-  const { data: currentProject, refetch } = useGetByIdQuery(
+  const { data: currentProject, refetch, isLoading } = useGetByIdQuery(
     "" + router.query.projectId
     );
-    
+
   const { push } = useRouter();
   const [query, setQuery] = useState<ResourceQuery>(defaultQuery);
   const itemQuery = useMemo(() => toItemQuery(query), [query]);
@@ -78,7 +65,7 @@ export const ProjectById = () => {
 
   useEffect(() => {
     if (addResourcesResult.isSuccess) {
-      handleToast("Resources updated!");
+      handleToast(RESOURCES_SYNC_MESSAGE);
       refetch()
     }
     if (addResourcesResult.error && "status" in addResourcesResult.error) {
@@ -90,7 +77,9 @@ export const ProjectById = () => {
     <ProjectResourcesPage
       project={currentProject}
       currentQuery={itemQuery}
+      isLoading={isLoading}
       onAddResources={(newR) => {
+        RESOURCES_SYNC_MESSAGE='Resources added'
         addResources({ id: currentProject.id, resources: newR })
       }}
       onQueryChange={(itemQuery) => setQuery(toResourceQuery(itemQuery))}
@@ -98,6 +87,7 @@ export const ProjectById = () => {
         push(`/user/${user.id}`);
       }}
       removeSelected={(selected) => {
+        RESOURCES_SYNC_MESSAGE='Resources removed'
         addResources({ id: currentProject.id, resources: selected })
       }}
       resources={currentProject.resources}

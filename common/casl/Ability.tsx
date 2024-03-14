@@ -31,13 +31,13 @@ export const updateAbility = (user, ability) => {
     can('manage', ENTITIES.Projects)
     can('read', ENTITIES.RemoteConfigurations)
     can('read', ENTITIES.Web)
-    can('read', ENTITIES.Resources)
+    can('attach', ENTITIES.Resources)
   } else if (user.role === ROLES.Viewer) {
     can('read', ENTITIES.Projects)
     can('read', ENTITIES.Reports)
     can('read', ENTITIES.RemoteConfigurations)
     can('read', ENTITIES.Web)
-    can('read', ENTITIES.Resources)
+    // can('read', ENTITIES.Resources)
   }
 
   ability.update(rules);  
