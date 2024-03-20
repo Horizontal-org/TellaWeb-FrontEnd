@@ -37,6 +37,7 @@ type Props = {
   onQueryChange: (iq: ItemQuery) => void;
   onOpen: (report: Report) => void;
   onDownload?: (report: Report) => void;
+  onDelete: (reports: Report[]) => void;
   sidebar: React.ReactNode;
   currentQuery: ItemQuery;
 };
@@ -48,6 +49,7 @@ export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   project,
   onOpen,
   onDownload = voidFunction,
+  onDelete,
   onQueryChange,
   sidebar,
   currentQuery,
@@ -123,7 +125,19 @@ export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
                       text="Download"
                     />
                   </>
-                )}             
+                )}        
+                <Can I='delete' a={ENTITIES.Reports}>
+                  <ButtonMenu openSide="right" type={btnType.Secondary} text="...">
+                    <DeleteModal 
+                      render={(
+                        <p>
+                          the selected reports will be permanently deleted.
+                        </p>
+                      )}
+                      onDelete={() => onDelete(selectedReports)}
+                      />  
+                  </ButtonMenu>
+                </Can>     
               </>
             )}
           </div>
@@ -158,7 +172,7 @@ export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
                       text="Download"
                       color='#8B8E8F'
                     />
-                    {/* <Can I='delete' a={ENTITIES.Reports}>
+                    <Can I='delete' a={ENTITIES.Reports}>
                       <DeleteModal 
                         render={(
                           <p>
@@ -167,7 +181,7 @@ export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
                         )}
                         onDelete={() => onDelete([hoveredRow])}
                       />  
-                    </Can> */}
+                    </Can>
                   </ButtonMenu>
                 </>
               </HoveredRowWrapper>

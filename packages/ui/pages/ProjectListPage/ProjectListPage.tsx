@@ -27,8 +27,9 @@ type Props = {
   onQueryChange: (iq: ItemQuery) => void;  
   sidebar: React.ReactNode;
   currentQuery: ItemQuery;
-  onCreateProject: ({name: string}) => void
+  onCreateProject: ({name}) => void
   onOpen: (id: string) => void
+  isLoading: boolean
 };
 
 
@@ -38,7 +39,8 @@ export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> 
   sidebar,
   currentQuery,
   onCreateProject,
-  onOpen
+  onOpen,
+  isLoading
 }) => {
 
   const [open, handleOpen] = useState<boolean>(false)
@@ -102,7 +104,7 @@ export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> 
           </div>
         </div>
       }
-      absoluteContent={ projects.length === 0 && (
+      absoluteContent={ (projects.length === 0 && !isLoading) && (
         <div 
           className="flex text-sm justify-center w-full p-6" 
           style={{ 

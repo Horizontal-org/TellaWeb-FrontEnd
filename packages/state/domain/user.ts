@@ -8,9 +8,21 @@ export const ROLES = {
 export interface User {
   id: string;
   username: string;
+  otp_active: boolean
   role: string;
   createdAt: string;
   note?: string
+}
+
+export interface LoginResponse {
+  access_token: string
+  user: User,
+  flagged?: boolean
+}
+
+export interface OtpEnableRes {
+  otp_url: string
+  otp_code: string
 }
 
 export interface Credential {
@@ -26,4 +38,9 @@ export interface UserQuery {
   total?: number;
   exclude?: Array<string>;
   size: number;
+}
+
+export interface OtpData {
+  otpCode: string,
+  otpUrl: string
 }

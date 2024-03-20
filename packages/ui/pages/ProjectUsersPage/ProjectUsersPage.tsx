@@ -62,13 +62,12 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
 
   const openUser = () => {
     setCurrentUser(selectedUsers[0]);
-  };
-
+  }
 
   return (
     <MainLayout
-      title={project.name}
-      subtitle="Manage the project's users"
+      title={"Project users"}
+      subtitle={`Manage users available in the project “${project.name}”`}            
       content={
         <div>
           <div className="flex space-x-2 mb-2 p-2">

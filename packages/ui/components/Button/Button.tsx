@@ -9,18 +9,23 @@ export enum btnType {
 
 interface Props {
   text?: string;
+  //TODO To remove
   icon?: ReactNode;
   disabled?: boolean;
   full?: boolean;
   type?: btnType;
   onClick?: (event: unknown) => void;
   onBlur?: (event: unknown) => void;
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
 }
 
 export const Button: FunctionComponent<React.PropsWithChildren<Props>> = ({
   text,
   disabled,
   icon,
+  leftIcon,
+  rightIcon,
   type,
   onClick,
   full,
@@ -50,13 +55,17 @@ export const Button: FunctionComponent<React.PropsWithChildren<Props>> = ({
       onBlur={onBlur}
     >
       {icon && <span className="text-base">{icon}</span>}
+      {leftIcon && <span className="text-base">{leftIcon}</span>}
       {text && <span>{text}</span>}
+      {rightIcon && <span className="text-base">{rightIcon}</span>}
     </button>
   );
 };
 
 Button.defaultProps = {
   icon: undefined,
+  leftIcon: undefined,
+  rightIcon: undefined,
   text: undefined,
   disabled: false,
   full: false,

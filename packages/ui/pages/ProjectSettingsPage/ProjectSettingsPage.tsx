@@ -31,13 +31,15 @@ import { RenameProjectModal } from "packages/ui/modals/project/RenameProjectModa
 import { DeleteProjectModal } from "packages/ui/modals/project/DeleteProjectModal/DeleteProjectModal";
 import { ManageUsersProjectModal } from "packages/ui/modals/project/ManageUsersProjectModal/ManageUsersProjectModal";
 import { EditUrlProjectModal } from "packages/ui/modals/project/EditUrlProjectModal/EditUrlProjectModal";
+import { Can } from "common/casl/Can";
+import { ENTITIES } from "common/casl/Ability";
 
 type Props = {
   project: Project
   onRename: (name: string) => void;
   onEdit: ({}) => void
   onDelete: () => void;
-  onManage: () => void;
+  onManage: (entity: string) => void;
   sidebar: React.ReactNode;
 };
 
@@ -146,10 +148,29 @@ export const ProjectSettingsPage: FunctionComponent<React.PropsWithChildren<Prop
               Manage access
             </p>
 
+            <Can I='read' a={ENTITIES.Users}>
+              <div className="flex justify-between items-center py-4 border-b">
+                <div className="flex items-center">
+                  <p className="text-gray-600 text-base uppercase" style={{ minWidth: 300 }}>
+                    Manage users
+                  </p>                  
+                  <p>
+                    
+                  </p>
+                </div>
+                <div>
+                  <Button 
+                    type={btnType.Secondary}
+                    text='MANAGE'
+                    onClick={() => {onManage('users')}}  
+                  />
+                </div>                
+              </div>            
+            </Can>
             <div className="flex justify-between items-center py-4 border-b">
               <div className="flex items-center">
                 <p className="text-gray-600 text-base uppercase" style={{ minWidth: 300 }}>
-                  Manage users
+                  Manage resources
                 </p>                  
                 <p>
                   
@@ -159,10 +180,10 @@ export const ProjectSettingsPage: FunctionComponent<React.PropsWithChildren<Prop
                 <Button 
                   type={btnType.Secondary}
                   text='MANAGE'
-                  onClick={onManage}  
+                  onClick={() => {onManage('resources')}}  
                 />
               </div>                
-            </div>
+            </div>                      
           </div>
 
 

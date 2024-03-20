@@ -26,6 +26,7 @@ export const SearchUserInput: FunctionComponent<PropsWithChildren<Props>> = ({
   const [selectedRole, handleSelectedRole] = useState(null)
   
   const [showResults, handleShowResults] = useState(false)
+  console.log("🚀 ~ file: SearchUserInput.tsx:29 ~ showResults:", showResults)
   // const [showRoles, handleShowRoles] = useState(false)
   
   const searchInput = useRef(null)

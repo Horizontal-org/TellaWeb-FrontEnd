@@ -6,5 +6,5 @@ export class ReadReportDto {
   readonly title: string;
   readonly description: string;
   files: FileDto[] = [];
-  author: ReadUserDto;
+  author?: ReadUserDto;
 }

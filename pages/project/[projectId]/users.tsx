@@ -4,7 +4,7 @@ import { ItemQuery, ProjectPage, ReportPage } from "packages/ui";
 import { useToast } from "../../../components/ToastWrapper";
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import {
-  useAddUsersMutation,
+  useAddEntitiesMutation,
   useEditProjectMutation,
   useGetByIdQuery,
 } from "packages/state/services/project";
@@ -72,7 +72,7 @@ export const ProjectById = () => {
   const { push } = useRouter();
   const [query, setQuery] = useState<UserQuery>(defaultQuery);
   const itemQuery = useMemo(() => toItemQuery(query), [query]);
-  const [addUsers, addUsersResult] = useAddUsersMutation()
+  const [addUsers, addUsersResult] = useAddEntitiesMutation()
 
   useEffect(() => {
     if (addUsersResult.isSuccess) {

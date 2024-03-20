@@ -53,8 +53,12 @@ export const Project = () => {
   const { push } = useRouter()
 
   const [createProject, createProjectResult] = useCreateProjectMutation()
-  const { data: projects, refetch } = useListQuery(query);
+  const { data: projects, refetch, isLoading } = useListQuery(query);
   
+  useEffect(() => {
+    refetch()
+  }, [])
+
   useEffect(() => {
     if (createProjectResult.isSuccess) {
       handleToast("Project created!", "info");
@@ -67,6 +71,7 @@ export const Project = () => {
 
   return (
     <ProjectListPage 
+      isLoading={isLoading}
       currentQuery={itemQuery}
       projects={projects?.results || []}
       sidebar={<Menu />}

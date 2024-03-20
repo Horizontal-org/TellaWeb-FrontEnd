@@ -75,7 +75,13 @@ export const userApi = createApi({
         }),
       }
     ),
-
+    confirmPassword: builder.mutation<boolean, { current: string}> ({
+      query: (currentPassword) => ({
+        url: "/confirm/password",
+        method: "POST",
+        body: currentPassword
+      })
+    }),
     list: builder.query<Pagination<User>, UserQuery>({
       query: (userQuery) => {
         const params = {
@@ -140,9 +146,10 @@ export const {
   useValidateEmailQuery,
   useUpdateUserMutation,
   useUpdatePasswordMutation,
+  useConfirmPasswordMutation,
   useListQuery,
   useLazyGetByUsernameQuery,
   useDeleteMutation,
   useBatchDeleteUserMutation,
-  useCreateUserMutation
+  useCreateUserMutation,
 } = userApi;

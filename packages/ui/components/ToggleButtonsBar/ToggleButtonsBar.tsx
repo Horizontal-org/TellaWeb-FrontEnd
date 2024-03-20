@@ -3,7 +3,7 @@ import { SidebarButton } from '../SidebarButton/SidebarButton'
 
 type Props = {
   leftToggle: () => void; 
-  rightToggle: () => void;
+  rightToggle?: () => void;
 };
 
 export const ToggleButtonsBar: FunctionComponent<React.PropsWithChildren<PropsWithChildren<Props>>> = ({
@@ -18,9 +18,11 @@ export const ToggleButtonsBar: FunctionComponent<React.PropsWithChildren<PropsWi
 
     <div className="flex-1 flex justify-between">{children}</div>
 
-    <SidebarButton 
-      onClick={rightToggle}
-      position='right'
-    />
+    { rightToggle && (
+      <SidebarButton 
+        onClick={rightToggle}
+        position='right'
+      />
+    )}
   </div>
 );

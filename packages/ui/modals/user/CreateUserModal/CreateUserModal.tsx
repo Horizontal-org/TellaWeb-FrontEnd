@@ -1,9 +1,11 @@
-import { FunctionComponent, useState, ChangeEventHandler } from 'react'
+import { FunctionComponent, useState, ChangeEventHandler, useEffect } from 'react'
+import zxcvbn from 'zxcvbn'
 import { Modal, ErrorMessage } from '../../../components/Modal'
 import { TextInput, RadioGroupInput } from '../../../'
 import { btnType } from '../../../components/Button/Button'
 import { MdEdit } from 'react-icons/md'
 import { ROLES } from 'packages/state/domain/user'
+import PasswordMeter from 'packages/ui/components/PasswordMeter/PasswordMeter'
 
 interface Props {
   onSubmit: (newUser: {
@@ -22,8 +24,12 @@ export const CreateUserModal: FunctionComponent<React.PropsWithChildren<Props>> 
   const [confirmPassword, handleConfirmPassword] = useState<string>('')
   const [role, handleRole] = useState<string>('reporter')
   const [isAdmin, handleIsAdmin] = useState<boolean>(false)
-
   const [showValidations, handleShowValidations] = useState(false)
+  const [paswordStrength, handlePasswordStrength] = useState<number>(0)
+
+  useEffect(() => {
+    handlePasswordStrength(zxcvbn(password).score)
+  }, [password])
   
   return (
     <Modal 
@@ -39,6 +45,11 @@ export const CreateUserModal: FunctionComponent<React.PropsWithChildren<Props>> 
           password,
           role
         })
+
+        handleUsername('')
+        handlePassword('')
+        handleConfirmPassword('')
+        handleRole('reporter')
       }}
       render={() => (
         <div>
@@ -78,6 +89,13 @@ export const CreateUserModal: FunctionComponent<React.PropsWithChildren<Props>> 
                 }
               }}
             />
+            {password.length > 0 && (
+              <div>
+                <PasswordMeter
+                  score={paswordStrength}
+                />
+              </div>
+            )}
           </div>
           <div>
             <TextInput

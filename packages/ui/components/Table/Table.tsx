@@ -186,7 +186,9 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
                 style={{
                   height: 50
                 }}
-                onClick={() => { row.toggleRowSelected() }}
+                onClick={(e) => {
+                  row.toggleRowSelected() 
+                }}
                 {...row.getRowProps()}
                 className={cn(
                   "border-b border-gray-200 hover:border-transparent",

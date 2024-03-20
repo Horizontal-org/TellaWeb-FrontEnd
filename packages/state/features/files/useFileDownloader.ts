@@ -12,8 +12,9 @@ export const useFileDownloader = (): [FileDownloader, DownloaderState] => {
     bucket: string;
     fileName: string;
   }) => {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/file/${file.bucket}/${file.id}`;
-    const fileType = file.fileName.split(".")[1];
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/file/download/${file.bucket}/${file.fileName}`;
+    const fileNameParts = file.fileName.split('.');
+    const fileType = fileNameParts[fileNameParts.length - 1].toUpperCase();
     return downloadBlob(url, fileType);
   };
 
