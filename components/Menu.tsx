@@ -8,6 +8,8 @@ import { BsFillCloudArrowUpFill, BsPerson } from 'react-icons/bs'
 import { MdOutlinePictureAsPdf } from "react-icons/md";
 
 import RemoteConfigIcon from '../packages/ui/components/RemoteConfigIcon'
+import { IoMdHelpCircleOutline } from "react-icons/io";
+
 import { ENTITIES } from "common/casl/Ability";
 export const Menu: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
   const router = useRouter();
@@ -52,6 +54,13 @@ export const Menu: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
           icon: <MdOutlineSettings />,
           onClick: () => router.replace("/settings"),
           selected: router.route == "/settings",
+        },
+        {
+          permission: ENTITIES.Web,
+          text: "Help",
+          icon: <IoMdHelpCircleOutline />,
+          onClick: () => window.open("https://tella-app.org/docs", "_blank"),
+          selected: false,
         },
         {
           permission: ENTITIES.Web,
