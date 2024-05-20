@@ -6,6 +6,9 @@ import { IoMdExit } from 'react-icons/io'
 import { MdOutlineSettings } from 'react-icons/md'
 import { BsFillCloudArrowUpFill, BsPerson } from 'react-icons/bs'
 import { MdOutlinePictureAsPdf } from "react-icons/md";
+import { MdOutlineShield } from "react-icons/md";
+import { IoShieldOutline } from "react-icons/io5";
+
 
 import RemoteConfigIcon from '../packages/ui/components/RemoteConfigIcon'
 import { IoMdHelpCircleOutline } from "react-icons/io";
@@ -48,6 +51,13 @@ export const Menu: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
         // }
       ]}
       bottomMenu={[
+        {
+          permission: ENTITIES.AdminCenter,
+          text: "Admin Center",
+          icon: <IoShieldOutline />,
+          onClick: () => router.replace("/admin-center"),
+          selected: router.route == "/admin-center",
+        },
         {
           permission: ENTITIES.Web,
           text: "Settings",
