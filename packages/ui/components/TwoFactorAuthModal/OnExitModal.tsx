@@ -8,12 +8,16 @@ type Props = {
   isOpen: boolean,
   onClose: () => void,
   onExitProgress: () => void
+  text?: string
+  buttonText?: string
 }
 
 export const OnExitModal: FunctionComponent<React.PropsWithChildren<Props>> = ({ 
   isOpen,
   onClose,
   onExitProgress,
+  text,
+  buttonText
 }) => {
 
   return (
@@ -30,13 +34,13 @@ export const OnExitModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
             Exit?
           </p>
           <p className='font-sans text-base font-normal text-gray-500'>
-            If you exit, you will have to restart setting up two-factor authentication from the beginning.        
+            {text}
           </p>
 
           <ButtonsContainer>
             <div className='pr-4'>
-              <Button
-                text='continue set up' 
+              <Button                 
+                text={buttonText} 
                 type={btnType.Secondary} 
                 onClick={onClose}
               />
