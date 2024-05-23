@@ -15,15 +15,15 @@ function TellaWeb({ Component, pageProps }: AppProps) {
   
   return (
     <AbilityContext.Provider value={defaultAbility}>
-      <Provider store={store}>
-        <ToastWrapper>
-          {router.isReady && (
-            <SplashScreen>
-              <Component {...pageProps} />
-            </SplashScreen>
-          )}
-        </ToastWrapper>
-      </Provider>
+        <Provider store={store}>
+          <ToastWrapper>
+            {router.isReady && (
+              <SplashScreen>
+                <Component {...pageProps} />
+              </SplashScreen>
+            )}
+          </ToastWrapper>
+        </Provider>
     </AbilityContext.Provider>
   );
 }
