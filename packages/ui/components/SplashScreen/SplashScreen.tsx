@@ -6,6 +6,7 @@ import { validateRoute } from 'common/casl/Ability'
 import Img from "next/image";
 import logo from "../../assets/tella-sidelogo.png";
 import PUBLIC_ROUTES from '../../utilities/publicRoutes'
+import { visitAnalytic } from 'common/globalSettings/VisitAnalytic';
 
 interface Props {
   children: ReactNode
@@ -27,6 +28,9 @@ export const SplashScreen: FunctionComponent<React.PropsWithChildren<Props>> = (
       if (router.pathname == '/') {
         await router.replace('/project')
       }
+
+      // should be all visits or authenticated visits ? 
+      visitAnalytic()
       handleReady(true)
     })
 

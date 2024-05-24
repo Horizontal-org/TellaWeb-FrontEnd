@@ -14,7 +14,8 @@ export const ENTITIES = {
   Users: 'users',
   Projects: 'projects',
   Web: 'web',
-  Resources: 'resources'
+  Resources: 'resources',
+  AdminCenter: 'admin-center'
 }
 
 export const defaultAbility = defineAbility((can, cannot) => {
@@ -59,9 +60,11 @@ export const validateRoute = (ability, route) => {
   if (route.includes('configuration')) {
     entity = ENTITIES.RemoteConfigurations
   }
-
   if (route.includes('resource')) {
     entity = ENTITIES.Resources
+  }
+  if (route.includes('admin-center')) {
+    entity = ENTITIES.AdminCenter
   }
 
     

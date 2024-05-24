@@ -10,6 +10,7 @@ import { filesApi } from "./services/files";
 import { configurationApi } from './services/configuration'
 import { projectApi } from "./services/project";
 import { resourcesApi } from "./services/resource";
+import { globalSettingsApi } from "./services/global-setting";
 
 const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ const store = configureStore({
     [configurationApi.reducerPath]: configurationApi.reducer,
     [projectApi.reducerPath]: projectApi.reducer,
     [resourcesApi.reducerPath]: resourcesApi.reducer,
+    [globalSettingsApi.reducerPath]: globalSettingsApi.reducer,
     auth: authSlice.reducer,
     user: userSlice.reducer,
     reports: reportsSlice.reducer,
@@ -32,7 +34,8 @@ const store = configureStore({
       filesApi.middleware,
       configurationApi.middleware,
       projectApi.middleware,
-      resourcesApi.middleware
+      resourcesApi.middleware,
+      globalSettingsApi.middleware
     ),
 });
 

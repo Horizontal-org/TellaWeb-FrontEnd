@@ -72,7 +72,9 @@ export const TwoFactorAuthModal: FunctionComponent<React.PropsWithChildren<Props
       render={(toggle) => (
         <div className='p-4'>
           {onExitModal && <OnExitModal 
-            isOpen={onExitModal} 
+            isOpen={onExitModal}                     
+            text='If you exit, you will have to restart setting up two-factor authentication from the beginning.'
+            buttonText='continue set up'
             onClose={() => handleOnExitModal(false)} 
             onExitProgress={() => handleExitProgress()}
           

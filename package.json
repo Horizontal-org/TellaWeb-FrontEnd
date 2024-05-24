@@ -49,6 +49,7 @@
   "dependencies": {
     "@casl/ability": "^5.4.4",
     "@casl/react": "^3.0.0",
+    "@divviup/dap": "^0.9.0",
     "@fontsource/open-sans": "^4.5.1",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/react-leaflet": "^2.8.2",
