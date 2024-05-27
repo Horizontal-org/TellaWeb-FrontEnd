@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Menu } from "../../components/Menu";
-import { AdminCenterPage } from "packages/ui/pages/AdminCenterPage";
+import { AdminCenterPage } from "packages/ui/pages/AdminCenterPage/AdminCenterPage";
 import { useListQuery, useUpdateGlobalSettingMutation } from "packages/state/services/global-setting";
 import { useToast } from "components/ToastWrapper";
 

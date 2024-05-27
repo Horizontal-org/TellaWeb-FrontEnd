@@ -4,7 +4,7 @@ import axios from 'axios'
 export const visitAnalytic = async() => {
   try {
     const token = localStorage.getItem("access_token")
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/global-setting/DIVVIUP_ANALYTICS`, {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/global-setting/ANALYTICS`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

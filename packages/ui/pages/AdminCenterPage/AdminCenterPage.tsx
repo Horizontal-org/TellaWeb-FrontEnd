@@ -25,6 +25,7 @@ export const AdminCenterPage: FunctionComponent<React.PropsWithChildren<Props>> 
       leftbarActive={false}
       content={
         <div className='px-8'>
+          <div className="flex h-10 mb-2"></div>
           { globalSettings && globalSettings.length > 0 && globalSettings.map((g) => (
             <div 
               className="flex justify-between items-center py-4 border-b"
