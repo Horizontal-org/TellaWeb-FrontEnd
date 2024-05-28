@@ -66,6 +66,19 @@ export const userApi = createApi({
       }),
     }),
 
+    updateUserSelf: builder.mutation<User, 
+    {       
+      username: string,
+    }>({
+      query: ({ username }) => ({
+        url: `/change-self`,
+        method: "POST",
+        body: {
+          username          
+        },
+      }),
+    }),
+
     updatePassword: builder.mutation<boolean, { current: string; new: string }>(
       {
         query: (passwords) => ({
@@ -145,6 +158,7 @@ export const {
   useGetProfileQuery,
   useValidateEmailQuery,
   useUpdateUserMutation,
+  useUpdateUserSelfMutation,
   useUpdatePasswordMutation,
   useConfirmPasswordMutation,
   useListQuery,
