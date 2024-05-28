@@ -7,7 +7,8 @@ import { useUserProfile } from "packages/state/features/user/userHooks";
 import { useToast } from "components/ToastWrapper";
 import {
   useUpdatePasswordMutation,
-  useUpdateUserMutation
+  useUpdateUserMutation,
+  useUpdateUserSelfMutation
 } from "packages/state/services/user";
 import { useDispatch } from "react-redux";
 import { setUser } from "packages/state/features/user/userSlice";
@@ -20,7 +21,7 @@ const Settings = () => {
   const handleToast = useToast();
 
   const [updatePassword, updatePasswordResult] = useUpdatePasswordMutation();
-  const [updateUser, updateUserResult] = useUpdateUserMutation();
+  const [updateSelf, updateSelfResult] = useUpdateUserSelfMutation();
 
   const [otpActive, handleOtpActive] = useState<boolean | null>(null)
 
@@ -39,14 +40,14 @@ const Settings = () => {
   }, [updatePasswordResult.status]);
 
   useEffect(() => {
-    if (updateUserResult.isSuccess) {
+    if (updateSelfResult.isSuccess) {
       handleToast("Email updated!", "info");
-      dispatch(setUser({ ...user, ...updateUserResult.data }));
+      dispatch(setUser({ ...user, ...updateSelfResult.data }));
     }
-    if (updateUserResult.error && "status" in updateUserResult.error) {
-      handleToast(updateUserResult.error.data.message, "danger");
+    if (updateSelfResult.error && "status" in updateSelfResult.error) {
+      handleToast(updateSelfResult.error.data.message, "danger");
     }
-  }, [updateUserResult.status]);
+  }, [updateSelfResult.status]);
 
   return (
     <SettingsPage
@@ -56,11 +57,7 @@ const Settings = () => {
         updatePassword({ current, new: newPassword });
       }}
       onUpdateUsername={(username) => {
-        updateUser({ 
-          id: user.id, 
-          username: username,
-          role: user.role
-        });
+        updateSelf({ username: username })
       }}
       otpActive={otpActive}
       handleOtpActive={handleOtpActive}

@@ -81,9 +81,7 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
   const [currentResource, setCurrentResource] = useState<Resource | undefined>();
   const [openViewer, handleViewer] = useState<boolean>(false)
 
-  console.log("🚀 ~ file: ResourceListPage.tsx:81 ~ currentResource:", currentResource)
   const [selectedResources, setSelectedResources] = useState<Resource[]>([]);
-  console.log("🚀 ~ file: ResourceListPage.tsx:83 ~ selectedResources:", selectedResources)
   
   const searchInput = useRef<HTMLInputElement>();
   let searchTimeout = null

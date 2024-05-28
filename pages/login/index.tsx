@@ -90,18 +90,18 @@ const Login = () => {
 
   return (
     <>
-    <LoginPage
-      onSubmit={doLogin}
-      errorMessage={errorMessage}
-      isLoading={isLoading}
-      isSuspicious={isSuspicious}
-      otpLoading={otpLoading}
-      loginResponse={loginResponse}
-      handleTwoFactorAuth={handleTwoFactorAuth}
-      handleRecoveryKeyAuth={handleRecoveryKeyAuth}
-      twoFactorErrorMessage={twoFactorError}
-      clearLoginResponse={() => handleLoginResponse(null)}
-      verificationSuccessful={verification_successful}
+      <LoginPage
+        onSubmit={doLogin}
+        errorMessage={errorMessage}
+        isLoading={isLoading}
+        isSuspicious={isSuspicious}
+        otpLoading={otpLoading}
+        loginResponse={loginResponse}
+        handleTwoFactorAuth={handleTwoFactorAuth}
+        handleRecoveryKeyAuth={handleRecoveryKeyAuth}
+        twoFactorErrorMessage={twoFactorError}
+        clearLoginResponse={() => handleLoginResponse(null)}
+        verificationSuccessful={verification_successful}
       />    
     </>
   );
