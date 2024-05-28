@@ -29,8 +29,6 @@ export const SplashScreen: FunctionComponent<React.PropsWithChildren<Props>> = (
         await router.replace('/project')
       }
 
-      // should be all visits or authenticated visits ? 
-      visitAnalytic()
       handleReady(true)
     })
 

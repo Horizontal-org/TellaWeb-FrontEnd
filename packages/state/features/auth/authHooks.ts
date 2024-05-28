@@ -9,6 +9,7 @@ import { setUser } from "../user/userSlice";
 import { AbilityContext } from "common/casl/Can";
 import { updateAbility } from "common/casl/Ability";
 import PUBLIC_ROUTES from '../../../ui/utilities/publicRoutes'
+import { visitAnalytic } from "common/globalSettings/VisitAnalytic";
 
 export const useAuth = () => {
   const authState = useSelector((store: RootStore) => store.auth);
@@ -32,6 +33,7 @@ export const useAuthRequired = (loginUrl = "/login", redirectTo?: string) => {
         (response) => {
           if (response.isError) return
           
+          visitAnalytic()
           updateAbility(response.data, ability)
           dispatch(setUser(response.data))
         }
