@@ -41,7 +41,7 @@ export const projectApi = createApi({
         const params = {
           limit: projectQuery.size,
           offset: projectQuery.page * projectQuery.size,
-          sort: projectQuery.sortKey,
+          sort: 'project.created_at',
           order: projectQuery.sortOrder,
           search: projectQuery.search,
         };

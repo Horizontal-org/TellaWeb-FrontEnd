@@ -14,7 +14,7 @@ import { EditTwoFactorAuthModal } from "packages/ui/components/EditTwoFactorAuth
 
 type Props = {
   sidebar: React.ReactNode;
-  onUpdateUsername: (username: string) => void;
+  onUpdateUsername: (username: string, confirmPassword: string) => void;
   onUpdatePassword: (currentPassword: string, newPassword: string) => void;
   handleOtpActive: (value: boolean) => void
   user: User | null;
@@ -54,6 +54,7 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
               <p>{user ? user.username : ""}</p>
             </div>
             <EditEmailModal 
+              withPassword={true}
               isEmail={user && user.role !== ROLES.REPORTER}
               onSubmit={onUpdateUsername}
               title="Please enter the new email address you would like to use to log in Tella" 

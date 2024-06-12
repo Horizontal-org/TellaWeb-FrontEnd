@@ -3,14 +3,21 @@ import { ButtonPopup, Button, TextInput } from '../../'
 import { btnType } from '../Button/Button'
 
 type Props = {
-  onSubmit: (username: string) => void
+  onSubmit: (username: string, confirmPassword) => void
   title: string
   isEmail: boolean
+  withPassword: boolean
 }
 
-export const EditEmailModal: FunctionComponent<React.PropsWithChildren<Props>> = ({ onSubmit, title, isEmail }) => {
+export const EditEmailModal: FunctionComponent<React.PropsWithChildren<Props>> = ({ 
+  onSubmit, 
+  title, 
+  isEmail,
+  withPassword
+}) => {
   const [username, handleUsername] = useState<string>('')
   const [confirmUsername, handleConfirmUsername] = useState<string>('')
+  const [confirmPassword, handleConfirmPassword] = useState<string>('')
   const [showValidations, handleShowValidations] = useState<boolean>(false)
 
 
@@ -68,6 +75,29 @@ export const EditEmailModal: FunctionComponent<React.PropsWithChildren<Props>> =
             />
           </div>
 
+          { withPassword && (
+            <div className='pt-4'>
+              <TextInput
+                name='confirm-password'
+                type='password'
+                placeholder={'Confirm password'}
+                value={confirmPassword}
+                onChange={(e) => { handleConfirmPassword(e.target.value) }}
+                onFocus={(e) => {
+                  if (!e.currentTarget.contains(e.relatedTarget)) {
+                    handleShowValidations(false)
+                  }
+                }}
+                onBlur={(e) => {
+                  if (!e.currentTarget.contains(e.relatedTarget)) {
+                    handleShowValidations(true)
+                  }
+                }}
+              />
+            </div>
+          )}
+
+
           { showValidations && (
             <>
               { isEmail && username.length > 0 && !(/\S+@\S+\.\S+/.test(username)) && (
@@ -81,6 +111,13 @@ export const EditEmailModal: FunctionComponent<React.PropsWithChildren<Props>> =
                   The { isEmail ? 'email addresses' : 'names'} do not match
                 </div>
               )}
+
+
+              { withPassword && !(confirmPassword.length > 0) && (
+                <div className="w-full p-2 mt-4  bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200">
+                  Please enter a valid password
+                </div>
+              )}
             </>
           )}          
 
@@ -88,9 +125,9 @@ export const EditEmailModal: FunctionComponent<React.PropsWithChildren<Props>> =
             <Button 
               text='SAVE'
               full={true}
-              disabled={!(username.length > 0 && username === confirmUsername) || (isEmail && !(/\S+@\S+\.\S+/.test(username)))}
+              disabled={!(username.length > 0 && username === confirmUsername && (withPassword ? confirmPassword.length > 0 : true)) || (isEmail && !(/\S+@\S+\.\S+/.test(username)))}
               onClick={() => {
-                onSubmit(username)
+                onSubmit(username, confirmPassword)
                 toggle()
               }}
             />

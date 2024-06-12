@@ -16,7 +16,7 @@ import { useToast } from "components/ToastWrapper";
 
 const defaultQuery: ProjectQuery = {
   page: 0,
-  size: 25,
+  size: 0,
 };
 
 const toItemQuery = (projectQuery: ProjectQuery): ItemQuery => {
