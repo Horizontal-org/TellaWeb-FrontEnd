@@ -56,8 +56,8 @@ const Settings = () => {
       onUpdatePassword={(current, newPassword) => {
         updatePassword({ current, new: newPassword });
       }}
-      onUpdateUsername={(username) => {
-        updateSelf({ username: username })
+      onUpdateUsername={(username, confirmPassword) => {
+        updateSelf({ username: username, confirmPassword: confirmPassword })
       }}
       otpActive={otpActive}
       handleOtpActive={handleOtpActive}

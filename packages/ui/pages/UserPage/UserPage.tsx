@@ -54,7 +54,8 @@ export const UserPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
             </div>
             <EditEmailModal 
               isEmail={user && user.role !== ROLES.REPORTER}
-              onSubmit={(username: string) => {
+              withPassword={false}
+              onSubmit={(username: string, cp: string) => {
                 onUpdateUsername(username)
               }} 
               title="Edit the username of the user"

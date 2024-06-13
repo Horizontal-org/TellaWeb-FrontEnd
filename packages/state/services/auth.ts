@@ -36,11 +36,11 @@ export const authApi = createApi({
         body: code
       })
     }),
-    disable: builder.mutation<boolean, {code: string, is_otp: boolean}> ({
-      query: (code) => ({
+    disable: builder.mutation<boolean, {code: string, is_otp: boolean, confirm_password: string}> ({
+      query: (body) => ({
         url: "/auth/otp/disable",
         method: "POST",
-        body: code
+        body: body
       })
     }),
     recoveryKey: builder.query<[string], void>({
