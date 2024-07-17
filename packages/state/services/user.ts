@@ -69,12 +69,14 @@ export const userApi = createApi({
     updateUserSelf: builder.mutation<User, 
     {       
       username: string,
+      confirmPassword: string
     }>({
-      query: ({ username }) => ({
+      query: ({ username, confirmPassword }) => ({
         url: `/change-self`,
         method: "POST",
         body: {
-          username          
+          username,
+          confirmPassword,
         },
       }),
     }),

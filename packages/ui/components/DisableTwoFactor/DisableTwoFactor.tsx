@@ -18,19 +18,20 @@ export const DisableTwoFactorModal: FunctionComponent<React.PropsWithChildren<Pr
 }) => {
   const handleToast = useToast();
   const [step, handleSteps] = useState<number>(1)
+  const [confirmPasswordText, handleConfirmPasswordText] = useState<string>('')
 
   const [confirmPassword, {isError, isSuccess: isConfirmSuccess}] = useConfirmPasswordMutation();
   const [disableOtp, {isError: otpConfirmError, isSuccess: isOtpVerifySuccess}] = useDisableMutation();
 
   useEffect(() => {
     if(isConfirmSuccess) {
-      handleToast("You have successfully disabled two-factor authentication!", "success");
       handleSteps(step + 1)
     }
   }, [isConfirmSuccess])
 
   useEffect(() => {
     if(isOtpVerifySuccess) {
+      handleToast("You have successfully disabled two-factor authentication!", "success");
       handleOtpActive(false)
       toggle()
     }
@@ -44,6 +45,7 @@ export const DisableTwoFactorModal: FunctionComponent<React.PropsWithChildren<Pr
           errorMessage={isError}
           title="Disable two-factor authentication" 
           onSubmit={(currentPassword) => {
+            handleConfirmPasswordText(currentPassword)
             confirmPassword({
               current: currentPassword
             })
@@ -58,7 +60,8 @@ export const DisableTwoFactorModal: FunctionComponent<React.PropsWithChildren<Pr
           onSubmit={(code) => {
             disableOtp({
               code,
-              is_otp: true
+              is_otp: true,
+              confirm_password: confirmPasswordText
             })
           }}
         >
@@ -83,7 +86,8 @@ export const DisableTwoFactorModal: FunctionComponent<React.PropsWithChildren<Pr
           onSubmit={(code) => {
             disableOtp({
               code,
-              is_otp: false
+              is_otp: false,
+              confirm_password: confirmPasswordText
             })
           }}
         >
