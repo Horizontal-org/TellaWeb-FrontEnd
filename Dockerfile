@@ -2,7 +2,6 @@ FROM node:16.15-alpine AS base
 
 ENV NEXT_REDIRECT_API_URL=http://api:3001
 ENV NEXT_PUBLIC_API_URL=/api
-#ENV NEXT_PUBLIC_FEEDBACK_API_URL=https://api.feedback.tella-app.org
 
 # Install dependencies only when needed
 FROM base AS builder
