@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import styled from 'styled-components'
 import axios from 'axios'
 import { BsChatLeftText } from 'react-icons/bs'
@@ -29,10 +29,32 @@ const submitFeedback = async(feedback: string, handleToast, displaySuccess) => {
 
 
 export const FeedbackBox: FunctionComponent<Props> = () => {
-  const [visible, handleVisible] = useState(false) 
+  const [serviceIsEnabled, handleServiceIsEnabled] = useState(false)
+  const [visible, handleVisible] = useState(false)
   const [success, handleSuccess] = useState(false)
   const [feedback, handleFeedback] = useState<string>('')
   const handleToast = useToast()
+
+  useEffect(() => {
+    const checkGlobalSetting = async() => {
+      try {
+        const token = localStorage.getItem("access_token")
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/global-setting/FEEDBACK`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+    
+        handleServiceIsEnabled(res.data.enabled)
+     
+      } catch (e) {
+        // cant check so disabled
+        handleServiceIsEnabled(false)
+      }
+    }
+
+    checkGlobalSetting()
+  }, [])
 
   const reset = ( ) => {
     handleFeedback('')
@@ -46,7 +68,8 @@ export const FeedbackBox: FunctionComponent<Props> = () => {
       reset()
     }, 2000)
   }
-  return (
+  
+  return serviceIsEnabled && (
     <Wrapper>
       
       { visible && (

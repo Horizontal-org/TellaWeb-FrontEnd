@@ -4,6 +4,7 @@ import { Title, SubTitle } from "..";
 import { Item } from "../domain/Item";
 import { SidebarButton } from '../components/SidebarButton/SidebarButton'
 import { FeedbackBox } from "../components/FeedbackBox/FeedbackBox";
+import { NewVersionBanner } from "../components/NewVersionBanner/NewVersionBanner";
 
 type Props = {
   title?: string;
@@ -67,6 +68,9 @@ export const MainLayout: FunctionComponent<React.PropsWithChildren<Props>> = ({
           "transform mr-64": rightbar && rightSidebarOpen,
         })}
       >
+        
+        <NewVersionBanner/>
+
         <div className="p-8">
           {title && <Title>{title}</Title>}
           {subtitle && <SubTitle>{subtitle}</SubTitle>}
