@@ -19,8 +19,8 @@ export const AdminCenterPage: FunctionComponent<React.PropsWithChildren<Props>> 
 
   return (
     <MainLayout
-      title="Admin center"
-      subtitle="Change system wide settings"
+      title="Admin Center"
+      subtitle="Manage system-wide settings"
       leftbar={sidebar}
       leftbarActive={false}
       content={
@@ -35,7 +35,7 @@ export const AdminCenterPage: FunctionComponent<React.PropsWithChildren<Props>> 
                 <p className="text-gray-600 uppercase" style={{ width: 200 }}>
                   { g.name }
                 </p>
-                <p>{g.enabled  ? 'ENABLED' : 'DISABLED'}</p>
+                <p>{g.enabled  ? 'Enabled' : 'Disabled'}</p>
               </div>            
               <ToggleGlobalSettingsModel 
                 onToggle={(newValue) => {
