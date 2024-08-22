@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import Img from "next/image";
 import { useRouter } from 'next/router'
 import { MenuDescription } from "../../domain/Menu";
@@ -11,12 +11,13 @@ type Props = {
   bottomMenu: MenuDescription[];
 };
 
+
 export const SidebarLayout: FunctionComponent<React.PropsWithChildren<Props>> = ({
   topMenu,
   bottomMenu,
 }) => {
   const { push } = useRouter()
-
+  
   return (
     <div className="flex flex-1 flex-col">
       <div className="pb-16">

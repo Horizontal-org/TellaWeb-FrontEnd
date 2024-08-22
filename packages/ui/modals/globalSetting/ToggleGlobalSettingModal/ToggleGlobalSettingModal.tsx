@@ -4,6 +4,7 @@ import { ButtonPopup, Button } from '../../..'
 import { OnExitModal } from 'packages/ui/components/TwoFactorAuthModal/OnExitModal';
 import { btnType } from 'packages/ui/components/Button/Button';
 import { GlobalSetting } from 'packages/state/domain/global-setting';
+import { lowerCase } from 'lodash';
 
 type Props = {
   globalSetting: GlobalSetting
@@ -49,10 +50,10 @@ export const ToggleGlobalSettingsModel: FunctionComponent<React.PropsWithChildre
 
           <div>
             <p className='py-2 font-sans text-gray-600 text-xxxl font-bold'>
-              {`${globalSetting.enabled ? 'Disable': 'Enable'} ${globalSetting.name} ?`}
+              {`${globalSetting.enabled ? 'Disable': 'Enable'} ${lowerCase(globalSetting.name)} ?`}
             </p>
             <p className='font-sans text-sm font-normal text-gray-500'>
-              this change is system wide and will impact every user
+              This change will impact all users on your Tella Web instance
             </p>
           </div>
 
