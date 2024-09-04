@@ -84,6 +84,30 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
             }
           </div>
 
+          <div className="flex justify-between items-center py-4 border-b">
+            <div className="flex items-center">
+              <p className="text-gray-600 uppercase" style={{ width: 200 }}>
+                TWO-FACTOR AUTHENTICATION
+              </p>
+              <p>{otpActive ? 'ENABLED' : 'DISABLED'}</p>
+            </div>
+            { otpActive ? 
+              <EditTwoFactorAuthModal handleExternalOpen={handleditTwoFactorOpen} externalOpen={editTwoFactorOpen} handleOtpActive={handleOtpActive}/> :
+              <TwoFactorAuthModal handleEditOpen={handleditTwoFactorOpen} handleOtpActive={handleOtpActive} />
+            }
+          </div>
+
+          <div 
+            className="flex justify-between items-center py-4 border-b"
+          >
+            <div className="flex items-center">
+              <p className="text-gray-600 uppercase flex items-center" style={{ width: 200 }}>
+                TELLA WEB VERSION                
+              </p>
+              <p>v{version}</p>            
+            </div>                        
+          </div>
+
           {/* HIDE FOR NOW */}
           {/* <div className="flex justify-between items-center py-4 border-b">
             <div className="flex items-center">
@@ -112,18 +136,7 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
             </ButtonMenu>
           </div> */}
         </div>
-      }
-      absoluteContent={(
-        <div
-          className="flex text-sm justify-center w-full p-6" 
-          style={{ 
-            position: 'absolute', 
-            bottom: '0',
-            marginLeft: '-60px'
-          }}>
-            Server version: v{version}
-        </div>
-      )}
+      }      
     />
   );
 };
