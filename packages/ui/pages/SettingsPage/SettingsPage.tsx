@@ -84,19 +84,6 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
             }
           </div>
 
-          <div className="flex justify-between items-center py-4 border-b">
-            <div className="flex items-center">
-              <p className="text-gray-600 uppercase" style={{ width: 200 }}>
-                TWO-FACTOR AUTHENTICATION
-              </p>
-              <p>{otpActive ? 'ENABLED' : 'DISABLED'}</p>
-            </div>
-            { otpActive ? 
-              <EditTwoFactorAuthModal handleExternalOpen={handleditTwoFactorOpen} externalOpen={editTwoFactorOpen} handleOtpActive={handleOtpActive}/> :
-              <TwoFactorAuthModal handleEditOpen={handleditTwoFactorOpen} handleOtpActive={handleOtpActive} />
-            }
-          </div>
-
           <div 
             className="flex justify-between items-center py-4 border-b"
           >
