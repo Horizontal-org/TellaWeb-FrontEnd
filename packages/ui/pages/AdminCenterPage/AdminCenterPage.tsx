@@ -1,8 +1,9 @@
 import { FunctionComponent, useState } from "react";
 import { MainLayout } from "../../layouts/MainLayout";
-import { useListQuery } from "packages/state/services/global-setting";
 import { GlobalSetting } from "packages/state/domain/global-setting";
 import { ToggleGlobalSettingsModel } from "packages/ui/modals/globalSetting/ToggleGlobalSettingModal/ToggleGlobalSettingModal";
+import { IoMdHelpCircleOutline } from "react-icons/io";
+import { version } from 'package.json'
 
 type Props = {
   sidebar: React.ReactNode;
@@ -32,10 +33,20 @@ export const AdminCenterPage: FunctionComponent<React.PropsWithChildren<Props>> 
               key={g.id}
             >
               <div className="flex items-center">
-                <p className="text-gray-600 uppercase" style={{ width: 200 }}>
+                <p className="text-gray-600 uppercase flex items-center" style={{ width: 350 }}>
                   { g.name }
+                  <span className="ml-4 cursor-pointer">
+                    <IoMdHelpCircleOutline 
+                        size={20}
+                        color="#8B8E8F"
+                        onClick={() => {
+                          window.open("https://tella-app.org/tella-web/#admin-center", "_blank")
+                        }}
+                    />
+                  </span>
                 </p>
                 <p>{g.enabled  ? 'Enabled' : 'Disabled'}</p>
+                
               </div>            
               <ToggleGlobalSettingsModel 
                 onToggle={(newValue) => {
@@ -45,6 +56,16 @@ export const AdminCenterPage: FunctionComponent<React.PropsWithChildren<Props>> 
               />
             </div>
           ))}
+          <div 
+            className="flex justify-between items-center py-4 border-b"
+          >
+            <div className="flex items-center">
+              <p className="text-gray-600 uppercase flex items-center" style={{ width: 350 }}>
+                TELLA WEB VERSION                
+              </p>
+              <p>v{version}</p>            
+            </div>                        
+          </div>
         </div>
       }
     />
