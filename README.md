@@ -1,13 +1,5 @@
 # Tellaweb (frontend)
 
-Frontend application built on NextJS
-
-Before executing it is necessary to build the Tailwinds css file:
-`yarn build:css`
-
-The application has storybook
-`yarn storybook`
-
 # How it is organized
 
 Inside the packages folder you will find two other folders: ui and bloc.
@@ -18,12 +10,17 @@ Inside the packages folder you will find two other folders: ui and bloc.
 
 The Next application should only do the routing and connect the state with the UI layouts.
 
-# Deploy using Docker
 
-During the build process it is necessary to provide the `api_url` argument that will be used to redirect requests to the api. This value is stored in the docker image and can't be changed during execution. _If you want to change the url you need to rebuild the image_. This is because during the build process the url is included as text in the js bundle.
+# To prepare release 
 
-> docker build . --build-arg api_url=https://api.your-api-example.org -t tellaweb-frontend
+### For development
 
-To use the image:
+- write package.json "version" with the number needed for production (without 'beta-' prefix in any case)
+- close pr's and merge them to development
+- push tag from development with the version number and the prefix, example: 'beta-1.2.3'. This will start the build of the image in dockerhub
+- After the build pull the new images on the beta server and run migrations if necessary
 
-> docker run -p 3000:3000 tellaweb-frontend
+### For deploying production
+- merge what needs merging from development
+- push tag without any prefix, example: '1.2.3', this will start the build of the image in dockerhub
+- After the build pull the new images on the production server/s and run migrations if necessary

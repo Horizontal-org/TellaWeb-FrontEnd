@@ -15,11 +15,11 @@ export const ToggleGlobalSettingsModel: FunctionComponent<React.PropsWithChildre
   globalSetting,
   onToggle
 }) => {
-  const [onExitModal, handleOnExitModal] = useState<boolean>(false) 
+  // const [onExitModal, handleOnExitModal] = useState<boolean>(false) 
   const [externalOpen, handleExternalOpen] = useState<boolean>(false)
 
   const handleExitProgress = () =>{
-    handleOnExitModal(false)
+    // handleOnExitModal(false)
     handleExternalOpen(false)
   }
 
@@ -27,8 +27,8 @@ export const ToggleGlobalSettingsModel: FunctionComponent<React.PropsWithChildre
     <ButtonPopup 
       externalOpen={externalOpen}
       onClose={() => {
-        handleExternalOpen(true)
-        handleOnExitModal(true)
+        handleExternalOpen(false)
+        // handleOnExitModal(true)/
       }} 
       toggleButton={(toggle) => (
         <Button
@@ -40,13 +40,13 @@ export const ToggleGlobalSettingsModel: FunctionComponent<React.PropsWithChildre
       render={(toggle) => (
         <div className='p-4'>
 
-          {onExitModal && <OnExitModal 
+          {/* {onExitModal && <OnExitModal 
             isOpen={onExitModal} 
             text='Changes you made will not be saved.'
             buttonText='Cancel'
             onClose={() => handleOnExitModal(false)} 
             onExitProgress={() => handleExitProgress()}          
-          />}
+          />} */}
 
           <div>
             <p className='py-2 font-sans text-gray-600 text-xxxl font-bold'>

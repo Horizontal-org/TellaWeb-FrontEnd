@@ -18,8 +18,8 @@ const AdminCenter = () => {
   }, [])
   
   useEffect(() => {
-    if (updateResult.isSuccess) {
-      handleToast("Value updated, Refreshing Tellaweb...", "info");
+    if (updateResult.isSuccess) {      
+      handleToast("Your settings are updating, the page will refresh soon.", "info");
       setTimeout(() => {
         router.reload()
       }, 1500)
