@@ -5,10 +5,6 @@ import { Menu } from "../../components/Menu";
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import { useUserProfile } from "packages/state/features/user/userHooks";
 import { useToast } from "components/ToastWrapper";
-import {
-  useUpdatePasswordMutation,
-  useUpdateUserMutation
-} from "packages/state/services/user";
 import { useDispatch } from "react-redux";
 import { setUser } from "packages/state/features/user/userSlice";
 import { ResourceListPage } from "packages/ui/pages/ResourceListPage/ResourceListPage";

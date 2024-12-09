@@ -41,8 +41,6 @@ export const ManageUsersProjectModal: FunctionComponent<React.PropsWithChildren<
     handleParsedUserList(parsed)
   }, [users])
 
-  console.log("🚀 ~ file: ManageUsersProjectModal.tsx:31 ~ users:", users)
-
   return (
     <Modal 
       title='Add users to project'

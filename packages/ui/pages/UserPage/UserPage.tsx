@@ -10,16 +10,16 @@ import {
 import { MainLayout } from "../../layouts/MainLayout"
 import { ROLES, User } from "packages/state/domain/user"
 import { EditEmailModal } from "../../components/EditEmailModal/EditEmailModal";
-import { EditPasswordModal } from "../../components/EditPasswordModal/EditPasswordModal";
 import { DeleteUserModal } from '../../components/DeleteUserModal/DeleteUserModal'
 import { EditUserNoteModal } from '../../components/EditUserNoteModal/EditUserNoteModal'
 import { useUserProfile } from "packages/state/features/user/userHooks";
 import { EditRoleModal } from '../../modals/user/EditRoleModal/EditRoleModal'
+import { EditPasswordModal } from "packages/ui/modals/user/EditPasswordModal/EditPasswordModal";
 
 type Props = {
   sidebar: React.ReactNode;
   onUpdateUsername: (username: string) => void;
-  onUpdatePassword: (currentPassword: string, newPassword: string) => void;
+  onUpdatePassword: (newPassword: string) => void;
   onUpdateNote: (note: string) => void;
   onUpdateRole: (role: string) => void;
   deleteUser: () => void

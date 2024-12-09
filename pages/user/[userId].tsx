@@ -5,9 +5,8 @@ import { Menu } from "../../components/Menu";
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import { useToast } from "components/ToastWrapper";
 import {
-  useUpdatePasswordMutation,
   useUpdateUserMutation,
-  useLazyGetByUsernameQuery,
+  useGetByIdQuery,
   useDeleteMutation
 } from "packages/state/services/user";
 
@@ -15,38 +14,19 @@ const UserById: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
   
   const router = useRouter();
   const handleToast = useToast()
-   
-  const [currentUsername, handleCurrentUsername] = useState<string>()
-  const [loadUser, { data: currentUser }] = useLazyGetByUsernameQuery();
-  const [updatePassword, updatePasswordResult] = useUpdatePasswordMutation();
+     
   const [updateUser, updateUserResult] = useUpdateUserMutation();
   const [deleteUser, deleteUserResult] = useDeleteMutation()
 
-  const username = useMemo(() => {
-    if (router.query?.username && typeof router.query.username !== "string")
-      return router.query.username.toString();
-    return router.query.username as string;
-  }, [router.query?.username]);
-
-  useEffect(() => {
-    username && loadUser(username);
-    username && handleCurrentUsername(username)
-  }, [username, loadUser]);  
-
-  useEffect(() => {
-    if (updatePasswordResult.isSuccess) {
-      handleToast("Password updated!", "info");
-    }
-    if (updatePasswordResult.error && "status" in updatePasswordResult.error) {
-      handleToast(updatePasswordResult.error.data.message, "danger");
-    }
-  }, [updatePasswordResult.status]);
+  const { data: currentUser, refetch } = useGetByIdQuery(
+    "" + router.query.userId
+  )
 
   useEffect(() => {
     if (updateUserResult.isSuccess) {
       handleToast("User updated!", "info");
-      router.push(`./${currentUsername}`)
-      loadUser(currentUsername)
+      router.push(`./${currentUser.id}`)
+      refetch()
     }
     if (updateUserResult.error && "status" in updateUserResult.error) {
       handleToast(updateUserResult.error.data.message, "danger");
@@ -75,11 +55,15 @@ const UserById: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
           role: role
         });
       }}
-      onUpdatePassword={(current, newPassword) => {
-        updatePassword({ current, new: newPassword });
+      onUpdatePassword={(newPassword) => {
+        updateUser({ 
+          password: newPassword,
+          id: currentUser.id,
+          note: currentUser.note,
+          role: currentUser.role
+        });
       }}
       onUpdateUsername={(username, isAdmin = false) => {
-        handleCurrentUsername(username)
         updateUser({ 
           id: currentUser.id, 
           username: username,
