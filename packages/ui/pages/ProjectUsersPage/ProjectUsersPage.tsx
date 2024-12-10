@@ -59,6 +59,7 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
 }) => {
   const [currentUser, setCurrentUser] = useState<User | undefined>();
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+  console.log("🚀 ~ selectedUsers:", selectedUsers)
 
   const openUser = () => {
     setCurrentUser(selectedUsers[0]);

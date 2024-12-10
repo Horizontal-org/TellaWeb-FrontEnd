@@ -6,8 +6,7 @@ import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import { useUserProfile } from "packages/state/features/user/userHooks";
 import { useToast } from "components/ToastWrapper";
 import {
-  useUpdatePasswordMutation,
-  useUpdateUserMutation,
+  useUpdatePasswordSelfMutation,
   useUpdateUserSelfMutation
 } from "packages/state/services/user";
 import { useDispatch } from "react-redux";
@@ -20,7 +19,7 @@ const Settings = () => {
 
   const handleToast = useToast();
 
-  const [updatePassword, updatePasswordResult] = useUpdatePasswordMutation();
+  const [updatePassword, updatePasswordResult] = useUpdatePasswordSelfMutation();
   const [updateSelf, updateSelfResult] = useUpdateUserSelfMutation();
 
   const [otpActive, handleOtpActive] = useState<boolean | null>(null)
@@ -28,7 +27,6 @@ const Settings = () => {
   useEffect(() => {
     handleOtpActive(user.otp_active)
   }, [user])
-
 
   useEffect(() => {
     if (updatePasswordResult.isSuccess) {

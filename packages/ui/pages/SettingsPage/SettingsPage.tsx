@@ -1,7 +1,7 @@
 import { FunctionComponent, useState } from "react";
 import { MainLayout } from "../../layouts/MainLayout";
 import { EditEmailModal } from "../../components/EditEmailModal/EditEmailModal";
-import { EditPasswordModal } from "../../components/EditPasswordModal/EditPasswordModal";
+import { EditSelfPasswordModal } from "../../components/EditSelfPasswordModal/EditSelfPasswordModal";
 import { TwoFactorAuthModal } from "packages/ui/components/TwoFactorAuthModal/TwoFactorAuthModal";
 import { ButtonMenu } from '../../components/ButtonMenu/ButtonMenu'
 import { ButtonOption } from '../../components/ButtonMenu/ButtonOption'
@@ -68,7 +68,7 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
               </p>
               <p>••••••••••</p>
             </div>
-            <EditPasswordModal onSubmit={onUpdatePassword} />
+            <EditSelfPasswordModal onSubmit={onUpdatePassword} />
           </div>
 
           <div className="flex justify-between items-center py-4 border-b">

@@ -94,7 +94,7 @@ export const Report = () => {
       sidebar={<Menu />}
       users={users?.results || []}
       onOpen={(user) => {
-        push(`./user/${user.username}`);
+        push(`./user/${user.id}`);
       }}
       onDelete={onBatchDeleteUsers}
       onCreateUser={createUser} 
