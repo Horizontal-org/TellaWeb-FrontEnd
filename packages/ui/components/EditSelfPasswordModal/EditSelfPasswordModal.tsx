@@ -3,10 +3,11 @@ import { ButtonPopup, Button, TextInput } from '../..'
 import { btnType } from '../Button/Button'
 import PasswordMeter from '../PasswordMeter/PasswordMeter'
 import zxcvbn from 'zxcvbn'
-
+import { FocusEvent } from 'react'
 type Props = {
   onSubmit: (currentPassword: string, newPassword: string) => void
 }
+
 
 export const EditSelfPasswordModal: FunctionComponent<React.PropsWithChildren<Props>> = ({ onSubmit }) => {
   const [oldPassword, handleOldPassword] = useState<string>('')
@@ -18,6 +19,12 @@ export const EditSelfPasswordModal: FunctionComponent<React.PropsWithChildren<Pr
   useEffect(() => {
     handlePasswordStrength(zxcvbn(newPassword).score)
   }, [newPassword])
+
+  const handleInput = (e: FocusEvent<HTMLInputElement>, isFocus: boolean) => {
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      handleShowValidations(!isFocus)
+    }
+  }
 
   return (
     <ButtonPopup       
@@ -44,16 +51,8 @@ export const EditSelfPasswordModal: FunctionComponent<React.PropsWithChildren<Pr
               type='password'
               value={oldPassword}
               onChange={(e) => { handleOldPassword(e.target.value) }}
-              onFocus={(e) => {
-                if (!e.currentTarget.contains(e.relatedTarget)) {
-                  handleShowValidations(false)
-                }
-              }}
-              onBlur={(e) => {
-                if (!e.currentTarget.contains(e.relatedTarget)) {
-                  handleShowValidations(true)
-                }
-              }}
+              onFocus={(e) => handleInput(e, true)}
+              onBlur={(e) => handleInput(e, false)}
             />
           </div>
           
@@ -64,16 +63,8 @@ export const EditSelfPasswordModal: FunctionComponent<React.PropsWithChildren<Pr
               type='password'
               value={newPassword}
               onChange={(e) => { handleNewPassword(e.target.value) }}
-              onFocus={(e) => {
-                if (!e.currentTarget.contains(e.relatedTarget)) {
-                  handleShowValidations(false)
-                }
-              }}
-              onBlur={(e) => {
-                if (!e.currentTarget.contains(e.relatedTarget)) {
-                  handleShowValidations(true)
-                }
-              }}
+              onFocus={(e) => handleInput(e, true)}
+              onBlur={(e) => handleInput(e, false)}
             />
           </div>
 
@@ -90,16 +81,8 @@ export const EditSelfPasswordModal: FunctionComponent<React.PropsWithChildren<Pr
               type='password'          
               value={confirmPassword}
               onChange={(e) => { handleConfirmPassword(e.target.value) }}
-              onFocus={(e) => {
-                if (!e.currentTarget.contains(e.relatedTarget)) {
-                  handleShowValidations(false)
-                }
-              }}
-              onBlur={(e) => {
-                if (!e.currentTarget.contains(e.relatedTarget)) {
-                  handleShowValidations(true)
-                }
-              }}
+              onFocus={(e) => handleInput(e, true)}
+              onBlur={(e) => handleInput(e, false)}
             /> 
           </div>
 
