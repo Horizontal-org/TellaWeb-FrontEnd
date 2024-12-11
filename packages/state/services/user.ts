@@ -52,16 +52,18 @@ export const userApi = createApi({
     { 
       id: string, 
       username?: string,
+      password?: string,
       note?: string     
       role: string
     }>({
-      query: ({ id, username = null, note, role }) => ({
+      query: ({ id, username = null, password = null, note, role }) => ({
         url: `/${id}`,
         method: "POST",
         body: {
           note: note,
           username: username,
-          role: role
+          role: role,
+          password: password
         },
       }),
     }),
@@ -81,7 +83,7 @@ export const userApi = createApi({
       }),
     }),
 
-    updatePassword: builder.mutation<boolean, { current: string; new: string }>(
+    updatePasswordSelf: builder.mutation<boolean, { current: string; new: string }>(
       {
         query: (passwords) => ({
           url: `/change-password`,
@@ -115,10 +117,10 @@ export const userApi = createApi({
       },
     }),
 
-    getByUsername: builder.query<User, string>({
-      query: (username) => {
+    getById: builder.query<User, string>({
+      query: (id) => {
         return {
-          url: `/${username}`
+          url: `/${id}`
         }
       }
     }),
@@ -161,10 +163,10 @@ export const {
   useValidateEmailQuery,
   useUpdateUserMutation,
   useUpdateUserSelfMutation,
-  useUpdatePasswordMutation,
+  useUpdatePasswordSelfMutation,
   useConfirmPasswordMutation,
   useListQuery,
-  useLazyGetByUsernameQuery,
+  useGetByIdQuery,
   useDeleteMutation,
   useBatchDeleteUserMutation,
   useCreateUserMutation,
