@@ -4,18 +4,29 @@ import { GlobalSetting } from "packages/state/domain/global-setting";
 import { ToggleGlobalSettingsModel } from "packages/ui/modals/globalSetting/ToggleGlobalSettingModal/ToggleGlobalSettingModal";
 import { IoMdHelpCircleOutline } from "react-icons/io";
 import { version } from 'package.json'
+import { btnType, Button } from "packages/ui/components/Button/Button";
+import { useFileDownloader } from "packages/state/features/files/useFileDownloader";
+import { useBackupDownloader } from "packages/state/features/backup/useBackupDownloader";
+import { BackupManagement } from "packages/ui/components/BackupManagement/BackupManagement";
+import { LatestBackups } from "packages/state/domain/backup";
 
 type Props = {
   sidebar: React.ReactNode;
   globalSettings: GlobalSetting[]
   onUpdate: (id, newValue: boolean) => void
+  onBackupStart: () => void
+  onBackupDelete: (id) => void
+  backups: LatestBackups
 };
 
 
 export const AdminCenterPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   sidebar,
   globalSettings,
-  onUpdate
+  onUpdate,
+  onBackupStart,
+  onBackupDelete,
+  backups
 }) => {
 
   return (
@@ -27,6 +38,10 @@ export const AdminCenterPage: FunctionComponent<React.PropsWithChildren<Props>> 
       content={
         <div className='px-8'>
           <div className="flex h-10 mb-2"></div>
+          <p className="font-bold text-md text-gray-600">
+              General
+          </p>
+
           { globalSettings && globalSettings.length > 0 && globalSettings.map((g) => (
             <div 
               className="flex justify-between items-center py-4 border-b"
@@ -66,6 +81,13 @@ export const AdminCenterPage: FunctionComponent<React.PropsWithChildren<Props>> 
               <p>v{version}</p>            
             </div>                        
           </div>
+
+          {/* BACKUPS */}
+          <BackupManagement 
+            backups={backups}
+            onBackupDelete={onBackupDelete}
+            onBackupStart={onBackupStart}
+          />
         </div>
       }
     />
