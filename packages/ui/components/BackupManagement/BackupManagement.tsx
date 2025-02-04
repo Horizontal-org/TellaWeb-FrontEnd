@@ -6,6 +6,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { useBackupDownloader } from "packages/state/features/backup/useBackupDownloader";
 import { StartBackupModal } from "packages/ui/modals/backup/StartBackupModal";
 import { DeleteBackupModal } from "packages/ui/modals/backup/DeleteBackupModal";
+import { useAuth } from "packages/state/features/auth/authHooks";
 interface Props {
     backups: LatestBackups
     onBackupStart: () => void
@@ -19,6 +20,7 @@ export const BackupManagement: FunctionComponent<React.PropsWithChildren<Props>>
 }) => {
 
     const [downloadFile] = useBackupDownloader()
+    const { accessToken } = useAuth()
 
     if (!backups) {
         return null
@@ -75,11 +77,8 @@ export const BackupManagement: FunctionComponent<React.PropsWithChildren<Props>>
                             type={btnType.Secondary} 
                             onClick={(e: any) => {
                                 e.preventDefault()
-                                console.log('I GOT A BACKUP')
-                                downloadFile(
-                                    backups.latest.id, 
-                                    backups.latest.folderName
-                                )
+                                const url = `${process.env.NEXT_PUBLIC_API_URL}/backup/download/${backups.latest.id}`;
+                                window.open(url, "_blank");                                
                             }}
                         /> 
                     </div>
