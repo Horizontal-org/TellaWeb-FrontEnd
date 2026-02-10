@@ -1,42 +1,13 @@
-import { SerializedError } from "@reduxjs/toolkit";
-import { BaseQueryError } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
 import {
-  BaseQueryFn,
   createApi,
-  FetchArgs,
-  fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
-import { RootStore } from "packages/state/store";
+import baseQueryWithRefresh from "./baseQueryWithRefresh";
 import { User, UserQuery } from "../domain/user";
 import { Pagination } from "../domain/common";
 
-interface CustomError {
-  status: string;
-  data?: {
-    statusCode: number;
-    message: string;
-  };
-}
-
-type CustomFetchBaseQuery = BaseQueryFn<
-  string | FetchArgs,
-  unknown,
-  CustomError,
-  {}
->;
-
 export const userApi = createApi({
   reducerPath: "userApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/user`,
-    prepareHeaders: (headers, { getState }) => {
-      const { accessToken } = (getState() as RootStore).auth;
-      if (!accessToken) return headers;
-
-      headers.set("authorization", `Bearer ${accessToken}`);
-      return headers;
-    },
-  }) as CustomFetchBaseQuery,
+  baseQuery: baseQueryWithRefresh(`${process.env.NEXT_PUBLIC_API_URL}/user`),
   endpoints: (builder) => ({
     getProfile: builder.query<User, void>({
       query: () => ({ url: "/" }),

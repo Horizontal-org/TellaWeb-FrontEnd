@@ -1,42 +1,14 @@
 import {
-    BaseQueryFn,
     createApi,
-    FetchArgs,
-    fetchBaseQuery,
   } from "@reduxjs/toolkit/query/react";
+  import baseQueryWithRefresh from "./baseQueryWithRefresh";
   
-  import { RootStore } from "../../state/store";
-  import { Pagination } from "../domain/common";
   import { Backup, LatestBackups } from "../domain/backup";
-  
-  interface CustomError {
-    status: string;
-    data?: {
-      statusCode: number;
-      message: string;
-    };
-  }
-  
-  type CustomFetchBaseQuery = BaseQueryFn<
-    string | FetchArgs,
-    unknown,
-    CustomError,
-    {}
-  >;
   
   export const backupsApi = createApi({
     reducerPath: "backupsApi",
     tagTypes: ["Backup"],
-    baseQuery: fetchBaseQuery({
-      baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/backup`,
-      prepareHeaders: (headers, { getState }) => {
-        const { accessToken } = (getState() as RootStore).auth;
-        if (!accessToken) return headers;
-  
-        headers.set("authorization", `Bearer ${accessToken}`);
-        return headers;
-      },
-    }) as CustomFetchBaseQuery,
+    baseQuery: baseQueryWithRefresh(`${process.env.NEXT_PUBLIC_API_URL}/backup`),
     endpoints: (builder) => ({
     
       latest: builder.query<LatestBackups, void>({

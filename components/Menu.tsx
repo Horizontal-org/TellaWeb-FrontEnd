@@ -69,7 +69,7 @@ export const Menu: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
           permission: ENTITIES.Web,
           text: "Help",
           icon: <IoMdHelpCircleOutline />,
-          onClick: () => window.open("https://tella-app.org/docs", "_blank"),
+          onClick: () => window.open("https://tella-app.org/tella-web", "_blank"),
           selected: false,
         },
         {

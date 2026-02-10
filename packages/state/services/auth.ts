@@ -1,19 +1,10 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { RootStore } from "packages/state/store";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import baseQueryWithRefresh from "./baseQueryWithRefresh";
 import { Credential, User, OtpEnableRes, LoginResponse } from "../domain/user";
 
 export const authApi = createApi({
   reducerPath: "authApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_API_URL,
-    prepareHeaders: (headers, { getState }) => {
-      const { accessToken } = (getState() as RootStore).auth;
-      if (!accessToken) return headers;
-
-      headers.set("authorization", `Bearer ${accessToken}`);
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithRefresh(process.env.NEXT_PUBLIC_API_URL),
   endpoints: (builder) => ({
     login: builder.mutation<{ access_token: string; user: User, flagged?: boolean }, Credential>({
       query: (credential) => ({
@@ -61,7 +52,13 @@ export const authApi = createApi({
         method: "POST",
         body: credential
       })
-    })
+    }),
+    logout: builder.mutation<void, void>({
+      query: () => ({
+        url: "/auth/logout",
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -72,5 +69,6 @@ export const {
   useDisableMutation,
   useRecoveryKeyQuery,
   useAuthRecoveryKeyMutation,
-  useOtpLoginMutation 
+  useOtpLoginMutation,
+  useLogoutMutation,
 } = authApi;
