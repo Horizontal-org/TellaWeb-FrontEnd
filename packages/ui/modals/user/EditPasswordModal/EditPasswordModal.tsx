@@ -35,7 +35,7 @@ export const EditPasswordModal: FunctionComponent<React.PropsWithChildren<Props>
             Edit password
           </p>
           <p className='font-sans text-sm font-normal text-gray-500'>
-            Please enter your current password and new password.           
+            Please enter the user new password.           
           </p>      
           
           <div>
