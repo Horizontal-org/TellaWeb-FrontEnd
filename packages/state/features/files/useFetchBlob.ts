@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 import { RootStore } from "../../store";
 
-type Downloader = (url: string, fileType?: string) => Promise<void>;
+type Downloader = (url: string, fileType?: string, fileName?: string) => Promise<void>;
 
 export interface DownloaderState {
   isDownloading: boolean;
@@ -20,7 +20,7 @@ export const useFetchBlob = (): [Downloader, DownloaderState] => {
     setIsError(false);
   };
 
-  const download = async (url: string, fileType?: string) => {
+  const download = async (url: string, fileType?: string, fileName?: string) => {
     resetState();
 
     try {
@@ -33,7 +33,7 @@ export const useFetchBlob = (): [Downloader, DownloaderState] => {
       });
 
       const blob = await response.blob();
-      openBlob(blob, fileType);
+      openBlob(blob, fileType, fileName);
 
       setIsDownloading(false);
     } catch (error) {
@@ -42,10 +42,11 @@ export const useFetchBlob = (): [Downloader, DownloaderState] => {
     }
   };
 
-  const openBlob = (blob: Blob, type?: string) => {
+  const openBlob = (blob: Blob, type?: string, name = 'download') => {
     const link = document.createElement("a");
     link.href = window.URL.createObjectURL(blob);
-    link.download = type ? `download.${type}` : `download`;
+    
+    link.download = type ? `${name}.${type}` : name;
     link.target = "_blank";
     link.click();
   };

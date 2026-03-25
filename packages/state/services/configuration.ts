@@ -1,44 +1,14 @@
-import { SerializedError } from "@reduxjs/toolkit";
-import { BaseQueryError } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
 import {
-  BaseQueryFn,
   createApi,
-  FetchArgs,
-  fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
-import { RootStore } from "packages/state/store";
-import { User, UserQuery } from "../domain/user";
+import baseQueryWithRefresh from "./baseQueryWithRefresh";
 import { Pagination } from "../domain/common";
 import { Configuration, ConfigurationQuery, Camouflage } from "../domain/configuration";
 import { CrashReport } from "packages/ui/proto/configuration";
 
-interface CustomError {
-  status: string;
-  data?: {
-    statusCode: number;
-    message: string;
-  };
-}
-
-type CustomFetchBaseQuery = BaseQueryFn<
-  string | FetchArgs,
-  unknown,
-  CustomError,
-  {}
->;
-
 export const configurationApi = createApi({
   reducerPath: "configurationApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/config`,
-    prepareHeaders: (headers, { getState }) => {
-      const { accessToken } = (getState() as RootStore).auth;
-      if (!accessToken) return headers;
-
-      headers.set("authorization", `Bearer ${accessToken}`);
-      return headers;
-    },
-  }) as CustomFetchBaseQuery,
+  baseQuery: baseQueryWithRefresh(`${process.env.NEXT_PUBLIC_API_URL}/config`),
   endpoints: (builder) => ({
   
     list: builder.query<Pagination<Configuration>, ConfigurationQuery>({

@@ -11,6 +11,7 @@ import { configurationApi } from './services/configuration'
 import { projectApi } from "./services/project";
 import { resourcesApi } from "./services/resource";
 import { globalSettingsApi } from "./services/global-setting";
+import { backupsApi } from "./services/backup";
 
 const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ const store = configureStore({
     [projectApi.reducerPath]: projectApi.reducer,
     [resourcesApi.reducerPath]: resourcesApi.reducer,
     [globalSettingsApi.reducerPath]: globalSettingsApi.reducer,
+    [backupsApi.reducerPath]: backupsApi.reducer,
     auth: authSlice.reducer,
     user: userSlice.reducer,
     reports: reportsSlice.reducer,

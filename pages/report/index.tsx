@@ -3,7 +3,6 @@ import { ReportListPage, ItemQuery, Report as IReport } from "packages/ui";
 import { Menu } from "../../components/Menu";
 import { toReport } from "../../common/toReport";
 import { useRouter } from "next/dist/client/router";
-import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import {
   useBatchDeleteMutation,
   useListQuery,
