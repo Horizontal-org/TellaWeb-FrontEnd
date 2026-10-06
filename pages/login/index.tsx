@@ -1,7 +1,7 @@
 import { useEffect, useContext, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { LoginPage } from "packages/ui";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { useAuth } from "packages/state/features/auth/authHooks";
 import { useLoginMutation, useOtpLoginMutation, useAuthRecoveryKeyMutation } from "packages/state/services/auth";

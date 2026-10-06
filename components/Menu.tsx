@@ -1,4 +1,4 @@
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import { FunctionComponent } from "react";
 import { SidebarLayout } from "packages/ui";
 import { IoMdExit } from 'react-icons/io'

@@ -5,7 +5,6 @@ import { useListQuery, useUpdateGlobalSettingMutation } from "packages/state/ser
 import { useToast } from "components/ToastWrapper";
 import { useRouter } from "next/router";
 import { useLatestQuery, useStartMutation, useDeleteMutation } from "packages/state/services/backup";
-import { on } from "cluster";
 
 
 const AdminCenter = () => {

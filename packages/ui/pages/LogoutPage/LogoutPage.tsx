@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import Img from "next/image";
 import logo from "../../assets/tella-logo.png";
 

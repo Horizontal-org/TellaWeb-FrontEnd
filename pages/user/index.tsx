@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from "react";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import { ItemQuery, User as IUser } from 'packages/ui'
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import { Menu } from "../../components/Menu";
