@@ -1,5 +1,5 @@
 import { useEffect, useContext, useState } from "react";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import { LoginPage } from "packages/ui";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";

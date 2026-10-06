@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import "../styles/tailwind.css";
-import { appWithTranslation } from "next-i18next";
+import { appWithTranslation } from "next-i18next/pages";
 import type { AppProps } from "next/app";
 import { ToastWrapper } from "../components/ToastWrapper";
 import { Provider } from "react-redux";

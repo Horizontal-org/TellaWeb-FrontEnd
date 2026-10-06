@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import { SettingsPage } from "../../packages/ui/pages/SettingsPage/SettingsPage";
 import { Menu } from "../../components/Menu";
 import { useAuthRequired } from "packages/state/features/auth/authHooks";

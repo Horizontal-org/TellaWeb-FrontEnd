@@ -1,5 +1,5 @@
 import { FunctionComponent, useState, useEffect } from "react";
-import { useTranslation } from "next-i18next";
+import { useTranslation } from "next-i18next/pages";
 import logo from "../../assets/tella-logo.png";
 import Img from "next/image";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
