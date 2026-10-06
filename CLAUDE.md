@@ -6,7 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 npm run dev            # Next.js dev server on :3000
-npm run build          # production build
+npm run build          # production build (needs NEXT_PUBLIC_API_URL=/api NEXT_REDIRECT_API_URL=http://localhost:3001, or the /api rewrite is invalid)
+npm run typecheck      # tsc --noEmit
 npm run lint           # next lint
 npm run build:css      # regenerate styles/tailwind.css (imported by pages/_app.tsx)
 npm run storybook      # Storybook on :6006 (stories live in storybook/stories)
@@ -14,11 +15,14 @@ npm test               # jest --watch
 npm run test:ci        # jest --ci
 npx jest path/to/file.test.tsx   # run a single test file
 npx jest -t "test name"          # run tests matching a name
+npm run e2e            # Playwright smoke suite (needs the local backend, see e2e/README.md)
+npm run e2e -- -g "report page"  # single e2e test by name
+npm run e2e:update     # re-record local screenshot baselines
 ```
 
-`next.config.js` sets `eslint.ignoreDuringBuilds` and `typescript.ignoreBuildErrors`, so a successful `npm run build` does **not** mean the code type-checks or passes lint. Run `npx tsc --noEmit` and `npm run lint` yourself. `tsconfig` has `strict: false`.
+`next.config.js` sets `eslint.ignoreDuringBuilds` and `typescript.ignoreBuildErrors`, so a successful `npm run build` does **not** mean the code type-checks or passes lint. Run `npm run typecheck` and `npm run lint` yourself. `tsconfig` has `strict: false`.
 
-Jest is set up with `next/jest`, jsdom and `@testing-library/jest-dom`, but the repo currently has almost no test files.
+Jest is set up with `next/jest`, jsdom and `@testing-library/jest-dom`, but the repo currently has almost no test files. Behaviour is covered by the Playwright suite in `e2e/`. Its screenshot baselines are gitignored because they capture local backend data.
 
 ## Environment / API
 
