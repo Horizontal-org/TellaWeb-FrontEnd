@@ -53,7 +53,7 @@ export const LoginBox: FunctionComponent<React.PropsWithChildren<Props>> = ({
       }}
     >
       <div className="flex justify-center items-center py-4">
-        <Img src={logo} height="36px" alt="Tella logo" />
+        <Img src={logo} height={36} alt="Tella logo" />
       </div>
       <p className="mb-5 text-xl text-gray-600 font-bold">Sign in</p>
       <input

@@ -10,7 +10,7 @@ export const LogoutPage: FunctionComponent<React.PropsWithChildren<unknown>> = (
     <div className="w-screen h-screen flex justify-center items-center bg-white">
       <div className="p-10 bg-white rounded flex justify-center items-center flex-col shadow-md border">
         <div className="flex justify-center items-center py-4">
-          <Img src={logo} height="36px" alt="Tella logo" />
+          <Img src={logo} height={36} alt="Tella logo" />
         </div>
         <p className="text-xl text-gray-600 font-bold">Good bye</p>
         <p className="text-gray-600 py-4">

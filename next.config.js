@@ -19,7 +19,7 @@ module.exports = {
     ];
   },
   images: {
-    domains: ['localhost', 'tella-app.org'],
+    remotePatterns: [{ hostname: 'localhost' }, { hostname: 'tella-app.org' }],
   },
   eslint: {
     ignoreDuringBuilds: true,

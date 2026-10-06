@@ -21,10 +21,10 @@ export const ImageView: FunctionComponent<React.PropsWithChildren<Props>> = ({ f
           className='cursor-pointer'
           src={window.location.origin + file.src}
           alt={file.fileName}
-          layout='fill'
-          objectFit='contain'
+          fill
+          style={{ objectFit: 'contain' }}
           unoptimized={true}
-          onLoadingComplete={() => {
+          onLoad={() => {
             handleLoading(false)
           }}
         />
