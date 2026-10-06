@@ -14,7 +14,8 @@
     "test:ci": "jest --ci",
     "typecheck": "tsc --noEmit",
     "e2e": "playwright test",
-    "e2e:update": "playwright test --update-snapshots"
+    "e2e:update": "playwright test --update-snapshots",
+    "e2e:prod": "E2E_PROD=1 playwright test"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",

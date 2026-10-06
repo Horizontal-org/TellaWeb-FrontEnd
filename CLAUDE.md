@@ -16,6 +16,7 @@ npm run test:ci        # jest --ci
 npx jest path/to/file.test.tsx   # run a single test file
 npx jest -t "test name"          # run tests matching a name
 npm run e2e            # Playwright smoke suite (needs the local backend, see e2e/README.md)
+npm run e2e:prod       # same suite against a production build (next build && next start on :3101)
 npm run e2e -- -g "report page"  # single e2e test by name
 npm run e2e:update     # re-record local screenshot baselines
 ```

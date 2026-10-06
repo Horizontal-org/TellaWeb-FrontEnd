@@ -28,3 +28,31 @@ test("report video viewer loads the video", async ({ page }) => {
   // readyState >= 1 (HAVE_METADATA) means the browser fetched and parsed the file
   await expect.poll(() => player.evaluate((el: HTMLVideoElement) => el.readyState)).toBeGreaterThanOrEqual(1)
 })
+
+test("report audio viewer loads the audio", async ({ page }) => {
+  const { audio } = readData()
+  test.skip(!audio, "No report with an audio file in the local backend")
+
+  await openFile(page, audio)
+  const player = page.locator("#content audio")
+  await expect(player).toBeAttached()
+  await expect.poll(() => player.evaluate((el: HTMLAudioElement) => el.readyState)).toBeGreaterThanOrEqual(1)
+})
+
+test("resource PDF viewer points at a downloadable PDF", async ({ page }) => {
+  const { pdfResource } = readData()
+  test.skip(!pdfResource, "No PDF resource in the local backend")
+
+  await page.goto("/resource")
+  await waitForApp(page)
+  const row = page.getByRole("row").filter({ hasText: pdfResource.replace(/\.pdf$/i, "") }).first()
+  await row.hover()
+
+  await row.getByRole("button", { name: "Open" }).click()
+  // Headless Chromium has no PDF plugin and never fetches <object> data, so fetch it directly
+  const viewer = page.locator('object[type="application/pdf"]')
+  await expect(viewer).toHaveAttribute("data", /\/api\/resource\/asset\/.+/)
+  const response = await page.request.get(await viewer.getAttribute("data"))
+  expect(response.ok(), `status ${response.status()}`).toBe(true)
+  expect((await response.body()).subarray(0, 4).toString()).toBe("%PDF")
+})

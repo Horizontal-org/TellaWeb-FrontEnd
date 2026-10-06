@@ -20,14 +20,15 @@ A smoke suite that checks the main screens load, don't throw, and look the same.
 
 ```bash
 npm run e2e                                  # starts `next dev -p 3100` unless something is already serving it
+npm run e2e:prod                             # same suite against `next build && next start -p 3101`
 npm run e2e -- e2e/auth.spec.ts              # one file
 npm run e2e -- -g "report page"              # by test name
 npm run e2e:update                           # re-record screenshot baselines
 npx playwright show-report                   # HTML report with screenshot diffs
 ```
 
-`global-setup.ts` logs in through the `/api` rewrite, saves the session to `e2e/.auth/`, and picks existing records (first project, first report, a report with an image and one with a video) for the detail pages. Specs skip themselves when the local backend has no matching record.
+`global-setup.ts` logs in through the `/api` rewrite, saves the session to `e2e/.auth/`, and picks existing records for the detail pages: the first project and report, reports with an image, video or audio file, and a PDF resource. If there's no remote configuration it creates one called "e2e configuration". Specs skip themselves when the local backend has no matching record. Today the audio spec skips, because there are no audio files locally.
 
 ## Screenshot baselines are local only
 
-`e2e/__screenshots__/` is **gitignored**, because the screenshots contain whatever is in your local database (names, emails, file titles). Record the baseline on the code *before* a change with `npm run e2e:update`, then run `npm run e2e` after it. Any visual difference fails the test and shows up in the HTML report.
+`e2e/__screenshots__/` is **gitignored**, because the screenshots contain whatever is in your local database (names, emails, file titles). Record the baseline on the code *before* a change with `npm run e2e:update`, then run `npm run e2e` after it. Any visual difference fails the test and shows up in the HTML report. Dev and production builds share the same baselines. Don't change local backend data between recording and comparing, or you'll get false diffs.

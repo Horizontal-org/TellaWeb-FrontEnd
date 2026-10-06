@@ -11,7 +11,11 @@ if (fs.existsSync(envFile)) {
   }
 }
 
-const baseURL = process.env.E2E_BASE_URL || "http://localhost:3100"
+// E2E_PROD=1 runs the suite against a production build (`next build && next start`) on its
+// own port, so it never reuses a dev server
+const prod = !!process.env.E2E_PROD
+const port = prod ? 3101 : 3100
+const baseURL = process.env.E2E_BASE_URL || `http://localhost:${port}`
 
 export default defineConfig({
   testDir: "./e2e",
@@ -38,9 +42,13 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npx next dev -p 3100",
+    command: prod ? `npm run build && npx next start -p ${port}` : `npx next dev -p ${port}`,
     url: baseURL,
-    reuseExistingServer: true,
-    timeout: 180_000,
+    reuseExistingServer: !prod,
+    timeout: prod ? 600_000 : 180_000,
+    env: {
+      NEXT_PUBLIC_API_URL: "/api",
+      NEXT_REDIRECT_API_URL: process.env.NEXT_REDIRECT_API_URL || "http://localhost:3001",
+    },
   },
 })

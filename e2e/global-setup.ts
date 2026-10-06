@@ -12,6 +12,8 @@ export type E2EData = {
   reportId?: string
   image?: ReportFile
   video?: ReportFile
+  audio?: ReportFile
+  pdfResource?: string
   configurationId?: string
 }
 
@@ -42,11 +44,27 @@ export default async function globalSetup(config: FullConfig) {
     return res.ok() ? (await res.json()).results ?? [] : []
   }
 
-  const [projects, reports, configurations] = await Promise.all([
+  let [projects, reports, configurations] = await Promise.all([
     list("project"),
     list("report"),
     list("config"),
   ])
+
+  // Remote configurations are cheap to create, so make one if the local backend has none
+  if (configurations.length === 0) {
+    await api.post("/api/config/", {
+      headers,
+      data: {
+        name: "e2e configuration",
+        camouflage: JSON.stringify({ visible: true, calculator: true, change_name: true }),
+        crashReports: JSON.stringify({ visible: true, enabled: true }),
+        serversVisible: true,
+      },
+    })
+    configurations = await list("config")
+  }
+  const resources = await list("resource")
+
   const withFileType = (type: string) => {
     for (const report of reports) {
       const fileIndex = (report.files ?? []).findIndex((file) => file.type === type)
@@ -59,6 +77,8 @@ export default async function globalSetup(config: FullConfig) {
     reportId: reports[0]?.id,
     image: withFileType("IMAGE"),
     video: withFileType("VIDEO"),
+    audio: withFileType("AUDIO"),
+    pdfResource: resources.find((resource) => resource.fileName?.toLowerCase().endsWith(".pdf"))?.fileName,
     configurationId: configurations[0]?.id,
   }
 
