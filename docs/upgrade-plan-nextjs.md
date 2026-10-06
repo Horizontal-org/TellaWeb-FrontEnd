@@ -3,6 +3,22 @@
 **Goal:** get Next.js onto a supported, patched version without changing how the app behaves.
 **Out of scope:** moving to the App Router, redesigning the UI, and the Tailwind upgrade (see `upgrade-plan-tailwind.md`). Do that one as a separate PR.
 
+## Decisions (agreed 2026-10-06)
+
+- **One branch (`upgrade/nextjs`), one commit per step and per Next major version.** It goes to beta only **twice**: once after Phases 0–2 (Next still on 12), and once on Next 16. Versions 13–15 are checked locally (typecheck, build, e2e) but never deployed.
+- **Verification is a Playwright smoke suite** (`npm run e2e`) with screenshots, in place of the manual checklist below. The screenshots also serve as the visual baseline for the Tailwind upgrade.
+- **Chromatic is removed.** Storybook is upgraded after Next 16.
+- **Packages the upgrade requires get upgraded along with it** (TypeScript, @types, ESLint 9, Jest 30 with Testing Library, next-i18next with i18next and react-i18next, Storybook). Packages that are only outdated stay out of scope: React 19, RTK 2 / react-redux 9, CASL 7, date-fns 4, styled-components 6 and others. Unused packages are removed.
+- Tags and deploys are done by a maintainer, not as part of the upgrade work.
+
+## Type-error baseline (TypeScript 5.9, Next 12)
+
+`npm run typecheck`: **22 errors in app code, none from `node_modules`.**
+- 19 × `TS2339` `Property 'message' does not exist on type 'unknown'` (catch blocks in `pages/**`)
+- 1 × `TS2345` in `pages/login/index.tsx` (login response type)
+- 1 × `TS2741` in `packages/ui/pages/ProjectUsersPage/ProjectUsersPage.tsx` (missing `children`)
+- 1 × `TS2614` in `pages/admin-center/index.tsx`: an unused `import { on } from "cluster"` (Node's server-only module in browser code). Removed in Phase 1.
+
 ## Starting point
 
 | | Now | Needed for Next 16 |
@@ -90,11 +106,11 @@ At each step: bump `next` and `eslint-config-next` → run the codemods → `typ
 
 ## Phase 5: Storybook (separate PR, can run in parallel)
 
-Storybook 6.5 is unlikely to survive the toolchain changes. Upgrade it with `npx storybook@latest upgrade` (to `@storybook/nextjs`) and check that `npm run chromatic` still works. You need this before the Tailwind upgrade, which depends on Chromatic for visual diffs.
+Storybook 6.5 is unlikely to survive the toolchain changes. Upgrade it with `npx storybook@latest upgrade` (to `@storybook/nextjs`) and check that the stories render. Chromatic has been removed, so visual diffs come from the Playwright screenshots.
 
 ## Rollout
 
-1. Merge each phase into `development` → tag `beta-X.Y.Z` → deploy to beta → run the smoke checklist on beta.
+1. Beta drop #1 after Phases 0–2, beta drop #2 on Next 16: a maintainer tags `beta-X.Y.Z` → deploys to beta → checks by hand on beta.
 2. Leave it on beta for at least a few days of real use before production.
 3. Production: tag `X.Y.Z` as usual.
 
