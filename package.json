@@ -13,9 +13,12 @@
     "chromatic": "npx chromatic --project-token=15ec91a46767 --build-script-name=build-storybook",
     "test": "jest --watch",
     "test:ci": "jest --ci",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "e2e": "playwright test",
+    "e2e:update": "playwright test --update-snapshots"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@storybook/addon-essentials": "^6.3.8",
     "@storybook/addon-links": "^6.3.8",
     "@storybook/addon-postcss": "^2.0.0",

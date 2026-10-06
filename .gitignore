@@ -6,3 +6,10 @@ node_modules
 build-storybook.log
 .vercel
 tsconfig.tsbuildinfo
+
+# e2e (local only: screenshots contain local backend data)
+.env.e2e.local
+e2e/.auth/
+e2e/__screenshots__/
+test-results/
+playwright-report/
