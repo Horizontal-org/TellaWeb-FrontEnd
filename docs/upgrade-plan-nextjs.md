@@ -19,6 +19,21 @@
 - 1 × `TS2741` in `packages/ui/pages/ProjectUsersPage/ProjectUsersPage.tsx` (missing `children`)
 - 1 × `TS2614` in `pages/admin-center/index.tsx`: an unused `import { on } from "cluster"` (Node's server-only module in browser code). Removed in Phase 1.
 
+## Progress
+
+**Milestone A (Phases 0–2, Next still on 12): done, waiting for beta drop #1.**
+- TypeScript 5.9 and `typecheck`: baseline 22 errors, now **21** (the `cluster` import was removed).
+- Playwright suite in `e2e/` (see `e2e/README.md`): 20 pass, 1 skipped (configuration detail, because there's no configuration locally).
+- Babel removed (SWC), `next/router` imports fixed, Node 22 in Docker plus `.nvmrc`.
+- Chromatic, 10 unused packages and `yarn.lock` removed.
+- Minor/patch updates: next 12.3.7, react 18.3.1, RTK 1.9.7, axios 1.20.0, among others.
+  - RTK 1.9 brought up a real bug: `backupsApi` middleware wasn't registered. Fixed.
+  - `@divviup/dap` 0.9.1 added an exports map, so the import changed.
+
+**Order changed from the original plan:** `eslint-config-next` ≤ 14 only supports ESLint ≤ 8, and `next/jest` comes from the installed Next. So **ESLint 9 moves to the Next 15 hop** and **Jest 30 with Testing Library moves to the Next 16 hop.**
+
+**Note:** `npm run build` needs `NEXT_PUBLIC_API_URL` and `NEXT_REDIRECT_API_URL` set (Docker sets them). Without them, the `/api` rewrite is invalid.
+
 ## Starting point
 
 | | Now | Needed for Next 16 |
