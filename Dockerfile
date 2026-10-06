@@ -1,4 +1,4 @@
-FROM node:16.15-alpine AS base
+FROM node:22-alpine AS base
 
 ENV NEXT_REDIRECT_API_URL=http://api:3001
 ENV NEXT_PUBLIC_API_URL=/api
