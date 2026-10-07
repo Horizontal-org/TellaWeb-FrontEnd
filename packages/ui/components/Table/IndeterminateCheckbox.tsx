@@ -1,9 +1,8 @@
 import { useEffect, forwardRef, useRef, Ref } from "react";
 import { useCombinedRefs } from "../../utilities/useCombinedRefs";
 
-interface Props {
+interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   indeterminate?: boolean;
-  name?: string;
 }
 
 export const IndeterminateCheckbox = forwardRef<HTMLInputElement, Props>(

@@ -48,6 +48,8 @@ Check these first for the release being tested, then run section 2.
 ### Dependency beta drop #2
 | Change | Check |
 |---|---|
+| Table rewritten on TanStack Table 8 | 🧑 On every list (users, resources, reports, configurations, project reports/users/resources): rows look the same; clicking a row selects it (checkbox appears, toolbar actions show); header checkbox selects all; clicking a column header sorts (arrow shows, order flips on second click); hover shows the row's actions |
+| Pagination fix (lists stopped at 25 items) | 🧑 On a list with **more than 25 items** (reports on beta likely): the pager shows the right number of pages, next/previous load the other pages, and searching updates the page count |
 | styled-components 6 (transient props, built-in types) | 🧑 These components look and behave as before: 2FA passcode boxes (login), password strength meter (create user, change password), "Add users / resources to project" search box (border, selected chips, results list), Feedback button, PDF viewer close button, "exit 2FA setup" confirmation buttons, "use a backup code" link |
 
 ---

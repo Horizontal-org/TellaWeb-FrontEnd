@@ -28,7 +28,7 @@
 | @reduxjs/toolkit | 1.9 → 2 ✅ | 2 | 15 files; `extraReducers` object syntax (removed in v2) in `authSlice`, `reportsSlice`, `userSlice` |
 | react-redux | 7 → 9 ✅ | 9 | 8 files |
 | @casl/ability, @casl/react | 5 / 3 → 7 ✅ | 7 | `common/casl/Ability.tsx`, `Can.tsx` |
-| react-table | 7 (no React 19 version) | → @tanstack/react-table 8 | `components/Table/Table.tsx`, column definitions in `domain/*TableColumns.ts`, `domain/ItemQuery.ts`, `types/react-table-config.d.ts`; 7 list pages render `<Table>` |
+| react-table | 7 → @tanstack/react-table 8 ✅ | 8 | `components/Table/Table.tsx`, column definitions in `domain/*TableColumns.ts`, `domain/ItemQuery.ts`, `types/react-table-config.d.ts`; 7 list pages render `<Table>` |
 | styled-components | 5 → 6 ✅ | 6 | 11 files |
 | react-leaflet (+ leaflet, @types/leaflet) | 4 | 5 | only `VerificationMap`, used only by `VerificationInformation`, which **nothing imports** (dead code) |
 | react, react-dom, @types/react* | 18.3 | 19 | everywhere |
@@ -69,11 +69,13 @@ Gate: typecheck 0, lint 0 errors, build, `e2e` and `e2e:prod` 37 passed / 1 skip
 
 **→ Beta drop #1 checkpoint** (see "Beta drops").
 
-### 5. react-table 7 → TanStack Table 8 (largest step)
-- **Before:** add e2e tests for what the table does: sorting, row selection (single, all), pagination, search. Today these are only partly covered.
-- Rewrite `components/Table/Table.tsx` on `@tanstack/react-table` (`useReactTable`, column helpers, controlled sorting/pagination through `ItemQuery`).
-- Port the column definitions (`domain/*TableColumns.ts`) and remove `types/react-table-config.d.ts`.
-- Check all 7 list pages; screenshots catch layout changes.
+### 5. react-table 7 → TanStack Table 8 ✅
+- **Tests first** (`27040d8`, against react-table 7): search, server-side pagination, sorting (descending then ascending, with the arrow icon) and row selection (single row, select all) on the users list, using 27 temporary users.
+- **Bug found and fixed first** (`cfa5750`, also in production): the users, resources, configurations and reports pages never passed the API's `total` to the table, so the pager showed "1 of 1" and **items after the first 25 couldn't be reached**. The pages now pass `total`, and the page count is `ceil(total / size)` (the old `floor + 1` also added an empty page when the total was a multiple of 25).
+- `components/Table/Table.tsx` rewritten on `@tanstack/react-table` 8.21, with the same props and markup: manual (server-side) sorting and pagination, row selection that resets when new data arrives, the same classes, titles ("Toggle SortBy", "Toggle All Rows Selected", "Toggle Row Selected") and checkbox styling. Defaults are parameters instead of `defaultProps`.
+- Column definitions use a new `TableColumn` type (no more `// @ts-nocheck`). Removed `react-table` and `types/react-table-config.d.ts`.
+- Screenshots of every list page are unchanged. The react-table 7 console warnings (spread `key`, `disableSortBy` on a DOM element) are gone. One lint rule (`react-hooks/incompatible-library`) is silenced on `useReactTable`, since the app doesn't use the React Compiler.
+- Gate: typecheck 0, lint clean, build, `e2e` and `e2e:prod` 44 passed / 1 skipped.
 
 ### 6. styled-components 6 ✅
 - **Tests first** (`d34f1b9`, against v5): adding a user and a resource to a project through the search dialogs (including the search box's active border, driven by a styled-components prop), and the password strength meter's bar colours. While writing them I briefly thought "Add users to project" was broken in production; it wasn't: the test was clicking the typed text inside the search box instead of the result.
@@ -85,7 +87,7 @@ Gate: typecheck 0, lint 0 errors, build, `e2e` and `e2e:prod` 37 passed / 1 skip
 
 ### 7. React 19
 - `react`, `react-dom`, `@types/react`, `@types/react-dom` 19.
-- Fix removed or changed APIs: implicit `children`, ref changes, and **`defaultProps` on function components, which React 19 ignores.** `Button` and `ButtonMenu` use it today (React 18 already warns), so their default values would silently stop applying. Move them to default parameters.
+- Fix removed or changed APIs: implicit `children`, ref changes, and **`defaultProps` on function components, which React 19 ignores.** React 18 already warns for: `Button`, `ButtonMenu`, `NavButton`, `ImageView`, `Thumbnail`, `VideoThumbnail`, `ProjectListPage`, `ProjectPage`, `ProjectResourcesPage`, `ProjectUsersPage` (`Table` was converted in step 5). Their default values would silently stop applying; move them to default parameters.
 - **react-leaflet 5** (React 19 only). The map code isn't used today (`VerificationInformation` isn't imported anywhere), but it stays: upgrade it and check it still type-checks and builds.
 
 ### 8. protobufjs: removed instead of upgraded ✅ (done before steps 5–7)
