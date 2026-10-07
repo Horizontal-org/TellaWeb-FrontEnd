@@ -93,16 +93,21 @@ test("rows can be selected one by one or all at once", async ({ page }) => {
   // Clicking a row selects it: its checkbox appears and the toolbar offers "Open"
   await first.locator("td").nth(1).click()
   await expect(first.getByRole("checkbox")).toBeChecked()
+  // With some (not all) rows selected, the header checkbox is indeterminate
+  const all = page.getByRole("checkbox", { name: "Toggle All Rows Selected" })
+  const isIndeterminate = () => all.evaluate((el: HTMLInputElement) => el.indeterminate)
+  await expect.poll(isIndeterminate).toBe(true)
+  await expect(all).not.toBeChecked()
   // Move off the row so only the toolbar's "Open" is shown (hovered rows have their own)
   await page.getByRole("heading", { level: 1 }).hover()
   await expect(page.getByRole("button", { name: "Open", exact: true })).toBeVisible()
   await first.locator("td").nth(1).click()
   await expect(rowCheckboxes).toHaveCount(0)
 
-  // The header checkbox selects every row on the page
-  const all = page.getByRole("checkbox", { name: "Toggle All Rows Selected" })
+  // The header checkbox selects every row on the page (checked, no longer indeterminate)
   await all.check()
   await expect(rowCheckboxes).toHaveCount(await bodyRows(page).count())
+  await expect.poll(isIndeterminate).toBe(false)
   await all.uncheck()
   await expect(rowCheckboxes).toHaveCount(0)
 })

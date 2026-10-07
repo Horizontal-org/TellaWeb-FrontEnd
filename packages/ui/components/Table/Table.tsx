@@ -5,8 +5,12 @@ import {
   RowSelectionState,
   SortingState,
   flexRender,
-  getCoreRowModel,
-  useReactTable,
+  metaHelper,
+  rowPaginationFeature,
+  rowSelectionFeature,
+  rowSortingFeature,
+  tableFeatures,
+  useTable,
 } from "@tanstack/react-table";
 import cn from "classnames";
 import { MdExpandMore } from "react-icons/md";
@@ -28,6 +32,17 @@ export type TableColumn<T = any> = {
 };
 
 type ColumnMeta = { className?: string; headerKey?: string };
+
+// TanStack Table 9 only includes the features a table registers. Sorting and pagination are done
+// by the server (manual modes), so no sorted or paginated row models are needed
+const features = tableFeatures({
+  rowSortingFeature,
+  rowSelectionFeature,
+  rowPaginationFeature,
+  columnMeta: metaHelper<ColumnMeta>(),
+});
+
+type Features = typeof features;
 
 type Props = {
   columns: Array<TableColumn>;
@@ -51,7 +66,7 @@ const SELECTION_COLUMN_ID = "selection";
 // Only cursor: pointer, like react-table 7's checkbox props (which replaced the 40x40 size)
 const CHECKBOX_STYLE = { cursor: "pointer" };
 
-const toColumnDef = (column: TableColumn): ColumnDef<Item> => {
+const toColumnDef = (column: TableColumn): ColumnDef<Features, Item> => {
   const id = column.id ?? (typeof column.accessor === "string" ? column.accessor : column.Header);
   const meta: ColumnMeta = { className: column.className, headerKey: column.headerKey };
   if (typeof column.accessor === "function") {
@@ -78,11 +93,11 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
     pageSize: itemQuery.pagination.size,
   });
 
-  const tColumns = useMemo<ColumnDef<Item>[]>(
+  const tColumns = useMemo<ColumnDef<Features, Item>[]>(
     () => [
       {
         id: SELECTION_COLUMN_ID,
-        meta: { className: "max-w-content text-center p-2" } as ColumnMeta,
+        meta: { className: "max-w-content text-center p-2" },
         enableSorting: false,
         header: ({ table }) => (
           <div className='flex justify-center w-full'>
@@ -90,7 +105,7 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
               title="Toggle All Rows Selected"
               style={CHECKBOX_STYLE}
               checked={table.getIsAllRowsSelected()}
-              indeterminate={table.getIsSomeRowsSelected()}
+              indeterminate={table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()}
               onChange={(e) => table.toggleAllRowsSelected(e.target.checked)}
             />
           </div>
@@ -116,12 +131,10 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
     []
   );
 
-  // TanStack Table can't be memoized by the React Compiler, which this app doesn't use
-  // eslint-disable-next-line react-hooks/incompatible-library
-  const table = useReactTable({
+  const table = useTable({
+    features,
     columns: tColumns,
     data,
-    getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
     manualSorting: true,
     enableMultiSort: false,
@@ -181,7 +194,7 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
               className="rounded-lg text-base font-sans text-gray-300 text-left"
             >
               {headerGroup.headers.map((header) => {
-                const meta = header.column.columnDef.meta as ColumnMeta;
+                const meta = header.column.columnDef.meta;
                 const sortable = header.column.id !== SELECTION_COLUMN_ID;
                 const sorted = header.column.getIsSorted();
                 return (
@@ -242,8 +255,8 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
                   }
                 )}
               >
-                {row.getVisibleCells().map((cell) => {
-                  const meta = cell.column.columnDef.meta as ColumnMeta;
+                {row.getAllCells().map((cell) => {
+                  const meta = cell.column.columnDef.meta;
                   return (
                     <td
                       key={cell.id}

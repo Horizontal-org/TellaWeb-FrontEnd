@@ -29,7 +29,7 @@
 | @reduxjs/toolkit | 1.9 → 2 ✅ | 2 | 15 files; `extraReducers` object syntax (removed in v2) in `authSlice`, `reportsSlice`, `userSlice` |
 | react-redux | 7 → 9 ✅ | 9 | 8 files |
 | @casl/ability, @casl/react | 5 / 3 → 7 ✅ | 7 | `common/casl/Ability.tsx`, `Can.tsx` |
-| react-table | 7 → @tanstack/react-table 8 ✅ | 8 | `components/Table/Table.tsx`, column definitions in `domain/*TableColumns.ts`, `domain/ItemQuery.ts`, `types/react-table-config.d.ts`; 7 list pages render `<Table>` |
+| react-table | 7 → @tanstack/react-table 9 ✅ | 9 | `components/Table/Table.tsx`, column definitions in `domain/*TableColumns.ts`, `domain/ItemQuery.ts`, `types/react-table-config.d.ts`; 7 list pages render `<Table>` |
 | styled-components | 5 → 6 ✅ | 6 | 11 files |
 | react-leaflet (+ leaflet, @types/leaflet) | 4 → 5 ✅ | 5 | only `VerificationMap`, used only by `VerificationInformation`, which **nothing imports** (dead code) |
 | react, react-dom, @types/react* | 18.3 → 19 ✅ | 19 | everywhere |
@@ -77,6 +77,15 @@ Gate: typecheck 0, lint 0 errors, build, `e2e` and `e2e:prod` 37 passed / 1 skip
 - Column definitions use a new `TableColumn` type (no more `// @ts-nocheck`). Removed `react-table` and `types/react-table-config.d.ts`.
 - Screenshots of every list page are unchanged. The react-table 7 console warnings (spread `key`, `disableSortBy` on a DOM element) are gone. One lint rule (`react-hooks/incompatible-library`) is silenced on `useReactTable`, since the app doesn't use the React Compiler.
 - Gate: typecheck 0, lint clean, build, `e2e` and `e2e:prod` 44 passed / 1 skipped.
+
+### 5b. TanStack Table 8 → 9 ✅
+TanStack Table 9 (Aug 2026) was released after the plan was written. Migrated following the guides that ship with the package (`node_modules/@tanstack/react-table/skills/migrate-v8-to-v9`, plus the core one in `@tanstack/table-core`):
+- `useReactTable` → `useTable` with an explicit, stable `features` object: `rowSortingFeature`, `rowSelectionFeature`, `rowPaginationFeature`, and a typed `columnMeta` slot (no more `as ColumnMeta` casts). `getCoreRowModel()` removed; sorting and pagination stay manual (server-side), so no sorted or paginated row models are registered.
+- `ColumnDef` takes the features type: `ColumnDef<Features, Item>`.
+- `row.getVisibleCells()` belongs to the column-visibility feature in v9; the table hides no columns, so it uses `row.getAllCells()`.
+- **Selection semantics:** `getIsSomeRowsSelected()` now means "at least one", including all selected. The header checkbox's indeterminate state is now `some && !all`, which keeps the old behaviour. The table test now checks indeterminate (one row) and not indeterminate (all rows); temporarily reverting to the naive form makes it fail.
+- The `react-hooks/incompatible-library` lint suppression from step 5 is no longer needed.
+- Gate: typecheck 0, lint clean, build, `e2e` and `e2e:prod` 44 passed / 1 skipped, production audit 0 vulnerabilities.
 
 ### 6. styled-components 6 ✅
 - **Tests first** (`d34f1b9`, against v5): adding a user and a resource to a project through the search dialogs (including the search box's active border, driven by a styled-components prop), and the password strength meter's bar colours. While writing them I briefly thought "Add users to project" was broken in production; it wasn't: the test was clicking the typed text inside the search box instead of the result.
