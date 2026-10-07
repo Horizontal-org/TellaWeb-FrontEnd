@@ -9,7 +9,7 @@ type Props = {
   icon?: React.ReactNode;
   type?: btnType;
   openSide?: "left" | "right";
-  children: React.ReactNode
+  children?: React.ReactNode
 };
 
 export const ButtonMenu: FunctionComponent<React.PropsWithChildren<Props>> = ({

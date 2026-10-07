@@ -13,6 +13,7 @@ import { ResourceQuery } from "packages/state/domain/resource";
 import { ItemQuery } from "@tellaweb/ui";
 import { useDeleteResourceMutation, useListQuery } from "packages/state/services/resource";
 import { useResourceFileDownloader } from "packages/state/features/resources/useResourceFilesDownloader";
+import { errorMessage } from "packages/state/utils/errorMessage";
 
 
 const defaultQuery: ResourceQuery = {
@@ -69,7 +70,7 @@ const Resources = () => {
       refetch()
     }
     if (deleteResourceResult.error && "status" in deleteResourceResult.error) {
-      handleToast(deleteResourceResult.error.data.message, "danger");
+      handleToast(errorMessage(deleteResourceResult.error), "danger");
     }
   }, [deleteResourceResult.status]);
 

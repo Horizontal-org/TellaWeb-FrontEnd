@@ -15,6 +15,7 @@ import { UserQuery } from "packages/state/domain/user";
 import { ProjectUsersPage } from "packages/ui/pages/ProjectUsersPage/ProjectUsersPage";
 import { ResourceQuery } from "packages/state/domain/resource";
 import { ProjectResourcesPage } from "packages/ui/pages/ProjectResourcesPage/ProjectResourcesPage";
+import { errorMessage } from "packages/state/utils/errorMessage";
 
 const defaultQuery: ResourceQuery = {
   page: 0,
@@ -69,7 +70,7 @@ export const ProjectById = () => {
       refetch()
     }
     if (addResourcesResult.error && "status" in addResourcesResult.error) {
-      handleToast(addResourcesResult.error.data.message, "danger");
+      handleToast(errorMessage(addResourcesResult.error), "danger");
     }
   }, [addResourcesResult.status]);
 

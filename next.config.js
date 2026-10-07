@@ -23,8 +23,5 @@ module.exports = {
   images: {
     remotePatterns: [{ hostname: 'localhost' }, { hostname: 'tella-app.org' }],
   },
-  typescript: {
-    ignoreBuildErrors: true
-  },
   i18n,
 };

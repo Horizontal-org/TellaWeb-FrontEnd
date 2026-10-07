@@ -5,6 +5,7 @@ import { useListQuery, useUpdateGlobalSettingMutation } from "packages/state/ser
 import { useToast } from "components/ToastWrapper";
 import { useRouter } from "next/router";
 import { useLatestQuery, useStartMutation, useDeleteMutation } from "packages/state/services/backup";
+import { errorMessage } from "packages/state/utils/errorMessage";
 
 
 const AdminCenter = () => {
@@ -53,7 +54,7 @@ const AdminCenter = () => {
       }, 1500)
     }
     if (updateResult.error && "status" in updateResult.error) {
-      handleToast(updateResult.error.data.message, "danger");
+      handleToast(errorMessage(updateResult.error), "danger");
     }
   }, [updateResult.status]);
 
@@ -63,7 +64,7 @@ const AdminCenter = () => {
       refetchLatestBackups()
     }
     if (startBackupResult.error && "status" in startBackupResult.error) {
-      handleToast(startBackupResult.error.data.message, "danger");
+      handleToast(errorMessage(startBackupResult.error), "danger");
     }
   }, [startBackupResult.status]);
 
@@ -73,7 +74,7 @@ const AdminCenter = () => {
       refetchLatestBackups()
     }
     if (deleteBackupResult.error && "status" in deleteBackupResult.error) {
-      handleToast(deleteBackupResult.error.data.message, "danger");
+      handleToast(errorMessage(deleteBackupResult.error), "danger");
     }
   }, [deleteBackupResult.status]);
 

@@ -11,6 +11,7 @@ import { ReportQuery } from "packages/state/domain/report";
 import { useReportFileDownloader } from "packages/state/features/files/useReportFileDownloader";
 import { Menu } from "components/Menu";
 import { useBatchDeleteMutation } from "packages/state/services/reports";
+import { errorMessage } from "packages/state/utils/errorMessage";
 
 const defaultQuery: ReportQuery = {
   page: 0,
@@ -86,7 +87,7 @@ export const ProjectById = () => {
       refetch()
     }
     if (batchDeleteReportResult.error && "status" in batchDeleteReportResult.error) {
-      handleToast(batchDeleteReportResult.error.data.message, "danger");
+      handleToast(errorMessage(batchDeleteReportResult.error), "danger");
     }
   }, [batchDeleteReportResult.status])
 

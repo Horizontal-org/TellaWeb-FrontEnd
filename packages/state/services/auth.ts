@@ -6,7 +6,7 @@ export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: baseQueryWithRefresh(process.env.NEXT_PUBLIC_API_URL),
   endpoints: (builder) => ({
-    login: builder.mutation<{ access_token: string; user: User, flagged?: boolean }, Credential>({
+    login: builder.mutation<LoginResponse, Credential>({
       query: (credential) => ({
         url: "/login/web",
         method: "POST",

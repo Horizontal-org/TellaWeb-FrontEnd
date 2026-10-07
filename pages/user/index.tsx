@@ -11,6 +11,7 @@ import {
 } from "packages/state/services/user";
 import { UserQuery } from "packages/state/domain/user";
 import { UserListPage } from '../../packages/ui/pages/UserListPage/UserListPage'
+import { errorMessage } from "packages/state/utils/errorMessage"
 
 const defaultQuery: UserQuery = {
   page: 0,
@@ -73,7 +74,7 @@ export const Report = () => {
       refetch()
     }
     if (createUserResult.error && "status" in createUserResult.error) {
-      handleToast(createUserResult.error.data.message, "danger");
+      handleToast(errorMessage(createUserResult.error), "danger");
     }
   }, [createUserResult.status]);
 
@@ -83,7 +84,7 @@ export const Report = () => {
       refetch()
     }
     if (batchDeleteUsersResult.error && "status" in batchDeleteUsersResult.error) {
-      handleToast(batchDeleteUsersResult.error.data.message, "danger");
+      handleToast(errorMessage(batchDeleteUsersResult.error), "danger");
     }
   }, [batchDeleteUsersResult.status])
 
