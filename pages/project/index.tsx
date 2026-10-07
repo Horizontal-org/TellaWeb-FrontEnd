@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from "react";
 import { ReportListPage, ItemQuery, Report as IReport } from "packages/ui";
 import { Menu } from "../../components/Menu";
 import { toReport } from "../../common/toReport";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import {
   useCreateProjectMutation,
@@ -13,6 +13,7 @@ import { useReportFileDownloader } from "packages/state/features/files/useReport
 import { ProjectQuery } from "packages/state/domain/project";
 import { ProjectListPage } from "packages/ui/pages/ProjectListPage/ProjectListPage";
 import { useToast } from "components/ToastWrapper";
+import { errorMessage } from "packages/state/utils/errorMessage";
 
 const defaultQuery: ProjectQuery = {
   page: 0,
@@ -65,7 +66,7 @@ export const Project = () => {
       refetch()
     }
     if (createProjectResult.error && "status" in createProjectResult.error) {
-      handleToast(createProjectResult.error.data.message, "danger");
+      handleToast(errorMessage(createProjectResult.error), "danger");
     }
   }, [createProjectResult.status]);
 

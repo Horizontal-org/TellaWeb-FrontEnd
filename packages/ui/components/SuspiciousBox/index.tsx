@@ -8,7 +8,7 @@ const SuspiciousPage = () => {
       style={{ width: 400 }}
     >
       <div className="flex justify-center items-center py-8">
-        <Img src={logo} height="36px" alt="Tella logo" />
+        <Img src={logo} height={36} alt="Tella logo" />
       </div>
       <p className="text-gray-600 text-center" >
         Your account has been flagged as suspicious, please check your email to unlock it

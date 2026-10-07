@@ -93,8 +93,8 @@ export const ConfigurationPanel: FunctionComponent<React.PropsWithChildren<Props
           </p>
           <div>
             <Img
-              height="100px"
-              width="133px"
+              height={100}
+              width={133}
               src={placeholder}
               alt="Placeholder"
             />
@@ -114,8 +114,8 @@ export const ConfigurationPanel: FunctionComponent<React.PropsWithChildren<Props
             <div>
               <img
                 className="m-auto"
-                height="150px"
-                width="150px"
+                height={150}
+                width={150}
                 src={imageUrl}
                 alt="configuration QR code"
               />
@@ -144,8 +144,8 @@ export const ConfigurationPanel: FunctionComponent<React.PropsWithChildren<Props
           </p>
           <div>
             <Img
-              height="100px"
-              width="133px"
+              height={100}
+              width={133}
               src={placeholder}
               alt="Placeholder"
             />

@@ -24,3 +24,5 @@ export const IndeterminateCheckbox = forwardRef<HTMLInputElement, Props>(
     );
   }
 );
+
+IndeterminateCheckbox.displayName = "IndeterminateCheckbox";

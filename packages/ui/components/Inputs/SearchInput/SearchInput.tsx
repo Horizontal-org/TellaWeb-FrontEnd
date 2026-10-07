@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { MdSearch } from "react-icons/md";
 import { ComponentPropsWithoutRef, forwardRef, useState } from "react";
 import cn from "classnames";

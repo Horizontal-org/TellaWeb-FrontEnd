@@ -35,8 +35,8 @@ const Verify = () => {
     >
       <Img
         src={logo} 
-        width="125px" 
-        height="36px" 
+        width={125} 
+        height={36} 
         alt="Tella logo" 
       />
     </div>  

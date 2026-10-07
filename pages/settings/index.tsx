@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import { SettingsPage } from "../../packages/ui/pages/SettingsPage/SettingsPage";
 import { Menu } from "../../components/Menu";
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
@@ -11,6 +11,7 @@ import {
 } from "packages/state/services/user";
 import { useDispatch } from "react-redux";
 import { setUser } from "packages/state/features/user/userSlice";
+import { errorMessage } from "packages/state/utils/errorMessage";
 
 const Settings = () => {
   
@@ -33,7 +34,7 @@ const Settings = () => {
       handleToast("Password updated!", "info");
     }
     if (updatePasswordResult.error && "status" in updatePasswordResult.error) {
-      handleToast(updatePasswordResult.error.data.message, "danger");
+      handleToast(errorMessage(updatePasswordResult.error), "danger");
     }
   }, [updatePasswordResult.status]);
 
@@ -43,7 +44,7 @@ const Settings = () => {
       dispatch(setUser({ ...user, ...updateSelfResult.data }));
     }
     if (updateSelfResult.error && "status" in updateSelfResult.error) {
-      handleToast(updateSelfResult.error.data.message, "danger");
+      handleToast(errorMessage(updateSelfResult.error), "danger");
     }
   }, [updateSelfResult.status]);
 

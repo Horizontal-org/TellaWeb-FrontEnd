@@ -1,6 +1,6 @@
 import { useEffect, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import { RootStore } from "../../store";
 import { useLazyGetProfileQuery } from "packages/state/services/user";
 import { useUserProfile } from "../user/userHooks";

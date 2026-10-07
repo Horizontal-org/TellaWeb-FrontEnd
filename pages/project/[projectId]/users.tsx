@@ -13,6 +13,7 @@ import { useReportFileDownloader } from "packages/state/features/files/useReport
 import { Menu } from "components/Menu";
 import { UserQuery } from "packages/state/domain/user";
 import { ProjectUsersPage } from "packages/ui/pages/ProjectUsersPage/ProjectUsersPage";
+import { errorMessage } from "packages/state/utils/errorMessage";
 
 const defaultQuery: ReportQuery = {
   page: 0,
@@ -80,7 +81,7 @@ export const ProjectById = () => {
       refetch()
     }
     if (addUsersResult.error && "status" in addUsersResult.error) {
-      handleToast(addUsersResult.error.data.message, "danger");
+      handleToast(errorMessage(addUsersResult.error), "danger");
     }
   }, [addUsersResult.status]);
 

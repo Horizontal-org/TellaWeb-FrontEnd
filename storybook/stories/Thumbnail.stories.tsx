@@ -1,4 +1,3 @@
-/* eslint-disable no-alert */
 import { CSSProperties } from "react";
 import { storiesOf } from "@storybook/react";
 import { FilesMokedData } from "../moked/files";

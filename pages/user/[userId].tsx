@@ -9,6 +9,7 @@ import {
   useGetByIdQuery,
   useDeleteMutation
 } from "packages/state/services/user";
+import { errorMessage } from "packages/state/utils/errorMessage";
 
 const UserById: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
   
@@ -29,7 +30,7 @@ const UserById: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
       refetch()
     }
     if (updateUserResult.error && "status" in updateUserResult.error) {
-      handleToast(updateUserResult.error.data.message, "danger");
+      handleToast(errorMessage(updateUserResult.error), "danger");
     }
   }, [updateUserResult.status]);
 
@@ -39,7 +40,7 @@ const UserById: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
       router.back()
     }
     if (deleteUserResult.error && "status" in deleteUserResult.error) {
-      handleToast(deleteUserResult.error.data.message, "danger");
+      handleToast(errorMessage(deleteUserResult.error), "danger");
     }
   }, [deleteUserResult.status]);
 

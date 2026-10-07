@@ -37,7 +37,8 @@ const store = configureStore({
       configurationApi.middleware,
       projectApi.middleware,
       resourcesApi.middleware,
-      globalSettingsApi.middleware
+      globalSettingsApi.middleware,
+      backupsApi.middleware
     ),
 });
 

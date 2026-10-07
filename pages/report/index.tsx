@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from "react";
 import { ReportListPage, ItemQuery, Report as IReport } from "packages/ui";
 import { Menu } from "../../components/Menu";
 import { toReport } from "../../common/toReport";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import {
   useBatchDeleteMutation,
   useListQuery,

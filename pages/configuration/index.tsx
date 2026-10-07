@@ -10,6 +10,7 @@ import {
   useListQuery
 } from '../../packages/state/services/configuration'
 import { useRouter } from 'next/router';
+import { errorMessage } from "packages/state/utils/errorMessage";
 
 const defaultQuery: ConfigurationQuery = {
   page: 0,
@@ -65,7 +66,7 @@ const Configuration = () => {
       refetch()
     }
     if (createConfigResult.error && "status" in createConfigResult.error) {
-      handleToast(createConfigResult.error.data.message, "danger");
+      handleToast(errorMessage(createConfigResult.error), "danger");
     }
   }, [createConfigResult.status]);
 

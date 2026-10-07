@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import { SettingsPage } from "../../packages/ui/pages/SettingsPage/SettingsPage";
 import { Menu } from "../../components/Menu";
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
@@ -13,6 +13,7 @@ import { ResourceQuery } from "packages/state/domain/resource";
 import { ItemQuery } from "@tellaweb/ui";
 import { useDeleteResourceMutation, useListQuery } from "packages/state/services/resource";
 import { useResourceFileDownloader } from "packages/state/features/resources/useResourceFilesDownloader";
+import { errorMessage } from "packages/state/utils/errorMessage";
 
 
 const defaultQuery: ResourceQuery = {
@@ -69,7 +70,7 @@ const Resources = () => {
       refetch()
     }
     if (deleteResourceResult.error && "status" in deleteResourceResult.error) {
-      handleToast(deleteResourceResult.error.data.message, "danger");
+      handleToast(errorMessage(deleteResourceResult.error), "danger");
     }
   }, [deleteResourceResult.status]);
 
