@@ -54,7 +54,7 @@ There are three layers, wired together with tsconfig path aliases (`@tellaweb/ui
 `next-i18next` handles translation, with locales `en` (default) and `es`. Translation files are in `public/locales/<locale>/<namespace>.json`. Pages that translate text load their namespaces in `getStaticProps`/`getServerSideProps` with `serverSideTranslations(locale, [...])`.
 
 ### Styling
-Tailwind CSS 3.4, built by Next's PostCSS from the directives in `styles/tailwind.css` (imported by `pages/_app.tsx`; nothing is pre-built). `tailwind.config.js` pins Tailwind 2's palette names, shadows and font fallbacks so the UI looks as it did on v2; `styles/tailwind.css` also restores v2's `body { font-family: inherit }`. Some components use styled-components 6 (styling-only props must be transient, `$prop`).
+Tailwind CSS 4, built by Next's PostCSS (`@tailwindcss/postcss`) from `styles/tailwind.css` (imported by `pages/_app.tsx` after `styles/globals.css`). There is no `tailwind.config.js`: the theme is the `@theme` block in `styles/tailwind.css` (exact hex colours, custom font sizes and spacing names that replace the defaults). Class names are only scanned in `packages/`, `pages/`, `components/` and `common/` (`@source`). Tailwind 4 uses native CSS layers, so global CSS must go inside `@layer base` (see `styles/globals.css`) or it will override utilities. The custom spacing names (`sm`, `md`, `xsm`, `xxl`, …) are for margins/padding; `max-w-md` and similar would resolve to them. Supported browsers: Safari 16.4+, Chrome 111+, Firefox 128+. Some components use styled-components 6 (styling-only props must be transient, `$prop`).
 
 ## Code style
 - Leave out semicolons in new JS/TS code. Existing files are inconsistent, so match the file you are editing where it matters.

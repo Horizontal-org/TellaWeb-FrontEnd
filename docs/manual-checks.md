@@ -54,13 +54,15 @@ Check these first for the release being tested, then run section 2.
 | Pagination fix (lists stopped at 25 items) | 🧑 On a list with **more than 25 items** (reports on beta likely): the pager shows the right number of pages, next/previous load the other pages, and searching updates the page count |
 | styled-components 6 (transient props, built-in types) | 🧑 These components look and behave as before: 2FA passcode boxes (login), password strength meter (create user, change password), "Add users / resources to project" search box (border, selected chips, results list), Feedback button, PDF viewer close button, "exit 2FA setup" confirmation buttons, "use a backup code" link |
 
-### Tailwind 3.4 beta drop (`upgrade/tailwind`)
+### Tailwind 4 beta drop (`upgrade/tailwind`, via 3.4)
 | Change | Check |
 |---|---|
-| Tailwind 3.4, CSS built from source (was a stale pre-built file) | 🧑 **Side-by-side with production** on the main pages and dialogs: colours, spacing, fonts, borders, shadows. Expected differences only: toasts now **fade out** (the fade classes were missing before), and the "Name" column in lists may be slightly wider (`w-40` now applies) |
+| Tailwind 4, CSS built from source (was a stale pre-built file) | 🧑 **Side-by-side with production** on the main pages and dialogs: colours, spacing, fonts, borders (light grey, not dark), corner rounding, shadows. Expected differences only: toasts now **fade out** (the fade classes were missing before), and the "Name" column in lists may be slightly wider (`w-40` now applies) |
 | Body font restored to Open Sans | 🧑 Report page side panel and other text-heavy areas use Open Sans, not the system font |
-| Deprecated classes replaced | 🧑 Dialog backdrops are semi-transparent black; menu items and report thumbnails show a light grey on hover; long project URLs in project settings end with "…" |
-| Browsers | 🧑 Chrome, Firefox and Safari, including the **oldest versions your users have** (Tailwind 3.4 still supports older browsers; this is the baseline for the v4 decision) |
+| `globals.css` moved into a CSS layer | 🧑 Links look the same; the volume/progress sliders in the audio/video players, radio buttons (create user role) and checkboxes look as before; the loading animation (double bounce) still plays |
+| v3 defaults kept | 🧑 Placeholders in inputs are light grey; the mouse shows a pointing hand over buttons |
+| Deprecated classes replaced | 🧑 Dialog backdrops are semi-transparent black; menu items show a light grey on hover; long project URLs in project settings end with "…" |
+| **Browser support changed** | 🧑 Works on Safari 16.4+, Chrome/Edge 111+, Firefox 128+. **Older browsers (Windows 7/8.1, old macOS, iPhone 7 and older) will show a broken layout: expected and accepted.** If a user reports a broken layout, check their browser version first |
 
 ---
 
@@ -154,4 +156,4 @@ Record each run here or in the release ticket.
 | Next.js beta #2 | | | | |
 | Dependencies beta #1 | | | | |
 | Dependencies beta #2 | | | | |
-| Tailwind 3.4 | | | | |
+| Tailwind 4 | | | | |
