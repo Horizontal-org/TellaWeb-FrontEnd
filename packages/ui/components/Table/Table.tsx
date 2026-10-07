@@ -59,7 +59,7 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
       manualPagination: true,
       initialState: { pageIndex: 0, pageSize: itemQuery.pagination.size },
       autoResetPage: false,
-      pageCount: Math.floor(itemQuery.pagination.total / itemQuery.pagination.size) + 1,
+      pageCount: Math.max(1, Math.ceil((itemQuery.pagination.total || 0) / itemQuery.pagination.size)),
       manualSortBy: true,
       disableMultiSort: true,
     },

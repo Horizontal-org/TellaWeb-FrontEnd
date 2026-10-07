@@ -49,9 +49,13 @@ export const Report = () => {
   const [downloadReportFile] = useReportFileDownloader();
 
   const [query, setQuery] = useState<ReportQuery>(defaultQuery);
-  const itemQuery = useMemo(() => toItemQuery(query), [query]);
 
   const { data: reports } = useListQuery(query);
+  // The table needs the total from the API to know how many pages there are
+  const itemQuery = useMemo(
+    () => toItemQuery({ ...query, total: reports?.total ?? query.total }),
+    [query, reports?.total]
+  );
   const [batchDelete] = useBatchDeleteMutation();
 
   const onBatchDelete = async (reportsToDelete: IReport[]) => {

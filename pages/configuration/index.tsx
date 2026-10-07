@@ -51,10 +51,14 @@ const Configuration = () => {
   const { push } = useRouter();
 
   const [query, setQuery] = useState<ConfigurationQuery>(defaultQuery);
-  const itemQuery = useMemo(() => toItemQuery(query), [query]);
   
   const [createConfig, createConfigResult] = useCreateConfigurationMutation()
   const { data: configurations, refetch } = useListQuery(query);
+  // The table needs the total from the API to know how many pages there are
+  const itemQuery = useMemo(
+    () => toItemQuery({ ...query, total: configurations?.total ?? query.total }),
+    [query, configurations?.total]
+  );
   const handleToast = useToast();
 
 
