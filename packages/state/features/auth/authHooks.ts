@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { RootStore } from "../../store";
@@ -6,7 +6,7 @@ import { useLazyGetProfileQuery } from "packages/state/services/user";
 import { useUserProfile } from "../user/userHooks";
 import { setUser } from "../user/userSlice";
 
-import { AbilityContext } from "common/casl/Can";
+import { useAbility } from "common/casl/Can";
 import { updateAbility } from "common/casl/Ability";
 import PUBLIC_ROUTES from '../../../ui/utilities/publicRoutes'
 import { visitAnalytic } from "common/globalSettings/VisitAnalytic";
@@ -22,7 +22,7 @@ export const useAuthRequired = (loginUrl = "/login", redirectTo?: string) => {
   const user = useUserProfile();
   const router = useRouter();
   const dispatch = useDispatch();
-  const ability = useContext(AbilityContext);
+  const ability = useAbility();
   const [loadUserProfile, data] = useLazyGetProfileQuery();
 
   // If the token was retrieved from the localstorage, we try to

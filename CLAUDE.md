@@ -10,7 +10,6 @@ npm run build          # production build (needs NEXT_PUBLIC_API_URL=/api NEXT_R
 npm run typecheck      # next typegen && tsc --noEmit (next-env.d.ts is generated, not committed)
 npm run lint           # next lint
 npm run build:css      # regenerate styles/tailwind.css (imported by pages/_app.tsx)
-npm run storybook      # Storybook on :6006 (stories live in storybook/stories)
 npm test               # jest --watch
 npm run test:ci        # jest --ci
 npx jest path/to/file.test.tsx   # run a single test file
