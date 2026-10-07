@@ -82,7 +82,7 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
 
   const [selectedResources, setSelectedResources] = useState<Resource[]>([]);
   
-  const searchInput = useRef<HTMLInputElement>();
+  const searchInput = useRef<HTMLInputElement>(null);
   let searchTimeout = null
 
   const search = (e: FormEvent<HTMLFormElement> | ChangeEvent<HTMLInputElement>) => {

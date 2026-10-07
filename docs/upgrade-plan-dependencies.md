@@ -1,6 +1,7 @@
 # Upgrade plan: remaining dependencies
 
 **Goal:** every runtime dependency on its current major version, without changing how the app behaves. Tailwind has its own plan (`upgrade-plan-tailwind.md`).
+**Status (2026-10-07): all steps done.** The app runs on React 19, the known requirement for Next 17. Waiting for beta drops #1 and #2.
 **Side effect:** at the end the app runs on React 19, the known requirement for Next 17.
 **Branch:** `upgrade/dependencies`, started from `upgrade/nextjs` (`8248498`). Rebase onto `development` once `upgrade/nextjs` is merged.
 
@@ -30,8 +31,8 @@
 | @casl/ability, @casl/react | 5 / 3 → 7 ✅ | 7 | `common/casl/Ability.tsx`, `Can.tsx` |
 | react-table | 7 → @tanstack/react-table 8 ✅ | 8 | `components/Table/Table.tsx`, column definitions in `domain/*TableColumns.ts`, `domain/ItemQuery.ts`, `types/react-table-config.d.ts`; 7 list pages render `<Table>` |
 | styled-components | 5 → 6 ✅ | 6 | 11 files |
-| react-leaflet (+ leaflet, @types/leaflet) | 4 | 5 | only `VerificationMap`, used only by `VerificationInformation`, which **nothing imports** (dead code) |
-| react, react-dom, @types/react* | 18.3 | 19 | everywhere |
+| react-leaflet (+ leaflet, @types/leaflet) | 4 → 5 ✅ | 5 | only `VerificationMap`, used only by `VerificationInformation`, which **nothing imports** (dead code) |
+| react, react-dom, @types/react* | 18.3 → 19 ✅ | 19 | everywhere |
 | protobufjs | 6 → removed ✅ | 8 | was only used by the unused `ConfigurationPanel` (see step 8) |
 
 ## Steps
@@ -85,10 +86,15 @@ Gate: typecheck 0, lint 0 errors, build, `e2e` and `e2e:prod` 37 passed / 1 skip
 - Gate: typecheck 0, lint clean, build, `e2e` and `e2e:prod` 40 passed / 1 skipped.
 - Unused code noticed (not removed): `SearchUserInput` (its only use in `ManageUsersProjectModal` is commented out) and the `modals/project/ManageUsersProjectModal copy/` folder.
 
-### 7. React 19
-- `react`, `react-dom`, `@types/react`, `@types/react-dom` 19.
-- Fix removed or changed APIs: implicit `children`, ref changes, and **`defaultProps` on function components, which React 19 ignores.** React 18 already warns for: `Button`, `ButtonMenu`, `NavButton`, `ImageView`, `Thumbnail`, `VideoThumbnail`, `ProjectListPage`, `ProjectPage`, `ProjectResourcesPage`, `ProjectUsersPage` (`Table` was converted in step 5). Their default values would silently stop applying; move them to default parameters.
-- **react-leaflet 5** (React 19 only). The map code isn't used today (`VerificationInformation` isn't imported anywhere), but it stays: upgrade it and check it still type-checks and builds.
+### 7. React 19 ✅
+- **`defaultProps` first** (`0f1f968`, on React 18): React 19 ignores `defaultProps` on function components, so the defaults moved to default parameters in 12 components (`Button`, `ButtonMenu`, `NavButton`, `ImageView`, `TextInput`, `Thumbnail`, `VideoThumbnail`, `ProjectListPage`, `ProjectPage`, `ProjectResourcesPage`, `ProjectUsersPage`, `ReportListPage`). The React 18 `defaultProps` warnings went to zero, and all tests still passed.
+- `react` and `react-dom` 19.3, `@types/react` and `@types/react-dom` 19.3, `react-leaflet` 5 (the map code is still unused, but it type-checks and builds).
+- The only code change React 19 needed: `useRef()` now takes an initial value (`null` for element refs; `undefined` kept in `useCombinedRefs`). No code checked refs against `undefined`.
+- Checked the runtime libraries for APIs React 19 removed (`findDOMNode`, `ReactDOM.render`, legacy context): none are called. react-modal's `unmountComponentAtNode` is only on its pre-React-16 path.
+- The build no longer warns "React 18 support is deprecated" (Next 16). No new browser warnings.
+- Gate: typecheck 0, lint clean, build, Jest + Testing Library on React 19 (throwaway test), `e2e` and `e2e:prod` 44 passed / 1 skipped, Docker image builds and serves `/login` and `/es/login`.
+
+**→ Beta drop #2 checkpoint.** The plan is complete.
 
 ### 8. protobufjs: removed instead of upgraded ✅ (done before steps 5–7)
 - **Why first:** `npm audit` flagged protobufjs 6 as **critical** (arbitrary code execution, plus about ten other advisories).
@@ -101,7 +107,7 @@ Gate: typecheck 0, lint 0 errors, build, `e2e` and `e2e:prod` 37 passed / 1 skip
 ## Beta drops (maintainer)
 Use **`docs/manual-checks.md`**. Each step adds its checks to the release it ships in.
 - **#1 after step 4:** Storybook removal, small upgrades, RTK, CASL. Lower risk.
-- **#2:** styled-components 6, plus the Table rewrite and React 19 if those are done now (otherwise styled-components ships alone).
+- **#2 after step 7:** styled-components 6, the TanStack Table rewrite with the pagination fix, and React 19.
 - Step 8 (protobufjs removal) is already done and ships with beta drop #1.
 - On beta, check by hand: list pages (sort, select, paginate, search), 2FA setup QR, configuration share + print, permissions per role.
 

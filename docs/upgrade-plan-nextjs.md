@@ -75,7 +75,7 @@ Moved to `upgrade-plan-dependencies.md`: Storybook is removed instead of upgrade
 ## Follow-ups (tickets, not part of this upgrade)
 
 - **Post the Next 16.4 bug report**, then move to 16.4.x once a fixed release ships. Re-test with a direct load of `/login` in `next dev`.
-- **React 19:** Next 16 warns that React 18 support is deprecated and goes away in Next 17.
+- ~~**React 19:** Next 16 warns that React 18 support is deprecated~~: done on `upgrade/dependencies` (React 19.3).
 - **Search debounce bug:** six list pages (`ProjectListPage`, `ReportListPage`, `ResourceListPage`, `UserListPage`, `ConfigurationListPage`, `ProjectPage`) keep `let searchTimeout` in the component body, so a re-render loses the pending timer. Use `useRef`. (Flagged by `react-hooks/immutability`.)
 - **React Compiler lint rules** that are off (`set-state-in-effect`, `preserve-manual-memoization`, `immutability`, `refs`): refactor the code they flag, then turn them back on.
 - **Circular barrel imports:** 46 modules in `packages/ui` import from their own barrel (`'../..'`, `'packages/ui'`). Not the cause of the Turbopack bug, but worth removing.

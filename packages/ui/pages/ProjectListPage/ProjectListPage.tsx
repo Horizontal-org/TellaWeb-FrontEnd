@@ -44,7 +44,7 @@ export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> 
 }) => {
 
   const [open, handleOpen] = useState<boolean>(false)
-  const searchInput = useRef<HTMLInputElement>();
+  const searchInput = useRef<HTMLInputElement>(null);
   let searchTimeout = null
 
   const search = (e: FormEvent<HTMLFormElement> | ChangeEvent<HTMLInputElement>) => {

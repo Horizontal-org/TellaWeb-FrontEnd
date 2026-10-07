@@ -4,7 +4,7 @@
 import { useRef, useEffect, MutableRefObject } from "react";
 
 export const useCombinedRefs = (...refs): MutableRefObject<any> => {
-  const targetRef = useRef();
+  const targetRef = useRef<any>(undefined);
 
   useEffect(() => {
     refs.forEach((ref) => {

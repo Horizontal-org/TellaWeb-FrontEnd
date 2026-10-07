@@ -47,7 +47,7 @@ export const ConfigurationListPage: FunctionComponent<React.PropsWithChildren<Pr
     setCurrentConfig(setSelectedConfigs[0]);
   };
 
-  const searchInput = useRef<HTMLInputElement>();
+  const searchInput = useRef<HTMLInputElement>(null);
    let searchTimeout = null
 
 
