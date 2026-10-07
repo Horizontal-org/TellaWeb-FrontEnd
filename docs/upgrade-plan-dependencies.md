@@ -90,6 +90,7 @@ Gate: typecheck 0, lint 0 errors, build, `e2e` and `e2e:prod` 37 passed / 1 skip
 - **Gate:** someone shares a remote configuration from the web app to a phone running Tella and confirms it applies. If nobody can test that, keep protobufjs 6 pinned and note why.
 
 ## Beta drops (maintainer)
+Use **`docs/manual-checks.md`**. Each step adds its checks to the release it ships in.
 - **#1 after step 4:** Storybook removal, small upgrades, RTK, CASL. Lower risk.
 - **#2 after step 7:** the Table rewrite, styled-components and React 19.
 - **Step 8** ships on its own after the mobile check.
