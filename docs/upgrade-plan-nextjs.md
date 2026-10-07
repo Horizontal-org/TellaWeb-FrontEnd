@@ -3,14 +3,14 @@
 **Goal:** get Next.js onto a supported, patched version without changing how the app behaves.
 **Out of scope:** moving to the App Router, redesigning the UI, and the Tailwind upgrade (see `upgrade-plan-tailwind.md`, a separate PR).
 
-**Status (2026-10-07):** Milestones A and B are done. **Waiting for beta drop #1 (`e09fb53`) and beta drop #2 (tip of `upgrade/nextjs`).** Then Milestone C (Storybook).
+**Status (2026-10-07):** Milestones A and B are done. **Waiting for beta drop #1 (`e09fb53`) and beta drop #2 (tip of `upgrade/nextjs`).** Further upgrades continue in `upgrade-plan-dependencies.md` (branch `upgrade/dependencies`).
 
 ## Decisions
 
 - **One branch (`upgrade/nextjs`), one commit per step and per Next major version.** It goes to beta only **twice**: drop #1 after Milestone A (Next still on 12), and drop #2 on Next 16. Versions 13–15 are only checked locally.
 - **A maintainer does every tag and deploy.** The upgrade work stops at each beta checkpoint and hands off.
 - **Verification is the Playwright suite** in `e2e/`, run in dev mode (`npm run e2e`) and against a production build (`npm run e2e:prod`). Screenshot baselines stay local only (they capture local backend data).
-- **Chromatic is removed.** Storybook gets upgraded after Next 16 (Milestone C).
+- **Chromatic is removed.** Storybook was later removed entirely (see `upgrade-plan-dependencies.md`).
 - **Packages the upgrade requires get upgraded along with it.** Packages that are only outdated stay out of scope: React 19, RTK 2 / react-redux 9, CASL 7, date-fns 4, styled-components 6, react-leaflet 5, react-icons 5, qrcode.react 4, react-to-print 3, protobufjs 8, @fontsource 5. Each of these becomes a follow-up ticket.
 - **Lint covers the whole repo** (`eslint .`). React Compiler lint rules that existing code trips are off (the app doesn't use the compiler).
 - **Next stays on 16.3.x** until the 16.4 Turbopack dev regression is fixed (see Milestone B).
@@ -68,10 +68,8 @@ Every Next commit passed: typecheck, build, `e2e` and `e2e:prod` (22 passed, 1 s
 - On beta, check by hand: real report media (audio, PDF, download), token refresh after 15 min, 2FA login, the visit analytics call, and an error toast (for example, create a user with an email that already exists).
 - Then soak for several days and tag production.
 
-### 5. Milestone C: Storybook (separate PR)
-- [ ] `npx storybook@latest upgrade` → `@storybook/nextjs`. Remove `@storybook/addon-postcss`.
-- [ ] `.storybook/preview.js`: remove the `next/image` monkey-patch.
-- [ ] Check that the stories in `storybook/stories` render. This also clears the React 17 peer warnings from Storybook 6 dependencies during `npm i`.
+### 5. Remaining dependencies
+Moved to `upgrade-plan-dependencies.md`: Storybook is removed instead of upgraded, and the other libraries are upgraded step by step on `upgrade/dependencies`.
 
 ## Follow-ups (tickets, not part of this upgrade)
 

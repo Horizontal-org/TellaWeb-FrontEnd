@@ -3,7 +3,7 @@ import testingLibrary from "eslint-plugin-testing-library"
 
 const config = [
   {
-    ignores: [".next/**", "node_modules/**", "storybook-static/**", "playwright-report/**", "test-results/**"],
+    ignores: [".next/**", "node_modules/**", "playwright-report/**", "test-results/**"],
   },
   // Includes the base "next" and "next/typescript" configs
   ...nextCoreWebVitals,
