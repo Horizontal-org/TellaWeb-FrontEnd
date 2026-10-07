@@ -9,7 +9,8 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-# Exactly what package-lock.json lists
+# Exactly what package-lock.json lists. If this fails with "Missing: … from lock file", the
+# lockfile was rewritten by an older npm 11 (e.g. 11.6) that drops entries npm 10 needs; see CLAUDE.md
 RUN npm ci
 
 COPY . .

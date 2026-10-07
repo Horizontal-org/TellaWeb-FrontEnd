@@ -61,7 +61,7 @@ Tailwind CSS 4, built by Next's PostCSS (`@tailwindcss/postcss`) from `styles/ta
 
 ## Docker
 - The image builds with `npm ci`, then `npm prune --omit=dev` and removes `.next/cache`, so only runtime dependencies ship (`@playwright/test` stays: it's an optional peer of `next`). Use `--omit=dev` only; `--omit=peer` would also remove `react`, `react-dom` and others.
-- `node:22-alpine` ships **npm 10**. A lockfile written by npm 11 can lack entries npm 10's `npm ci` requires (it failed on `@emnapi/*`). If the Docker build fails at `npm ci` after a dependency change, run `npx npm@10 install --package-lock-only` and commit the lockfile; it then works with both versions.
+- **Use npm ≥ 11.21 (or npm 10) when changing dependencies.** Older npm 11 releases (e.g. 11.6) drop two lockfile entries (`@emnapi/core`, `@emnapi/runtime`) that npm 10 and current npm 11 require, and the Docker build's `npm ci` then fails with "Missing: … from lock file". `package.json`'s `engines.npm` warns about those versions. Fix: `npm install -g npm@11`, then `npm install` (or `npx npm@11 install --package-lock-only`) and commit the lockfile.
 - To run the e2e suite against a built image: `docker run --add-host api:host-gateway -p 3200:3000 <image>` (the image's `/api` rewrite targets `http://api:3001`, here your local backend), then `E2E_BASE_URL=http://localhost:3200 npm run e2e`.
 
 ## Releases
