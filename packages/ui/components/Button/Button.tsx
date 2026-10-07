@@ -22,14 +22,14 @@ interface Props {
 
 export const Button: FunctionComponent<React.PropsWithChildren<Props>> = ({
   text,
-  disabled,
+  disabled = false,
   icon,
   leftIcon,
   rightIcon,
-  type,
-  onClick,
-  full,
-  onBlur,
+  type = btnType.Primary,
+  onClick = () => null,
+  full = false,
+  onBlur = () => null,
 }: Props) => {
   const btnStyle = cn(
     "flex flex-none w-auto py-2 px-2 space-x-2 rounded items-center text-sm font-bold font-sans uppercase border border-gray-100 active:shadow-inbox disabled:opacity-50 focus:outline-none",
@@ -62,14 +62,3 @@ export const Button: FunctionComponent<React.PropsWithChildren<Props>> = ({
   );
 };
 
-Button.defaultProps = {
-  icon: undefined,
-  leftIcon: undefined,
-  rightIcon: undefined,
-  text: undefined,
-  disabled: false,
-  full: false,
-  type: btnType.Primary,
-  onClick: () => null,
-  onBlur: () => null,
-};

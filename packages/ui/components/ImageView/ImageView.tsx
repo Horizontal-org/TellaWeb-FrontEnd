@@ -8,7 +8,7 @@ type Props = {
   onClick?: () => void,
 };
 
-export const ImageView: FunctionComponent<React.PropsWithChildren<Props>> = ({ file, onClick }) => {
+export const ImageView: FunctionComponent<React.PropsWithChildren<Props>> = ({ file, onClick = () => {} }) => {
 
   const [loading, handleLoading] = useState(true)
 
@@ -39,8 +39,5 @@ export const ImageView: FunctionComponent<React.PropsWithChildren<Props>> = ({ f
   )
 } 
 
-ImageView.defaultProps = {
-  onClick: () => {}
-}
 
 

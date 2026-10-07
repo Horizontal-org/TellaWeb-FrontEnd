@@ -34,7 +34,7 @@ type Props = {
 
 
 export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
-  projects,
+  projects = [],
   onQueryChange,
   sidebar,
   currentQuery,
@@ -143,6 +143,3 @@ export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> 
   );
 };
 
-ProjectListPage.defaultProps = {
-  projects: [],
-};

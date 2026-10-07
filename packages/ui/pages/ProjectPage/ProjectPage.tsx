@@ -45,7 +45,7 @@ type Props = {
 const voidFunction = () => {};
 
 export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
-  reports,
+  reports = [],
   project,
   onOpen,
   onDownload = voidFunction,
@@ -199,6 +199,3 @@ export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   );
 };
 
-ProjectPage.defaultProps = {
-  reports: [],
-};

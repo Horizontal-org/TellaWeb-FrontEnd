@@ -52,7 +52,7 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
   onOpen,
   onQueryChange,
   onAddUsers,
-  users,
+  users = [],
   sidebar,
   currentQuery,
   removeSelected
@@ -162,6 +162,3 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
   );
 };
 
-ProjectUsersPage.defaultProps = {
-  users: [],
-};

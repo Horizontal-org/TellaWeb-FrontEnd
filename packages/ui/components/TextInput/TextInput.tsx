@@ -3,7 +3,7 @@ import { ComponentPropsWithoutRef, forwardRef } from "react";
 export const TextInput = forwardRef<
   HTMLInputElement,
   ComponentPropsWithoutRef<"input">
->(({ ...props }, ref) => {
+>(({ type = 'text', ...props }, ref) => {
 
   return (
     <div className="relative flex items-center justify-center">
@@ -26,14 +26,12 @@ export const TextInput = forwardRef<
           py-1
           pr-2
           pl-2"
+        type={type}
         {...props}
       />
     </div>
   );
 });
 
-TextInput.defaultProps = {
-  type: 'text'
-}
 
 TextInput.displayName = "TextInput";

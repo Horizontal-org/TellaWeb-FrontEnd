@@ -13,9 +13,9 @@ type Props = {
 
 export const VideoThumbnail: FunctionComponent<React.PropsWithChildren<Props>> = ({
   file,
-  onClick,
-  full,
-  box,
+  onClick = () => {},
+  full = false,
+  box = false,
   selected,
 }) => {
   return (
@@ -58,8 +58,3 @@ export const VideoThumbnail: FunctionComponent<React.PropsWithChildren<Props>> =
   )
 };
 
-VideoThumbnail.defaultProps = {
-  onClick: () => {},
-  full: false,
-  box: false,
-};

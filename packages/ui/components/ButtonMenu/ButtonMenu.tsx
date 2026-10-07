@@ -14,9 +14,9 @@ type Props = {
 
 export const ButtonMenu: FunctionComponent<React.PropsWithChildren<Props>> = ({
   children,
-  text,
+  text = "",
   icon,
-  type,
+  type = btnType.Secondary,
   openSide,
 }) => {
   const [open, setOpenState] = useState(false);
@@ -82,7 +82,3 @@ export const ButtonMenu: FunctionComponent<React.PropsWithChildren<Props>> = ({
   );
 };
 
-ButtonMenu.defaultProps = {
-  type: btnType.Secondary,
-  text: "",
-};
