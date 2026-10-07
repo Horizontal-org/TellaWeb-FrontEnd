@@ -51,6 +51,9 @@ See "Progress". Remaining: deploy to beta and check by eye on the browsers your 
 
 ## Decision gate: should you go to v4?
 
+**Decided (2026-10-07): go to v4.** Accepted consequence: browsers below Safari 16.4, Chrome 111 and Firefox 128 lose the layout. In practice that's Windows 7/8.1 (Chrome stops at 109, Firefox at 115 ESR), older Macs on old macOS, iPhones that can't install iOS 16.4 (iPhone 7 and older) and Android 6 or older. If someone reports a broken layout on beta or in production, check their browser first.
+
+
 Tailwind v4 **only supports Safari 16.4+, Chrome 111+ and Firefox 128+.** In older browsers the styling doesn't degrade gracefully; it breaks badly. Some Tella Web users (admins and editors reviewing reports) may work in low-resource or high-risk settings on older devices.
 
 Before Phase 2, answer these:
