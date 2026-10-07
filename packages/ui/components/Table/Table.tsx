@@ -76,7 +76,6 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
             </div>
           ),
           className: "max-w-content text-center p-2",
-          // eslint-disable-next-line react/display-name
           Cell: ({ row }) => {
             return (
               <div className='flex justify-center'>

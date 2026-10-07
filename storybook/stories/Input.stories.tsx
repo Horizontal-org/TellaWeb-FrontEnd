@@ -1,4 +1,3 @@
-/* eslint-disable no-alert */
 import { CSSProperties, useRef } from "react";
 import { storiesOf } from "@storybook/react";
 import { SearchInput, TextInput, TextArea } from "../../packages/ui";

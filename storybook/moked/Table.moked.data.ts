@@ -5,7 +5,6 @@ import { FilesMokedData } from "./files";
 
 const range = (amount: number) => {
   const arr: number[] = [];
-  // eslint-disable-next-line no-plusplus
   for (let i = 0; i < amount; i += 1) {
     arr.push(i);
   }

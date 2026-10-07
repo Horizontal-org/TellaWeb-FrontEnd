@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev -p 3000",
     "start": "next start -p 3000",
-    "lint": "eslint pages components",
+    "lint": "eslint .",
     "build": "next build",
     "build:css": "NODE_ENV=production tailwindcss -o styles/tailwind.css",
     "storybook": "start-storybook -p 6006",

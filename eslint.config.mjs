@@ -1,7 +1,7 @@
 import nextCoreWebVitals from "eslint-config-next/core-web-vitals"
 import testingLibrary from "eslint-plugin-testing-library"
 
-export default [
+const config = [
   {
     ignores: [".next/**", "node_modules/**", "storybook-static/**", "playwright-report/**", "test-results/**"],
   },
@@ -10,10 +10,12 @@ export default [
   {
     rules: {
       "react-hooks/exhaustive-deps": "off",
-      // React Compiler rules (eslint-plugin-react-hooks 7, via Next 16) that existing pages
-      // trip. The app doesn't use the compiler, so they stay off until those effects are refactored
+      // React Compiler rules (eslint-plugin-react-hooks 7, via Next 16) that existing code
+      // trips. The app doesn't use the compiler, so they stay off until that code is refactored
       "react-hooks/set-state-in-effect": "off",
       "react-hooks/preserve-manual-memoization": "off",
+      "react-hooks/immutability": "off",
+      "react-hooks/refs": "off",
     },
   },
   {
@@ -23,3 +25,5 @@ export default [
     ...testingLibrary.configs["flat/react"],
   },
 ]
+
+export default config
