@@ -21,10 +21,10 @@
 
 | Package | Now | Latest | Used in |
 |---|---|---|---|
-| qrcode.react | 3 | 4 | `TwoFactorAuthModal/Connect.tsx`, `ShareConfigurationModal.tsx` (already use the named `QRCodeCanvas`) |
-| react-to-print | 2 | 3 | `ShareConfigurationModal.tsx` (`useReactToPrint`) |
-| react-icons | 4 | 5 | 57 files |
-| date-fns | 2 | 4 | 14 files, only `format` and `addSeconds` |
+| qrcode.react | 3 → 4 ✅ | 4 | `TwoFactorAuthModal/Connect.tsx`, `ShareConfigurationModal.tsx` (already use the named `QRCodeCanvas`) |
+| react-to-print | 2 → 3 ✅ | 3 | `ShareConfigurationModal.tsx` (`useReactToPrint`) |
+| react-icons | 4 → 5 ✅ | 5 | 57 files |
+| date-fns | 2 → 4 ✅ | 4 | 14 files, only `format` and `addSeconds` |
 | @reduxjs/toolkit | 1.9 | 2 | 15 files; `extraReducers` object syntax (removed in v2) in `authSlice`, `reportsSlice`, `userSlice` |
 | react-redux | 7 | 9 | 8 files |
 | @casl/ability, @casl/react | 5 / 3 | 7 | `common/casl/Ability.tsx`, `Can.tsx` |
@@ -32,7 +32,7 @@
 | styled-components | 5 | 6 | 11 files |
 | react-leaflet (+ leaflet, @types/leaflet) | 4 | 5 | only `VerificationMap`, used only by `VerificationInformation`, which **nothing imports** (dead code) |
 | react, react-dom, @types/react* | 18.3 | 19 | everywhere |
-| protobufjs | 6 | 8 | `packages/ui/proto/configuration.ts` (`Writer`/`Reader` from `protobufjs/minimal`); encodes remote configurations **the mobile app decodes** |
+| protobufjs | 6 | 8 | `packages/ui/proto/configuration.ts` (`Writer`/`Reader` from `protobufjs/minimal`); only called from `ConfigurationPanel`, which no page renders (see step 8) |
 
 ## Steps
 
@@ -42,12 +42,16 @@ The team doesn't use it, and the e2e suite (real pages) plus Jest + Testing Libr
 - `npm i` no longer prints the React 17 peer warnings.
 - Can be set up fresh later if the team wants a component catalogue again.
 
-### 2. Small independent upgrades
-- `qrcode.react` 4: the named `QRCodeCanvas` is already in use; check the props.
-- `react-to-print` 3: `useReactToPrint({ content: () => ref.current })` → `useReactToPrint({ contentRef: ref })`.
-- `react-icons` 5: fix any renamed or removed icons (the type check finds them).
-- `date-fns` 4: check `format` patterns and `addSeconds`.
-- Verify by hand: 2FA setup QR code (settings), remote configuration share + print.
+### 2. Small independent upgrades ✅
+| Commit | Change |
+|---|---|
+| `fa4159e` | New e2e test: share a configuration as a QR code (canvas drawn, Download gives a PNG, Print calls `print()`), written against the old versions first |
+| `b4828ee` | react-to-print 3: `useReactToPrint({ contentRef })`, and the print button no longer passes the click event as "content" |
+| `5a78371` | qrcode.react 4: no code changes (named `QRCodeCanvas` already in use) |
+| `83cb698` | react-icons 5: no code changes; screenshots unchanged |
+| (this commit) | date-fns 4: no code changes (`format` patterns and `addSeconds` unchanged); dates in screenshots unchanged |
+
+Gate: typecheck 0, lint 0 errors, build, `e2e` and `e2e:prod` 37 passed / 1 skipped.
 
 ### 3. Redux Toolkit 2 + react-redux 9
 - `extraReducers`: object syntax → builder callback in the 3 slices.
@@ -70,10 +74,11 @@ The team doesn't use it, and the e2e suite (real pages) plus Jest + Testing Libr
 
 ### 7. React 19
 - `react`, `react-dom`, `@types/react`, `@types/react-dom` 19.
-- Fix removed or changed APIs (`defaultProps` on function components, implicit `children`, ref changes).
+- Fix removed or changed APIs: implicit `children`, ref changes, and **`defaultProps` on function components, which React 19 ignores.** `Button` and `ButtonMenu` use it today (React 18 already warns), so their default values would silently stop applying. Move them to default parameters.
 - **react-leaflet 5** (React 19 only). The map code isn't used today (`VerificationInformation` isn't imported anywhere), but it stays: upgrade it and check it still type-checks and builds.
 
 ### 8. protobufjs 8: needs a mobile-app check
+- **Finding (2026-10-07):** the running app doesn't use protobufjs. Encoding only happens in `ConfigurationPanel`, which no page renders (only the removed Storybook used it). `services/configuration.ts` imports just a type from `packages/ui/proto/configuration.ts`, and the share dialog's QR code is plain JSON. So the mobile-app risk doesn't apply to what's shipped today. ❓ Upgrade without the mobile gate, or remove the unused encoding code and protobufjs.
 - `protobufjs/minimal` `Writer`/`Reader` API changes.
 - **Gate:** someone shares a remote configuration from the web app to a phone running Tella and confirms it applies. If nobody can test that, keep protobufjs 6 pinned and note why.
 
