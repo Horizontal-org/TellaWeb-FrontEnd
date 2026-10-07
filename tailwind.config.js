@@ -1,12 +1,67 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
+const colors = require("tailwindcss/colors");
 const aspectRatio = require("@tailwindcss/aspect-ratio");
 
+// Tailwind 2's default palette under its v2 names. In v3 `defaultTheme.colors` is a function
+// (spreading it gives nothing) and some palettes were renamed; shades 50–900 are identical
+const v2Colors = {
+  transparent: "transparent",
+  current: "currentColor",
+  black: colors.black,
+  white: colors.white,
+  gray: colors.gray,
+  red: colors.red,
+  yellow: colors.amber,
+  green: colors.emerald,
+  indigo: colors.indigo,
+  purple: colors.violet,
+  pink: colors.pink,
+};
+
+// Tailwind 2's default shadows (v3 changed their values)
+const v2BoxShadow = {
+  sm: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+  DEFAULT: "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)",
+  md: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+  lg: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+  xl: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+  "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+  inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)",
+  none: "none",
+};
+
+// Tailwind 2's default sans-serif fallbacks (v3 changed the list)
+const v2SansFallbacks = [
+  "ui-sans-serif",
+  "system-ui",
+  "-apple-system",
+  "BlinkMacSystemFont",
+  '"Segoe UI"',
+  "Roboto",
+  '"Helvetica Neue"',
+  "Arial",
+  '"Noto Sans"',
+  "sans-serif",
+  '"Apple Color Emoji"',
+  '"Segoe UI Emoji"',
+  '"Segoe UI Symbol"',
+  '"Noto Color Emoji"',
+];
+
 module.exports = {
-  purge: ["./packages/ui/**/*.tsx"],
-  darkMode: false,
+  content: [
+    "./packages/**/*.{ts,tsx}",
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./common/**/*.{ts,tsx}",
+  ],
+  // The aspect-ratio plugin provides aspect-w-* / aspect-h-*; v3's own aspect-* utilities clash with it
+  corePlugins: {
+    aspectRatio: false,
+  },
   theme: {
     colors: {
-      ...defaultTheme.colors,
+      ...v2Colors,
       blue: {
         light: "#e9f2ff",
         50: "#3eacf1",
@@ -21,7 +76,7 @@ module.exports = {
         900: "#005297",
       },
       gray: {
-        ...defaultTheme.colors.gray,
+        ...v2Colors.gray,
         25: "#f1f1f1",
         50: "#f5f5f5",
         100: "#d9d9d9",
@@ -48,7 +103,7 @@ module.exports = {
       extrablack: 1000,
     },
     boxShadow: {
-      ...defaultTheme.boxShadow,
+      ...v2BoxShadow,
       inbox:
         "inset -3px 2px 2px rgba(0, 0, 0, 0.15), inset 2px -2px 2px rgba(0, 0, 0, 0.15)",
     },
@@ -63,16 +118,8 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        sans: ["Open Sans", ...defaultTheme.fontFamily.sans],
+        sans: ["Open Sans", ...v2SansFallbacks],
       },
-    },
-  },
-  variants: {
-    extend: {
-      placeholderColor: ["hover"],
-      opacity: ["disabled"],
-      boxShadow: ["active"],
-      display: ["group-hover"]
     },
   },
   plugins: [aspectRatio],
