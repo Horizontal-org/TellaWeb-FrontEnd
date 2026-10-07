@@ -23,7 +23,7 @@ export const NavButton: FunctionComponent<React.PropsWithChildren<Props>> = ({
         "flex flex-row font-bold items-center h-10 px-4 rounded text-base bg-white text-gray-500",
         {
           "opacity-40 cursor-not-allowed": disabled,
-          "hover:bg-black hover:bg-opacity-5 hover:text-gray-700 cursor-pointer":
+          "hover:bg-black/5 hover:text-gray-700 cursor-pointer":
             !disabled && !selected,
           "bg-blue-light text-blue-500 cursor-pointer": selected,
         }

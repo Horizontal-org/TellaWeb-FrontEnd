@@ -49,7 +49,7 @@ export const DeletePopup: FunctionComponent<React.PropsWithChildren<PropsWithChi
         isOpen={popupOpen}
         onRequestClose={requestClose}
         overlayClassName={
-          "flex bg-black bg-opacity-50 absolute inset-0 justify-center items-center"
+          "flex bg-black/50 absolute inset-0 justify-center items-center"
         }
         className="bg-white font-thin w-4/12 py-4 px-3 rounded shadow-xl text-gray-800"
       >

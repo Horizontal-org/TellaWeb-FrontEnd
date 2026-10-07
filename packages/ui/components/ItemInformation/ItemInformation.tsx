@@ -13,7 +13,7 @@ export const ItemInformation: FunctionComponent<React.PropsWithChildren<Props>> 
         Object.entries(dict).map(([key, value]) => (
           <div style={{padding: '2px 0'}} className="flex justify-between flex-wrap" key={key}>
             <span style={{minWidth: 80}}>{key}</span>
-            <span className="text-black text-opacity-80">{value}</span>
+            <span className="text-black/80">{value}</span>
           </div>
         ))}
     </div>

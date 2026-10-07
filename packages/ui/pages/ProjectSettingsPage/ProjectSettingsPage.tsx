@@ -115,7 +115,7 @@ export const ProjectSettingsPage: FunctionComponent<React.PropsWithChildren<Prop
               <div>
                 <div
                   style={{ maxWidth: '100%'}}
-                  className="overflow-ellipsis overflow-hidden whitespace-nowrap pr-8"
+                  className="text-ellipsis overflow-hidden whitespace-nowrap pr-8"
                 >
                   {project.url  ? project.url : 'No URL set'}
                 </div>

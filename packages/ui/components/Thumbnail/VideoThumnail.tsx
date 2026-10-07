@@ -31,10 +31,10 @@ export const VideoThumbnail: FunctionComponent<React.PropsWithChildren<Props>> =
       >
         <div
           className={cn(
-            "flex content-center flex-wrap rounded-md  hover:bg-black",
+            "flex content-center flex-wrap rounded-md",
             {
-              "hover:bg-opacity-5 ": file.thumbnail === undefined,
-              "hover:bg-opacity-10": file.thumbnail !== undefined,
+              "hover:bg-black/5": file.thumbnail === undefined,
+              "hover:bg-black/10": file.thumbnail !== undefined,
               "border-gray-100 hover:border-gray-500 border": !selected,
               "border-blue-400 hover:border-blue-500 border-2": !!(selected),
               "w-24 h-24": !full && !box,
