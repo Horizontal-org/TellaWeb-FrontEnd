@@ -111,7 +111,7 @@ export const FeedbackBox: FunctionComponent<Props> = () => {
           </Box>
         </>
       )}
-      <FeedbackButton type='button' onClick={() => {
+      <FeedbackButton onClick={() => {
         handleVisible(!visible)
       }}>
         <BsChatLeftText color="white" size={18}/>

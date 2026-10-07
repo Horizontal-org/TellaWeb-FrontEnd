@@ -45,6 +45,11 @@ Check these first for the release being tested, then run section 2.
 | Storybook removed | Nothing to check in the app |
 | protobufjs and `ConfigurationPanel` removed (unused code) | 🧑 Remote configuration → Share → scan with Tella on a phone: the configuration applies (the QR is JSON, unchanged); edit crash reports settings and check they save |
 
+### Dependency beta drop #2
+| Change | Check |
+|---|---|
+| styled-components 6 (transient props, built-in types) | 🧑 These components look and behave as before: 2FA passcode boxes (login), password strength meter (create user, change password), "Add users / resources to project" search box (border, selected chips, results list), Feedback button, PDF viewer close button, "exit 2FA setup" confirmation buttons, "use a backup code" link |
+
 ---
 
 ## 2. Full regression
@@ -74,7 +79,8 @@ Check these first for the release being tested, then run section 2.
 ### 2.3 Projects
 - [ ] 🤖 Create, rename, delete (delete needs the name and "DELETE")
 - [ ] 🧑 Copy the project URL; edit the URL (slug)
-- [ ] 🧑 Manage users of a project (add, remove) and manage resources (attach, detach)
+- [ ] 🤖 Add a user and a resource to a project
+- [ ] 🧑 Remove a user or resource from a project
 - [ ] 🧑 Project page lists its reports; search, sort and pagination work
 
 ### 2.4 Reports (data from the Tella mobile app)
@@ -135,3 +141,4 @@ Record each run here or in the release ticket.
 | Next.js beta #1 | | | | |
 | Next.js beta #2 | | | | |
 | Dependencies beta #1 | | | | |
+| Dependencies beta #2 | | | | |

@@ -29,7 +29,7 @@
 | react-redux | 7 → 9 ✅ | 9 | 8 files |
 | @casl/ability, @casl/react | 5 / 3 → 7 ✅ | 7 | `common/casl/Ability.tsx`, `Can.tsx` |
 | react-table | 7 (no React 19 version) | → @tanstack/react-table 8 | `components/Table/Table.tsx`, column definitions in `domain/*TableColumns.ts`, `domain/ItemQuery.ts`, `types/react-table-config.d.ts`; 7 list pages render `<Table>` |
-| styled-components | 5 | 6 | 11 files |
+| styled-components | 5 → 6 ✅ | 6 | 11 files |
 | react-leaflet (+ leaflet, @types/leaflet) | 4 | 5 | only `VerificationMap`, used only by `VerificationInformation`, which **nothing imports** (dead code) |
 | react, react-dom, @types/react* | 18.3 | 19 | everywhere |
 | protobufjs | 6 → removed ✅ | 8 | was only used by the unused `ConfigurationPanel` (see step 8) |
@@ -75,9 +75,13 @@ Gate: typecheck 0, lint 0 errors, build, `e2e` and `e2e:prod` 37 passed / 1 skip
 - Port the column definitions (`domain/*TableColumns.ts`) and remove `types/react-table-config.d.ts`.
 - Check all 7 list pages; screenshots catch layout changes.
 
-### 6. styled-components 6
-- Props that reach the DOM → transient `$props`. Drop any `@types/styled-components`.
-- Screenshots catch visual changes.
+### 6. styled-components 6 ✅
+- **Tests first** (`d34f1b9`, against v5): adding a user and a resource to a project through the search dialogs (including the search box's active border, driven by a styled-components prop), and the password strength meter's bar colours. While writing them I briefly thought "Add users to project" was broken in production; it wasn't: the test was clicking the typed text inside the search box instead of the result.
+- styled-components 6.5 ships its own types. Props used only for styling became transient (`$`-prefixed) so they don't reach the DOM: `PasswordMeter` (`$color`, `$selected`), `SearchEntityInput` and `SearchUserInput` (`$resultsOpen`).
+- `FeedbackBox`: removed `type='button'` from a styled `div` (meaningless on a div; v6's types reject it). Kept it a `div` so its styling doesn't change.
+- No new console warnings (no props leaking to the DOM).
+- Gate: typecheck 0, lint clean, build, `e2e` and `e2e:prod` 40 passed / 1 skipped.
+- Unused code noticed (not removed): `SearchUserInput` (its only use in `ManageUsersProjectModal` is commented out) and the `modals/project/ManageUsersProjectModal copy/` folder.
 
 ### 7. React 19
 - `react`, `react-dom`, `@types/react`, `@types/react-dom` 19.
@@ -95,7 +99,7 @@ Gate: typecheck 0, lint 0 errors, build, `e2e` and `e2e:prod` 37 passed / 1 skip
 ## Beta drops (maintainer)
 Use **`docs/manual-checks.md`**. Each step adds its checks to the release it ships in.
 - **#1 after step 4:** Storybook removal, small upgrades, RTK, CASL. Lower risk.
-- **#2 after step 7:** the Table rewrite, styled-components and React 19.
+- **#2:** styled-components 6, plus the Table rewrite and React 19 if those are done now (otherwise styled-components ships alone).
 - Step 8 (protobufjs removal) is already done and ships with beta drop #1.
 - On beta, check by hand: list pages (sort, select, paginate, search), 2FA setup QR, configuration share + print, permissions per role.
 
