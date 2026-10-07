@@ -23,7 +23,7 @@ npm run e2e:update     # re-record local screenshot baselines
 
 `next.config.js` sets `typescript.ignoreBuildErrors`, and Next 16's `next build` doesn't lint, so a successful `npm run build` does **not** mean the code type-checks or passes lint. Run `npm run typecheck` and `npm run lint` yourself. `tsconfig` has `strict: false`.
 
-Jest is set up with `next/jest`, jsdom and `@testing-library/jest-dom`, but the repo currently has almost no test files. Behaviour is covered by the Playwright suite in `e2e/`. Its screenshot baselines are gitignored because they capture local backend data.
+Jest is set up with `next/jest`, jsdom and `@testing-library/jest-dom`, but the repo currently has almost no test files. Behaviour is covered by the Playwright suite in `e2e/` (page loads, CRUD flows, roles, token refresh, 2FA, error toasts). Its screenshot baselines are gitignored because they capture local backend data. Tests that write data name records `e2e-tmp-…` and clean them up; use the helpers in `e2e/support/api.ts` and `expectToast()` from `e2e/fixtures.ts` (see `e2e/README.md`).
 
 ## Environment / API
 

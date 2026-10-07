@@ -1,4 +1,5 @@
 import { request, FullConfig } from "@playwright/test"
+import { AdminApi } from "./support/api"
 import fs from "fs"
 import path from "path"
 
@@ -25,6 +26,11 @@ export default async function globalSetup(config: FullConfig) {
   if (!E2E_USER || !E2E_PASS) {
     throw new Error("Set E2E_USER and E2E_PASS (see e2e/README.md)")
   }
+
+  // Remove records left behind by a previous run that crashed before cleaning up
+  const adminApi = await AdminApi.login(baseURL)
+  await adminApi.removeTmpRecords()
+  await adminApi.dispose()
 
   const api = await request.newContext({ baseURL })
   const login = await api.post("/api/login/web", {

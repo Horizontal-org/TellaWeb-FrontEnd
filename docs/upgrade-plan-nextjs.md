@@ -80,6 +80,8 @@ Every Next commit passed: typecheck, build, `e2e` and `e2e:prod` (22 passed, 1 s
 - **Search debounce bug:** six list pages (`ProjectListPage`, `ReportListPage`, `ResourceListPage`, `UserListPage`, `ConfigurationListPage`, `ProjectPage`) keep `let searchTimeout` in the component body, so a re-render loses the pending timer. Use `useRef`. (Flagged by `react-hooks/immutability`.)
 - **React Compiler lint rules** that are off (`set-state-in-effect`, `preserve-manual-memoization`, `immutability`, `refs`): refactor the code they flag, then turn them back on.
 - **Circular barrel imports:** 46 modules in `packages/ui` import from their own barrel (`'../..'`, `'packages/ui'`). Not the cause of the Turbopack bug, but worth removing.
+- **Toasts disappear early:** `ToastWrapper.handleToast` doesn't cancel the previous toast's hide timers, so a toast shown within 5 s of another can vanish almost immediately. Clear the old timers (e.g. keep them in a ref) before scheduling new ones. Found by the e2e write tests.
+- **Wrong toast text:** deleting a remote configuration shows "Report deleted" (`pages/configuration/[configurationId].tsx`).
 - **RTK:** `createSlice.extraReducers` object notation is deprecated (warning in the console) and removed in RTK 2.
 - Packages left out of scope on purpose (see "Decisions").
 
