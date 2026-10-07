@@ -27,7 +27,7 @@
 | date-fns | 2 → 4 ✅ | 4 | 14 files, only `format` and `addSeconds` |
 | @reduxjs/toolkit | 1.9 → 2 ✅ | 2 | 15 files; `extraReducers` object syntax (removed in v2) in `authSlice`, `reportsSlice`, `userSlice` |
 | react-redux | 7 → 9 ✅ | 9 | 8 files |
-| @casl/ability, @casl/react | 5 / 3 | 7 | `common/casl/Ability.tsx`, `Can.tsx` |
+| @casl/ability, @casl/react | 5 / 3 → 7 ✅ | 7 | `common/casl/Ability.tsx`, `Can.tsx` |
 | react-table | 7 (no React 19 version) | → @tanstack/react-table 8 | `components/Table/Table.tsx`, column definitions in `domain/*TableColumns.ts`, `domain/ItemQuery.ts`, `types/react-table-config.d.ts`; 7 list pages render `<Table>` |
 | styled-components | 5 | 6 | 11 files |
 | react-leaflet (+ leaflet, @types/leaflet) | 4 | 5 | only `VerificationMap`, used only by `VerificationInformation`, which **nothing imports** (dead code) |
@@ -61,9 +61,13 @@ Gate: typecheck 0, lint 0 errors, build, `e2e` and `e2e:prod` 37 passed / 1 skip
 - No new Redux warnings in the browser console, and the `extraReducers` deprecation warning is gone. The two warnings left (a spread `key` prop, `disableSortBy` on a DOM element) come from react-table 7 and go away with step 5.
 - Gate: typecheck 0, lint 0 errors, build, `e2e` and `e2e:prod` 37 passed / 1 skipped.
 
-### 4. CASL 7
-- `@casl/ability` + `@casl/react` 7: update `AbilityBuilder` / `createMongoAbility` usage and `<Can>` / `AbilityContext`.
-- Covered by `roles.spec.ts` (viewer, editor, admin, reporter).
+### 4. CASL 7 ✅
+- `@casl/ability` and `@casl/react` 7.0.1.
+- `Ability.tsx`: abilities are built with `new AbilityBuilder(createMongoAbility)`. The old `Ability` class broke the builder's typing (`can(action, subject)` "expected 1 argument"). Rules and `ability.update(rules)` are unchanged.
+- `@casl/react` 7 dropped `createContextualCan`. CASL now has its own React context: `_app.tsx` uses `<AbilityProvider>`, and `authHooks`, `SplashScreen` and the login page use `useAbility()`. `common/casl/Can.tsx` re-exports `AbilityProvider`, `Can` and `useAbility`, so the rest of the app still imports from one place.
+- Gate: typecheck 0, lint 0 errors, build, `roles.spec.ts`, `e2e` and `e2e:prod` 37 passed / 1 skipped, Docker image builds and serves `/login`.
+
+**→ Beta drop #1 checkpoint** (see "Beta drops").
 
 ### 5. react-table 7 → TanStack Table 8 (largest step)
 - **Before:** add e2e tests for what the table does: sorting, row selection (single, all), pagination, search. Today these are only partly covered.
