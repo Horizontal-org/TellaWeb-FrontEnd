@@ -62,6 +62,7 @@ Check these first for the release being tested, then run section 2.
 | `globals.css` moved into a CSS layer | 🧑 Links look the same; the volume/progress sliders in the audio/video players, radio buttons (create user role) and checkboxes look as before; the loading animation (double bounce) still plays |
 | v3 defaults kept | 🧑 Placeholders in inputs are light grey; the mouse shows a pointing hand over buttons |
 | Deprecated classes replaced | 🧑 Dialog backdrops are semi-transparent black; menu items show a light grey on hover; long project URLs in project settings end with "…" |
+| Docker image ships only runtime dependencies (`npm ci`, `npm prune --omit=dev`) | 🧑 The beta container starts; logos and report images load (image optimization writes to `.next/cache` at runtime); no "Cannot find module" errors in the container logs |
 | **Browser support changed** | 🧑 Works on Safari 16.4+, Chrome/Edge 111+, Firefox 128+. **Older browsers (Windows 7/8.1, old macOS, iPhone 7 and older) will show a broken layout: expected and accepted.** If a user reports a broken layout, check their browser version first |
 
 ---
