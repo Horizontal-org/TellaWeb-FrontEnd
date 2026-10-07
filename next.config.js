@@ -23,9 +23,6 @@ module.exports = {
   images: {
     remotePatterns: [{ hostname: 'localhost' }, { hostname: 'tella-app.org' }],
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true
   },
