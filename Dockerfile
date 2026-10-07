@@ -9,10 +9,15 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm install
+# Exactly what package-lock.json lists
+RUN npm ci
 
 COPY . .
 RUN npm run build
+
+# Keep only what `next start` needs in the final image: runtime dependencies (no Jest, ESLint,
+# Playwright…) and no build cache (Next recreates .next/cache for optimized images at runtime)
+RUN npm prune --omit=dev && rm -rf .next/cache
 
 # Production image, copy all the files and run next
 FROM base AS runner

@@ -59,6 +59,11 @@ Tailwind CSS 4, built by Next's PostCSS (`@tailwindcss/postcss`) from `styles/ta
 ## Code style
 - Leave out semicolons in new JS/TS code. Existing files are inconsistent, so match the file you are editing where it matters.
 
+## Docker
+- The image builds with `npm ci`, then `npm prune --omit=dev` and removes `.next/cache`, so only runtime dependencies ship (`@playwright/test` stays: it's an optional peer of `next`). Use `--omit=dev` only; `--omit=peer` would also remove `react`, `react-dom` and others.
+- `node:22-alpine` ships **npm 10**. A lockfile written by npm 11 can lack entries npm 10's `npm ci` requires (it failed on `@emnapi/*`). If the Docker build fails at `npm ci` after a dependency change, run `npx npm@10 install --package-lock-only` and commit the lockfile; it then works with both versions.
+- To run the e2e suite against a built image: `docker run --add-host api:host-gateway -p 3200:3000 <image>` (the image's `/api` rewrite targets `http://api:3001`, here your local backend), then `E2E_BASE_URL=http://localhost:3200 npm run e2e`.
+
 ## Releases
 Versions are tags that trigger Docker Hub image builds:
 - Beta: set `version` in `package.json` (no prefix), merge to `development`, then push the tag `beta-X.Y.Z` from `development`.
