@@ -1,143 +1,102 @@
 # Upgrade plan: Next.js 12.2.5 → 16.x
 
 **Goal:** get Next.js onto a supported, patched version without changing how the app behaves.
-**Out of scope:** moving to the App Router, redesigning the UI, and the Tailwind upgrade (see `upgrade-plan-tailwind.md`). Do that one as a separate PR.
+**Out of scope:** moving to the App Router, redesigning the UI, and the Tailwind upgrade (see `upgrade-plan-tailwind.md`, a separate PR).
 
-## Decisions (agreed 2026-10-06)
+**Status (2026-10-06):** Milestone A is done. Milestone B is done through Next 15 + ESLint 9. **Next 16 is installed but not checked or committed.**
 
-- **One branch (`upgrade/nextjs`), one commit per step and per Next major version.** It goes to beta only **twice**: once after Phases 0–2 (Next still on 12), and once on Next 16. Versions 13–15 are checked locally (typecheck, build, e2e) but never deployed.
-- **Verification is a Playwright smoke suite** (`npm run e2e`) with screenshots, in place of the manual checklist below. The screenshots also serve as the visual baseline for the Tailwind upgrade.
-- **Chromatic is removed.** Storybook is upgraded after Next 16.
-- **Packages the upgrade requires get upgraded along with it** (TypeScript, @types, ESLint 9, Jest 30 with Testing Library, next-i18next with i18next and react-i18next, Storybook). Packages that are only outdated stay out of scope: React 19, RTK 2 / react-redux 9, CASL 7, date-fns 4, styled-components 6 and others. Unused packages are removed.
-- Tags and deploys are done by a maintainer, not as part of the upgrade work.
+## Decisions
 
-## Type-error baseline (TypeScript 5.9, Next 12)
+- **One branch (`upgrade/nextjs`), one commit per step and per Next major version.** It goes to beta only **twice**: drop #1 after Milestone A (Next still on 12), and drop #2 on Next 16. Versions 13–15 are only checked locally.
+- **A maintainer does every tag and deploy.** The upgrade work stops at each beta checkpoint and hands off.
+- **Verification is the Playwright suite** in `e2e/`, run in dev mode (`npm run e2e`) and against a production build (`npm run e2e:prod`). Screenshot baselines stay local only (they capture local backend data).
+- **Chromatic is removed.** Storybook gets upgraded after Next 16 (Milestone C).
+- **Packages the upgrade requires get upgraded along with it.** Packages that are only outdated stay out of scope: React 19, RTK 2 / react-redux 9, CASL 7, date-fns 4, styled-components 6, react-leaflet 5, react-icons 5, qrcode.react 4, react-to-print 3, protobufjs 8, @fontsource 5. Each of these becomes a follow-up ticket.
+- **Lint scope stays where `next lint` had it** (`pages/`, `components/`) unless decided otherwise (see "Open decisions").
 
-`npm run typecheck`: **22 errors in app code, none from `node_modules`.**
-- 19 × `TS2339` `Property 'message' does not exist on type 'unknown'` (catch blocks in `pages/**`)
-- 1 × `TS2345` in `pages/login/index.tsx` (login response type)
-- 1 × `TS2741` in `packages/ui/pages/ProjectUsersPage/ProjectUsersPage.tsx` (missing `children`)
-- 1 × `TS2614` in `pages/admin-center/index.tsx`: an unused `import { on } from "cluster"` (Node's server-only module in browser code). Removed in Phase 1.
+## Done
 
-## Progress
+### Milestone A: safety net and prep (Next 12) → beta drop #1 from `e09fb53`
 
-**Milestone A (Phases 0–2, Next still on 12): done, waiting for beta drop #1.**
-- TypeScript 5.9 and `typecheck`: baseline 22 errors, now **21** (the `cluster` import was removed).
-- Playwright suite in `e2e/` (see `e2e/README.md`): 20 pass, 1 skipped (configuration detail, because there's no configuration locally).
-- Babel removed (SWC), `next/router` imports fixed, Node 22 in Docker plus `.nvmrc`.
-- Chromatic, 10 unused packages and `yarn.lock` removed.
-- Minor/patch updates: next 12.3.7, react 18.3.1, RTK 1.9.7, axios 1.20.0, among others.
-  - RTK 1.9 brought up a real bug: `backupsApi` middleware wasn't registered. Fixed.
-  - `@divviup/dap` 0.9.1 added an exports map, so the import changed.
+| Commit | Change |
+|---|---|
+| `189c84e` | CLAUDE.md and the upgrade plans |
+| `730f4e8` | TypeScript 4.4 → 5.9, @types bumps, `typecheck` script. **Baseline: 22 app-code errors** |
+| `5badd56` | Playwright smoke suite |
+| `42023d4` | Babel → SWC, `next/dist/client/router` → `next/router`, removed the stray `import { on } from "cluster"` (→ 21 errors) |
+| `d926f4d` | Node 22 (Dockerfile, `.nvmrc`) |
+| `1fcc1e0` | Removed Chromatic, 10 unused packages and `yarn.lock` |
+| `81357d1` | **Bug fix:** `backupsApi` middleware wasn't registered in the store (RTK 1.9 throws in dev) |
+| `ac02bf5` | Minor/patch updates (next 12.3.7, react 18.3.1, RTK 1.9.7, axios 1.20). `@divviup/dap` 0.9.1 needs the root import |
+| `e09fb53` | Progress notes. **← tag beta drop #1 here** |
 
-**Order changed from the original plan:** `eslint-config-next` ≤ 14 only supports ESLint ≤ 8, and `next/jest` comes from the installed Next. So **ESLint 9 moves to the Next 15 hop** and **Jest 30 with Testing Library moves to the Next 16 hop.**
+### Milestone B: Next 13 → 16 (in progress)
 
-**Note:** `npm run build` needs `NEXT_PUBLIC_API_URL` and `NEXT_REDIRECT_API_URL` set (Docker sets them). Without them, the `/api` rewrite is invalid.
+| Commit | Change |
+|---|---|
+| `7cff015` | e2e: production-build mode (`e2e:prod`, port 3101). Global setup creates an "e2e configuration" if none exists. Audio and resource PDF specs. Logout spec checks the end state |
+| `5ec2d5e` | **Next 13.5:** `next/image` moved to the new API (numeric sizes; `ImageView` uses `fill` + `objectFit` style + `onLoad`), `images.domains` → `remotePatterns` |
+| `b038880` | **Next 14.2** |
+| `49ff4e1` | **Next 15.5**, next-i18next 16 (imports moved to `next-i18next/pages`) with i18next 26 and react-i18next 17, tsconfig `moduleResolution: "bundler"`, `outputFileTracingRoot` pinned |
+| `40f19d0` | ESLint 9 with flat config (`eslint.config.mjs` via FlatCompat), `lint` = `eslint pages components` |
 
-## Starting point
+Every Next commit passed: typecheck (21), build, `e2e` and `e2e:prod` (22 passed, 1 skipped because there's no audio locally), lint.
 
-| | Now | Needed for Next 16 |
-|---|---|---|
-| next | 12.2.5 | 16.x |
-| Node (Docker) | `node:16.15-alpine` | ≥ 20.9 (use 22 LTS) |
-| TypeScript | 4.4.4 (pinned) | ≥ 5.1 |
-| React | 18.2 | 18.2 is fine (React 19 is optional, not part of this plan) |
-| ESLint | 8 + `.eslintrc` + `next lint` | `next lint` is removed in 16. Use ESLint 9 with flat config |
-| next-i18next | 10.5 | 15+/16 (it has its own i18next peer dependencies) |
-| Storybook | 6.5 (webpack 4) | Probably breaks. Upgrade separately (Phase 0 / Phase 5) |
+**Order changed from the original plan:** `eslint-config-next` ≤ 14 only supports ESLint ≤ 8, so ESLint 9 moved to the Next 15 hop. Jest 30 moves to after Next 16.
 
-Facts about the codebase that shape this plan:
-- Only the **Pages Router** is used. There is no `app/`, no `middleware`, and no `pages/api`. Most of the Next 13–15 breaking changes don't apply.
-- `next.config.js` ignores TypeScript **and** ESLint errors during build, so a green build proves very little.
-- `.babelrc` (`next/babel` + `react-require`) turns off SWC today.
-- `next/dist/client/router` is imported in 7 files. That is an internal path.
-- `next/image` is used in 9 files. `ImageView.tsx` uses `layout="fill"`, `objectFit` and `onLoadingComplete`, which are legacy-only props.
-- `serverSideTranslations` is used in 3 pages (`login`, `settings`, `resource`).
-- `npx tsc --noEmit` currently stops at **104 parse errors, all inside `react-leaflet` type definitions**. TS 4.4 can't read the newer `.d.ts` syntax, so **the real type-error baseline for app code is unknown right now.**
+## Remaining
 
-## Phase 0: Safety net (before touching Next)
+### 1. Finish Next 16 (packages already installed, uncommitted)
+`next@16` and `eslint-config-next@16` are in `package.json` and the lockfile. Typecheck is still at 21.
+- [ ] `eslint.config.mjs`: drop FlatCompat and import `eslint-config-next`'s native flat configs directly (`eslint-config-next` + `eslint-config-next/core-web-vitals`). Then remove `@eslint/eslintrc` if nothing else needs it. Check that `npm run lint` passes.
+- [ ] **Turbopack is the default for `dev` and `build`.** Watch for:
+  - the named `version` import from `package.json` in `NewVersionBanner`, `AdminCenterPage` and `SettingsPage`. Webpack warns about it today, and Turbopack may reject it. Fix it with a default import (`import pkg from "…/package.json"` → `pkg.version`).
+  - the workspace root: add `turbopack.root` next to `outputFileTracingRoot` if Next complains about multiple lockfiles.
+  - Fallback while investigating: `next build --webpack`.
+- [ ] Typecheck ≤ 21, build, `e2e`, `e2e:prod`, lint → commit `chore: next 16`.
 
-1. Make a branch, `upgrade/nextjs`, off `development`.
-2. **Bump TypeScript to 5.x on its own** and run `npx tsc --noEmit`. Write down the number of app-code errors as the baseline, for example in a comment on the PR. Don't fix them all now. The point is to be able to tell when the upgrade *adds* errors.
-3. Add a `typecheck` script (`tsc --noEmit`). From now on, run it after every phase.
-4. Write a **manual smoke-test checklist** and run it on the current build to record baseline behaviour:
-   - login (plus 2FA), logout, and redirect to `/login` when signed out
-   - `/verify` (a public route)
-   - report list → report detail: image, audio, video, PDF and map views, file download
-   - projects: list, detail, users, resources, settings
-   - remote configuration list/detail and the camouflage wizard
-   - users, resources, admin center (backups)
-   - language switch en/es on `login`, `settings` and `resource`
-   - token refresh (wait for the access token to expire, or force a 401)
-5. Optional but recommended: take screenshots of the main pages. They become the visual baseline for the Tailwind plan as well.
+### 2. Jest 30 and Testing Library (own commit)
+- [ ] `jest` and `babel-jest` 30, plus `jest-environment-jsdom` 30, `@testing-library/react` 16 with `@testing-library/dom` 10, `@testing-library/jest-dom` 6, `@testing-library/user-event` 14.
+- [ ] `jest.setup.js`: `@testing-library/jest-dom/extend-expect` → `@testing-library/jest-dom`.
+- [ ] There are no Jest tests: check with a throwaway test (not committed) and add `--passWithNoTests` to `test:ci`.
 
-**Done when:** the TS baseline is recorded and the smoke checklist passes on the current code.
+### 3. Turn the build checks back on (own commit, depends on an open decision)
+- [ ] Fix the 21 known type errors: 19 × `.message` on `unknown` in catch blocks, `pages/login/index.tsx` (login response type), `ProjectUsersPage` (`ButtonMenu` without `children`).
+- [ ] Remove `typescript.ignoreBuildErrors` from `next.config.js`.
+- [ ] Remove `eslint.ignoreDuringBuilds`. It does nothing in Next 16, because `next build` no longer lints.
+- [ ] Full `e2e` and `e2e:prod`.
 
-## Phase 1: Clean-ups that work on Next 12
+### 4. Gate → STOP for beta drop #2
+- [ ] Typecheck, lint, `e2e`, `e2e:prod`, `docker build` + run the container and check `/login`.
+- [ ] Update this doc's "Done" section and CLAUDE.md where commands changed.
+- [ ] **Hand off:** a maintainer tags and deploys beta drop #2, soaks it for several days, then tags production.
+- On beta, check by hand: real report media (audio, PDF, download), token refresh after 15 min, 2FA login, the visit analytics call.
 
-These are small PRs that make the jump smaller and ship without risk:
+### 5. Milestone C: Storybook (separate PR, after B)
+- [ ] `npx storybook@latest upgrade` → `@storybook/nextjs`. Remove `@storybook/addon-postcss`.
+- [ ] `.storybook/preview.js`: remove the `next/image` monkey-patch.
+- [ ] Check that the stories in `storybook/stories` render. This also clears the React 17 peer warnings from Storybook 6 dependencies during `npm i`.
 
-1. Change `next/dist/client/router` to `next/router` (7 files).
-2. Delete `.babelrc`. `react-require` isn't needed with React 18's automatic JSX runtime. This switches the build to SWC, which is what Turbopack expects later. Then confirm that styled-components still render correctly. If class names or SSR styles go wrong, add `compiler: { styledComponents: true }` in `next.config.js`.
-3. Run the smoke checklist.
+## Open decisions
 
-**Done when:** this is merged and deployed to beta with no regressions.
+- **Lint scope:** keep `eslint pages components` (same as `next lint`), or widen to `eslint .` and fix the 8 existing errors in `packages/` and `storybook/` (missing `key` props ×3, a display name, an unescaped `'`, disable comments for unknown `@typescript-eslint` rules).
+- **Step 3:** fix the type errors and remove `ignoreBuildErrors` in this upgrade, or open a follow-up ticket.
+- **Local clean-up when finished:** the `e2e-admin@tella.local` user and the "e2e configuration" record in the local backend database, and the Docker images `tellaweb-frontend:upgrade-a4` / `upgrade-milestone-a`.
 
-## Phase 2: Runtime and tooling
+## Resuming work
 
-1. Dockerfile: `node:16.15-alpine` → `node:22-alpine`. Use the same Node version locally (consider adding `.nvmrc`).
-2. Move ESLint to v9 with flat config (`eslint.config.mjs`), using `eslint-config-next` and `eslint-plugin-testing-library`. Change the `lint` script from `next lint` to `eslint .`. Keep `react-hooks/exhaustive-deps: off`.
-3. Run the smoke checklist and the Docker build.
+- The worktree is `../TellaWeb-FrontEnd-nextjs`, on branch `upgrade/nextjs`. Not pushed, no upstream (`git push -u origin upgrade/nextjs` when ready).
+- The local backend must be running on `:3001` (`TellaWeb-backend`: `docker-compose up db redis`, `npm run start:dev`).
+- E2E credentials are in `.env.e2e.local` (gitignored). Baselines are in `e2e/__screenshots__/`, recorded on the Milestone A code. **Don't change local backend data,** or the screenshots will show false diffs.
+- `npm run build` needs `NEXT_PUBLIC_API_URL=/api NEXT_REDIRECT_API_URL=http://localhost:3001` (Docker sets them).
+- Port 3000 is usually taken by the main checkout's dev server. e2e uses 3100 (dev) and 3101 (prod).
+- To discard the uncommitted Next 16 install: `git checkout package.json package-lock.json && npm ci`.
 
-## Phase 3: Next.js, one major version at a time
-
-At each step: bump `next` and `eslint-config-next` → run the codemods → `typecheck` → `npm run build` → run the smoke checklist → commit.
-
-### 12 → 13
-- `npx @next/codemod@latest new-link .`: probably nothing to change (no `<Link><a>` found), but run it anyway.
-- **`next/image`:** start with `npx @next/codemod@latest next-image-to-legacy-image .` so behaviour stays the same. Then move each of the 9 files to the new `next/image` by hand:
-  - `ImageView.tsx`: `layout="fill"` → `fill`, `objectFit="contain"` → `style={{ objectFit: "contain" }}`, `onLoadingComplete` → `onLoad`.
-  - The other 8 files (logos and icons): check that their sizes look the same.
-  - The aim is **no `next/legacy/image` left by the end of Phase 3**, because it is deprecated.
-- `images.domains` → `images.remotePatterns`. `domains` is deprecated, and `ImageView` uses `unoptimized` anyway.
-
-### 13 → 14
-- Mostly painless for the Pages Router. Remove `next export` usage if there is any (there is none today).
-
-### 14 → 15
-- The async request APIs and caching changes only affect the App Router, so skip them.
-- Check the `rewrites()` config: `source` is built from `process.env.NEXT_PUBLIC_API_URL`, so make sure the env var is set at build time in Docker. It is today.
-- Upgrade **next-i18next** here (to the current major, with matching `i18next` and `react-i18next`). Check the 3 `serverSideTranslations` pages and the 6 files that use `useTranslation`.
-
-### 15 → 16
-- **Turbopack becomes the default** for `dev` and `build`. Phase 1 deleted `.babelrc`, so the custom-Babel problem should be gone. If something breaks only under Turbopack, `next build --webpack` is available as a temporary fallback.
-- Check that nothing still uses `next/legacy/image` or `next lint`.
-- Bump `@types/react` and `@types/react-dom` as needed.
-
-## Phase 4: Turn the safety checks back on
-
-1. Fix any type errors **added** during the upgrade, compared with the Phase 0 baseline.
-2. Remove `typescript.ignoreBuildErrors` and `eslint.ignoreDuringBuilds` from `next.config.js` if the error count lets you. If it doesn't, open a follow-up ticket and at least run `typecheck` in CI.
-
-## Phase 5: Storybook (separate PR, can run in parallel)
-
-Storybook 6.5 is unlikely to survive the toolchain changes. Upgrade it with `npx storybook@latest upgrade` (to `@storybook/nextjs`) and check that the stories render. Chromatic has been removed, so visual diffs come from the Playwright screenshots.
-
-## Rollout
-
-1. Beta drop #1 after Phases 0–2, beta drop #2 on Next 16: a maintainer tags `beta-X.Y.Z` → deploys to beta → checks by hand on beta.
-2. Leave it on beta for at least a few days of real use before production.
-3. Production: tag `X.Y.Z` as usual.
-
-**Rollback:** each phase is its own PR/tag, so you can roll back by re-deploying the previous Docker image tag. Nothing in this plan touches the backend or data.
-
-## Risks to watch
+## Risks still open
 
 | Risk | Mitigation |
 |---|---|
-| Errors hidden by `ignoreBuildErrors` | Phase 0 baseline plus `typecheck` after every step |
-| `next/image` layout shifts (the media viewer especially) | Migrate `ImageView` by hand and check it with real report media |
-| styled-components rendering after removing Babel | `compiler.styledComponents`, and check visually |
-| Turbopack-only build differences | `--webpack` fallback while investigating |
-| next-i18next API changes | Test en/es on the 3 translated pages |
-| Leaflet/OpenLayers maps (they need `window`) | Smoke-test the verification map and the report map views |
+| Turbopack-only build differences | `e2e:prod` on every change, `--webpack` fallback |
+| Type errors hidden by `ignoreBuildErrors` | `typecheck` stays ≤ 21; step 3 removes the flag |
+| Not covered by e2e: 2FA, token refresh, write flows, audio (no local file) | Manual checks on beta |
+| Long-lived branch vs. ongoing work on `development` | Short pause on dependency changes, or rebase before the PR |
