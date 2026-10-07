@@ -43,6 +43,7 @@ Check these first for the release being tested, then run section 2.
 | Redux Toolkit 2 | 🤖 General regression: lists refresh after create, edit and delete; nothing shows stale data after navigating back and forth |
 | CASL 7 | 🧑 Log in as **each role** on beta (section 2.2) |
 | Storybook removed | Nothing to check in the app |
+| protobufjs and `ConfigurationPanel` removed (unused code) | 🧑 Remote configuration → Share → scan with Tella on a phone: the configuration applies (the QR is JSON, unchanged); edit crash reports settings and check they save |
 
 ---
 

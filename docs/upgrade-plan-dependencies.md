@@ -32,7 +32,7 @@
 | styled-components | 5 | 6 | 11 files |
 | react-leaflet (+ leaflet, @types/leaflet) | 4 | 5 | only `VerificationMap`, used only by `VerificationInformation`, which **nothing imports** (dead code) |
 | react, react-dom, @types/react* | 18.3 | 19 | everywhere |
-| protobufjs | 6 | 8 | `packages/ui/proto/configuration.ts` (`Writer`/`Reader` from `protobufjs/minimal`); only called from `ConfigurationPanel`, which no page renders (see step 8) |
+| protobufjs | 6 → removed ✅ | 8 | was only used by the unused `ConfigurationPanel` (see step 8) |
 
 ## Steps
 
@@ -84,16 +84,19 @@ Gate: typecheck 0, lint 0 errors, build, `e2e` and `e2e:prod` 37 passed / 1 skip
 - Fix removed or changed APIs: implicit `children`, ref changes, and **`defaultProps` on function components, which React 19 ignores.** `Button` and `ButtonMenu` use it today (React 18 already warns), so their default values would silently stop applying. Move them to default parameters.
 - **react-leaflet 5** (React 19 only). The map code isn't used today (`VerificationInformation` isn't imported anywhere), but it stays: upgrade it and check it still type-checks and builds.
 
-### 8. protobufjs 8: needs a mobile-app check
-- **Finding (2026-10-07):** the running app doesn't use protobufjs. Encoding only happens in `ConfigurationPanel`, which no page renders (only the removed Storybook used it). `services/configuration.ts` imports just a type from `packages/ui/proto/configuration.ts`, and the share dialog's QR code is plain JSON. So the mobile-app risk doesn't apply to what's shipped today. ❓ Upgrade without the mobile gate, or remove the unused encoding code and protobufjs.
-- `protobufjs/minimal` `Writer`/`Reader` API changes.
-- **Gate:** someone shares a remote configuration from the web app to a phone running Tella and confirms it applies. If nobody can test that, keep protobufjs 6 pinned and note why.
+### 8. protobufjs: removed instead of upgraded ✅ (done before steps 5–7)
+- **Why first:** `npm audit` flagged protobufjs 6 as **critical** (arbitrary code execution, plus about ten other advisories).
+- The running app didn't use it: encoding only happened in `ConfigurationPanel`, which no page rendered. The live QR codes are the share dialog (configuration as **JSON**) and the 2FA setup, both on `qrcode.react`, both unchanged. The team confirmed the mobile app no longer uses protobuf.
+- Removed `ConfigurationPanel`, `packages/ui/proto/`, `assets/placeholder.png`, `protobufjs` and `qrcode` (only the panel used it).
+- `services/configuration.ts` now types crash reports with the domain `CrashReports` (`{ visible, enabled }`, what the backend stores) instead of the outdated protobuf `CrashReport` (`{ share, changeable }`).
+- Result: `npm audit --omit=dev` finds **0 vulnerabilities**. Dev-only findings remain through Tailwind 2 (fixed by the Tailwind plan), `eslint-config-next` 16.3 and Jest 30 (upstream). Lint has no warnings left.
+- Gate: typecheck 0, lint clean, build, `e2e` and `e2e:prod` 37 passed / 1 skipped.
 
 ## Beta drops (maintainer)
 Use **`docs/manual-checks.md`**. Each step adds its checks to the release it ships in.
 - **#1 after step 4:** Storybook removal, small upgrades, RTK, CASL. Lower risk.
 - **#2 after step 7:** the Table rewrite, styled-components and React 19.
-- **Step 8** ships on its own after the mobile check.
+- Step 8 (protobufjs removal) is already done and ships with beta drop #1.
 - On beta, check by hand: list pages (sort, select, paginate, search), 2FA setup QR, configuration share + print, permissions per role.
 
 ## Risks
@@ -103,5 +106,4 @@ Use **`docs/manual-checks.md`**. Each step adds its checks to the release it shi
 | Table behaviour changes (sorting, selection, pagination) | Add table e2e tests before step 5; screenshots for layout |
 | RTK 2 changes how requests or caching behave | e2e write tests cover the main endpoints; beta soak |
 | Permission regressions after CASL 7 | `roles.spec.ts` |
-| Remote configuration encoding breaks phones | Step 8 is gated on a mobile check, or stays pinned |
 | React 19 breaks a library without a declared peer range | Every step on React 18 first; React 19 last, on its own |
