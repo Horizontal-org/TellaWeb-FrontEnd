@@ -114,7 +114,7 @@ export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> 
           }}
         >          
           <div 
-            className="py-8 px-12 border rounded border-gray-100"
+            className="py-8 px-12 border rounded-sm border-gray-100"
           >
 
             <p className='text-xxxl text-gray-600 font-bold'>

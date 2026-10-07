@@ -22,7 +22,7 @@ export const TextInput = forwardRef<
           hover:placeholder-gray-800
           hover:border-gray-500
           focus:border-blue-300
-          focus:outline-none
+          focus:outline-hidden
           py-1
           pr-2
           pl-2"

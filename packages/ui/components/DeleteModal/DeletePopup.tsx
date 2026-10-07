@@ -51,7 +51,7 @@ export const DeletePopup: FunctionComponent<React.PropsWithChildren<PropsWithChi
         overlayClassName={
           "flex bg-black/50 absolute inset-0 justify-center items-center"
         }
-        className="bg-white font-thin w-4/12 py-4 px-3 rounded shadow-xl text-gray-800"
+        className="bg-white font-thin w-4/12 py-4 px-3 rounded-sm shadow-xl text-gray-800"
       >
         <div className="flex-start items-center">
           <button type="button" onClick={requestClose}>

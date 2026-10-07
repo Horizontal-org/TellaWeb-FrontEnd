@@ -26,7 +26,7 @@ export const Slider: FunctionComponent<React.PropsWithChildren<Props>> = ({ item
 
   return items.length > 0 ? (
     <div className="flex-row">
-      <div className="rounded-sm">{items[current - 1]}</div>
+      <div className="rounded-xs">{items[current - 1]}</div>
       <div className="flex justify-center my-5 px-10">
         <SliderControl
           goPrev={goPrev}

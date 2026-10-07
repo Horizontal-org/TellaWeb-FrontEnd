@@ -67,7 +67,7 @@ export const ButtonMenu: FunctionComponent<React.PropsWithChildren<Props>> = ({
         {open && (
           <div
             className={cn(
-              "absolute m-2 w-max bg-white rounded overflow-hidden border border-gray-100 z-20 flex flex-col -top-2",
+              "absolute m-2 w-max bg-white rounded-sm overflow-hidden border border-gray-100 z-20 flex flex-col -top-2",
               {
                 "right-0": !toRight,
                 "left-0": toRight,
