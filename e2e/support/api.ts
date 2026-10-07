@@ -106,6 +106,22 @@ export const loginWeb = async (ctx: APIRequestContext, username: string, passwor
   return res.json()
 }
 
+// Turns on 2FA for a user the way the settings page does, and returns the TOTP secret
+export const enableTwoFactor = async (baseURL: string, username: string, password = TMP_PASSWORD) => {
+  const ctx = await request.newContext({ baseURL })
+  try {
+    const { access_token } = await loginWeb(ctx, username, password)
+    const headers = { authorization: `Bearer ${access_token}` }
+    const enable = await (await ctx.post("/api/auth/otp/enable", { headers, data: { password } })).json()
+    const secret = new URL(enable.otp_url).searchParams.get("secret")
+    const activate = await ctx.post("/api/auth/otp/activate", { headers, data: { code: totp(secret) } })
+    if (!activate.ok()) throw new Error(`Activating 2FA for ${username} failed: ${activate.status()}`)
+    return secret
+  } finally {
+    await ctx.dispose()
+  }
+}
+
 // Storage state that makes the app consider the browser logged in with these tokens
 export const sessionState = (baseURL: string, access_token: string, refresh_token: string) => ({
   cookies: [],

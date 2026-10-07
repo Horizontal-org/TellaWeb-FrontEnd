@@ -1,6 +1,6 @@
 import { Page, request } from "@playwright/test"
 import { test, expect, waitForApp } from "./fixtures"
-import { TMP_PASSWORD, loginWeb, sessionState, totp, uniqueEmail } from "./support/api"
+import { TMP_PASSWORD, enableTwoFactor, loginWeb, sessionState, totp, uniqueEmail } from "./support/api"
 
 const NOT_A_TOKEN = "not-a-valid-token"
 
@@ -61,15 +61,7 @@ test.describe("two-factor authentication", () => {
     const email = uniqueEmail("otp")
     await adminApi.createUser(email, "viewer")
 
-    // Enable 2FA for the user through the API, like the settings page does
-    const api = await request.newContext({ baseURL })
-    const { access_token } = await loginWeb(api, email, TMP_PASSWORD)
-    const headers = { authorization: `Bearer ${access_token}` }
-    const enable = await (await api.post("/api/auth/otp/enable", { headers, data: { password: TMP_PASSWORD } })).json()
-    const secret = new URL(enable.otp_url).searchParams.get("secret")
-    const activate = await api.post("/api/auth/otp/activate", { headers, data: { code: totp(secret) } })
-    expect(activate.ok(), "2FA activated").toBe(true)
-    await api.dispose()
+    const secret = await enableTwoFactor(baseURL, email)
 
     await page.goto("/login")
     await page.getByPlaceholder("Email").fill(email)
