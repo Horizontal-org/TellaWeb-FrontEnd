@@ -1,20 +1,36 @@
-# E2E smoke tests (Playwright)
+# E2E tests (Playwright)
 
-A smoke suite that checks the main screens load, don't throw, and look the same. It was written for the Next.js and Tailwind upgrades.
+A smoke and behaviour suite: the main screens load, don't throw and look the same, and the main flows (CRUD, roles, sessions, 2FA, error toasts) work. It was written for the Next.js and Tailwind upgrades.
 
-## Setup
+## Fresh clone checklist
 
-1. Run the backend locally on `:3001` (see `TellaWeb-backend`: `docker-compose up db redis`, then `npm run start:dev`).
-2. Create an admin user **without 2FA** in the backend:
+1. **Backend running on `:3001`**, migrated, with its file storage available. Resource upload and download need it. See `TellaWeb-backend`: `docker-compose up db redis`, `npm run typeorm:run`, `npm run start:dev`.
+2. **An admin user without 2FA** for the tests:
    ```bash
+   # in TellaWeb-backend
    npm run console:dev -- users create e2e-admin@tella.local -a   # prompts for the password
    ```
-3. Put the credentials in `.env.e2e.local` at the repo root (gitignored):
+3. **Credentials** in `.env.e2e.local` at the frontend repo root (gitignored):
    ```
    E2E_USER=e2e-admin@tella.local
    E2E_PASS=...
    ```
-4. `npx playwright install chromium`
+4. **Dependencies and browser:** `npm ci` and `npx playwright install chromium`.
+5. **First run:** `npm run e2e`. With no `e2e/__screenshots__/` folder yet, this run **records the screenshot baselines** and passes ("No screenshot baselines … this run records them"). Do the first run on code you know is good, because those screenshots become the reference.
+6. **Later runs** compare against those baselines. Re-record on purpose with `npm run e2e:update`.
+
+You don't need `.env.development`: the Playwright config passes the API env vars to the server it starts.
+
+### What to expect on an empty database
+
+The write, roles, session, 2FA and error tests create their own data, so they pass on an empty database. "e2e configuration" is created automatically. Tests for pages that need existing records **skip** until that data exists:
+
+| Needs | Skipped tests |
+|---|---|
+| A project | project detail, users, resources and settings pages |
+| A report | report page |
+| Reports with an image, video or audio file | the media viewer tests (reports only come in through the mobile app) |
+| A PDF resource | the resource PDF viewer test |
 
 ## Running
 

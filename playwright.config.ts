@@ -17,9 +17,23 @@ const prod = !!process.env.E2E_PROD
 const port = prod ? 3101 : 3100
 const baseURL = process.env.E2E_BASE_URL || `http://localhost:${port}`
 
+// Screenshot baselines are local only (gitignored). On a machine that has none yet, this run
+// records them instead of failing every screenshot test. Once they exist, a missing or changed
+// screenshot fails as usual. Decided once in the main process and passed to workers through the
+// environment, because workers re-read this file after the first baselines are written
+const screenshotsDir = path.join(__dirname, "e2e", "__screenshots__")
+if (process.env.E2E_RECORD_BASELINES === undefined) {
+  process.env.E2E_RECORD_BASELINES = fs.existsSync(screenshotsDir) ? "0" : "1"
+  if (process.env.E2E_RECORD_BASELINES === "1") {
+    console.log(`No screenshot baselines in ${path.relative(process.cwd(), screenshotsDir)}: this run records them`)
+  }
+}
+const recordBaselines = process.env.E2E_RECORD_BASELINES === "1"
+
 export default defineConfig({
   testDir: "./e2e",
   snapshotPathTemplate: "{testDir}/__screenshots__/{testFilePath}/{arg}{ext}",
+  ...(recordBaselines && { updateSnapshots: "changed" as const }),
   globalSetup: "./e2e/global-setup.ts",
   fullyParallel: false,
   workers: 1,
