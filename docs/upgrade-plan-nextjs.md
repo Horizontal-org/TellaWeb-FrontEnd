@@ -80,7 +80,7 @@ Moved to `upgrade-plan-dependencies.md`: Storybook is removed instead of upgrade
 - **Circular barrel imports:** 46 modules in `packages/ui` import from their own barrel (`'../..'`, `'packages/ui'`). Not the cause of the Turbopack bug, but worth removing.
 - **Toasts disappear early:** `ToastWrapper.handleToast` doesn't cancel the previous toast's hide timers, so a toast shown within 5 s of another can vanish almost immediately. Clear the old timers (e.g. keep them in a ref) before scheduling new ones. Found by the e2e write tests.
 - **Wrong toast text:** deleting a remote configuration shows "Report deleted" (`pages/configuration/[configurationId].tsx`).
-- **RTK:** `createSlice.extraReducers` object notation is deprecated (warning in the console) and removed in RTK 2.
+- ~~**RTK:** `createSlice.extraReducers` object notation is deprecated~~: done with RTK 2 on `upgrade/dependencies`.
 - Packages left out of scope on purpose (see "Decisions").
 
 ## Local clean-up when finished

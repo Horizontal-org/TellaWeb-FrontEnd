@@ -25,8 +25,8 @@
 | react-to-print | 2 → 3 ✅ | 3 | `ShareConfigurationModal.tsx` (`useReactToPrint`) |
 | react-icons | 4 → 5 ✅ | 5 | 57 files |
 | date-fns | 2 → 4 ✅ | 4 | 14 files, only `format` and `addSeconds` |
-| @reduxjs/toolkit | 1.9 | 2 | 15 files; `extraReducers` object syntax (removed in v2) in `authSlice`, `reportsSlice`, `userSlice` |
-| react-redux | 7 | 9 | 8 files |
+| @reduxjs/toolkit | 1.9 → 2 ✅ | 2 | 15 files; `extraReducers` object syntax (removed in v2) in `authSlice`, `reportsSlice`, `userSlice` |
+| react-redux | 7 → 9 ✅ | 9 | 8 files |
 | @casl/ability, @casl/react | 5 / 3 | 7 | `common/casl/Ability.tsx`, `Can.tsx` |
 | react-table | 7 (no React 19 version) | → @tanstack/react-table 8 | `components/Table/Table.tsx`, column definitions in `domain/*TableColumns.ts`, `domain/ItemQuery.ts`, `types/react-table-config.d.ts`; 7 list pages render `<Table>` |
 | styled-components | 5 | 6 | 11 files |
@@ -53,10 +53,13 @@ The team doesn't use it, and the e2e suite (real pages) plus Jest + Testing Libr
 
 Gate: typecheck 0, lint 0 errors, build, `e2e` and `e2e:prod` 37 passed / 1 skipped.
 
-### 3. Redux Toolkit 2 + react-redux 9
-- `extraReducers`: object syntax → builder callback in the 3 slices.
-- RTK 2 type and option changes (`configureStore` middleware callback, `createSlice` typing).
-- The e2e write tests exercise most RTK Query endpoints.
+### 3. Redux Toolkit 2 + react-redux 9 ✅
+- `@reduxjs/toolkit` 2.13, `react-redux` 9.3.
+- The three `extraReducers` were empty objects, so they're removed. The invalid `{}` also broke type inference for the whole `createSlice` call (the cause of the "expected 1 argument" errors on `clearCredentials()` / `clearUser()`).
+- `store.ts`: `setupListeners` now comes from `@reduxjs/toolkit/query/react`; the old `dist/` path no longer resolves.
+- react-redux usage (`Provider`, `useDispatch`, `useSelector`) needed no changes.
+- No new Redux warnings in the browser console, and the `extraReducers` deprecation warning is gone. The two warnings left (a spread `key` prop, `disableSortBy` on a DOM element) come from react-table 7 and go away with step 5.
+- Gate: typecheck 0, lint 0 errors, build, `e2e` and `e2e:prod` 37 passed / 1 skipped.
 
 ### 4. CASL 7
 - `@casl/ability` + `@casl/react` 7: update `AbilityBuilder` / `createMongoAbility` usage and `<Can>` / `AbilityContext`.
