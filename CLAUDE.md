@@ -9,7 +9,6 @@ npm run dev            # Next.js dev server on :3000
 npm run build          # production build (needs NEXT_PUBLIC_API_URL=/api NEXT_REDIRECT_API_URL=http://localhost:3001, or the /api rewrite is invalid)
 npm run typecheck      # next typegen && tsc --noEmit (next-env.d.ts is generated, not committed)
 npm run lint           # next lint
-npm run build:css      # regenerate styles/tailwind.css (imported by pages/_app.tsx)
 npm test               # jest --watch
 npm run test:ci        # jest --ci
 npx jest path/to/file.test.tsx   # run a single test file
@@ -55,7 +54,7 @@ There are three layers, wired together with tsconfig path aliases (`@tellaweb/ui
 `next-i18next` handles translation, with locales `en` (default) and `es`. Translation files are in `public/locales/<locale>/<namespace>.json`. Pages that translate text load their namespaces in `getStaticProps`/`getServerSideProps` with `serverSideTranslations(locale, [...])`.
 
 ### Styling
-The project uses Tailwind CSS v2 (`tailwind.config.js`), with some styled-components.
+Tailwind CSS 3.4, built by Next's PostCSS from the directives in `styles/tailwind.css` (imported by `pages/_app.tsx`; nothing is pre-built). `tailwind.config.js` pins Tailwind 2's palette names, shadows and font fallbacks so the UI looks as it did on v2; `styles/tailwind.css` also restores v2's `body { font-family: inherit }`. Some components use styled-components 6 (styling-only props must be transient, `$prop`).
 
 ## Code style
 - Leave out semicolons in new JS/TS code. Existing files are inconsistent, so match the file you are editing where it matters.

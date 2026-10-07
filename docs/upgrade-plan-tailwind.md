@@ -1,9 +1,28 @@
 # Upgrade plan: Tailwind CSS 2.2.19 → 3.4 → (maybe) 4.x
 
 **Goal:** a maintained Tailwind version with **no visible change** to the UI.
-**Prerequisite:** the Next.js upgrade is done, or at least Storybook and Chromatic work (see Phase 5 of `upgrade-plan-nextjs.md`). Without a visual-diff tool, regressions here are silent.
+**Branch:** `upgrade/tailwind`, started from `upgrade/dependencies` (`3335093`).
+**Visual safety net:** the Playwright screenshots in `e2e/` (Storybook and Chromatic were removed).
 
 The plan stops on purpose at **v3.4** and treats v4 as a separate decision (see "Decision gate" below).
+
+## Progress
+
+**Status (2026-10-07): Phase 0 and Phase 1 done (Tailwind 3.4.19).** Next: the decision gate for v4.
+
+| Commit | Change |
+|---|---|
+| `f90a839` | **Phase 0:** `e2e/visual.spec.ts`, element screenshots of the main dialogs (create user with the password meter, create project/resource, new configuration, share configuration, rename/delete project), the users list with a selected row, the login error and the 2FA passcode screen. Recorded on Tailwind 2 |
+| `232d65c` | **Phase 1:** Tailwind 3.4, `@tailwindcss/aspect-ratio` 0.4, one build pipeline (details below) |
+| `989280b` | Deprecated class names replaced: `bg-opacity-*`/`text-opacity-*` → slash syntax, `flex-grow` → `grow`, `overflow-ellipsis` → `text-ellipsis` (same CSS values) |
+
+What Phase 1 found and did:
+- **The committed v2 stylesheet was stale.** It only scanned `packages/ui` and was last rebuilt in Jan 2025, so 6 classes used in the code were missing: `w-40`, `opacity-0`, `opacity-100`, `transition`, `pb-1`, `blur`. They now apply. None changed a screenshot; the visible effect should be the toast fade-out, which now animates.
+- **Theme defaults pinned to v2:** v3's `defaultTheme.colors` is a function (spreading it, as the old config did, gives nothing), and v2's `green`/`yellow`/`purple` are v3's `emerald`/`amber`/`violet`. Shades 50–900 are identical. v2's shadows and sans-serif fallbacks are pinned too.
+- **One real difference, fixed:** Tailwind 3 dropped `body { font-family: inherit }` from its base styles, so body text without `font-sans` fell back to the system fonts in `globals.css` (seen on the report page). Restored in `styles/tailwind.css`.
+- `aspect-w-*`/`aspect-h-*` (report thumbnails) still come from the plugin; v3's built-in `aspect-*` utilities are disabled with `corePlugins.aspectRatio: false`.
+- Result: all 28 screenshots (pages, dialogs, states) match Tailwind 2. `e2e` and `e2e:prod` 53 passed / 1 skipped; Docker image builds and serves the generated CSS.
+- Dev-only audit: 28 findings remain (29 before). Tailwind 3.4 still depends on an old `postcss-selector-parser`; Tailwind 4 would clear those.
 
 ## Starting point
 
@@ -11,7 +30,6 @@ The plan stops on purpose at **v3.4** and treats v4 as a separate decision (see 
 - The theme **replaces** `colors`, `fontSize` and `spacing`, spreading `defaultTheme`. It has custom blue/gray/customgray scales, custom font sizes (`sm` = 11px, `base` = 14px…) and custom spacing keys (`xsm`, `sm`, `md`, `xxl`…).
 - The plugin is `@tailwindcss/aspect-ratio`.
 - **There are two pipelines today:** `styles/tailwind.css` is a **pre-built, committed** file (`npm run build:css`) imported by `_app.tsx`, *and* `postcss.config.js` runs `tailwindcss`. Because `purge` only scans `packages/ui`, classes used only in `pages/` or `components/` may be missing from that file.
-- Storybook loads Tailwind through `@storybook/addon-postcss`.
 
 Usage that the upgrades will affect (counted in `packages/`, `pages/` and `components/`):
 
@@ -21,34 +39,15 @@ Usage that the upgrades will affect (counted in `packages/`, `pages/` and `compo
 | `rounded` | 59 | unchanged | renamed `rounded-sm` (the old `rounded-sm` becomes `rounded-xs`) |
 | `shadow` | 19 | unchanged | renamed `shadow-sm` |
 | `outline-none` | 8 | unchanged | `outline-hidden` |
-| `bg-/text-opacity-*` | 12 | deprecated, still works | **removed**. Use `bg-black/50` |
-| `flex-grow` | 3 | deprecated alias | `grow` |
-| `overflow-ellipsis` | 1 | `text-ellipsis` | `text-ellipsis` |
+| `bg-/text-opacity-*` | 12 | ✅ replaced with the slash syntax | **removed** in v4 |
+| `flex-grow` | 1 (2 more are plain CSS in styled-components) | ✅ `grow` | `grow` |
+| `overflow-ellipsis` | 1 | ✅ `text-ellipsis` | `text-ellipsis` |
 
-## Phase 0: Baseline
+## Phase 0: Baseline ✅
+Done with Playwright instead of Chromatic: page screenshots (`pages.spec.ts`, `auth.spec.ts`) plus element screenshots of dialogs and states (`visual.spec.ts`).
 
-1. Make a branch, `upgrade/tailwind-v3`.
-2. Get **Chromatic** running on the current stories and accept the result as the baseline. Add stories for any key screens that don't have one yet; at least the page components in `packages/ui/pages/` are worth covering.
-3. Take full-page screenshots of the real app (login, report list, report detail, project pages, configuration wizard, admin center), because Storybook doesn't cover everything.
-
-## Phase 1: Tailwind 2 → 3.4
-
-1. `npm i -D tailwindcss@3 postcss@8 autoprefixer@10 @tailwindcss/aspect-ratio@latest`
-2. Update `tailwind.config.js`:
-   - `purge` → `content`, and **widen it** to `./packages/**/*.tsx`, `./pages/**/*.tsx`, `./components/**/*.tsx`, `./common/**/*.tsx`.
-   - Remove `darkMode: false` and the whole `variants` block. v3 enables every variant by default.
-   - Keep `...defaultTheme.colors` but check for warnings about renamed colours (`lightBlue` → `sky` and so on). If any appear, use `tailwindcss/colors` and pick the scales you use.
-3. **Use one pipeline:** delete the committed `styles/tailwind.css` and the `build:css` script. Create a small `styles/tailwind.css` (or reuse `globals.css`) with `@tailwind base; @tailwind components; @tailwind utilities;` and let PostCSS build it through Next. Add the generated file to `.gitignore` if anything still writes it.
-4. Fix the deprecations even though they still work, because it makes Phase 2 smaller:
-   - `bg-opacity-*` / `text-opacity-*` → the slash syntax (`bg-black/50`, `text-gray-500/80`)
-   - `flex-grow` → `grow`, `overflow-ellipsis` → `text-ellipsis`
-5. Get Storybook's PostCSS working with Tailwind 3. On a modern Storybook this means importing the CSS in `.storybook/preview`.
-6. Run Chromatic and compare the screenshots.
-   - Expect a **few intended differences**: classes in `pages/` and `components/` that were missing from the purged CSS will now apply. Check each one; usually they fix things.
-   - Any other difference is a regression to fix.
-7. Deploy to beta and check it by eye on the browsers your users actually have.
-
-**Done when:** Chromatic shows no unintended changes and beta looks the same. **Phase 1 is a good place to stop.** Tailwind 3.4 is stable and still supports older browsers.
+## Phase 1: Tailwind 2 → 3.4 ✅
+See "Progress". Remaining: deploy to beta and check by eye on the browsers your users actually have (`docs/manual-checks.md`, "Tailwind 3.4 beta drop").
 
 ## Decision gate: should you go to v4?
 
@@ -63,7 +62,7 @@ If the answer isn't a clear yes, **stay on 3.4** and come back to this later.
 
 ## Phase 2: Tailwind 3.4 → 4.x (only if the gate is passed)
 
-1. Make a branch, `upgrade/tailwind-v4`, from the merged v3 work.
+1. Continue on `upgrade/tailwind` (or a new branch from the merged v3 work).
 2. Run the official upgrade tool: `npx @tailwindcss/upgrade`. It:
    - moves `@tailwind` directives to `@import "tailwindcss"`
    - changes PostCSS to `@tailwindcss/postcss` (autoprefixer is no longer needed)
@@ -85,7 +84,7 @@ If the answer isn't a clear yes, **stay on 3.4** and come back to this later.
    - Custom spacing keys (`sm`, `md`, `xxl`…) clash with v4's dynamic spacing scale and with named sizes such as `max-w-md`. Check every use.
 6. Remove `@tailwindcss/aspect-ratio` and use the built-in `aspect-*` utilities (`aspect-w-*`/`aspect-h-*` → `aspect-[16/9]` and similar).
 7. Check the base-style changes: focus rings (3px → 1px, `ring` → `ring-3`), placeholder colour, and `cursor: default` on buttons, which used to be `pointer`.
-8. Run Chromatic, compare screenshots, deploy to beta, and **test on the oldest browser you've agreed to support**.
+8. Run the e2e screenshots, compare, deploy to beta, and **test on the oldest browser you've agreed to support**.
 
 ## Rollout and rollback
 
@@ -96,7 +95,7 @@ If the answer isn't a clear yes, **stay on 3.4** and come back to this later.
 
 | Risk | Phase | Mitigation |
 |---|---|---|
-| Missing or extra CSS from changing the purge/content paths | 1 | Chromatic plus screenshots; check each difference |
+| Missing or extra CSS from changing the purge/content paths | 1 | Done: 6 missing classes found, no visual change |
 | Dropping browser support | 2 | Decision gate, using real analytics data |
 | ~100 borders turning dark | 2 | Compatibility rule in the base layer |
 | Codemod misses classes built dynamically | 2 | Review the diff by hand, grep for `` className={` `` templates |
