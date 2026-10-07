@@ -63,6 +63,7 @@ Every Next commit passed: typecheck, build, `e2e` and `e2e:prod` (22 passed, 1 s
 ## Remaining
 
 ### 4. Beta drops (maintainer)
+Use **`docs/manual-checks.md`**: release focus for each drop, plus the full manual regression list.
 - [ ] **Beta drop #1** from `e09fb53` (Next 12 + prep).
 - [ ] **Beta drop #2** from the branch tip (Next 16.3), after #1 has soaked.
 - On beta, check by hand: real report media (audio, PDF, download), token refresh after 15 min, 2FA login, the visit analytics call, and an error toast (for example, create a user with an email that already exists).
