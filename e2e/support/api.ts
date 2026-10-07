@@ -49,6 +49,16 @@ export class AdminApi {
     return this.post("/project/", { name })
   }
 
+  // Same two calls the "Create resource" dialog makes: upload the bytes, then confirm the size
+  async uploadResource(fileName: string, content: Buffer) {
+    const put = await this.ctx.put(`/api/resource/upload/${fileName}`, {
+      headers: { ...this.headers, "content-type": "multipart/form-data" },
+      data: content,
+    })
+    if (!put.ok()) throw new Error(`PUT resource ${fileName}: ${put.status()}`)
+    await this.post(`/resource/upload/${fileName}`, { size: content.length })
+  }
+
   async findUser(username: string) {
     const { results } = await this.get("/user/list", { limit: 50, offset: 0, search: username })
     return results.find((user) => user.username === username)
