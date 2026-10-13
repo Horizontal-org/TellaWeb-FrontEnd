@@ -41,6 +41,7 @@ npm run e2e -- e2e/auth.spec.ts              # one file
 npm run e2e -- -g "report page"              # by test name
 npm run e2e:update                           # re-record screenshot baselines
 npx playwright show-report                   # HTML report with screenshot diffs
+E2E_BASE_URL=http://localhost:3200 npm run e2e  # against an already running server, e.g. the Docker image (see CLAUDE.md)
 ```
 
 `global-setup.ts` logs in through the `/api` rewrite, saves the session to `e2e/.auth/`, and picks existing records for the detail pages: the first project and report, reports with an image, video or audio file, and a PDF resource. If there's no remote configuration it creates one called "e2e configuration". Specs skip themselves when the local backend has no matching record. Today the audio spec skips, because there are no audio files locally.

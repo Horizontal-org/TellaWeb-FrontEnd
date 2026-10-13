@@ -1,3 +1,11 @@
 node_modules
 /**/node_modules
 .next
+
+# Local test artifacts and credentials: not needed to build the image
+.env*.local
+e2e/.auth
+e2e/__screenshots__
+test-results
+playwright-report
+.issue-draft-*

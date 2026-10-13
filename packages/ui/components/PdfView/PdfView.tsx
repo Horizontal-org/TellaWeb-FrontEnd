@@ -23,7 +23,7 @@ export const PdfView: FunctionComponent<React.PropsWithChildren<Props>> = ({
         onRequestClose={handleIsOpen}
         isOpen={isOpen}
         overlayClassName={
-          "flex bg-black bg-opacity-50 absolute inset-0 justify-center items-center"
+          "flex bg-black/50 absolute inset-0 justify-center items-center"
         }
       >
         <object data={`${window.location.origin}/api/resource/asset/${fileName}`} type="application/pdf" width="100%" height="100%">

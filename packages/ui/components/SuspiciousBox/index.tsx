@@ -4,7 +4,7 @@ import logo from "../../assets/tella-logo.png";
 const SuspiciousPage = () => {
   return (
     <div
-      className="p-8 bg-white rounded flex justify-center items-center flex-col shadow-md border"
+      className="p-8 bg-white rounded-sm flex justify-center items-center flex-col shadow-md border"
       style={{ width: 400 }}
     >
       <div className="flex justify-center items-center py-8">

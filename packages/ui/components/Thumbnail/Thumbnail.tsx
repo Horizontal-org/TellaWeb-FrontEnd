@@ -30,7 +30,7 @@ export const Thumbnail: FunctionComponent<React.PropsWithChildren<Props>> = ({
         );
       case ReportFileType.VIDEO:
         return (
-          <div className="m-auto bg-black opacity-70 p-2 rounded-sm">
+          <div className="m-auto bg-black opacity-70 p-2 rounded-xs">
             <MdVideocam size={25} color="#ffffff" />
           </div>
         );
@@ -75,21 +75,21 @@ export const Thumbnail: FunctionComponent<React.PropsWithChildren<Props>> = ({
           "cursor-pointer": onClick !== null,
           "w-full h-full": full,
           "w-24 h-24": !full && !box,
-          "aspect-w-4 aspect-h-4 w-full": box,
+          "aspect-square w-full": box,
         })}
         style={getBackgroundImage(file.thumbnail)}
         aria-hidden="true" // TODO: a11y
       >
         <div
           className={cn(
-            "flex content-center flex-wrap rounded-md  hover:bg-black",
+            "flex content-center flex-wrap rounded-md",
             {
-              "hover:bg-opacity-5 ": file.thumbnail === undefined,
-              "hover:bg-opacity-10": file.thumbnail !== undefined,
+              "hover:bg-black/5": file.thumbnail === undefined,
+              "hover:bg-black/10": file.thumbnail !== undefined,
               "border-gray-100 hover:border-gray-500 border": !selected,
               "border-blue-400 hover:border-blue-500 border-2": !!(selected),
               "w-24 h-24": !full && !box,
-              "aspect-w-4 aspect-h-4 w-full": box,
+              "aspect-square w-full": box,
               "h-full w-full": full,
             }
           )}

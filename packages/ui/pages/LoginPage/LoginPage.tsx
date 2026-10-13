@@ -61,7 +61,7 @@ export const LoginPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
             <div 
               style={{width: 400}} 
               className={classNames(
-                'mt-2 shadow-md p-2 text-sm font-bold font-sans duration-300 text-white rounded',
+                'mt-2 shadow-md p-2 text-sm font-bold font-sans duration-300 text-white rounded-sm',
                 {                  
                   'bg-red-600': verificationSuccessful === '0',
                   'bg-blue-300': verificationSuccessful === '1',

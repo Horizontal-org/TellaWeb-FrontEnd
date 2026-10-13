@@ -25,9 +25,9 @@ export const OnExitModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
       <ReactModal
         isOpen={isOpen}
         overlayClassName={
-          "flex bg-black bg-opacity-50 absolute inset-0 justify-center items-center"
+          "flex bg-black/50 absolute inset-0 justify-center items-center"
         }
-        className="bg-white w-5/12 py-4 px-3 rounded shadow-xl text-gray-800"
+        className="bg-white w-5/12 py-4 px-3 rounded-sm shadow-xl text-gray-800"
       >      
         <div className='px-20'>
           <p className='py-2 font-sans text-gray-600 text-xxxl font-bold'>

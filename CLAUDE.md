@@ -9,7 +9,6 @@ npm run dev            # Next.js dev server on :3000
 npm run build          # production build (needs NEXT_PUBLIC_API_URL=/api NEXT_REDIRECT_API_URL=http://localhost:3001, or the /api rewrite is invalid)
 npm run typecheck      # next typegen && tsc --noEmit (next-env.d.ts is generated, not committed)
 npm run lint           # next lint
-npm run build:css      # regenerate styles/tailwind.css (imported by pages/_app.tsx)
 npm test               # jest --watch
 npm run test:ci        # jest --ci
 npx jest path/to/file.test.tsx   # run a single test file
@@ -55,10 +54,15 @@ There are three layers, wired together with tsconfig path aliases (`@tellaweb/ui
 `next-i18next` handles translation, with locales `en` (default) and `es`. Translation files are in `public/locales/<locale>/<namespace>.json`. Pages that translate text load their namespaces in `getStaticProps`/`getServerSideProps` with `serverSideTranslations(locale, [...])`.
 
 ### Styling
-The project uses Tailwind CSS v2 (`tailwind.config.js`), with some styled-components.
+Tailwind CSS 4, built by Next's PostCSS (`@tailwindcss/postcss`) from `styles/tailwind.css` (imported by `pages/_app.tsx` after `styles/globals.css`). There is no `tailwind.config.js`: the theme is the `@theme` block in `styles/tailwind.css` (exact hex colours, custom font sizes and spacing names that replace the defaults). Class names are only scanned in `packages/`, `pages/`, `components/` and `common/` (`@source`). Tailwind 4 uses native CSS layers, so global CSS must go inside `@layer base` (see `styles/globals.css`) or it will override utilities. The custom spacing names (`sm`, `md`, `xsm`, `xxl`, …) are for margins/padding; `max-w-md` and similar would resolve to them. Supported browsers: Safari 16.4+, Chrome 111+, Firefox 128+. Some components use styled-components 6 (styling-only props must be transient, `$prop`).
 
 ## Code style
 - Leave out semicolons in new JS/TS code. Existing files are inconsistent, so match the file you are editing where it matters.
+
+## Docker
+- The image builds with `npm ci`, then `npm prune --omit=dev` and removes `.next/cache`, so only runtime dependencies ship (`@playwright/test` stays: it's an optional peer of `next`). Use `--omit=dev` only; `--omit=peer` would also remove `react`, `react-dom` and others.
+- **Use npm ≥ 11.21 (or npm 10) when changing dependencies.** Older npm 11 releases (e.g. 11.6) drop two lockfile entries (`@emnapi/core`, `@emnapi/runtime`) that npm 10 and current npm 11 require, and the Docker build's `npm ci` then fails with "Missing: … from lock file". `package.json`'s `engines.npm` warns about those versions. Fix: `npm install -g npm@11`, then `npm install` (or `npx npm@11 install --package-lock-only`) and commit the lockfile.
+- To run the e2e suite against a built image: `docker run --add-host api:host-gateway -p 3200:3000 <image>` (the image's `/api` rewrite targets `http://api:3001`, here your local backend), then `E2E_BASE_URL=http://localhost:3200 npm run e2e`.
 
 ## Releases
 Versions are tags that trigger Docker Hub image builds:

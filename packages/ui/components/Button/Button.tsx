@@ -32,7 +32,7 @@ export const Button: FunctionComponent<React.PropsWithChildren<Props>> = ({
   onBlur = () => null,
 }: Props) => {
   const btnStyle = cn(
-    "flex flex-none w-auto py-2 px-2 space-x-2 rounded items-center text-sm font-bold font-sans uppercase border border-gray-100 active:shadow-inbox disabled:opacity-50 focus:outline-none",
+    "flex flex-none w-auto py-2 px-2 space-x-2 rounded-sm items-center text-sm font-bold font-sans uppercase border border-gray-100 active:shadow-inbox disabled:opacity-50 focus:outline-hidden",
     {
       "text-white bg-blue-300 hover:bg-blue-400": type === btnType.Primary,
       "text-gray-300 bg-white hover:bg-gray-50": type === btnType.Secondary,

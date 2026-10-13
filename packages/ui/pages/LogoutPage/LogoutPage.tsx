@@ -8,7 +8,7 @@ export const LogoutPage: FunctionComponent<React.PropsWithChildren<unknown>> = (
 
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-white">
-      <div className="p-10 bg-white rounded flex justify-center items-center flex-col shadow-md border">
+      <div className="p-10 bg-white rounded-sm flex justify-center items-center flex-col shadow-md border">
         <div className="flex justify-center items-center py-4">
           <Img src={logo} height={36} alt="Tella logo" />
         </div>
@@ -17,7 +17,7 @@ export const LogoutPage: FunctionComponent<React.PropsWithChildren<unknown>> = (
           You have been successfully logged out from Tella Web.
         </p>
         <button
-          className="bg-blue-300 hover:bg-blue py-2 text-white uppercase text-base font-bold rounded w-full disabled:opacity-50"
+          className="bg-blue-300 hover:bg-blue py-2 text-white uppercase text-base font-bold rounded-sm w-full disabled:opacity-50"
           id="logout"
           type={"button"}
           onClick={() => {

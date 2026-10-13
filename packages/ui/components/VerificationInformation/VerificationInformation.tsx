@@ -32,7 +32,7 @@ export const VerificationInformation: FunctionComponent<React.PropsWithChildren<
             <div className="text-sm text-gray-500 gap-y-2" key={key}>
               <div style={{padding: '2px 0'}} className="flex justify-between flex-wrap">
                 <span style={{minWidth: 80}}>{key}</span>
-                <span className="text-black text-opacity-80">{value}</span>
+                <span className="text-black/80">{value}</span>
               </div>            
             </div>
           ))}
@@ -47,7 +47,7 @@ export const VerificationInformation: FunctionComponent<React.PropsWithChildren<
               <div className="text-sm text-gray-500 gap-y-2" key={key}>
                 <div style={{padding: '2px 0'}} className="flex justify-between flex-wrap">
                   <span style={{minWidth: 80}}>{key}</span>
-                  <span className="text-black text-opacity-80">{value}</span>
+                  <span className="text-black/80">{value}</span>
                 </div>            
               </div>
           ))}
