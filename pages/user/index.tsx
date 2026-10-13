@@ -54,9 +54,13 @@ export const Report = () => {
   const [createUser, createUserResult] = useCreateUserMutation()
 
   const [query, setQuery] = useState<UserQuery>(defaultQuery);
-  const itemQuery = useMemo(() => toItemQuery(query), [query]);
 
   const { data: users, refetch } = useListQuery(query);
+  // The table needs the total from the API to know how many pages there are
+  const itemQuery = useMemo(
+    () => toItemQuery({ ...query, total: users?.total ?? query.total }),
+    [query, users?.total]
+  );
   const [batchDeleteUsers, batchDeleteUsersResult] = useBatchDeleteUserMutation();
 
   const onBatchDeleteUsers = async (usersToDelete: IUser[]) => {

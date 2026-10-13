@@ -15,9 +15,9 @@ type Props = {
 
 export const Thumbnail: FunctionComponent<React.PropsWithChildren<Props>> = ({
   file,
-  onClick,
-  full,
-  box,
+  onClick = () => {},
+  full = false,
+  box = false,
   selected
 }) => {
   const icon = ((type: keyof typeof ReportFileType) => {
@@ -101,8 +101,3 @@ export const Thumbnail: FunctionComponent<React.PropsWithChildren<Props>> = ({
   }
 };
 
-Thumbnail.defaultProps = {
-  onClick: () => {},
-  full: false,
-  box: false,
-};

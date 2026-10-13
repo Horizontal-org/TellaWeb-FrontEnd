@@ -12,9 +12,9 @@ type Props = {
 export const NavButton: FunctionComponent<React.PropsWithChildren<Props>> = ({
   text,
   icon,
-  disabled,
-  selected,
-  onClick,
+  disabled = false,
+  selected = false,
+  onClick = () => null,
 }: Props) => {
   return (
     <button
@@ -36,9 +36,3 @@ export const NavButton: FunctionComponent<React.PropsWithChildren<Props>> = ({
   );
 };
 
-NavButton.defaultProps = {
-  icon: undefined,
-  disabled: false,
-  selected: false,
-  onClick: () => null,
-};

@@ -64,3 +64,25 @@ test("creating a user with an existing email shows the backend's error", async (
   await dialog.getByRole("button", { name: "SAVE" }).click()
   await expect(toast(page, `User ${process.env.E2E_USER} already exist`)).toBeVisible()
 })
+
+test("the password strength meter colours its bars", async ({ page }) => {
+  // PasswordMeter's bars take their colour from styled-components props (color, selected)
+  const RED = "rgb(191, 46, 31)"
+  const GREEN = "rgb(88, 211, 71)"
+  const EMPTY = "rgba(0, 0, 0, 0.1)"
+
+  const dialog = await openCreateUser(page)
+  const password = dialog.locator('input[name="password"]')
+  const strength = dialog.getByText(/password strength:/)
+  const bars = strength.locator("xpath=preceding-sibling::div[1]/div")
+
+  await password.fill("abc")
+  await expect(strength).toHaveText("password strength: Weak")
+  await expect(bars).toHaveCount(4)
+  await expect(bars.nth(0)).toHaveCSS("background-color", RED)
+  for (const i of [1, 2, 3]) await expect(bars.nth(i)).toHaveCSS("background-color", EMPTY)
+
+  await password.fill("Correct-Horse-Battery-Staple-2026!")
+  await expect(strength).toHaveText("password strength: Very strong")
+  for (const i of [0, 1, 2, 3]) await expect(bars.nth(i)).toHaveCSS("background-color", GREEN)
+})

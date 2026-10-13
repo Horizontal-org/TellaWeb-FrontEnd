@@ -57,9 +57,13 @@ const Resources = () => {
   const { push } = useRouter();
 
   const [query, setQuery] = useState<ResourceQuery>(defaultQuery);
-  const itemQuery = useMemo(() => toItemQuery(query), [query]);
 
   const { data: resources, refetch } = useListQuery(query);
+  // The table needs the total from the API to know how many pages there are
+  const itemQuery = useMemo(
+    () => toItemQuery({ ...query, total: resources?.total ?? query.total }),
+    [query, resources?.total]
+  );
   const [deleteResource, deleteResourceResult] = useDeleteResourceMutation();
   const [downloadFile] = useResourceFileDownloader();
 

@@ -58,7 +58,7 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
   onOpen,
   onQueryChange,
   onAddResources,
-  resources,
+  resources = [],
   sidebar,
   currentQuery,
   removeSelected,
@@ -195,6 +195,3 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
   );
 };
 
-ProjectResourcesPage.defaultProps = {
-  resources: [],
-};

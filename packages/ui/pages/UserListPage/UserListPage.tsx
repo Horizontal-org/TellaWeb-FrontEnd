@@ -56,7 +56,7 @@ export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = (
   const [currentUser, setCurrentUser] = useState<User | undefined>();
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
 
-  const searchInput = useRef<HTMLInputElement>();
+  const searchInput = useRef<HTMLInputElement>(null);
   let searchTimeout = null
 
   const openUser = () => {

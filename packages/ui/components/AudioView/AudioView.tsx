@@ -14,7 +14,7 @@ type Props = {
 
 export const AudioView = ({ file }: Props) => {
   const [loading, handleLoading] = useState(true)
-  const audioRef = useRef<HTMLAudioElement>();
+  const audioRef = useRef<HTMLAudioElement>(null);
   const {
     currentTime,
     duration,

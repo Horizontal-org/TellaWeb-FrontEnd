@@ -3,8 +3,7 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import baseQueryWithRefresh from "./baseQueryWithRefresh";
 import { Pagination } from "../domain/common";
-import { Configuration, ConfigurationQuery, Camouflage } from "../domain/configuration";
-import { CrashReport } from "packages/ui/proto/configuration";
+import { Configuration, ConfigurationQuery, Camouflage, CrashReports } from "../domain/configuration";
 
 export const configurationApi = createApi({
   reducerPath: "configurationApi",
@@ -31,7 +30,7 @@ export const configurationApi = createApi({
     createConfiguration: builder.mutation<Configuration, { 
       name: string, 
       camouflage?: Camouflage,
-      crashReports?: CrashReport,
+      crashReports?: CrashReports,
       serversVisible?: boolean
     }>({
       query: ({ name, camouflage }) => ({
@@ -70,7 +69,7 @@ export const configurationApi = createApi({
       id: string
       name: string
       camouflage: Camouflage
-      crashReports: CrashReport
+      crashReports: CrashReports
       serversVisible: boolean 
     }>({
       query: ({ 

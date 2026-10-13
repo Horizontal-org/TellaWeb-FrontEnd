@@ -31,9 +31,8 @@ import { Resource } from "packages/state/domain/resource";
 import { CreateResourceModal } from "packages/ui/modals/resource/CreateResourceModal/CreateResourceModal";
 import { RiDownload2Fill } from "react-icons/ri";
 
-// @ts-nocheck
 import { format } from "date-fns";
-import { Column } from "react-table";
+import { TableColumn } from "../../components/Table/Table";
 import { DeleteResourceModal } from "packages/ui/modals/resource/DeleteResourceModal/DeleteResourceModal";
 import { ResourceBar } from "packages/ui/components/ResourceBar/ResourceBar";
 import { PdfView } from "packages/ui/components/PdfView/PdfView";
@@ -50,7 +49,7 @@ type Props = {
 };
 
 
-export const RESOURCE_COLUMNS: Column[] = [
+export const RESOURCE_COLUMNS: TableColumn[] = [
   {
     Header: "Title",
     headerKey: 'resource.title',
@@ -83,7 +82,7 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
 
   const [selectedResources, setSelectedResources] = useState<Resource[]>([]);
   
-  const searchInput = useRef<HTMLInputElement>();
+  const searchInput = useRef<HTMLInputElement>(null);
   let searchTimeout = null
 
   const search = (e: FormEvent<HTMLFormElement> | ChangeEvent<HTMLInputElement>) => {

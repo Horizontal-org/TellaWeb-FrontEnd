@@ -1,7 +1,7 @@
-import { FunctionComponent, useState, ReactNode, useEffect, useContext } from 'react'
+import { FunctionComponent, useState, ReactNode, useEffect } from 'react'
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import { useRouter } from "next/router";
-import { AbilityContext } from 'common/casl/Can';
+import { useAbility } from 'common/casl/Can';
 import { validateRoute } from 'common/casl/Ability'
 import Img from "next/image";
 import logo from "../../assets/tella-sidelogo.png";
@@ -15,7 +15,7 @@ interface Props {
 export const SplashScreen: FunctionComponent<React.PropsWithChildren<Props>> = ({ children }) => {  
   const user = useAuthRequired("/login");
   const router = useRouter()
-  const ability = useContext(AbilityContext);
+  const ability = useAbility();
   const [ready, handleReady] = useState<boolean>(false)
   
   useEffect(() => {
