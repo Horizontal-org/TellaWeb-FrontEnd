@@ -4,7 +4,7 @@ import { btnType } from '../Button/Button'
 import { DisableTwoFactorModal } from '../DisableTwoFactor/DisableTwoFactor'
 import { Init } from './Init'
 import { BackupCodes } from './BackupCodes'
-export enum Steps  {
+export enum Steps {
   INIT = "init",
   DISABLE = "disable",
   CODES = 'codes'
@@ -20,12 +20,12 @@ export const EditTwoFactorAuthModal: FunctionComponent<React.PropsWithChildren<P
   handleOtpActive,
   handleExternalOpen,
   externalOpen
-}) => { 
+}) => {
   const [steps, handleSteps] = useState<Steps>(Steps.INIT)
   return (
     <ButtonPopup
-       externalOpen={externalOpen}
-      onClose={() =>  {
+      externalOpen={externalOpen}
+      onClose={() => {
         handleSteps(Steps.INIT)
         handleExternalOpen(false)
       }}

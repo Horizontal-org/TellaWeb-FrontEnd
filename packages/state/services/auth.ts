@@ -13,40 +13,42 @@ export const authApi = createApi({
         body: credential,
       }),
     }),
-    enable: builder.mutation<OtpEnableRes, {password: string}>({
+    enable: builder.mutation<OtpEnableRes, { password: string }>({
       query: (password) => ({
         url: "/auth/otp/enable",
         method: "POST",
         body: password
       })
     }),
-    activate: builder.mutation<boolean, {code: string}>({
+    activate: builder.mutation<boolean, { code: string }>({
       query: (code) => ({
         url: "/auth/otp/activate",
         method: "POST",
         body: code
       })
     }),
-    disable: builder.mutation<boolean, {code: string, is_otp: boolean, confirm_password: string}> ({
+    disable: builder.mutation<boolean, { code: string, is_otp: boolean, confirm_password: string }>({
       query: (body) => ({
         url: "/auth/otp/disable",
         method: "POST",
         body: body
       })
     }),
-    recoveryKey: builder.query<[string], void>({
-      query: () => ({
-        url: '/auth/otp/recovery-key'
+    retrieveRecoveryKey: builder.mutation<[string], { current: string }>({
+      query: (credential) => ({
+        url: '/auth/otp/retrieve-recovery-key',
+        method: 'POST',
+        body: credential
       })
     }),
-    authRecoveryKey: builder.mutation<LoginResponse, {code: string, userId: string, password: string}>({
+    authRecoveryKey: builder.mutation<LoginResponse, { code: string, userId: string, password: string }>({
       query: (credential) => ({
         url: "auth/otp/recovery-key",
         method: "POST",
         body: credential
       })
     }),
-    otpLogin: builder.mutation<LoginResponse, {code: string, userId: string}>({
+    otpLogin: builder.mutation<LoginResponse, { code: string, userId: string }>({
       query: (credential) => ({
         url: "auth/otp/login",
         method: "POST",
@@ -62,12 +64,12 @@ export const authApi = createApi({
   }),
 });
 
-export const { 
+export const {
   useLoginMutation,
   useEnableMutation,
   useActivateMutation,
   useDisableMutation,
-  useRecoveryKeyQuery,
+  useRetrieveRecoveryKeyMutation,
   useAuthRecoveryKeyMutation,
   useOtpLoginMutation,
   useLogoutMutation,

@@ -20,30 +20,30 @@ export const DisableTwoFactorModal: FunctionComponent<React.PropsWithChildren<Pr
   const [step, handleSteps] = useState<number>(1)
   const [confirmPasswordText, handleConfirmPasswordText] = useState<string>('')
 
-  const [confirmPassword, {isError, isSuccess: isConfirmSuccess}] = useConfirmPasswordMutation();
-  const [disableOtp, {isError: otpConfirmError, isSuccess: isOtpVerifySuccess}] = useDisableMutation();
+  const [confirmPassword, { isError, isSuccess: isConfirmSuccess }] = useConfirmPasswordMutation();
+  const [disableOtp, { isError: otpConfirmError, isSuccess: isOtpVerifySuccess }] = useDisableMutation();
 
   useEffect(() => {
-    if(isConfirmSuccess) {
+    if (isConfirmSuccess) {
       handleSteps(step + 1)
     }
   }, [isConfirmSuccess])
 
   useEffect(() => {
-    if(isOtpVerifySuccess) {
+    if (isOtpVerifySuccess) {
       handleToast("You have successfully disabled two-factor authentication!", "success");
       handleOtpActive(false)
       toggle()
     }
   }, [isOtpVerifySuccess])
- 
+
 
   return (
     <>
       {step === 1 && (
-        <ConfirmPassword 
+        <ConfirmPassword
           errorMessage={isError}
-          title="Disable two-factor authentication" 
+          title="Disable two-factor authentication"
           onSubmit={(currentPassword) => {
             handleConfirmPasswordText(currentPassword)
             confirmPassword({
@@ -73,8 +73,8 @@ export const DisableTwoFactorModal: FunctionComponent<React.PropsWithChildren<Pr
             <Link
               className='cursor-pointer'
               onClick={() => handleSteps(3)}>
-               use a backup code instead
-            </Link>   
+              use a backup code instead
+            </Link>
           </p>
         </ConfirmOtp>
       )}
@@ -95,7 +95,7 @@ export const DisableTwoFactorModal: FunctionComponent<React.PropsWithChildren<Pr
             Backup code
           </p>
           <p className='font-sans text-base font-normal text-gray-500'>
-            Enter the 8-digit backup code   
+            Enter the 8-digit backup code
           </p>
         </ConfirmOtp>
       )}

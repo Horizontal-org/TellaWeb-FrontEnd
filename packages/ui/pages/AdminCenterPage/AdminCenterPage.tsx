@@ -5,8 +5,6 @@ import { ToggleGlobalSettingsModel } from "packages/ui/modals/globalSetting/Togg
 import { IoMdHelpCircleOutline } from "react-icons/io";
 import { version } from 'package.json'
 import { btnType, Button } from "packages/ui/components/Button/Button";
-import { useFileDownloader } from "packages/state/features/files/useFileDownloader";
-import { useBackupDownloader } from "packages/state/features/backup/useBackupDownloader";
 import { BackupManagement } from "packages/ui/components/BackupManagement/BackupManagement";
 import { LatestBackups } from "packages/state/domain/backup";
 

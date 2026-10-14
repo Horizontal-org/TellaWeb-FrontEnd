@@ -57,6 +57,7 @@ E2E_BASE_URL=http://localhost:3200 npm run e2e  # against an already running ser
 | `users.spec.ts` | create a user, change role, delete; duplicate-email error | no |
 | `configurations.spec.ts` | create and delete a remote configuration | no |
 | `resources.spec.ts` | upload a PDF, download it, delete it | no |
+| `downloads.spec.ts` | browser downloads: a report's file, a report zip from the list, the latest backup | no |
 | `roles.spec.ts` | what viewer, editor and admin can see and open; reporters can't log in | no |
 | `session.spec.ts` | expired access token is refreshed; invalid refresh → `/login`; 2FA login (wrong and right code) | no |
 | `errors.spec.ts` | error toasts with the backend's message; an error without a body doesn't crash the page (mocked responses) | no |

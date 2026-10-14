@@ -9,7 +9,7 @@ import { errorMessage } from "packages/state/utils/errorMessage";
 
 
 const AdminCenter = () => {
-  const { data: globalSettings, refetch } = useListQuery();
+  const { data: globalSettings } = useListQuery(undefined, { refetchOnMountOrArgChange: true })
   const router = useRouter()
   const handleToast = useToast()
 
@@ -17,19 +17,13 @@ const AdminCenter = () => {
   const [startBackup, startBackupResult] = useStartMutation();
   const [deleteBackup, deleteBackupResult] = useDeleteMutation();
   
-  const { data: latestBackups, refetch: refetchLatestBackups } = useLatestQuery();
+  // while on the page, poll for new backup status (stops on unmount)
+  const { data: latestBackups, refetch: refetchLatestBackups } = useLatestQuery(undefined, {
+    pollingInterval: 30000,
+    refetchOnMountOrArgChange: true,
+  })
 
   const [newBackupFlag, handleNewBackupFlag] = useState<boolean>(false)
-
-  useEffect(() => {
-    refetch()
-    refetchLatestBackups()
-
-    // if on the page check for new backup status
-    setInterval(() => {
-      refetchLatestBackups()
-    }, 30000)
-  }, [])
 
 
   useEffect(() => {
