@@ -1,3 +1,7 @@
+/* In the base cascade layer: Tailwind 4 uses native CSS layers, and unlayered rules would beat
+   every Tailwind utility (and Tailwind's own base styles). This file is imported before
+   styles/tailwind.css, so Tailwind's base rules still come after these, as in Tailwind 3 */
+@layer base {
 html,
 body {
   padding: 0;
@@ -217,4 +221,5 @@ input[type="radio"]:checked::before {
     transform: scale(1.0);
     -webkit-transform: scale(1.0);
   }
+}
 }

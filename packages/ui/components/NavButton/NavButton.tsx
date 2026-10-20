@@ -12,18 +12,18 @@ type Props = {
 export const NavButton: FunctionComponent<React.PropsWithChildren<Props>> = ({
   text,
   icon,
-  disabled,
-  selected,
-  onClick,
+  disabled = false,
+  selected = false,
+  onClick = () => null,
 }: Props) => {
   return (
     <button
       type="button"
       className={cn(
-        "flex flex-row font-bold items-center h-10 px-4 rounded text-base bg-white text-gray-500",
+        "flex flex-row font-bold items-center h-10 px-4 rounded-sm text-base bg-white text-gray-500",
         {
           "opacity-40 cursor-not-allowed": disabled,
-          "hover:bg-black hover:bg-opacity-5 hover:text-gray-700 cursor-pointer":
+          "hover:bg-black/5 hover:text-gray-700 cursor-pointer":
             !disabled && !selected,
           "bg-blue-light text-blue-500 cursor-pointer": selected,
         }
@@ -36,9 +36,3 @@ export const NavButton: FunctionComponent<React.PropsWithChildren<Props>> = ({
   );
 };
 
-NavButton.defaultProps = {
-  icon: undefined,
-  disabled: false,
-  selected: false,
-  onClick: () => null,
-};

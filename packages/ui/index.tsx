@@ -10,7 +10,6 @@ export { RightCollapsingSidebar } from "./components/CollapsingSidebar/RightColl
 export { ConfigSelect } from "./components/ConfigSelect/ConfigSelect";
 export { ConfigSelectOption } from "./components/ConfigSelect/ConfigSelectOption";
 export { ConfigurationInformation } from "./components/ConfigurationInformation/ConfigurationInformation";
-export { ConfigurationPanel } from "./components/ConfigurationPanel/ConfigurationPanel";
 export { Title, SubTitle } from "./components/Headers/Headers";
 export { TextInput } from './components/Inputs/TextInput/TextInput'
 export { RadioGroupInput } from './components/Inputs/RadioGroupInput/RadioGroupInput';

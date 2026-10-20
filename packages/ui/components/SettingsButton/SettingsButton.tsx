@@ -31,8 +31,8 @@ export const SettingsButton: FunctionComponent<React.PropsWithChildren<Props>> =
     </p>
     <div className="block ml-auto mr-auto w-6/12">
       <Img
-        height="100px"
-        width="100px"
+        height={100}
+        width={100}
         src={icon}
         className="mt-xsm mb-md"
         alt="icon"

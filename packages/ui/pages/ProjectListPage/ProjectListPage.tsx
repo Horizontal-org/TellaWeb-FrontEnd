@@ -34,7 +34,7 @@ type Props = {
 
 
 export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
-  projects,
+  projects = [],
   onQueryChange,
   sidebar,
   currentQuery,
@@ -44,7 +44,7 @@ export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> 
 }) => {
 
   const [open, handleOpen] = useState<boolean>(false)
-  const searchInput = useRef<HTMLInputElement>();
+  const searchInput = useRef<HTMLInputElement>(null);
   let searchTimeout = null
 
   const search = (e: FormEvent<HTMLFormElement> | ChangeEvent<HTMLInputElement>) => {
@@ -114,7 +114,7 @@ export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> 
           }}
         >          
           <div 
-            className="py-8 px-12 border rounded border-gray-100"
+            className="py-8 px-12 border rounded-sm border-gray-100"
           >
 
             <p className='text-xxxl text-gray-600 font-bold'>
@@ -143,6 +143,3 @@ export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> 
   );
 };
 
-ProjectListPage.defaultProps = {
-  projects: [],
-};

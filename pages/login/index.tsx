@@ -1,7 +1,7 @@
-import { useEffect, useContext, useState } from "react";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useEffect, useState } from "react";
+import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import { LoginPage } from "packages/ui";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { useAuth } from "packages/state/features/auth/authHooks";
 import { useLoginMutation, useOtpLoginMutation, useAuthRecoveryKeyMutation } from "packages/state/services/auth";
@@ -13,7 +13,7 @@ import { useUserProfile } from "packages/state/features/user/userHooks";
 import { Credential, LoginResponse } from "packages/state/domain/user";
 import { setUser } from "packages/state/features/user/userSlice";
 import { useLazyGetProfileQuery } from "packages/state/services/user";
-import { AbilityContext } from "common/casl/Can";
+import { useAbility } from "common/casl/Can";
 import { updateAbility } from "common/casl/Ability";
 
 const Login = () => {
@@ -26,7 +26,7 @@ const Login = () => {
   const [otpLogin, {isLoading: otpLoading}] = useOtpLoginMutation()
   const [authRecoveryKey, {isLoading: recoveryKeyLoading}] = useAuthRecoveryKeyMutation()
   const [loadUserProfile, { data }] = useLazyGetProfileQuery();
-  const ability = useContext(AbilityContext);
+  const ability = useAbility();
 
   const [isSuspicious, handleSuspicious] = useState(false)
   const [loginResponse, handleLoginResponse] = useState<LoginResponse|null>(null)

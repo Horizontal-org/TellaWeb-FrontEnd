@@ -7,7 +7,7 @@ import { ButtonMenu } from '../../components/ButtonMenu/ButtonMenu'
 import { ButtonOption } from '../../components/ButtonMenu/ButtonOption'
 import { ROLES, User } from "packages/state/domain/user";
 import { useRouter } from 'next/router'
-import { useTranslation } from "next-i18next";
+import { useTranslation } from "next-i18next/pages";
 import { btnType } from "../../components/Button/Button";
 import { version } from 'package.json'
 import { EditTwoFactorAuthModal } from "packages/ui/components/EditTwoFactorAuthModal/EditTwoFactorAuthModal";

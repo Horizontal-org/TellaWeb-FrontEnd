@@ -14,9 +14,9 @@ interface Props {
 
 export const ShareConfigurationModal: FunctionComponent<React.PropsWithChildren<Props>> = ({config}) => {
 
-  const componentRef = useRef();
+  const componentRef = useRef<HTMLDivElement>(null);
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
+    contentRef: componentRef,
   });
 
   const download = () => {
@@ -62,7 +62,7 @@ export const ShareConfigurationModal: FunctionComponent<React.PropsWithChildren<
                 type={btnType.Secondary}
                 icon={<AiFillPrinter color='#8b8e8f'/>}
                 text='Print'
-                onClick={handlePrint}
+                onClick={() => handlePrint()}
               />
             </div>
           </div>

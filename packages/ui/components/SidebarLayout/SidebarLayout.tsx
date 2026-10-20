@@ -27,8 +27,8 @@ export const SidebarLayout: FunctionComponent<React.PropsWithChildren<Props>> = 
           }} 
           className='cursor-pointer'
           src={logo} 
-          width="125px" 
-          height="36px" 
+          width={125} 
+          height={36} 
           alt="Tella logo" 
         />
       </div>

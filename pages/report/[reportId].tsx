@@ -11,6 +11,7 @@ import {
 } from "packages/state/services/reports";
 import { useDeleteFileMutation } from "packages/state/services/files";
 import { useFileDownloader } from "packages/state/features/files/useFileDownloader";
+import { errorMessage } from "packages/state/utils/errorMessage";
 
 export const ReportById = () => {
   // useAuthRequired();
@@ -32,7 +33,7 @@ export const ReportById = () => {
       handleToast("Title updated!", "info");
     }
     if (editReportResult.error && "status" in editReportResult.error) {
-      handleToast(editReportResult.error.data.message, "danger");
+      handleToast(errorMessage(editReportResult.error), "danger");
     }
   }, [editReportResult.status]);
 

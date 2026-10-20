@@ -1,4 +1,4 @@
-import { AbilityBuilder, Ability, defineAbility } from '@casl/ability';
+import { AbilityBuilder, createMongoAbility, defineAbility } from '@casl/ability';
 
 export const ROLES = {
   Admin: 'admin',
@@ -23,7 +23,7 @@ export const defaultAbility = defineAbility((can, cannot) => {
 })
 
 export const updateAbility = (user, ability) => {
-  const { can, rules } = new AbilityBuilder(Ability);
+  const { can, rules } = new AbilityBuilder(createMongoAbility);
 
   if (user.role === ROLES.Admin) {
     can('manage', 'all');

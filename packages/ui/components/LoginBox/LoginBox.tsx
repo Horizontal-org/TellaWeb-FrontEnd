@@ -1,5 +1,5 @@
 import { FunctionComponent, useState, useEffect } from "react";
-import { useTranslation } from "next-i18next";
+import { useTranslation } from "next-i18next/pages";
 import logo from "../../assets/tella-logo.png";
 import Img from "next/image";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
@@ -46,20 +46,20 @@ export const LoginBox: FunctionComponent<React.PropsWithChildren<Props>> = ({
   return (
     <form
       style={{ width: 400 }}
-      className="p-10 bg-white rounded flex justify-center items-center flex-col shadow-md border"
+      className="p-10 bg-white rounded-sm flex justify-center items-center flex-col shadow-md border"
       onSubmit={(e) => {
         e.preventDefault();
         onSubmit(credentail);
       }}
     >
       <div className="flex justify-center items-center py-4">
-        <Img src={logo} height="36px" alt="Tella logo" />
+        <Img src={logo} height={36} alt="Tella logo" />
       </div>
       <p className="mb-5 text-xl text-gray-600 font-bold">Sign in</p>
       <input
         type="text"
         name="username"
-        className="mb-5 w-80 focus:border-blue-700 rounded text-base p-2 border-2 outline-none"
+        className="mb-5 w-80 focus:border-blue-700 rounded-sm text-base p-2 border-2 outline-hidden"
         value={credentail.username}
         placeholder="Email"
         required
@@ -82,7 +82,7 @@ export const LoginBox: FunctionComponent<React.PropsWithChildren<Props>> = ({
           type={showPass ? "text" : "password"}
           value={credentail.password}
           name="password"
-          className="mb-5 w-80 focus:border-blue-700 rounded text-base p-2 border-2 outline-none"
+          className="mb-5 w-80 focus:border-blue-700 rounded-sm text-base p-2 border-2 outline-hidden"
           placeholder="Password"
           required
           onChange={(e) => {
@@ -104,7 +104,7 @@ export const LoginBox: FunctionComponent<React.PropsWithChildren<Props>> = ({
         </div>
       </div>
       <button
-        className="bg-blue-300 hover:bg-blue py-2 text-white uppercase text-base font-bold rounded w-80 disabled:opacity-50"
+        className="bg-blue-300 hover:bg-blue py-2 text-white uppercase text-base font-bold rounded-sm w-80 disabled:opacity-50"
         id="login"
         disabled={canSubmit() || isLoading}
         type={"submit"}

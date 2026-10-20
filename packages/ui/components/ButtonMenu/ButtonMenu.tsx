@@ -9,14 +9,14 @@ type Props = {
   icon?: React.ReactNode;
   type?: btnType;
   openSide?: "left" | "right";
-  children: React.ReactNode
+  children?: React.ReactNode
 };
 
 export const ButtonMenu: FunctionComponent<React.PropsWithChildren<Props>> = ({
   children,
-  text,
+  text = "",
   icon,
-  type,
+  type = btnType.Secondary,
   openSide,
 }) => {
   const [open, setOpenState] = useState(false);
@@ -67,7 +67,7 @@ export const ButtonMenu: FunctionComponent<React.PropsWithChildren<Props>> = ({
         {open && (
           <div
             className={cn(
-              "absolute m-2 w-max bg-white rounded overflow-hidden border border-gray-100 z-20 flex flex-col -top-2",
+              "absolute m-2 w-max bg-white rounded-sm overflow-hidden border border-gray-100 z-20 flex flex-col -top-2",
               {
                 "right-0": !toRight,
                 "left-0": toRight,
@@ -82,7 +82,3 @@ export const ButtonMenu: FunctionComponent<React.PropsWithChildren<Props>> = ({
   );
 };
 
-ButtonMenu.defaultProps = {
-  type: btnType.Secondary,
-  text: "",
-};

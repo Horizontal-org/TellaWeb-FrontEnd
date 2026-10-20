@@ -1,4 +1,3 @@
-// import { SortingRule } from "react-table";
 
 export type ItemQuery = {
   sort: {

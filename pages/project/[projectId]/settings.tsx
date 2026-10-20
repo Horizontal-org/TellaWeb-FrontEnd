@@ -10,6 +10,7 @@ import {
 import { ReportQuery } from "packages/state/domain/report";
 import { useReportFileDownloader } from "packages/state/features/files/useReportFileDownloader";
 import { Menu } from "components/Menu";
+import { errorMessage } from "packages/state/utils/errorMessage";
 
 export const ProjectById = () => {
 
@@ -31,7 +32,7 @@ export const ProjectById = () => {
       refetch()
     }
     if (editProjectResult.error && "status" in editProjectResult.error) {
-      handleToast(editProjectResult.error.data.message, "danger");
+      handleToast(errorMessage(editProjectResult.error), "danger");
     }
   }, [editProjectResult.status]);
 
@@ -42,7 +43,7 @@ export const ProjectById = () => {
       router.push("/project")
     }
     if (deleteProjectResult.error && "status" in deleteProjectResult.error) {
-      handleToast(deleteProjectResult.error.data.message, "danger");
+      handleToast(errorMessage(deleteProjectResult.error), "danger");
     }
   }, [deleteProjectResult.status]);
 

@@ -33,10 +33,10 @@ const PasswordMeter: FunctionComponent<React.PropsWithChildren<Props>> = ({ scor
   return (
     <div>
       <Wrapper>
-        <Bar color={scores[score].color} selected={score >= 1 || score === 0}/>
-        <Bar color={scores[score].color} selected={score >= 2}/>
-        <Bar color={scores[score].color} selected={score >= 3}/>
-        <Bar color={scores[score].color} selected={score == 4}/>
+        <Bar $color={scores[score].color} $selected={score >= 1 || score === 0}/>
+        <Bar $color={scores[score].color} $selected={score >= 2}/>
+        <Bar $color={scores[score].color} $selected={score >= 3}/>
+        <Bar $color={scores[score].color} $selected={score == 4}/>
       </Wrapper>
       <Text>
         password strength: {scores[score].text}
@@ -50,11 +50,11 @@ const Wrapper = styled.div`
   display: flex;
   margin: 8px 0;
 `
-const Bar = styled.div<{ color: string }>`
+const Bar = styled.div<{ $color: string; $selected: boolean }>`
   width: 25%;
   margin-right: 8px;
   height: 5px;
-  background-color: ${({ color, selected }) => selected ? color : 'rgba(0, 0, 0, 0.1)'};
+  background-color: ${({ $color, $selected }) => $selected ? $color : 'rgba(0, 0, 0, 0.1)'};
   border-radius: 4px;
 `
 

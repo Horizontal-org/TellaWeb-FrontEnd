@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { ComponentPropsWithoutRef, forwardRef } from "react";
 import cn from 'classnames'
 import style from './TextInput.module.css'

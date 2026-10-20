@@ -37,7 +37,7 @@ export const NewVersionBanner: FunctionComponent<React.PropsWithChildren<Props>>
   }, [])
 
   return newVersion && showBanner && (
-    <div className="w-full p-4 rounded bg-blue-300 flex items-center justify-between">
+    <div className="w-full p-4 rounded-sm bg-blue-300 flex items-center justify-between">
       <a href={GITHUB_TELLAWEB_REPO} target="_blank" className=" text-white text-base font-bold">
         New version of Tellaweb {newVersion} available!  
       </a>

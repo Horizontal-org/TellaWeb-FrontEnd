@@ -1,0 +1,130 @@
+# Upgrade plan: remaining dependencies
+
+**Goal:** every runtime dependency on its current major version, without changing how the app behaves. Tailwind has its own plan (`upgrade-plan-tailwind.md`).
+**Status (2026-10-07): all steps done.** The app runs on React 19, the known requirement for Next 17. Waiting for beta drops #1 and #2.
+**Side effect:** at the end the app runs on React 19, the known requirement for Next 17.
+**Branch:** `upgrade/dependencies`, started from `upgrade/nextjs` (`8248498`). Rebase onto `development` once `upgrade/nextjs` is merged.
+
+## Decisions
+
+- **New branch `upgrade/dependencies`**, from `development` once `upgrade/nextjs` is merged (or from `upgrade/nextjs` if work starts before that). Beta drop #2 stays exactly what was tested.
+- **One commit per step**, same checks as the Next.js upgrade after each: `typecheck`, `lint`, `build`, `e2e` and `e2e:prod`. Docker build before each beta drop.
+- **Every step works on React 18.** The new versions all support React 18 and 19, so the app is shippable after any step, and React 19 itself is a small last step.
+- **Tags and deploys are done by a maintainer.** The work stops at each beta checkpoint.
+- **Held back on purpose:**
+  - TypeScript 7: the new native compiler; Next 16 support isn't confirmed.
+  - ESLint 10: plugins may lag.
+  - `@types/node` > 22: pinned to match Node 22.
+  - Next 16.4: the Turbopack dev regression (see the Next.js plan).
+- **Decided (2026-10-07):** remove Storybook; keep the map code and upgrade `react-leaflet`; protobufjs stays gated on a mobile check.
+
+## Current state
+
+| Package | Now | Latest | Used in |
+|---|---|---|---|
+| qrcode.react | 3 → 4 ✅ | 4 | `TwoFactorAuthModal/Connect.tsx`, `ShareConfigurationModal.tsx` (already use the named `QRCodeCanvas`) |
+| react-to-print | 2 → 3 ✅ | 3 | `ShareConfigurationModal.tsx` (`useReactToPrint`) |
+| react-icons | 4 → 5 ✅ | 5 | 57 files |
+| date-fns | 2 → 4 ✅ | 4 | 14 files, only `format` and `addSeconds` |
+| @reduxjs/toolkit | 1.9 → 2 ✅ | 2 | 15 files; `extraReducers` object syntax (removed in v2) in `authSlice`, `reportsSlice`, `userSlice` |
+| react-redux | 7 → 9 ✅ | 9 | 8 files |
+| @casl/ability, @casl/react | 5 / 3 → 7 ✅ | 7 | `common/casl/Ability.tsx`, `Can.tsx` |
+| react-table | 7 → @tanstack/react-table 9 ✅ | 9 | `components/Table/Table.tsx`, column definitions in `domain/*TableColumns.ts`, `domain/ItemQuery.ts`, `types/react-table-config.d.ts`; 7 list pages render `<Table>` |
+| styled-components | 5 → 6 ✅ | 6 | 11 files |
+| react-leaflet (+ leaflet, @types/leaflet) | 4 → 5 ✅ | 5 | only `VerificationMap`, used only by `VerificationInformation`, which **nothing imports** (dead code) |
+| react, react-dom, @types/react* | 18.3 → 19 ✅ | 19 | everywhere |
+| protobufjs | 6 → removed ✅ | 8 | was only used by the unused `ConfigurationPanel` (see step 8) |
+
+## Steps
+
+### 1. Remove Storybook ✅
+The team doesn't use it, and the e2e suite (real pages) plus Jest + Testing Library (isolated components) cover what it was for.
+- Removed `.storybook/`, `storybook/`, the `storybook` / `build-storybook` scripts, `storybook`, `@storybook/*`, `@fontsource/open-sans`, `namor`, the `storybook` exclude in `tsconfig.json`, and the `storybook-static` / `build-storybook.log` ignores.
+- `npm i` no longer prints the React 17 peer warnings.
+- Can be set up fresh later if the team wants a component catalogue again.
+
+### 2. Small independent upgrades ✅
+| Commit | Change |
+|---|---|
+| `fa4159e` | New e2e test: share a configuration as a QR code (canvas drawn, Download gives a PNG, Print calls `print()`), written against the old versions first |
+| `b4828ee` | react-to-print 3: `useReactToPrint({ contentRef })`, and the print button no longer passes the click event as "content" |
+| `5a78371` | qrcode.react 4: no code changes (named `QRCodeCanvas` already in use) |
+| `83cb698` | react-icons 5: no code changes; screenshots unchanged |
+| (this commit) | date-fns 4: no code changes (`format` patterns and `addSeconds` unchanged); dates in screenshots unchanged |
+
+Gate: typecheck 0, lint 0 errors, build, `e2e` and `e2e:prod` 37 passed / 1 skipped.
+
+### 3. Redux Toolkit 2 + react-redux 9 ✅
+- `@reduxjs/toolkit` 2.13, `react-redux` 9.3.
+- The three `extraReducers` were empty objects, so they're removed. The invalid `{}` also broke type inference for the whole `createSlice` call (the cause of the "expected 1 argument" errors on `clearCredentials()` / `clearUser()`).
+- `store.ts`: `setupListeners` now comes from `@reduxjs/toolkit/query/react`; the old `dist/` path no longer resolves.
+- react-redux usage (`Provider`, `useDispatch`, `useSelector`) needed no changes.
+- No new Redux warnings in the browser console, and the `extraReducers` deprecation warning is gone. The two warnings left (a spread `key` prop, `disableSortBy` on a DOM element) come from react-table 7 and go away with step 5.
+- Gate: typecheck 0, lint 0 errors, build, `e2e` and `e2e:prod` 37 passed / 1 skipped.
+
+### 4. CASL 7 ✅
+- `@casl/ability` and `@casl/react` 7.0.1.
+- `Ability.tsx`: abilities are built with `new AbilityBuilder(createMongoAbility)`. The old `Ability` class broke the builder's typing (`can(action, subject)` "expected 1 argument"). Rules and `ability.update(rules)` are unchanged.
+- `@casl/react` 7 dropped `createContextualCan`. CASL now has its own React context: `_app.tsx` uses `<AbilityProvider>`, and `authHooks`, `SplashScreen` and the login page use `useAbility()`. `common/casl/Can.tsx` re-exports `AbilityProvider`, `Can` and `useAbility`, so the rest of the app still imports from one place.
+- Gate: typecheck 0, lint 0 errors, build, `roles.spec.ts`, `e2e` and `e2e:prod` 37 passed / 1 skipped, Docker image builds and serves `/login`.
+
+**→ Beta drop #1 checkpoint** (see "Beta drops").
+
+### 5. react-table 7 → TanStack Table 8 ✅
+- **Tests first** (`27040d8`, against react-table 7): search, server-side pagination, sorting (descending then ascending, with the arrow icon) and row selection (single row, select all) on the users list, using 27 temporary users.
+- **Bug found and fixed first** (`cfa5750`, also in production): the users, resources, configurations and reports pages never passed the API's `total` to the table, so the pager showed "1 of 1" and **items after the first 25 couldn't be reached**. The pages now pass `total`, and the page count is `ceil(total / size)` (the old `floor + 1` also added an empty page when the total was a multiple of 25).
+- `components/Table/Table.tsx` rewritten on `@tanstack/react-table` 8.21, with the same props and markup: manual (server-side) sorting and pagination, row selection that resets when new data arrives, the same classes, titles ("Toggle SortBy", "Toggle All Rows Selected", "Toggle Row Selected") and checkbox styling. Defaults are parameters instead of `defaultProps`.
+- Column definitions use a new `TableColumn` type (no more `// @ts-nocheck`). Removed `react-table` and `types/react-table-config.d.ts`.
+- Screenshots of every list page are unchanged. The react-table 7 console warnings (spread `key`, `disableSortBy` on a DOM element) are gone. One lint rule (`react-hooks/incompatible-library`) is silenced on `useReactTable`, since the app doesn't use the React Compiler.
+- Gate: typecheck 0, lint clean, build, `e2e` and `e2e:prod` 44 passed / 1 skipped.
+
+### 5b. TanStack Table 8 → 9 ✅
+TanStack Table 9 (Aug 2026) was released after the plan was written. Migrated following the guides that ship with the package (`node_modules/@tanstack/react-table/skills/migrate-v8-to-v9`, plus the core one in `@tanstack/table-core`):
+- `useReactTable` → `useTable` with an explicit, stable `features` object: `rowSortingFeature`, `rowSelectionFeature`, `rowPaginationFeature`, and a typed `columnMeta` slot (no more `as ColumnMeta` casts). `getCoreRowModel()` removed; sorting and pagination stay manual (server-side), so no sorted or paginated row models are registered.
+- `ColumnDef` takes the features type: `ColumnDef<Features, Item>`.
+- `row.getVisibleCells()` belongs to the column-visibility feature in v9; the table hides no columns, so it uses `row.getAllCells()`.
+- **Selection semantics:** `getIsSomeRowsSelected()` now means "at least one", including all selected. The header checkbox's indeterminate state is now `some && !all`, which keeps the old behaviour. The table test now checks indeterminate (one row) and not indeterminate (all rows); temporarily reverting to the naive form makes it fail.
+- The `react-hooks/incompatible-library` lint suppression from step 5 is no longer needed.
+- Gate: typecheck 0, lint clean, build, `e2e` and `e2e:prod` 44 passed / 1 skipped, production audit 0 vulnerabilities.
+
+### 6. styled-components 6 ✅
+- **Tests first** (`d34f1b9`, against v5): adding a user and a resource to a project through the search dialogs (including the search box's active border, driven by a styled-components prop), and the password strength meter's bar colours. While writing them I briefly thought "Add users to project" was broken in production; it wasn't: the test was clicking the typed text inside the search box instead of the result.
+- styled-components 6.5 ships its own types. Props used only for styling became transient (`$`-prefixed) so they don't reach the DOM: `PasswordMeter` (`$color`, `$selected`), `SearchEntityInput` and `SearchUserInput` (`$resultsOpen`).
+- `FeedbackBox`: removed `type='button'` from a styled `div` (meaningless on a div; v6's types reject it). Kept it a `div` so its styling doesn't change.
+- No new console warnings (no props leaking to the DOM).
+- Gate: typecheck 0, lint clean, build, `e2e` and `e2e:prod` 40 passed / 1 skipped.
+- Unused code noticed (not removed): `SearchUserInput` (its only use in `ManageUsersProjectModal` is commented out) and the `modals/project/ManageUsersProjectModal copy/` folder.
+
+### 7. React 19 ✅
+- **`defaultProps` first** (`0f1f968`, on React 18): React 19 ignores `defaultProps` on function components, so the defaults moved to default parameters in 12 components (`Button`, `ButtonMenu`, `NavButton`, `ImageView`, `TextInput`, `Thumbnail`, `VideoThumbnail`, `ProjectListPage`, `ProjectPage`, `ProjectResourcesPage`, `ProjectUsersPage`, `ReportListPage`). The React 18 `defaultProps` warnings went to zero, and all tests still passed.
+- `react` and `react-dom` 19.3, `@types/react` and `@types/react-dom` 19.3, `react-leaflet` 5 (the map code is still unused, but it type-checks and builds).
+- The only code change React 19 needed: `useRef()` now takes an initial value (`null` for element refs; `undefined` kept in `useCombinedRefs`). No code checked refs against `undefined`.
+- Checked the runtime libraries for APIs React 19 removed (`findDOMNode`, `ReactDOM.render`, legacy context): none are called. react-modal's `unmountComponentAtNode` is only on its pre-React-16 path.
+- The build no longer warns "React 18 support is deprecated" (Next 16). No new browser warnings.
+- Gate: typecheck 0, lint clean, build, Jest + Testing Library on React 19 (throwaway test), `e2e` and `e2e:prod` 44 passed / 1 skipped, Docker image builds and serves `/login` and `/es/login`.
+
+**→ Beta drop #2 checkpoint.** The plan is complete.
+
+### 8. protobufjs: removed instead of upgraded ✅ (done before steps 5–7)
+- **Why first:** `npm audit` flagged protobufjs 6 as **critical** (arbitrary code execution, plus about ten other advisories).
+- The running app didn't use it: encoding only happened in `ConfigurationPanel`, which no page rendered. The live QR codes are the share dialog (configuration as **JSON**) and the 2FA setup, both on `qrcode.react`, both unchanged. The team confirmed the mobile app no longer uses protobuf.
+- Removed `ConfigurationPanel`, `packages/ui/proto/`, `assets/placeholder.png`, `protobufjs` and `qrcode` (only the panel used it).
+- `services/configuration.ts` now types crash reports with the domain `CrashReports` (`{ visible, enabled }`, what the backend stores) instead of the outdated protobuf `CrashReport` (`{ share, changeable }`).
+- Result: `npm audit --omit=dev` finds **0 vulnerabilities**. Dev-only findings remain through Tailwind 2 (fixed by the Tailwind plan), `eslint-config-next` 16.3 and Jest 30 (upstream). Lint has no warnings left.
+- Gate: typecheck 0, lint clean, build, `e2e` and `e2e:prod` 37 passed / 1 skipped.
+
+## Beta drops (maintainer)
+Use **`docs/manual-checks.md`**. Each step adds its checks to the release it ships in.
+- **#1 after step 4:** Storybook removal, small upgrades, RTK, CASL. Lower risk.
+- **#2 after step 7:** styled-components 6, the TanStack Table rewrite with the pagination fix, and React 19.
+- Step 8 (protobufjs removal) is already done and ships with beta drop #1.
+- On beta, check by hand: list pages (sort, select, paginate, search), 2FA setup QR, configuration share + print, permissions per role.
+
+## Risks
+
+| Risk | Mitigation |
+|---|---|
+| Table behaviour changes (sorting, selection, pagination) | Add table e2e tests before step 5; screenshots for layout |
+| RTK 2 changes how requests or caching behave | e2e write tests cover the main endpoints; beta soak |
+| Permission regressions after CASL 7 | `roles.spec.ts` |
+| React 19 breaks a library without a declared peer range | Every step on React 18 first; React 19 last, on its own |

@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from "react";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import { ItemQuery, User as IUser } from 'packages/ui'
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import { Menu } from "../../components/Menu";
@@ -11,6 +11,7 @@ import {
 } from "packages/state/services/user";
 import { UserQuery } from "packages/state/domain/user";
 import { UserListPage } from '../../packages/ui/pages/UserListPage/UserListPage'
+import { errorMessage } from "packages/state/utils/errorMessage"
 
 const defaultQuery: UserQuery = {
   page: 0,
@@ -53,9 +54,13 @@ export const Report = () => {
   const [createUser, createUserResult] = useCreateUserMutation()
 
   const [query, setQuery] = useState<UserQuery>(defaultQuery);
-  const itemQuery = useMemo(() => toItemQuery(query), [query]);
 
   const { data: users, refetch } = useListQuery(query);
+  // The table needs the total from the API to know how many pages there are
+  const itemQuery = useMemo(
+    () => toItemQuery({ ...query, total: users?.total ?? query.total }),
+    [query, users?.total]
+  );
   const [batchDeleteUsers, batchDeleteUsersResult] = useBatchDeleteUserMutation();
 
   const onBatchDeleteUsers = async (usersToDelete: IUser[]) => {
@@ -73,7 +78,7 @@ export const Report = () => {
       refetch()
     }
     if (createUserResult.error && "status" in createUserResult.error) {
-      handleToast(createUserResult.error.data.message, "danger");
+      handleToast(errorMessage(createUserResult.error), "danger");
     }
   }, [createUserResult.status]);
 
@@ -83,7 +88,7 @@ export const Report = () => {
       refetch()
     }
     if (batchDeleteUsersResult.error && "status" in batchDeleteUsersResult.error) {
-      handleToast(batchDeleteUsersResult.error.data.message, "danger");
+      handleToast(errorMessage(batchDeleteUsersResult.error), "danger");
     }
   }, [batchDeleteUsersResult.status])
 

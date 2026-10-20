@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from "react";
 import { ReportListPage, ItemQuery, Report as IReport } from "packages/ui";
 import { Menu } from "../../components/Menu";
 import { toReport } from "../../common/toReport";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import {
   useBatchDeleteMutation,
   useListQuery,
@@ -49,9 +49,13 @@ export const Report = () => {
   const [downloadReportFile] = useReportFileDownloader();
 
   const [query, setQuery] = useState<ReportQuery>(defaultQuery);
-  const itemQuery = useMemo(() => toItemQuery(query), [query]);
 
   const { data: reports } = useListQuery(query);
+  // The table needs the total from the API to know how many pages there are
+  const itemQuery = useMemo(
+    () => toItemQuery({ ...query, total: reports?.total ?? query.total }),
+    [query, reports?.total]
+  );
   const [batchDelete] = useBatchDeleteMutation();
 
   const onBatchDelete = async (reportsToDelete: IReport[]) => {

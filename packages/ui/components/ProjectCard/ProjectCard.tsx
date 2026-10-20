@@ -46,7 +46,7 @@ const ProjectCard: FunctionComponent<React.PropsWithChildren<Props>> = ({ data }
          <div className="flex items-center">
             <Can I='read' a={ENTITIES.Users}>
               <div 
-                  className="p-2  cursor-pointer text-gray-500 active:shadow-inbox rounded"
+                  className="p-2  cursor-pointer text-gray-500 active:shadow-inbox rounded-sm"
                   onClick={(e) => {
                     e.stopPropagation()                  
                     router.push(`/project/${data.id}/users`)
@@ -56,7 +56,7 @@ const ProjectCard: FunctionComponent<React.PropsWithChildren<Props>> = ({ data }
               </div>              
             </Can>
             <div 
-                className="p-2  cursor-pointer text-gray-500 active:shadow-inbox rounded"
+                className="p-2  cursor-pointer text-gray-500 active:shadow-inbox rounded-sm"
                 onClick={(e) => {
                   e.stopPropagation()              
                   router.push(`/project/${data.id}/resources`)
@@ -67,7 +67,7 @@ const ProjectCard: FunctionComponent<React.PropsWithChildren<Props>> = ({ data }
          </div>
 
           <div 
-            className="p-2 cursor-pointer text-gray-500 active:shadow-inbox rounded"
+            className="p-2 cursor-pointer text-gray-500 active:shadow-inbox rounded-sm"
             onClick={(e) => {
               e.stopPropagation()              
               router.push(`/project/${data.id}/settings`)

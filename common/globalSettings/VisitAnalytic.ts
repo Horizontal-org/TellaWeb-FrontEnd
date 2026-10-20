@@ -1,4 +1,4 @@
-import {Task} from '@divviup/dap/dist/task'
+import { Task } from '@divviup/dap'
 import axios from 'axios'
 
 export const visitAnalytic = async() => {

@@ -10,6 +10,7 @@ import {
   useListQuery
 } from '../../packages/state/services/configuration'
 import { useRouter } from 'next/router';
+import { errorMessage } from "packages/state/utils/errorMessage";
 
 const defaultQuery: ConfigurationQuery = {
   page: 0,
@@ -50,10 +51,14 @@ const Configuration = () => {
   const { push } = useRouter();
 
   const [query, setQuery] = useState<ConfigurationQuery>(defaultQuery);
-  const itemQuery = useMemo(() => toItemQuery(query), [query]);
   
   const [createConfig, createConfigResult] = useCreateConfigurationMutation()
   const { data: configurations, refetch } = useListQuery(query);
+  // The table needs the total from the API to know how many pages there are
+  const itemQuery = useMemo(
+    () => toItemQuery({ ...query, total: configurations?.total ?? query.total }),
+    [query, configurations?.total]
+  );
   const handleToast = useToast();
 
 
@@ -65,7 +70,7 @@ const Configuration = () => {
       refetch()
     }
     if (createConfigResult.error && "status" in createConfigResult.error) {
-      handleToast(createConfigResult.error.data.message, "danger");
+      handleToast(errorMessage(createConfigResult.error), "danger");
     }
   }, [createConfigResult.status]);
 

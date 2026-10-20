@@ -29,7 +29,7 @@ export const ResourceBar: FunctionComponent<React.PropsWithChildren<Props>> = ({
           <div>
             <span className='text-gray-500 text-base '>Used in the following projects</span>
             { resource.projects.map((p) => (
-              <p className="text-sm py-2">
+              <p className="text-sm py-2" key={p.id}>
                 { p.name }
               </p>
             ))}

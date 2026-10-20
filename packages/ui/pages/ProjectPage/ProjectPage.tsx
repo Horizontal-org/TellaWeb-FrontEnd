@@ -45,7 +45,7 @@ type Props = {
 const voidFunction = () => {};
 
 export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
-  reports,
+  reports = [],
   project,
   onOpen,
   onDownload = voidFunction,
@@ -57,7 +57,7 @@ export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   const [currentReport, setCurrentReport] = useState<Report | undefined>();
   const [selectedReports, setSelectedReports] = useState<Report[]>([]);
 
-  const searchInput = useRef<HTMLInputElement>();
+  const searchInput = useRef<HTMLInputElement>(null);
   let searchTimeout = null
 
   const openReport = () => {
@@ -199,6 +199,3 @@ export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   );
 };
 
-ProjectPage.defaultProps = {
-  reports: [],
-};

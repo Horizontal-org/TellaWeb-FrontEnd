@@ -38,15 +38,15 @@ export const ButtonPopup: FunctionComponent<React.PropsWithChildren<PropsWithChi
         onRequestClose={requestClose}
         isOpen={popupOpen || externalOpen}
         overlayClassName={
-          "flex bg-black bg-opacity-50 absolute inset-0 justify-center items-center"
+          "flex bg-black/50 absolute inset-0 justify-center items-center"
         }
-        className="bg-white w-5/12 py-4 px-3 rounded shadow-xl text-gray-800"
+        className="bg-white w-5/12 py-4 px-3 rounded-sm shadow-xl text-gray-800"
       >
         <div className="flex-start items-center">
           <button 
             type="button" 
             onClick={requestClose}
-            className='active:shadow-inbox rounded flex flex-col justify-center items-center focus:outline-none cursor-pointer p-2 stroke-current text-customgray-500 hover:bg-gray-50'
+            className='active:shadow-inbox rounded-sm flex flex-col justify-center items-center focus:outline-hidden cursor-pointer p-2 stroke-current text-customgray-500 hover:bg-gray-50'
           >
             <MdClose className="text-gray-300" />
           </button>

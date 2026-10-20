@@ -1,10 +1,9 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { ComponentPropsWithoutRef, forwardRef } from "react";
 
 export const TextInput = forwardRef<
   HTMLInputElement,
   ComponentPropsWithoutRef<"input">
->(({ ...props }, ref) => {
+>(({ type = 'text', ...props }, ref) => {
 
   return (
     <div className="relative flex items-center justify-center">
@@ -23,18 +22,16 @@ export const TextInput = forwardRef<
           hover:placeholder-gray-800
           hover:border-gray-500
           focus:border-blue-300
-          focus:outline-none
+          focus:outline-hidden
           py-1
           pr-2
           pl-2"
+        type={type}
         {...props}
       />
     </div>
   );
 });
 
-TextInput.defaultProps = {
-  type: 'text'
-}
 
 TextInput.displayName = "TextInput";

@@ -59,7 +59,7 @@ export const SearchEntityInput: FunctionComponent<PropsWithChildren<Props>> = ({
 
   return (
     <Wrapper ref={wrapperRef}>
-      <MultiSelect resultsOpen={showResults || selectedItems.length > 0}>
+      <MultiSelect $resultsOpen={showResults || selectedItems.length > 0}>
 
         { selectedItems.map(si => (
           <Item key={si.label}>
@@ -145,7 +145,7 @@ const InputWrapper = styled.div`
   flex-grow: 1;
 `
 
-const MultiSelect = styled.div`
+const MultiSelect = styled.div<{ $resultsOpen: boolean }>`
   display: flex;
   flex-wrap: wrap;
   border: 1px solid #5F6368;
@@ -159,7 +159,7 @@ const MultiSelect = styled.div`
     border: 1px solid #008DEC;
   }
 
-  ${props => props.resultsOpen && `
+  ${props => props.$resultsOpen && `
     border: 1px solid #008DEC;
   `}
 `

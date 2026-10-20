@@ -11,6 +11,7 @@ const customJestConfig = {
     "^@/pages/(.*)$": "<rootDir>/pages/$1",
   },
   testEnvironment: "jest-environment-jsdom",
+  testPathIgnorePatterns: ["/node_modules/", "/e2e/"],
 };
 
 module.exports = createJestConfig(customJestConfig);
