@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test"
-import { authenticated as test, expect, waitForApp } from "./fixtures"
+import { apiRequest, authenticated as test, bodyRows, expect, pager, waitForApp } from "./fixtures"
 import { TMP_PREFIX } from "./support/api"
 
 // Behaviour of components/Table on the users list: server-side sorting, search, pagination and
@@ -20,10 +20,7 @@ test.afterAll(async ({ adminApi }) => {
 })
 
 const usersRequest = (page: Page, check: (params: URLSearchParams) => boolean) =>
-  page.waitForRequest((req) => {
-    const url = new URL(req.url())
-    return url.pathname.endsWith("/api/user/list") && check(url.searchParams)
-  })
+  apiRequest(page, "/api/user/list", check)
 
 // Opens the users list filtered to this spec's users
 const openFiltered = async (page: Page) => {
@@ -35,11 +32,7 @@ const openFiltered = async (page: Page) => {
   await expect(bodyRows(page).first()).toContainText(PREFIX)
 }
 
-const bodyRows = (page: Page) => page.locator("tbody tr")
 const names = async (page: Page) => (await bodyRows(page).locator("td:nth-child(2)").allTextContents()).map((n) => n.trim())
-
-// Paginator: [<] "N of M" [>], the label is a <strong> inside the middle box
-const pager = (page: Page) => page.locator("strong", { hasText: / of / }).locator("xpath=../..")
 
 test("search filters the rows on the server", async ({ page }) => {
   await openFiltered(page)
@@ -65,6 +58,36 @@ test("pagination moves between server pages", async ({ page }) => {
   const firstPage = usersRequest(page, (p) => p.get("offset") === "0")
   await prev.click()
   await firstPage
+  await expect(pager(page).locator("strong")).toHaveText("1 of 2")
+  await expect(bodyRows(page)).toHaveCount(25)
+})
+
+const goToSecondPage = async (page: Page) => {
+  await openFiltered(page)
+  const secondPage = usersRequest(page, (p) => p.get("offset") === "25")
+  await pager(page).locator("button").last().click()
+  await secondPage
+  await expect(pager(page).locator("strong")).toHaveText("2 of 2")
+}
+
+// Regression: the search kept the current page, so a search with one page of results asked for
+// offset 25 and showed an empty table with "2 of 1"
+test("a new search goes back to the first page", async ({ page }) => {
+  await goToSecondPage(page)
+  const search = `${PREFIX}00@`
+  const searched = usersRequest(page, (p) => p.get("search") === search && p.get("offset") === "0")
+  await page.getByRole("textbox", { name: "Search" }).fill(search)
+  await searched
+  await expect(bodyRows(page)).toHaveCount(1)
+  await expect(bodyRows(page).first()).toContainText(emails[0])
+  await expect(pager(page).locator("strong")).toHaveText("1 of 1")
+})
+
+test("sorting goes back to the first page", async ({ page }) => {
+  await goToSecondPage(page)
+  const sorted = usersRequest(page, (p) => p.get("sort") === "user.username" && p.get("offset") === "0")
+  await page.getByRole("columnheader", { name: "Name" }).click()
+  await sorted
   await expect(pager(page).locator("strong")).toHaveText("1 of 2")
   await expect(bodyRows(page)).toHaveCount(25)
 })

@@ -57,7 +57,9 @@ export const ConfigurationListPage: FunctionComponent<React.PropsWithChildren<Pr
 
     onQueryChange({
       ...currentQuery,
-      search: name
+      search: name,
+      // A new search starts again from the first page
+      pagination: { ...currentQuery.pagination, page: 0 }
     })
   };
   

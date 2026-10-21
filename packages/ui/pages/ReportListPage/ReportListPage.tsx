@@ -40,7 +40,7 @@ type Props = {
   currentQuery: ItemQuery;
 };
 
-const voidFunction = () => {};
+const voidFunction = () => { };
 
 export const ReportListPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   reports = [],
@@ -67,7 +67,9 @@ export const ReportListPage: FunctionComponent<React.PropsWithChildren<Props>> =
 
     onQueryChange({
       ...currentQuery,
-      search: name
+      search: name,
+      // A new search starts again from the first page
+      pagination: { ...currentQuery.pagination, page: 0 }
     })
   };
 
@@ -94,55 +96,55 @@ export const ReportListPage: FunctionComponent<React.PropsWithChildren<Props>> =
                 </form>
               </>
             )}
-             {selectedReports.length === 1 && (
-                  <>
-                    <Button
-                      icon={<MdOpenInNew />}
-                      text="Open"
-                      onClick={(event: MouseEvent) => {
-                        event.preventDefault();
-                        onOpen(selectedReports[0]);
-                      }}
-                    />
-                    <Button
-                      type={btnType.Secondary}
-                      icon={<MdRemoveRedEye />}
-                      text="Preview"
-                      onClick={openReport}
-                    />
-                    <Button
-                      type={btnType.Secondary}
-                      icon={<MdSave />}
-                      onClick={(event: MouseEvent) =>
-                        onDownload(selectedReports[0])
-                      }
-                      text="Download"
-                    />
-                    <Can I='delete' a={ENTITIES.Reports}>
-                      <ButtonMenu openSide="right" type={btnType.Secondary} text="...">
-                        <DeleteModal 
-                          render={(
-                            <p>
-                              the selected reports will be permanently deleted.
-                            </p>
-                          )}
-                          onDelete={() => onDelete(selectedReports)}
-                          />  
-                      </ButtonMenu>
-                    </Can>
-                  </>
-                )}
-            {selectedReports.length > 1 && (
-              <>               
+            {selectedReports.length === 1 && (
+              <>
+                <Button
+                  icon={<MdOpenInNew />}
+                  text="Open"
+                  onClick={(event: MouseEvent) => {
+                    event.preventDefault();
+                    onOpen(selectedReports[0]);
+                  }}
+                />
+                <Button
+                  type={btnType.Secondary}
+                  icon={<MdRemoveRedEye />}
+                  text="Preview"
+                  onClick={openReport}
+                />
+                <Button
+                  type={btnType.Secondary}
+                  icon={<MdSave />}
+                  onClick={(event: MouseEvent) =>
+                    onDownload(selectedReports[0])
+                  }
+                  text="Download"
+                />
                 <Can I='delete' a={ENTITIES.Reports}>
-                  <DeleteModal 
+                  <ButtonMenu openSide="right" type={btnType.Secondary} text="...">
+                    <DeleteModal
+                      render={(
+                        <p>
+                          the selected reports will be permanently deleted.
+                        </p>
+                      )}
+                      onDelete={() => onDelete(selectedReports)}
+                    />
+                  </ButtonMenu>
+                </Can>
+              </>
+            )}
+            {selectedReports.length > 1 && (
+              <>
+                <Can I='delete' a={ENTITIES.Reports}>
+                  <DeleteModal
                     render={(
                       <p>
                         the selected reports will be permanently deleted.
                       </p>
                     )}
                     onDelete={() => onDelete(selectedReports)}
-                    />
+                  />
                 </Can>
               </>
             )}
@@ -178,14 +180,14 @@ export const ReportListPage: FunctionComponent<React.PropsWithChildren<Props>> =
                       color='#8B8E8F'
                     />
                     <Can I='delete' a={ENTITIES.Reports}>
-                      <DeleteModal 
+                      <DeleteModal
                         render={(
                           <p>
                             the selected reports will be permanently deleted.
                           </p>
                         )}
                         onDelete={() => onDelete([hoveredRow])}
-                      />  
+                      />
                     </Can>
                   </ButtonMenu>
                 </>

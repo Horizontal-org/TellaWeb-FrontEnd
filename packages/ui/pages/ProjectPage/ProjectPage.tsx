@@ -42,7 +42,7 @@ type Props = {
   currentQuery: ItemQuery;
 };
 
-const voidFunction = () => {};
+const voidFunction = () => { };
 
 export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   reports = [],
@@ -70,7 +70,9 @@ export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
 
     onQueryChange({
       ...currentQuery,
-      search: name
+      search: name,
+      // A new search starts again from the first page
+      pagination: { ...currentQuery.pagination, page: 0 }
     })
   };
 
@@ -125,26 +127,26 @@ export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
                       text="Download"
                     />
                   </>
-                )}        
+                )}
                 <Can I='delete' a={ENTITIES.Reports}>
                   <ButtonMenu openSide="right" type={btnType.Secondary} text="...">
-                    <DeleteModal 
+                    <DeleteModal
                       render={(
                         <p>
                           the selected reports will be permanently deleted.
                         </p>
                       )}
                       onDelete={() => onDelete(selectedReports)}
-                      />  
+                    />
                   </ButtonMenu>
-                </Can>     
+                </Can>
               </>
             )}
           </div>
           <Table
             columns={REPORT_COLUMNS}
             data={reports}
-            withPagination={false}
+            withPagination={true}
             itemQuery={currentQuery}
             onSelection={setSelectedReports as Dispatch<SetStateAction<Item[]>>}
             onFetch={onQueryChange}
@@ -173,14 +175,14 @@ export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
                       color='#8B8E8F'
                     />
                     <Can I='delete' a={ENTITIES.Reports}>
-                      <DeleteModal 
+                      <DeleteModal
                         render={(
                           <p>
                             the selected reports will be permanently deleted.
                           </p>
                         )}
                         onDelete={() => onDelete([hoveredRow])}
-                      />  
+                      />
                     </Can>
                   </ButtonMenu>
                 </>

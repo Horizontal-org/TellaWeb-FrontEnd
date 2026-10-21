@@ -10,7 +10,7 @@ import {
 import { ReportQuery } from "packages/state/domain/report";
 import { useReportFileDownloader } from "packages/state/features/files/useReportFileDownloader";
 import { Menu } from "components/Menu";
-import { useBatchDeleteMutation } from "packages/state/services/reports";
+import { useBatchDeleteMutation, useListQuery } from "packages/state/services/reports";
 import { errorMessage } from "packages/state/utils/errorMessage";
 
 const defaultQuery: ReportQuery = {
@@ -45,33 +45,27 @@ const toReportQuery = (itemQuery: ItemQuery): ReportQuery => {
   };
 };
 
-const processReports = (reports, query) => {
-  if (!reports) {
-    return []
-  }
-
-  let newReports = reports
-  if ( query.search && query.search.length > 0 ) {
-    newReports = reports.filter((r) => { return r.title.toLowerCase().includes(query.search.toLowerCase()) })
-  }
-
-  return newReports.map(toReport)
-}
-
 export const ProjectById = () => {
 
   const router = useRouter();
   const handleToast = useToast()
-  
+
+  const projectId = router.query.projectId as string | undefined
   const { data: currentProject, refetch } = useGetByIdQuery(
-    "" + router.query.projectId
-    );
-  
+    "" + projectId
+  );
+
   const { push } = useRouter();
   const [downloadReportFile] = useReportFileDownloader();
 
   const [query, setQuery] = useState<ReportQuery>(defaultQuery);
-  const itemQuery = useMemo(() => toItemQuery(query), [query]);
+  // Sorting, search and pagination are done by the server, as on the reports list
+  const { data: reports } = useListQuery({ ...query, projectId }, { skip: !projectId });
+  // The table needs the total from the API to know how many pages there are
+  const itemQuery = useMemo(
+    () => toItemQuery({ ...query, total: reports?.total ?? query.total }),
+    [query, reports?.total]
+  );
   const [batchDelete, batchDeleteReportResult] = useBatchDeleteMutation()
 
 
@@ -91,7 +85,7 @@ export const ProjectById = () => {
     }
   }, [batchDeleteReportResult.status])
 
-  
+
   return currentProject ? (
     <ProjectPage
       project={currentProject}
@@ -104,7 +98,7 @@ export const ProjectById = () => {
         downloadReportFile(report.id);
       }}
       onDelete={onBatchDelete}
-      reports={processReports(currentProject.reports, query)}
+      reports={reports?.results.map(toReport) || []}
       sidebar={<Menu />}
     />
   ) : null;

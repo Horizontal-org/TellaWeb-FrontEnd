@@ -49,4 +49,15 @@ export const expectToast = async (page: Page, text: string | RegExp) => {
   await expect(toast(page, text)).toBeHidden({ timeout: 10_000 })
 }
 
+// components/Table: body rows, and the Paginator [<] "N of M" [>] (the label is a <strong>)
+export const bodyRows = (page: Page) => page.locator("tbody tr")
+export const pager = (page: Page) => page.locator("strong", { hasText: / of / }).locator("xpath=../..")
+
+// Waits for a request to an API path (e.g. "/api/user/list") whose query params pass the check
+export const apiRequest = (page: Page, path: string, check: (params: URLSearchParams) => boolean) =>
+  page.waitForRequest((req) => {
+    const url = new URL(req.url())
+    return url.pathname.replace(/\/$/, "") === path && check(url.searchParams)
+  })
+
 export { expect }

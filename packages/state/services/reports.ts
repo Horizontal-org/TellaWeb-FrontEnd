@@ -28,6 +28,7 @@ export const reportsApi = createApi({
           sort: reportQuery.sortKey,
           order: reportQuery.sortOrder,
           search: reportQuery.search,
+          projectId: reportQuery.projectId,
         };
 
         return {

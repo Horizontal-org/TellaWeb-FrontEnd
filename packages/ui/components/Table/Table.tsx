@@ -58,7 +58,7 @@ type Props = {
 const DEFAULT_ITEM_QUERY = {
   filter: {},
   sort: [],
-  pagination: { page: 1, total: 1, size: 1 },
+  pagination: { page: 0, total: 1, size: 1 },
 } as unknown as ItemQuery;
 
 const SELECTION_COLUMN_ID = "selection";
@@ -89,9 +89,15 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
+    pageIndex: itemQuery.pagination.page ?? 0,
     pageSize: itemQuery.pagination.size,
   });
+
+  // The parent can move the page too (a new search or sort goes back to the first one)
+  const queryPage = itemQuery.pagination.page ?? 0
+  useEffect(() => {
+    setPagination((p) => (p.pageIndex === queryPage ? p : { ...p, pageIndex: queryPage }))
+  }, [queryPage])
 
   const tColumns = useMemo<ColumnDef<Features, Item>[]>(
     () => [
@@ -112,8 +118,8 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
         ),
         cell: ({ row }) => (
           <div className='flex justify-center'>
-            <div style={{width: 20}}>
-              { row.getIsSelected() ? (
+            <div style={{ width: 20 }}>
+              {row.getIsSelected() ? (
                 <IndeterminateCheckbox
                   title="Toggle Row Selected"
                   style={CHECKBOX_STYLE}
@@ -121,7 +127,7 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
                   indeterminate={false}
                   onChange={(e) => row.toggleSelected(e.target.checked)}
                 />
-              ) : icon || <FaRegFolder size={14} color="#8B8E8F"/>}
+              ) : icon || <FaRegFolder size={14} color="#8B8E8F" />}
             </div>
           </div>
         ),
@@ -178,6 +184,7 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
         key: meta?.headerKey,
         order: desc ? 'desc' : 'asc'
       },
+      pagination: { ...itemQuery.pagination, page: 0 },
     })
     setSorting([{ id: columnId, desc }]);
   };
@@ -267,7 +274,7 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
                   );
                 })}
 
-                { hovering === i && (
+                {hovering === i && (
                   <div
                     className="absolute top-0"
                     style={{
@@ -281,7 +288,7 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
                         paddingRight: '20'
                       }}
                     >
-                      { rowOptions(row.original, row.getIsSelected()) }
+                      {rowOptions(row.original, row.getIsSelected())}
                     </div>
                   </div>
                 )}
@@ -291,7 +298,7 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
         </tbody>
       </table>
 
-      { withPagination && (
+      {withPagination && (
         <div className='w-full flex justify-center item-center py-8'>
           <Paginator
             gotoPage={(index) => table.setPageIndex(index)}

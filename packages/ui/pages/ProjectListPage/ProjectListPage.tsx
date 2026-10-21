@@ -53,7 +53,9 @@ export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> 
 
     onQueryChange({
       ...currentQuery,
-      search: name
+      search: name,
+      // A new search starts again from the first page
+      pagination: { ...currentQuery.pagination, page: 0 }
     })
   };
 
