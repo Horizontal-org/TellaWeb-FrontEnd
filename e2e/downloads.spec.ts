@@ -14,7 +14,7 @@ test("report view downloads the open file with its own name", async ({ page }) =
 
   await page.goto(`/report/${image.reportId}`)
   await waitForApp(page)
-  await page.locator(".grid.grid-cols-2 > *").nth(image.fileIndex).click()
+  await page.getByTestId("report-files").locator(":scope > *").nth(image.fileIndex).click()
 
   const downloadPromise = page.waitForEvent("download")
   await page.getByRole("button", { name: "Download file" }).first().click()

@@ -6,8 +6,14 @@ import { AdminApi } from "./support/api"
 export const readData = (): E2EData => JSON.parse(fs.readFileSync(DATA_FILE, "utf8"))
 
 // Fails the test on uncaught page errors, which is what most upgrade breakage looks like.
-// adminApi talks to the backend directly, for setup, checks and clean-up
+// adminApi talks to the backend directly, for setup, checks and clean-up.
+// The GitHub API is blocked so NewVersionBanner (rate-limited, unauthenticated) never shows
+// and screenshots stay stable
 export const test = base.extend<{ pageErrors: Error[] }, { adminApi: AdminApi }>({
+  page: async ({ page }, use) => {
+    await page.route("https://api.github.com/**", (route) => route.abort())
+    await use(page)
+  },
   adminApi: [
     async ({}, use, workerInfo) => {
       const api = await AdminApi.login(workerInfo.project.use.baseURL)

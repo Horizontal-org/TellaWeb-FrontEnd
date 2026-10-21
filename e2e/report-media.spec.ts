@@ -4,7 +4,7 @@ import { ReportFile } from "./global-setup"
 const openFile = async (page, file: ReportFile) => {
   await page.goto(`/report/${file.reportId}`)
   await waitForApp(page)
-  await page.locator(".grid.grid-cols-2 > *").nth(file.fileIndex).click()
+  await page.getByTestId("report-files").locator(":scope > *").nth(file.fileIndex).click()
 }
 
 test("report image viewer shows the image", async ({ page }) => {

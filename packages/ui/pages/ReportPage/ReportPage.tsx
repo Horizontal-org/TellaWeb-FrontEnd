@@ -87,7 +87,7 @@ export const ReportPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
     <div className="flex grow min-h-screen">
       <LeftCollapsingSidebar collapsed={!leftSidebarOpen}>
         <ReportInformation report={report} />
-        <div className="grid grid-cols-2 gap-2 mt-6">
+        <div className="grid grid-cols-2 gap-2 mt-6" data-testid="report-files">
           {report.files.map((file, index) => {
             return (
               <Thumbnail 
