@@ -4,7 +4,7 @@ import { Report } from "./Report";
 
 export const REPORT_COLUMNS: TableColumn[] = [
   {
-    Header: "Name",
+    Header: "Title",
     headerKey: 'report.title',
     accessor: (report: Report): string => report.title,
     className: "px-3 py-3 w-auto font-semibold",
