@@ -20,6 +20,4 @@ export interface ResourceQuery {
   total?: number;
   size: number;
   exclude?: Array<string>;
-  // Only the resources of this project
-  projectId?: string;
 }

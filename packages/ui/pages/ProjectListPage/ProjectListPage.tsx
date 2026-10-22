@@ -24,10 +24,10 @@ import ProjectCard from "packages/ui/components/ProjectCard/ProjectCard";
 
 type Props = {
   projects: Project[];
-  onQueryChange: (iq: ItemQuery) => void;  
+  onQueryChange: (iq: ItemQuery) => void;
   sidebar: React.ReactNode;
   currentQuery: ItemQuery;
-  onCreateProject: ({name}) => void
+  onCreateProject: ({ name }) => void
   onOpen: (id: string) => void
   isLoading: boolean
 };
@@ -66,10 +66,10 @@ export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> 
       subtitle="Organise all files and reports into folders"
       content={
         <div>
-          <div className="flex space-x-2 mb-2 p-2">    
+          <div className="flex space-x-2 mb-2 p-2">
             <>
               <Can I='create' a={ENTITIES.Projects}>
-                <CreateProjectModal                  
+                <CreateProjectModal
                   open={open}
                   onClose={() => { handleOpen(false) }}
                   existingNames={projects.map(p => p.name)}
@@ -91,50 +91,53 @@ export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> 
                   defaultValue={currentQuery.search}
                 />
               </form>
-            </>            
+            </>
           </div>
-                    
+
 
           <div className="py-4 flex flex-wrap ">
-              { projects.map((p) => (
-                <div key={p.id} className='pt-4 pr-4' onClick={() => { onOpen(p.id) }}>
-                  <ProjectCard 
-                    data={p}                
-                  />
-                </div>
-              ))}
+            {projects.map((p) => (
+              <div key={p.id} className='pt-4 pr-4' onClick={() => { onOpen(p.id) }}>
+                <ProjectCard
+                  data={p}
+                />
+              </div>
+            ))}
           </div>
         </div>
       }
-      absoluteContent={ (projects.length === 0 && !isLoading) && (
-        <div 
-          className="flex text-sm justify-center w-full p-6" 
-          style={{ 
-            position: 'absolute', 
+      absoluteContent={(projects.length === 0 && !isLoading) && (
+        <div
+          className="flex text-sm justify-center w-full p-6"
+          style={{
+            position: 'absolute',
             bottom: 'calc(50% - 50px)',
             marginLeft: '-60px'
           }}
-        >          
-          <div 
+        >
+          <div
             className="py-8 px-12 border rounded-sm border-gray-100"
           >
 
             <p className='text-xxxl text-gray-600 font-bold'>
               No projects
             </p>
+
             <p className='py-2 font-normal text-sm text-gray-500'>
-              There are currently no projects. Get started by creating your first project.
+              There are currently no projects. <Can I='create' a={ENTITIES.Projects}>Get started by creating your first project.</Can>
             </p>
-            
-            <div className='py-4'>
-              <Button 
-                text='CREATE PROJECT'
-                full={true}
-                onClick={() => {
-                  handleOpen(true)
-                }}
-              />
-            </div>
+
+            <Can I='create' a={ENTITIES.Projects}>
+              <div className='py-4'>
+                <Button
+                  text='CREATE PROJECT'
+                  full={true}
+                  onClick={() => {
+                    handleOpen(true)
+                  }}
+                />
+              </div>
+            </Can>
           </div>
         </div>
       )}

@@ -1,13 +1,14 @@
 import { Browser, Page, request } from "@playwright/test"
 import { test, expect, waitForApp } from "./fixtures"
-import { TMP_PASSWORD, loginWeb, sessionState, uniqueEmail } from "./support/api"
+import { TMP_PASSWORD, loginWeb, sessionState, uniqueEmail, uniqueName } from "./support/api"
+import { tinyPdf } from "./support/files"
 
 const MENU = ["Projects", "Users", "Resources", "Admin Center", "Settings", "Help", "Logout"]
 
 // Opens a browser session logged in as a new user with this role
 const openAs = async (browser: Browser, baseURL: string, adminApi, role: string) => {
   const email = uniqueEmail(role)
-  await adminApi.createUser(email, role)
+  const user = await adminApi.createUser(email, role)
   const api = await request.newContext({ baseURL })
   const tokens = await loginWeb(api, email, TMP_PASSWORD)
   await api.dispose()
@@ -15,7 +16,7 @@ const openAs = async (browser: Browser, baseURL: string, adminApi, role: string)
   const page = await context.newPage()
   const errors: Error[] = []
   page.on("pageerror", (error) => errors.push(error))
-  return { page, errors, close: () => context.close() }
+  return { page, errors, user, close: () => context.close() }
 }
 
 const menuButton = (page: Page, name: string) => page.getByRole("list").getByRole("button", { name, exact: true })
@@ -43,6 +44,29 @@ test("a viewer can read projects but not manage anything", async ({ browser, bas
     await expectBlocked(page, "/user")
     await expectBlocked(page, "/resource")
     await expectBlocked(page, "/admin-center")
+    expect(session.errors).toEqual([])
+  } finally {
+    await session.close()
+  }
+})
+
+test("a viewer sees the resources of their project but can't change them", async ({ browser, baseURL, adminApi }) => {
+  const session = await openAs(browser, baseURL, adminApi, "viewer")
+  const { page } = session
+  try {
+    const project = await adminApi.createProject(uniqueName("viewer-project"))
+    const title = uniqueName("viewer-resource")
+    await adminApi.uploadResource(`${title}.pdf`, tinyPdf())
+    const resource = await adminApi.findResource(title)
+    await adminApi.toggleInProject(project.id, { users: [session.user.id], resources: [resource.id] })
+
+    // A direct load, so the route check runs on this page
+    await page.goto(`/project/${project.id}/resources`)
+    await waitForApp(page)
+    await expect(page.getByRole("row", { name: new RegExp(title) })).toBeVisible()
+    await expect(page.getByRole("button", { name: "ADD RESOURCES" })).toHaveCount(0)
+
+    await expectBlocked(page, "/resource")
     expect(session.errors).toEqual([])
   } finally {
     await session.close()

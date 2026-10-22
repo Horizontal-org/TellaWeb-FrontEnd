@@ -23,11 +23,28 @@ export const resourcesApi = createApi({
           order: resourceQuery.sortOrder,
           search: resourceQuery.search,
           exclude: resourceQuery.exclude,
-          projectId: resourceQuery.projectId,
         };
 
         return {
           url: "/",
+          params,
+        };
+      },
+    }),
+
+    // The resources of one project; viewers can call it for the projects they belong to
+    listByProject: builder.query<Pagination<Resource>, ResourceQuery & { projectId: string }>({
+      query: ({ projectId, ...resourceQuery }) => {
+        const params = {
+          limit: resourceQuery.size,
+          offset: resourceQuery.page * resourceQuery.size,
+          sort: resourceQuery.sortKey,
+          order: resourceQuery.sortOrder,
+          search: resourceQuery.search,
+        };
+
+        return {
+          url: `/project/${projectId}`,
           params,
         };
       },
@@ -46,5 +63,6 @@ export const resourcesApi = createApi({
 
 export const {
   useListQuery,
+  useListByProjectQuery,
   useDeleteResourceMutation,
 } = resourcesApi;
