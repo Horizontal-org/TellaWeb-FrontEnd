@@ -15,6 +15,7 @@ import { EditUserNoteModal } from '../../components/EditUserNoteModal/EditUserNo
 import { useUserProfile } from "packages/state/features/user/userHooks";
 import { EditRoleModal } from '../../modals/user/EditRoleModal/EditRoleModal'
 import { EditPasswordModal } from "packages/ui/modals/user/EditPasswordModal/EditPasswordModal";
+import { IoMdHelpCircleOutline } from "react-icons/io";
 
 type Props = {
   sidebar: React.ReactNode;
@@ -52,12 +53,12 @@ export const UserPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
               </p>
               <p>{user ? user.username : ""}</p>
             </div>
-            <EditEmailModal 
+            <EditEmailModal
               isEmail={user && user.role !== ROLES.REPORTER}
               withPassword={false}
               onSubmit={(username: string, cp: string) => {
                 onUpdateUsername(username)
-              }} 
+              }}
               title="Edit the username of the user"
             />
           </div>
@@ -74,39 +75,48 @@ export const UserPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
 
           <div className="flex justify-between items-center py-4 border-b">
             <div className="flex items-center">
-              <p className="text-gray-600 uppercase" style={{ 
-                  width: 200,
-                  minWidth: 200
-                }}>
+              <p className="text-gray-600 uppercase" style={{
+                width: 200,
+                minWidth: 200
+              }}>
                 Note
               </p>
               <p className='break-all'>{user ? user.note : '-'}</p>
             </div>
-            <EditUserNoteModal 
+            <EditUserNoteModal
               onSubmit={(note: string) => {
                 onUpdateNote(note)
-              }} 
+              }}
             />
           </div>
 
           <div className="flex justify-between items-center py-4 border-b">
             <div className="flex items-center">
-              <p className="text-gray-600 uppercase" style={{ width: 200 }}>
+              <p className="flex items-center text-gray-600 uppercase" style={{ width: 200 }}>
                 Role
+                <span className="ml-4 cursor-pointer">
+                  <IoMdHelpCircleOutline
+                    size={20}
+                    color="#8B8E8F"
+                    onClick={() => {
+                      window.open("https://tella.app/tella-web/#understanding-user-roles", "_blank")
+                    }}
+                  />
+                </span>
               </p>
-              <p>{ user ? user.role : ' '}</p>
+              <p>{user ? user.role : ' '}</p>
             </div>
-            { user && user.id !== loggedUser.id && (
-              <EditRoleModal 
+            {user && user.id !== loggedUser.id && (
+              <EditRoleModal
                 defaultRole={user ? user.role + '' : 'admin'}
                 hasEmail={user && (/\S+@\S+\.\S+/.test(user.username))}
                 onSubmit={(role: string) => {
                   // update role 
                   onUpdateRole(role)
-                }} 
+                }}
               />
             )}
-          </div>          
+          </div>
 
 
           <div className="flex justify-between items-center py-4 border-b">
@@ -117,13 +127,13 @@ export const UserPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
               <p>
               </p>
             </div>
-            { user && (
-              <DeleteUserModal 
+            {user && (
+              <DeleteUserModal
                 onSubmit={deleteUser}
                 title={`This will permanently delete the user “${user.username}”`}
               />
             )}
-          </div>          
+          </div>
         </div>
       }
     />

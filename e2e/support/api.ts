@@ -36,6 +36,12 @@ export class AdminApi {
     return res.json()
   }
 
+  async put(url: string, data: unknown) {
+    const res = await this.ctx.put(`/api${url}`, { headers: this.headers, data })
+    if (!res.ok()) throw new Error(`PUT ${url}: ${res.status()} ${await res.text()}`)
+    return res.json()
+  }
+
   async delete(url: string) {
     const res = await this.ctx.delete(`/api${url}`, { headers: this.headers })
     if (!res.ok() && res.status() !== 404) throw new Error(`DELETE ${url}: ${res.status()}`)
@@ -47,6 +53,25 @@ export class AdminApi {
 
   createProject(name: string) {
     return this.post("/project/", { name })
+  }
+
+  // Same call as the project's "Add users" / "Add resources" dialogs. The backend toggles the ids:
+  // ones already in the project are removed
+  toggleInProject(projectId: string, entities: { users?: string[]; resources?: string[] }) {
+    return this.put(`/project/${projectId}`, entities)
+  }
+
+  getProject(projectId: string) {
+    return this.get(`/project/${projectId}`)
+  }
+
+  createConfiguration(name: string) {
+    return this.post("/config/", {
+      name,
+      camouflage: JSON.stringify({ visible: true, calculator: true, change_name: true }),
+      crashReports: JSON.stringify({ visible: true, enabled: true }),
+      serversVisible: true,
+    })
   }
 
   // Same call the mobile app makes to send a report to a project

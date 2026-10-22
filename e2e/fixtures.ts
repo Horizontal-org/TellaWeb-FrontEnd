@@ -66,4 +66,12 @@ export const apiRequest = (page: Page, path: string, check: (params: URLSearchPa
     return url.pathname.replace(/\/$/, "") === path && check(url.searchParams)
   })
 
+// Waits for the response to such a request. Next's 308 trailing-slash redirect (/api/x/ → /api/x)
+// is skipped, so this is the backend's answer
+export const apiResponse = (page: Page, path: string, check: (params: URLSearchParams) => boolean) =>
+  page.waitForResponse((res) => {
+    const url = new URL(res.url())
+    return res.status() !== 308 && url.pathname.replace(/\/$/, "") === path && check(url.searchParams)
+  })
+
 export { expect }

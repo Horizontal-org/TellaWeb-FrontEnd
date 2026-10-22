@@ -3,7 +3,7 @@ export { Button } from "./components/Button/Button";
 export { ButtonMenu } from "./components/ButtonMenu/ButtonMenu";
 export { ButtonOption } from "./components/ButtonMenu/ButtonOption";
 export { ButtonPopup } from "./components/ButtonPopup/ButtonPopup";
-export { SidebarButton }  from "./components/SidebarButton/SidebarButton"
+export { SidebarButton } from "./components/SidebarButton/SidebarButton"
 export { CamouflageWizard } from "./components/CamouflageWizard/CamouflageWizard";
 export { LeftCollapsingSidebar } from "./components/CollapsingSidebar/LeftCollapsingSidebar";
 export { RightCollapsingSidebar } from "./components/CollapsingSidebar/RightCollapsingSidebar";
@@ -13,7 +13,7 @@ export { ConfigurationInformation } from "./components/ConfigurationInformation/
 export { Title, SubTitle } from "./components/Headers/Headers";
 export { TextInput } from './components/Inputs/TextInput/TextInput'
 export { RadioGroupInput } from './components/Inputs/RadioGroupInput/RadioGroupInput';
-export { Checkbox } from './components/Inputs/Checkbox/Checkbox'; 
+export { Checkbox } from './components/Inputs/Checkbox/Checkbox';
 export { SearchInput } from "./components/Inputs/SearchInput/SearchInput";
 export { ItemInformation } from "./components/ItemInformation/ItemInformation";
 export { MainContent } from "./components/MainContent/MainContent";
@@ -34,11 +34,10 @@ export { EditReportTitleModal } from './components/EditReportTitleModal/EditRepo
 export { FileView } from "./components/FileView/FileView"
 export { ImageView } from "./components/ImageView/ImageView"
 export { Paginator } from './components/Paginator/Paginator'
-export { CreateUserModal } from './components/CreateUserModal/CreateUserModal'
 export { TextArea } from './components/TextArea/TextArea'
 export { UserBar } from './components/UserBar/UserBar'
 export { CreateConfigurationModal } from './components/CreateConfigurationModal/CreateConfigurationModal'
- 
+
 export { LoginPage } from "./pages/LoginPage/LoginPage";
 export { ReportListPage } from "./pages/ReportListPage/ReportListPage";
 export { ReportPage } from "./pages/ReportPage/ReportPage";

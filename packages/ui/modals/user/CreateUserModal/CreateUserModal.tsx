@@ -6,6 +6,7 @@ import { btnType } from '../../../components/Button/Button'
 import { MdEdit } from 'react-icons/md'
 import { ROLES } from 'packages/state/domain/user'
 import PasswordMeter from 'packages/ui/components/PasswordMeter/PasswordMeter'
+import { IoMdHelpCircleOutline } from 'react-icons/io'
 
 interface Props {
   onSubmit: (newUser: {
@@ -30,9 +31,9 @@ export const CreateUserModal: FunctionComponent<React.PropsWithChildren<Props>> 
   useEffect(() => {
     handlePasswordStrength(zxcvbn(password).score)
   }, [password])
-  
+
   return (
-    <Modal 
+    <Modal
       title='Create User'
       button='CREATE USER'
       btnType={btnType.Primary}
@@ -119,11 +120,20 @@ export const CreateUserModal: FunctionComponent<React.PropsWithChildren<Props>> 
 
 
           <div className='pt-8'>
-            <p className='text-sm font-normal text-gray-500'>
-              Role:
+            <p className='flex text-base items-center font-normal text-gray-600'>
+              Role
+              <span className="ml-2 cursor-pointer">
+                <IoMdHelpCircleOutline
+                  size={20}
+                  color="#8B8E8F"
+                  onClick={() => {
+                    window.open("https://tella.app/tella-web/#understanding-user-roles", "_blank")
+                  }}
+                />
+              </span>
             </p>
             <div className='py-4'>
-              <RadioGroupInput 
+              <RadioGroupInput
                 onChange={e => handleRole(e.target.value)}
                 value={role}
                 elements={[
@@ -146,28 +156,28 @@ export const CreateUserModal: FunctionComponent<React.PropsWithChildren<Props>> 
                     value: 'admin',
                     name: 'user-role',
                     label: 'Admin'
-                  },                  
+                  },
                 ]}
               />
             </div>
           </div>
 
 
-          { showValidations && (
+          {showValidations && (
             <>
-              { role !== ROLES.REPORTER && username.length > 0 && !(/\S+@\S+\.\S+/.test(username)) && (
-                <ErrorMessage 
+              {role !== ROLES.REPORTER && username.length > 0 && !(/\S+@\S+\.\S+/.test(username)) && (
+                <ErrorMessage
                   message='Please enter a valid email address.'
-                />          
+                />
               )}
 
-              { !(confirmPassword === password) && (
-                <ErrorMessage 
+              {!(confirmPassword === password) && (
+                <ErrorMessage
                   message='The passwords do not match.'
                 />
               )}
             </>
-          )}          
+          )}
 
         </div>
       )}

@@ -14,6 +14,7 @@ import { Menu } from "components/Menu";
 import { UserQuery } from "packages/state/domain/user";
 import { ProjectUsersPage } from "packages/ui/pages/ProjectUsersPage/ProjectUsersPage";
 import { ResourceQuery } from "packages/state/domain/resource";
+import { useListQuery } from "packages/state/services/resource";
 import { ProjectResourcesPage } from "packages/ui/pages/ProjectResourcesPage/ProjectResourcesPage";
 import { errorMessage } from "packages/state/utils/errorMessage";
 
@@ -55,19 +56,27 @@ export const ProjectById = () => {
 
   const router = useRouter();
   const handleToast = useToast()
+  const projectId = router.query.projectId as string | undefined
   const { data: currentProject, refetch, isLoading } = useGetByIdQuery(
-    "" + router.query.projectId
-    );
+    "" + projectId
+  );
 
   const { push } = useRouter();
   const [query, setQuery] = useState<ResourceQuery>(defaultQuery);
-  const itemQuery = useMemo(() => toItemQuery(query), [query]);
+  // Sorting, search and pagination are done by the server, as on the project's reports list
+  const { data: resources, refetch: refetchList } = useListQuery({ ...query, projectId }, { skip: !projectId })
+  // The table needs the total from the API to know how many pages there are
+  const itemQuery = useMemo(
+    () => toItemQuery({ ...query, total: resources?.total ?? query.total }),
+    [query, resources?.total]
+  )
   const [addResources, addResourcesResult] = useAddEntitiesMutation()
 
   useEffect(() => {
     if (addResourcesResult.isSuccess) {
       handleToast(RESOURCES_SYNC_MESSAGE);
       refetch()
+      refetchList()
     }
     if (addResourcesResult.error && "status" in addResourcesResult.error) {
       handleToast(errorMessage(addResourcesResult.error), "danger");
@@ -91,7 +100,8 @@ export const ProjectById = () => {
         RESOURCES_SYNC_MESSAGE='Resources removed'
         addResources({ id: currentProject.id, resources: selected })
       }}
-      resources={currentProject.resources}
+      resources={resources?.results || []}
+      projectResources={currentProject.resources}
       sidebar={<Menu />}
     />
   ) : null;

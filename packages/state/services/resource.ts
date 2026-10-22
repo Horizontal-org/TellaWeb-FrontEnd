@@ -22,7 +22,8 @@ export const resourcesApi = createApi({
           sort: resourceQuery.sortKey,
           order: resourceQuery.sortOrder,
           search: resourceQuery.search,
-          exclude: resourceQuery.exclude
+          exclude: resourceQuery.exclude,
+          projectId: resourceQuery.projectId,
         };
 
         return {

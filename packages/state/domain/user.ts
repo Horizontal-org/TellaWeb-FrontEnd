@@ -39,6 +39,8 @@ export interface UserQuery {
   total?: number;
   exclude?: Array<string>;
   size: number;
+  // Only the users of this project (admins are in every project)
+  projectId?: string;
 }
 
 export interface OtpData {

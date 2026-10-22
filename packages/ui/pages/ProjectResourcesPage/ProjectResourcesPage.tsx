@@ -43,7 +43,10 @@ import { PdfView } from "packages/ui/components/PdfView/PdfView";
 
 type Props = {
   project: Project
+  // One page of the project's resources, as returned by the server
   resources: Resource[];
+  // Every resource of the project, so the add modal can leave them out
+  projectResources: Resource[];
   onQueryChange: (iq: ItemQuery) => void;
   onOpen: (resource: Resource) => void;
   onAddResources: (newResources:  string[]) => void;
@@ -59,6 +62,7 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
   onQueryChange,
   onAddResources,
   resources = [],
+  projectResources = [],
   sidebar,
   currentQuery,
   removeSelected,
@@ -98,7 +102,7 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
                     onSubmit={(newResources) => {
                       onAddResources(newResources)
                     }}
-                    resourceList={resources}
+                    resourceList={projectResources}
                     />
                 </Can>
               </>
@@ -129,11 +133,11 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
               </>
             )}
           </div>
-          { (resources.length > 0) && (
+          { (projectResources.length > 0) && (
               <Table
                 columns={RESOURCE_COLUMNS}
                 data={resources}
-                withPagination={false}
+                withPagination={true}
                 itemQuery={currentQuery}
                 onSelection={setSelectedResources as Dispatch<SetStateAction<Item[]>>}
                 onFetch={onQueryChange}
@@ -165,7 +169,7 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
       leftbar={sidebar}
       leftbarActive={true}
       rightbarActive={true}
-      absoluteContent={ (resources.length === 0 && !isLoading) && (
+      absoluteContent={ (projectResources.length === 0 && !isLoading) && (
         <div 
           className="flex text-sm justify-center w-full p-6" 
           style={{ 

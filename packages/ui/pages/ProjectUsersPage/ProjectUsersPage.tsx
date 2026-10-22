@@ -38,7 +38,10 @@ import { BsPerson } from "react-icons/bs";
 
 type Props = {
   project: Project
+  // One page of the project's users, as returned by the server
   users: User[];
+  // Every user of the project, so the add modal can leave them out
+  projectUsers: User[];
   onQueryChange: (iq: ItemQuery) => void;
   onOpen: (user: User) => void;
   onAddUsers: (newUsers:  string[]) => void;
@@ -53,6 +56,7 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
   onQueryChange,
   onAddUsers,
   users = [],
+  projectUsers = [],
   sidebar,
   currentQuery,
   removeSelected
@@ -78,7 +82,7 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
                   onSubmit={(newUsers) => {
                     onAddUsers(newUsers)
                   }}
-                  userList={users}
+                  userList={projectUsers}
                 />
               </>
             )}
@@ -116,7 +120,7 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
           <Table
             columns={USER_COLUMNS}
             data={users}
-            withPagination={false}
+            withPagination={true}
             itemQuery={currentQuery}
             onSelection={setSelectedUsers as Dispatch<SetStateAction<Item[]>>}
             onFetch={onQueryChange}
