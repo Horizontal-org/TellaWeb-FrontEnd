@@ -8,7 +8,7 @@ import {
   ChangeEvent,
   useEffect
 } from "react";
-import { MdOpenInNew, MdRemoveRedEye, MdSave } from "react-icons/md";
+import { MdDelete, MdOpenInNew, MdRemoveRedEye, MdSave } from "react-icons/md";
 import {
   ReportBar,
   Button,
@@ -49,7 +49,7 @@ type Props = {
   projectResources: Resource[];
   onQueryChange: (iq: ItemQuery) => void;
   onOpen: (resource: Resource) => void;
-  onAddResources: (newResources:  string[]) => void;
+  onAddResources: (newResources: string[]) => void;
   sidebar: React.ReactNode;
   currentQuery: ItemQuery;
   removeSelected: (selectedResources: string[]) => void;
@@ -81,12 +81,12 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
   return (
     <MainLayout
       title={"Project resources"}
-      subtitle={`Manage resources available in the project “${project.name}”`}      
+      subtitle={`Manage resources available in the project “${project.name}”`}
       content={
         <div>
 
 
-          <PdfView 
+          <PdfView
             isOpen={openViewer}
             fileName={currentResource ? currentResource.fileName : ''}
             handleIsOpen={() => {
@@ -98,12 +98,12 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
             {selectedResources.length === 0 && (
               <>
                 <Can I='attach' a={ENTITIES.Resources}>
-                  <ManageResourcesProjectModal 
+                  <ManageResourcesProjectModal
                     onSubmit={(newResources) => {
                       onAddResources(newResources)
                     }}
                     resourceList={projectResources}
-                    />
+                  />
                 </Can>
               </>
             )}
@@ -111,57 +111,61 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
             {selectedResources.length > 0 && (
               <>
                 {selectedResources.length === 1 && (
-                  <>                   
+                  <>
                     <Button
                       type={btnType.Secondary}
                       icon={<MdRemoveRedEye />}
                       text="Preview"
                       onClick={openUser}
-                    />                    
+                    />
                   </>
                 )}
-                 <Can I='attach' a={ENTITIES.Resources}>                                    
-                    <Button
-                      type={btnType.Secondary}
+
+                <Can I='attach' a={ENTITIES.Resources}>
+                  <div className="rounded-sm overflow-hidden border border-gray-100">
+                    <ButtonOption
+                      icon={<MdDelete />}
+                      color="#DC2626"
                       text="Remove from project"
                       onClick={() => {
                         removeSelected(selectedResources.map(su => su.id))
                         setSelectedResources([])
                       }}
                     />
-                  </Can>             
+                  </div>
+                </Can>
               </>
             )}
           </div>
-          { (projectResources.length > 0) && (
-              <Table
-                columns={RESOURCE_COLUMNS}
-                data={resources}
-                withPagination={true}
-                itemQuery={currentQuery}
-                onSelection={setSelectedResources as Dispatch<SetStateAction<Item[]>>}
-                onFetch={onQueryChange}
-                icon={<MdPictureAsPdf/>}
-                rowOptions={(hoveredRow, isHoverSelected) => (
-                  <HoveredRowWrapper isHoverSelected={isHoverSelected}>
-                    <>
-                      <div className="px-2">
-                        <Button
-                          icon={<MdOpenInNew />}
-                          text="Open"
-                          onClick={(event: MouseEvent) => {
-                            event.preventDefault();
-                            event.stopPropagation()
-                            setCurrentResource(hoveredRow);
-                            handleViewer(true)
-                          }}
-                        />
-                      </div>
-                
-                    </>
-                  </HoveredRowWrapper>
-                )}
-              />
+          {(projectResources.length > 0) && (
+            <Table
+              columns={RESOURCE_COLUMNS}
+              data={resources}
+              withPagination={true}
+              itemQuery={currentQuery}
+              onSelection={setSelectedResources as Dispatch<SetStateAction<Item[]>>}
+              onFetch={onQueryChange}
+              icon={<MdPictureAsPdf />}
+              rowOptions={(hoveredRow, isHoverSelected) => (
+                <HoveredRowWrapper isHoverSelected={isHoverSelected}>
+                  <>
+                    <div className="px-2">
+                      <Button
+                        icon={<MdOpenInNew />}
+                        text="Open"
+                        onClick={(event: MouseEvent) => {
+                          event.preventDefault();
+                          event.stopPropagation()
+                          setCurrentResource(hoveredRow);
+                          handleViewer(true)
+                        }}
+                      />
+                    </div>
+
+                  </>
+                </HoveredRowWrapper>
+              )}
+            />
 
           )}
         </div>
@@ -169,16 +173,16 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
       leftbar={sidebar}
       leftbarActive={true}
       rightbarActive={true}
-      absoluteContent={ (projectResources.length === 0 && !isLoading) && (
-        <div 
-          className="flex text-sm justify-center w-full p-6" 
-          style={{ 
-            position: 'absolute', 
+      absoluteContent={(projectResources.length === 0 && !isLoading) && (
+        <div
+          className="flex text-sm justify-center w-full p-6"
+          style={{
+            position: 'absolute',
             bottom: 'calc(50% - 50px)',
             marginLeft: '-60px'
           }}
-        >          
-          <div 
+        >
+          <div
             className="py-8 px-12 text-center"
           >
 
@@ -188,11 +192,11 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
             <p className='py-2 font-normal text-lg text-gray-500'>
               Resources will show up here after they are added by your team
             </p>
-    
+
           </div>
         </div>
       )}
-      rightbar={<ResourceBar resource={currentResource}/>}
+      rightbar={<ResourceBar resource={currentResource} />}
       onClosePreview={() => setCurrentResource(undefined)}
       currentItem={currentResource}
     />

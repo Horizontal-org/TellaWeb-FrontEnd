@@ -8,7 +8,7 @@ import {
   ChangeEvent,
   useEffect
 } from "react";
-import { MdOpenInNew, MdRemoveRedEye, MdSave } from "react-icons/md";
+import { MdDelete, MdOpenInNew, MdRemoveRedEye, MdSave } from "react-icons/md";
 import {
   ReportBar,
   Button,
@@ -44,7 +44,7 @@ type Props = {
   projectUsers: User[];
   onQueryChange: (iq: ItemQuery) => void;
   onOpen: (user: User) => void;
-  onAddUsers: (newUsers:  string[]) => void;
+  onAddUsers: (newUsers: string[]) => void;
   sidebar: React.ReactNode;
   currentQuery: ItemQuery;
   removeSelected: (selectedUsers: string[]) => void;
@@ -72,13 +72,13 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
   return (
     <MainLayout
       title={"Project users"}
-      subtitle={`Manage users available in the project “${project.name}”`}            
+      subtitle={`Manage users available in the project “${project.name}”`}
       content={
         <div>
           <div className="flex space-x-2 mb-2 p-2">
             {selectedUsers.length === 0 && (
               <>
-                <ManageUsersProjectModal 
+                <ManageUsersProjectModal
                   onSubmit={(newUsers) => {
                     onAddUsers(newUsers)
                   }}
@@ -104,16 +104,19 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
                       icon={<MdRemoveRedEye />}
                       text="Preview"
                       onClick={openUser}
-                    />                    
+                    />
                   </>
-                )}             
-                <Button
-                  type={btnType.Secondary}
-                  text="Remove from project"
-                  onClick={() => {
-                    removeSelected(selectedUsers.map(su => su.id))
-                  }}
-                />         
+                )}
+                <div className="rounded-sm overflow-hidden border border-gray-100">
+                  <ButtonOption
+                    icon={<MdDelete />}
+                    color="#DC2626"
+                    text="Remove from project"
+                    onClick={() => {
+                      removeSelected(selectedUsers.map(su => su.id))
+                    }}
+                  />
+                </div>
               </>
             )}
           </div>
@@ -124,7 +127,7 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
             itemQuery={currentQuery}
             onSelection={setSelectedUsers as Dispatch<SetStateAction<Item[]>>}
             onFetch={onQueryChange}
-            icon={<BsPerson/>}
+            icon={<BsPerson />}
             rowOptions={(hoveredRow, isHoverSelected) => (
               <HoveredRowWrapper isHoverSelected={isHoverSelected}>
                 <>
@@ -139,8 +142,8 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
                       }}
                     />
                   </div>
-                  <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
-                    {/* <ButtonOption
+                  {/* <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
+                    <ButtonOption
                       icon={<MdSave />}
                       onClick={(event: MouseEvent) => {
                         event.stopPropagation()
@@ -148,8 +151,8 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
                       }}
                       text="Download"
                       color='#8B8E8F'
-                    /> */}
-                  </ButtonMenu>
+                    />
+                  </ButtonMenu> */}
                 </>
               </HoveredRowWrapper>
             )}

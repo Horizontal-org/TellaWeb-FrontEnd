@@ -32,7 +32,7 @@ export const ButtonPopup: FunctionComponent<React.PropsWithChildren<PropsWithChi
 
   return (
     <div>
-      { toggleButton && toggleButton(togglePopup)}
+      {toggleButton && toggleButton(togglePopup)}
 
       <ReactModal
         onRequestClose={requestClose}
@@ -43,8 +43,8 @@ export const ButtonPopup: FunctionComponent<React.PropsWithChildren<PropsWithChi
         className="bg-white w-5/12 py-4 px-3 rounded-sm shadow-xl text-gray-800"
       >
         <div className="flex-start items-center">
-          <button 
-            type="button" 
+          <button
+            type="button"
             onClick={requestClose}
             className='active:shadow-inbox rounded-sm flex flex-col justify-center items-center focus:outline-hidden cursor-pointer p-2 stroke-current text-customgray-500 hover:bg-gray-50'
           >
