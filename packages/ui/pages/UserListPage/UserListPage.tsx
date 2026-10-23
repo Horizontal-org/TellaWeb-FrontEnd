@@ -202,6 +202,7 @@ export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = (
                       />
                       <Can I='delete' a={ENTITIES.Users}>
                         <DeleteModal
+                          title="Delete user"
                           render={(
                             <p>
                               the selected users will be permanently deleted.

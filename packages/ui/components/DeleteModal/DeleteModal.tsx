@@ -8,11 +8,15 @@ import { MdDelete } from "react-icons/md";
 
 type Props = {
   render: React.ReactNode
+  title?: string
   onDelete: (e) => void
 }
 
-export const DeleteModal: FunctionComponent<React.PropsWithChildren<Props>> = ({ render, onDelete }) => {
-
+export const DeleteModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
+  render,
+  title = 'Delete file',
+  onDelete
+}) => {
   const [canDelete, handleCanDelete] = useState(false)
 
   return (
@@ -34,7 +38,7 @@ export const DeleteModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
       render={(toggle) => (
         <>
           <div className='p-4'>
-            <h3 className='py-2 text-xxxl font-sans font-bold text-gray-600'>Delete file</h3>
+            <h3 className='py-2 text-xxxl font-sans font-bold text-gray-600'>{title}</h3>
             <div className='text-base font-normal font-sans text-gray-500'>
               {render}
             </div>
