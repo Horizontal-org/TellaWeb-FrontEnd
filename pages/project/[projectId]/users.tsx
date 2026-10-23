@@ -84,7 +84,7 @@ export const ProjectById = () => {
       project={currentProject}
       currentQuery={itemQuery}
       onAddUsers={(newUsers) => {
-        addUsers({ id: currentProject.id, users:newUsers })
+        addUsers({ id: currentProject.id, users: newUsers })
       }}
       onQueryChange={(itemQuery) => setQuery(toUserQuery(itemQuery))}
       onOpen={(user) => {

@@ -272,9 +272,6 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
 
-                      {/* Inside the last cell, not directly in the <tr>: Chrome lays out a <tr> child
-                          as an extra cell even when it's absolutely positioned, which shifted the
-                          columns on hover. It's still positioned against the <tr> */}
                       {hovering === i && cellIndex === cells.length - 1 && (
                         <div
                           className="absolute top-0"
