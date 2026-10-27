@@ -3,7 +3,7 @@ import {
   } from "@reduxjs/toolkit/query/react";
   import baseQueryWithRefresh from "./baseQueryWithRefresh";
   
-  import { Backup, LatestBackups } from "../domain/backup";
+  import { Backup, BackupSpace, LatestBackups } from "../domain/backup";
   
   export const backupsApi = createApi({
     reducerPath: "backupsApi",
@@ -19,6 +19,12 @@ import {
         },
       }),
   
+      space: builder.query<BackupSpace, void>({
+        query: () => ({
+          url: "/space",
+        }),
+      }),
+
       start: builder.mutation<boolean, void>({
         query: () => ({
           url: "/",
@@ -39,6 +45,7 @@ import {
   
   export const {
     useLatestQuery,
+    useSpaceQuery,
     useStartMutation,
     useDeleteMutation
     // useDeleteResourceMutation,

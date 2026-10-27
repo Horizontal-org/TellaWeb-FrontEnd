@@ -56,7 +56,8 @@ export const ProjectById = () => {
   );
 
   const { push } = useRouter();
-  const [downloadReportFile] = useReportFileDownloader();
+  const [downloadReportFile, downloadState] = useReportFileDownloader();
+  console.log("🚀 ~ ProjectById ~ downloadState:", downloadState)
 
   const [query, setQuery] = useState<ReportQuery>(defaultQuery);
   // Sorting, search and pagination are done by the server, as on the reports list

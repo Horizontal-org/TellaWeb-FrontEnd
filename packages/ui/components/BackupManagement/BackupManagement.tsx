@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 import { btnType, Button } from "../Button/Button";
-import { LatestBackups } from "packages/state/domain/backup";
+import { BackupSpace, LatestBackups } from "packages/state/domain/backup";
 import { format } from "date-fns";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { useBackupDownloader } from "packages/state/features/backup/useBackupDownloader";
@@ -8,12 +8,16 @@ import { StartBackupModal } from "packages/ui/modals/backup/StartBackupModal";
 import { DeleteBackupModal } from "packages/ui/modals/backup/DeleteBackupModal";
 interface Props {
     backups: LatestBackups
+    backupSpace?: BackupSpace
     onBackupStart: () => void
     onBackupDelete: (id) => void
 }
 
+const gb = (bytes: number) => `${(bytes / 1024 ** 3).toFixed(1)} GB`
+
 export const BackupManagement: FunctionComponent<React.PropsWithChildren<Props>> = ({
     backups,
+    backupSpace,
     onBackupStart,
     onBackupDelete
 }) => {
@@ -47,6 +51,19 @@ export const BackupManagement: FunctionComponent<React.PropsWithChildren<Props>>
                 
             </div>
 
+
+            { backupSpace && (
+                <div 
+                className="flex justify-between items-center py-4 border-b"
+                >
+                    <div className="flex items-center">
+                        <p className="text-gray-600 uppercase flex items-center" style={{ width: 350 }}>
+                            DISK SPACE
+                        </p>
+                        <p>{`${gb(backupSpace.available)} available, a new backup needs about ${gb(backupSpace.needed)}`}</p>
+                    </div>
+                </div>
+            )}
 
             { backups.latest && (
                 <div 
