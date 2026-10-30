@@ -21,6 +21,7 @@ export const CreateResourceModal: FunctionComponent<React.PropsWithChildren<Prop
   const [file, handleFile] = useState(null)
   const [modalOpen, handleModalOpen] = useState(false)
   const [processing, handleProcessing] = useState(null)
+  // const [loading, handleLoading] = useState(true)
 
   // validations  
   const [nameTaken, handleNameTaken] = useState(false)
@@ -64,6 +65,7 @@ export const CreateResourceModal: FunctionComponent<React.PropsWithChildren<Prop
   }
 
   const uploadFile = () => {
+    // handleProcessing('Uploading ...')
     const token = localStorage.getItem("access_token")
     const reader = new FileReader()
 
@@ -201,6 +203,7 @@ export const CreateResourceModal: FunctionComponent<React.PropsWithChildren<Prop
             <Button
               disabled={!!(processing) || nameTaken || fileTooLarge || !file}
               text={processing || 'CREATE RESOURCE'}
+              loading={!!(processing)}
               type={btnType.Primary}
               full={true}
               onClick={() => {
