@@ -8,7 +8,7 @@ import {
   ChangeEvent,
   useEffect
 } from "react";
-import { MdOpenInNew, MdRemoveRedEye, MdSave } from "react-icons/md";
+import { MdOpenInNew, MdRemoveRedEye, MdSave, MdSettings } from "react-icons/md";
 import {
   ReportBar,
   Button,
@@ -30,6 +30,8 @@ import { Project } from "packages/state/domain/project";
 import HoveredRowWrapper from "packages/ui/components/Table/HoveredRowWrapper";
 import { Can } from "common/casl/Can";
 import { ENTITIES } from "common/casl/Ability";
+import { LayoutAbsoluteContent } from "packages/ui/components/LayoutAbsoluteContent/LayoutAbsoluteContent";
+import { useRouter } from "next/router";
 
 type Props = {
   project: Project
@@ -56,6 +58,8 @@ export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
 }) => {
   const [currentReport, setCurrentReport] = useState<Report | undefined>();
   const [selectedReports, setSelectedReports] = useState<Report[]>([]);
+
+  const { push } = useRouter();
 
   const searchInput = useRef<HTMLInputElement>(null);
   let searchTimeout = null
@@ -143,52 +147,54 @@ export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
               </>
             )}
           </div>
-          <Table
-            columns={REPORT_COLUMNS}
-            data={reports}
-            withPagination={true}
-            itemQuery={currentQuery}
-            onSelection={setSelectedReports as Dispatch<SetStateAction<Item[]>>}
-            onFetch={onQueryChange}
-            rowOptions={(hoveredRow, isHoverSelected) => (
-              <HoveredRowWrapper isHoverSelected={isHoverSelected}>
-                <>
-                  <div className="px-2">
-                    <Button
-                      type={btnType.Secondary}
-                      icon={<MdRemoveRedEye />}
-                      text="Preview"
-                      onClick={(e: ChangeEvent) => {
-                        e.stopPropagation()
-                        setCurrentReport(hoveredRow);
-                      }}
-                    />
-                  </div>
-                  <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
-                    <ButtonOption
-                      icon={<MdSave />}
-                      onClick={(event: MouseEvent) => {
-                        event.stopPropagation()
-                        onDownload(hoveredRow)
-                      }}
-                      text="Download"
-                      color='#8B8E8F'
-                    />
-                    <Can I='delete' a={ENTITIES.Reports}>
-                      <DeleteModal
-                        render={(
-                          <p>
-                            the selected reports will be permanently deleted.
-                          </p>
-                        )}
-                        onDelete={() => onDelete([hoveredRow])}
+          {reports.length > 0 && (
+            <Table
+              columns={REPORT_COLUMNS}
+              data={reports}
+              withPagination={true}
+              itemQuery={currentQuery}
+              onSelection={setSelectedReports as Dispatch<SetStateAction<Item[]>>}
+              onFetch={onQueryChange}
+              rowOptions={(hoveredRow, isHoverSelected) => (
+                <HoveredRowWrapper isHoverSelected={isHoverSelected}>
+                  <>
+                    <div className="px-2">
+                      <Button
+                        type={btnType.Secondary}
+                        icon={<MdRemoveRedEye />}
+                        text="Preview"
+                        onClick={(e: ChangeEvent) => {
+                          e.stopPropagation()
+                          setCurrentReport(hoveredRow);
+                        }}
                       />
-                    </Can>
-                  </ButtonMenu>
-                </>
-              </HoveredRowWrapper>
-            )}
-          />
+                    </div>
+                    <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
+                      <ButtonOption
+                        icon={<MdSave />}
+                        onClick={(event: MouseEvent) => {
+                          event.stopPropagation()
+                          onDownload(hoveredRow)
+                        }}
+                        text="Download"
+                        color='#8B8E8F'
+                      />
+                      <Can I='delete' a={ENTITIES.Reports}>
+                        <DeleteModal
+                          render={(
+                            <p>
+                              the selected reports will be permanently deleted.
+                            </p>
+                          )}
+                          onDelete={() => onDelete([hoveredRow])}
+                        />
+                      </Can>
+                    </ButtonMenu>
+                  </>
+                </HoveredRowWrapper>
+              )}
+            />
+          )}
         </div>
       }
       leftbar={sidebar}
@@ -197,6 +203,68 @@ export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
       rightbarActive={true}
       onClosePreview={() => setCurrentReport(undefined)}
       currentItem={currentReport}
+      absoluteContent={(reports.length === 0) && (
+        <LayoutAbsoluteContent>
+          <div
+            className="text-center flex-col flex justify-center items-center"
+          >
+            <Can I='create' a={ENTITIES.Projects} passThrough>
+              {({ isAllowed }) => isAllowed ? (
+                <>
+                  <p className='text-xl font-semibold'>
+                    No reports yet! Reports will appear here once users submit them.
+                  </p>
+                  <div className='pt-8'>
+                    <p className='font-bold text-lg'>
+                      To get started:
+                    </p>
+                    <p className='font-normal text-lg'>
+                      1. Go to project settings
+                    </p>
+                    <p className='font-normal text-lg'>
+                      2. Assign users to the project
+                    </p>
+                    <p className='font-normal text-lg'>
+                      3. Share the project URL for users to connect to on Tella mobile.
+                    </p>
+
+                    <div className='pt-8 pb-4 flex justify-center'>
+                      <Button
+                        text='PROJECT SETTINGS'
+                        icon={<MdSettings color='white' />}
+                        onClick={() => {
+                          push(`/project/${project.id}/settings`)
+                        }}
+                      />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className='text-xl font-semibold'>
+                    No reports yet!
+                  </p>
+                  <p className='font-normal text-lg py-4'>
+                    Reports will appear here once users submit them.
+                  </p>
+
+                </>
+              )}
+            </Can>
+            <div>
+              <a
+                className="text-blue-400 text-lg underline font-bold"
+                href="https://tella.app/tella-web#get-people-on-the-ground-ready-to-start-submitting-reports"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Learn about submitting reports
+              </a>
+            </div>
+
+          </div>
+        </LayoutAbsoluteContent>
+      )}
     />
   );
 };

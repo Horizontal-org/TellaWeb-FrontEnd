@@ -21,6 +21,8 @@ import { ENTITIES } from "common/casl/Ability";
 import { Project } from "packages/state/domain/project";
 import { CreateProjectModal } from '../../modals/project/CreateProjectModal/CreateProjectModal'
 import ProjectCard from "packages/ui/components/ProjectCard/ProjectCard";
+import { LayoutAbsoluteContent } from "packages/ui/components/LayoutAbsoluteContent/LayoutAbsoluteContent";
+import { IoMdAdd } from "react-icons/io";
 
 type Props = {
   projects: Project[];
@@ -107,39 +109,38 @@ export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> 
         </div>
       }
       absoluteContent={(projects.length === 0 && !isLoading) && (
-        <div
-          className="flex text-sm justify-center w-full p-6"
-          style={{
-            position: 'absolute',
-            bottom: 'calc(50% - 50px)',
-            marginLeft: '-60px'
-          }}
-        >
+        <LayoutAbsoluteContent>
           <div
-            className="py-8 px-12 border rounded-sm border-gray-100"
+            className="text-center flex-col flex justify-center items-center"
           >
-
-            <p className='text-xxxl text-gray-600 font-bold'>
-              No projects
+            <p className='text-xl font-semibold'>
+              You don’t have any projects yet.
             </p>
-
-            <p className='py-2 font-normal text-sm text-gray-500'>
-              There are currently no projects. <Can I='create' a={ENTITIES.Projects}>Get started by creating your first project.</Can>
-            </p>
-
-            <Can I='create' a={ENTITIES.Projects}>
-              <div className='py-4'>
-                <Button
-                  text='CREATE PROJECT'
-                  full={true}
-                  onClick={() => {
-                    handleOpen(true)
-                  }}
-                />
-              </div>
+            <Can I='create' a={ENTITIES.Projects} passThrough>
+              {({ isAllowed }) => isAllowed ? (
+                <>
+                  <p className='font-normal text-lg  py-2'>
+                    Create your first project to get started.
+                  </p>
+                  <div className='py-4'>
+                    <Button
+                      text='NEW PROJECT'
+                      icon={<IoMdAdd color='white' />}
+                      onClick={() => {
+                        handleOpen(true)
+                      }}
+                    />
+                  </div>
+                </>
+              ) : (
+                <p className='font-normal text-lg text-gray-500 py-2'>
+                  Projects that you are invited to will appear here.
+                </p>
+              )}
             </Can>
+
           </div>
-        </div>
+        </LayoutAbsoluteContent>
       )}
       leftbar={sidebar}
       leftbarActive={true}

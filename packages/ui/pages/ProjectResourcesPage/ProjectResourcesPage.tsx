@@ -40,6 +40,7 @@ import { RESOURCE_COLUMNS } from "../ResourceListPage/ResourceListPage";
 import { ManageResourcesProjectModal } from "packages/ui/modals/project/ManageResourcesProjectModal/ManageResourcesProjectModal";
 import { ResourceBar } from "packages/ui/components/ResourceBar/ResourceBar";
 import { PdfView } from "packages/ui/components/PdfView/PdfView";
+import { LayoutAbsoluteContent } from "packages/ui/components/LayoutAbsoluteContent/LayoutAbsoluteContent";
 
 type Props = {
   project: Project
@@ -76,7 +77,6 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
   const openUser = () => {
     setCurrentResource(selectedResources[0]);
   };
-
 
   return (
     <MainLayout
@@ -174,27 +174,38 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
       leftbarActive={true}
       rightbarActive={true}
       absoluteContent={(projectResources.length === 0 && !isLoading) && (
-        <div
-          className="flex text-sm justify-center w-full p-6"
-          style={{
-            position: 'absolute',
-            bottom: 'calc(50% - 50px)',
-            marginLeft: '-60px'
-          }}
-        >
+        <LayoutAbsoluteContent>
           <div
-            className="py-8 px-12 text-center"
+            className="text-center flex-col flex justify-center items-center"
           >
 
-            <p className='text-xxxl text-gray-600 font-bold'>
-              Nothing to show
+            <p className='text-xl font-semibold'>
+              This project does not have any resources yet.
             </p>
-            <p className='py-2 font-normal text-lg text-gray-500'>
-              Resources will show up here after they are added by your team
-            </p>
+            <Can I='attach' a={ENTITIES.Projects} passThrough>
+              {({ isAllowed }) => isAllowed ? (
+                <>
+                  <p className='font-normal text-lg py-2'>
+                    Add your first resource to get started.
+                  </p>
+                  <div className='py-4'>
+                    <ManageResourcesProjectModal
+                      onSubmit={(newResources) => {
+                        onAddResources(newResources)
+                      }}
+                      resourceList={projectResources}
+                    />
+                  </div>
+                </>
+              ) : (
+                <p className='font-normal text-lg text-gray-500 py-2'>
+                  Resources that are added to this project will appear here.
+                </p>
+              )}
+            </Can>
 
           </div>
-        </div>
+        </LayoutAbsoluteContent>
       )}
       rightbar={<ResourceBar resource={currentResource} />}
       onClosePreview={() => setCurrentResource(undefined)}

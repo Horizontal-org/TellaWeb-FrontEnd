@@ -47,7 +47,6 @@ export const CreateResourceModal: FunctionComponent<React.PropsWithChildren<Prop
     }
 
     handleProcessing(null)
-    console.log("🚀 ~ file: CreateResourceModal.tsx:38 ~ checkFilename ~ res:", res)
   }
 
   const checkFileSize = (size: number) => {

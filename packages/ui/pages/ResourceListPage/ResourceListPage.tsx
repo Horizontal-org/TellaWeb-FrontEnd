@@ -32,6 +32,7 @@ import { TableColumn } from "../../components/Table/Table";
 import { DeleteResourceModal } from "packages/ui/modals/resource/DeleteResourceModal/DeleteResourceModal";
 import { ResourceBar } from "packages/ui/components/ResourceBar/ResourceBar";
 import { PdfView } from "packages/ui/components/PdfView/PdfView";
+import { LayoutAbsoluteContent } from "packages/ui/components/LayoutAbsoluteContent/LayoutAbsoluteContent";
 
 type Props = {
   sidebar: React.ReactNode;
@@ -103,6 +104,28 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
       leftbar={sidebar}
       leftbarActive={true}
       currentItem={currentResource}
+      absoluteContent={resources.length === 0 && (
+        <LayoutAbsoluteContent>
+          <div
+            className="text-center flex-col flex justify-center items-center"
+          >
+
+            <p className='text-xl font-semibold'>
+              You don’t have any resources yet.
+            </p>
+            <>
+              <p className='font-normal text-lg py-2'>
+                Create your first resource to get started.
+              </p>
+              <div className='py-4'>
+                <CreateResourceModal
+                  onSubmit={onCreateUser}
+                />
+              </div>
+            </>
+          </div>
+        </LayoutAbsoluteContent>
+      )}
       content={
         <div>
           <div
@@ -191,46 +214,49 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
             )}
 
           </div>
-          <div>
-            <Table
-              columns={RESOURCE_COLUMNS}
-              data={resources}
-              itemQuery={currentQuery}
-              onSelection={setSelectedResources as Dispatch<SetStateAction<Item[]>>}
-              onFetch={onQueryChange}
-              icon={<MdPictureAsPdf />}
-              rowOptions={(hoverRow, isHoverSelected) => (
-                <HoveredRowWrapper isHoverSelected={isHoverSelected}>
-                  <>
-                    <div className='pr-2'>
-                      <Button
-                        icon={<MdOpenInNew />}
-                        text="Open"
-                        onClick={(event: MouseEvent) => {
-                          event.preventDefault();
-                          event.stopPropagation()
-                          // onOpen(hoverRow);
-                          setCurrentResource(hoverRow);
-                          handleViewer(true)
-                        }}
-                      />
-                    </div>
-                    <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
-                      <ButtonOption
-                        icon={<MdRemoveRedEye />}
-                        color='#8B8E8F'
-                        text="Preview"
-                        onClick={(e: ChangeEvent) => {
-                          e.stopPropagation()
-                          setCurrentResource(hoverRow);
-                        }}
-                      />
-                    </ButtonMenu>
-                  </>
-                </HoveredRowWrapper>
-              )}
-            />
-          </div>
+          {resources.length > 0 && (
+
+            <div>
+              <Table
+                columns={RESOURCE_COLUMNS}
+                data={resources}
+                itemQuery={currentQuery}
+                onSelection={setSelectedResources as Dispatch<SetStateAction<Item[]>>}
+                onFetch={onQueryChange}
+                icon={<MdPictureAsPdf />}
+                rowOptions={(hoverRow, isHoverSelected) => (
+                  <HoveredRowWrapper isHoverSelected={isHoverSelected}>
+                    <>
+                      <div className='pr-2'>
+                        <Button
+                          icon={<MdOpenInNew />}
+                          text="Open"
+                          onClick={(event: MouseEvent) => {
+                            event.preventDefault();
+                            event.stopPropagation()
+                            // onOpen(hoverRow);
+                            setCurrentResource(hoverRow);
+                            handleViewer(true)
+                          }}
+                        />
+                      </div>
+                      <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
+                        <ButtonOption
+                          icon={<MdRemoveRedEye />}
+                          color='#8B8E8F'
+                          text="Preview"
+                          onClick={(e: ChangeEvent) => {
+                            e.stopPropagation()
+                            setCurrentResource(hoverRow);
+                          }}
+                        />
+                      </ButtonMenu>
+                    </>
+                  </HoveredRowWrapper>
+                )}
+              />
+            </div>
+          )}
 
         </div>
       }
