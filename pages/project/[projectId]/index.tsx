@@ -61,7 +61,7 @@ export const ProjectById = () => {
 
   const [query, setQuery] = useState<ReportQuery>(defaultQuery);
   // Sorting, search and pagination are done by the server, as on the reports list
-  const { data: reports } = useListQuery({ ...query, projectId }, { skip: !projectId });
+  const { data: reports, isLoading, isUninitialized } = useListQuery({ ...query, projectId }, { skip: !projectId });
   // The table needs the total from the API to know how many pages there are
   const itemQuery = useMemo(
     () => toItemQuery({ ...query, total: reports?.total ?? query.total }),
@@ -89,6 +89,7 @@ export const ProjectById = () => {
 
   return currentProject ? (
     <ProjectPage
+      isLoading={isLoading || isUninitialized}
       project={currentProject}
       currentQuery={itemQuery}
       onQueryChange={(itemQuery) => setQuery(toReportQuery(itemQuery))}

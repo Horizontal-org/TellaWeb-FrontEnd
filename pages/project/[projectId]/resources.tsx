@@ -64,7 +64,7 @@ export const ProjectById = () => {
   const { push } = useRouter();
   const [query, setQuery] = useState<ResourceQuery>(defaultQuery);
   // Sorting, search and pagination are done by the server, as on the project's reports list
-  const { data: resources, refetch: refetchList } = useListByProjectQuery({ ...query, projectId }, { skip: !projectId })
+  const { data: resources, refetch: refetchList, isLoading: listLoading, isUninitialized } = useListByProjectQuery({ ...query, projectId }, { skip: !projectId })
   // The table needs the total from the API to know how many pages there are
   const itemQuery = useMemo(
     () => toItemQuery({ ...query, total: resources?.total ?? query.total }),
@@ -87,7 +87,7 @@ export const ProjectById = () => {
     <ProjectResourcesPage
       project={currentProject}
       currentQuery={itemQuery}
-      isLoading={isLoading}
+      isLoading={isLoading || listLoading || isUninitialized}
       onAddResources={(newR) => {
         RESOURCES_SYNC_MESSAGE='Resources added'
         addResources({ id: currentProject.id, resources: newR })

@@ -137,8 +137,9 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
               </>
             )}
           </div>
-          {(projectResources.length > 0) && (
+          {(projectResources.length > 0 || isLoading) && (
             <Table
+              loading={isLoading}
               columns={RESOURCE_COLUMNS}
               data={resources}
               withPagination={true}

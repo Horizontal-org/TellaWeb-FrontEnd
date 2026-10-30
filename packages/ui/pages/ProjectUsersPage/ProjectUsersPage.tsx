@@ -39,6 +39,7 @@ type Props = {
   sidebar: React.ReactNode;
   currentQuery: ItemQuery;
   removeSelected: (selectedUsers: string[]) => void;
+  isLoading?: boolean;
 };
 
 export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
@@ -50,7 +51,8 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
   projectUsers = [],
   sidebar,
   currentQuery,
-  removeSelected
+  removeSelected,
+  isLoading
 }) => {
   const [currentUser, setCurrentUser] = useState<User | undefined>();
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
@@ -114,6 +116,7 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
             )}
           </div>
           <Table
+            loading={isLoading}
             columns={USER_COLUMNS}
             data={users}
             withPagination={true}

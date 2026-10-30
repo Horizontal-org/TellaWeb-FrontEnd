@@ -29,6 +29,7 @@ interface Props {
   onCreateConfig: (name: string) => void;
   configurations: Configuration[];
   onOpen: (config: Configuration) => void;
+  isLoading?: boolean;
 }
 
 export const ConfigurationListPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
@@ -37,7 +38,8 @@ export const ConfigurationListPage: FunctionComponent<React.PropsWithChildren<Pr
   currentQuery,
   onCreateConfig,
   configurations,
-  onOpen
+  onOpen,
+  isLoading
 }) => {
 
   const [currentConfig, setCurrentConfig] = useState<Configuration | undefined>();
@@ -117,6 +119,7 @@ export const ConfigurationListPage: FunctionComponent<React.PropsWithChildren<Pr
 
           <div>
             <Table
+              loading={isLoading}
               columns={CONFIGURATION_COLUMNS}
               data={configurations}
               itemQuery={currentQuery}

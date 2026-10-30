@@ -38,6 +38,7 @@ type Props = {
   onDownload?: (report: Report) => void;
   sidebar: React.ReactNode;
   currentQuery: ItemQuery;
+  isLoading?: boolean;
 };
 
 const voidFunction = () => { };
@@ -50,6 +51,7 @@ export const ReportListPage: FunctionComponent<React.PropsWithChildren<Props>> =
   onQueryChange,
   sidebar,
   currentQuery,
+  isLoading,
 }) => {
   const [currentReport, setCurrentReport] = useState<Report | undefined>();
   const [selectedReports, setSelectedReports] = useState<Report[]>([]);
@@ -150,6 +152,7 @@ export const ReportListPage: FunctionComponent<React.PropsWithChildren<Props>> =
             )}
           </div>
           <Table
+            loading={isLoading}
             columns={REPORT_COLUMNS}
             data={reports}
             itemQuery={currentQuery}

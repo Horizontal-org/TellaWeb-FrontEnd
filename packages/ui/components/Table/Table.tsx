@@ -51,6 +51,7 @@ type Props = {
   itemQuery?: ItemQuery;
   icon?: React.ReactNode;
   rowOptions: (hoveredRow, isHoverSelected) => React.ReactNode
+  loading?: boolean;
 };
 
 const DEFAULT_ITEM_QUERY = {
@@ -60,6 +61,8 @@ const DEFAULT_ITEM_QUERY = {
 } as unknown as ItemQuery;
 
 const SELECTION_COLUMN_ID = "selection";
+
+const SKELETON_ROWS = 25;
 
 // Only cursor: pointer, like react-table 7's checkbox props (which replaced the 40x40 size).
 // margin: 0 drops the browser's uneven default margin so the checkbox centres in its box
@@ -87,6 +90,7 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
   icon,
   rowOptions,
   withPagination = true,
+  loading = false,
 }: Props) => {
   const [hovering, handleHover] = useState<number | null>(null);
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -235,8 +239,22 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
             </tr>
           ))}
         </thead>
-        <tbody className="text-base text-gray-700">
-          {rows.map((row, i) => {
+        <tbody className="text-base text-gray-700" aria-busy={loading}>
+          {loading ? [...Array(SKELETON_ROWS)].map((_, i) => (
+            <tr key={i} className="border-b border-gray-200" style={{ height: 50 }}>
+              {table.getAllLeafColumns().map((column) => (
+                <td key={column.id} className={column.columnDef.meta?.className || "px-3 py-3"}>
+                  {column.id === SELECTION_COLUMN_ID ? (
+                    <div className={`${SELECTION_BOX_CLASS} opacity-50`}>
+                      {icon || <FaRegFolder color="#8B8E8F" />}
+                    </div>
+                  ) : (
+                    <div className="bg-gray-100 rounded-lg animate-pulse w-3/4" style={{ height: 14 }} />
+                  )}
+                </td>
+              ))}
+            </tr>
+          )) : rows.map((row, i) => {
             return (
               <tr
                 onMouseEnter={() => {
@@ -299,7 +317,7 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
         </tbody>
       </table>
 
-      {withPagination && (
+      {withPagination && !loading && (
         <div className='w-full flex justify-center item-center py-8'>
           <Paginator
             gotoPage={(index) => table.setPageIndex(index)}

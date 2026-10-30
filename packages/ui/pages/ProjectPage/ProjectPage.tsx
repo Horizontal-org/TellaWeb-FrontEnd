@@ -42,6 +42,7 @@ type Props = {
   onDelete: (reports: Report[]) => void;
   sidebar: React.ReactNode;
   currentQuery: ItemQuery;
+  isLoading?: boolean;
 };
 
 const voidFunction = () => { };
@@ -55,6 +56,7 @@ export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   onQueryChange,
   sidebar,
   currentQuery,
+  isLoading,
 }) => {
   const [currentReport, setCurrentReport] = useState<Report | undefined>();
   const [selectedReports, setSelectedReports] = useState<Report[]>([]);
@@ -147,8 +149,9 @@ export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
               </>
             )}
           </div>
-          {reports.length > 0 && (
+          {(reports.length > 0 || isLoading) && (
             <Table
+              loading={isLoading}
               columns={REPORT_COLUMNS}
               data={reports}
               withPagination={true}
@@ -203,7 +206,7 @@ export const ProjectPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
       rightbarActive={true}
       onClosePreview={() => setCurrentReport(undefined)}
       currentItem={currentReport}
-      absoluteContent={(reports.length === 0) && (
+      absoluteContent={(reports.length === 0 && !isLoading) && (
         <LayoutAbsoluteContent>
           <div
             className="text-center flex-col flex justify-center items-center"

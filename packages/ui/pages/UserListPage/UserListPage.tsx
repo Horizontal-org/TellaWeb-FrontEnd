@@ -41,6 +41,7 @@ type Props = {
     password: string
     role: string
   }) => void;
+  isLoading?: boolean;
 };
 
 export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
@@ -50,7 +51,8 @@ export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = (
   currentQuery,
   onCreateUser,
   onOpen,
-  onDelete
+  onDelete,
+  isLoading
 }) => {
 
   const [currentUser, setCurrentUser] = useState<User | undefined>();
@@ -170,6 +172,7 @@ export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = (
           </div>
           <div>
             <Table
+              loading={isLoading}
               columns={USER_COLUMNS}
               data={users}
               itemQuery={currentQuery}

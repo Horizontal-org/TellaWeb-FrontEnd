@@ -43,6 +43,7 @@ type Props = {
   onDelete: (id: string) => void;
   onCreateUser: () => void;
   onDownload: (fileNames: string[]) => void
+  isLoading?: boolean
 };
 
 
@@ -71,7 +72,8 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
   onCreateUser,
   // onOpen,
   onDelete,
-  onDownload
+  onDownload,
+  isLoading
 }) => {
 
   const [currentResource, setCurrentResource] = useState<Resource | undefined>();
@@ -104,7 +106,7 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
       leftbar={sidebar}
       leftbarActive={true}
       currentItem={currentResource}
-      absoluteContent={resources.length === 0 && (
+      absoluteContent={resources.length === 0 && !isLoading && (
         <LayoutAbsoluteContent>
           <div
             className="text-center flex-col flex justify-center items-center"
@@ -214,10 +216,11 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
             )}
 
           </div>
-          {resources.length > 0 && (
+          {(resources.length > 0 || isLoading) && (
 
             <div>
               <Table
+                loading={isLoading}
                 columns={RESOURCE_COLUMNS}
                 data={resources}
                 itemQuery={currentQuery}

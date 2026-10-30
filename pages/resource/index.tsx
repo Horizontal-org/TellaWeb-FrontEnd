@@ -52,7 +52,7 @@ const Resources = () => {
 
   const [query, setQuery] = useState<ResourceQuery>(defaultQuery);
 
-  const { data: resources, refetch } = useListQuery(query);
+  const { data: resources, refetch, isLoading } = useListQuery(query);
   // The table needs the total from the API to know how many pages there are
   const itemQuery = useMemo(
     () => toItemQuery({ ...query, total: resources?.total ?? query.total }),
@@ -74,6 +74,7 @@ const Resources = () => {
 
   return (
     <ResourceListPage
+      isLoading={isLoading}
       onCreateUser={() => {
         refetch()
         handleToast('The new resource was successfully added to your workspace', 'success')
