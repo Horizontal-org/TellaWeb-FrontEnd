@@ -98,13 +98,19 @@ export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> 
 
 
           <div className="py-4 flex flex-wrap ">
-            {projects.map((p) => (
-              <div key={p.id} className='pt-4 pr-4' onClick={() => { onOpen(p.id) }}>
-                <ProjectCard
-                  data={p}
-                />
-              </div>
-            ))}
+            {isLoading
+              ? [...Array(4)].map((_, i) => (
+                <div key={i} className='pt-4 pr-4'>
+                  <ProjectCard loading />
+                </div>
+              ))
+              : projects.map((p) => (
+                <div key={p.id} className='pt-4 pr-4' onClick={() => { onOpen(p.id) }}>
+                  <ProjectCard
+                    data={p}
+                  />
+                </div>
+              ))}
           </div>
         </div>
       }

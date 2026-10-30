@@ -9,21 +9,54 @@ import { Can } from "common/casl/Can";
 import { ENTITIES } from "common/casl/Ability";
 
 interface Props {
-  data: Project;
+  data?: Project;
+  loading?: boolean;
 }
 
-const ProjectCard: FunctionComponent<React.PropsWithChildren<Props>> = ({ data }) => {
+const ProjectCard: FunctionComponent<React.PropsWithChildren<Props>> = ({ data, loading = false }) => {
   const router = useRouter()
+
+  if (loading) {
+    return (
+      <div
+        aria-busy
+        className="border border-gray-100 flex flex-col justify-between animate-pulse"
+        style={{ width: 280, height: 180, borderRadius: '8px' }}
+      >
+        <div className="pt-6 px-6 space-y-2" style={{ minHeight: '80px' }}>
+          <div className="bg-gray-100 rounded-lg w-full" style={{ height: 20 }} />
+        </div>
+        <div>
+          <div className="px-6 pt-6 pb-2">
+            <div className="bg-gray-100 rounded-lg w-20" style={{ height: 18 }} />
+          </div>
+          <div
+            className="px-6 py-2 flex items-center justify-between bg-gray-50"
+            style={{ borderBottomLeftRadius: '8px', borderBottomRightRadius: '8px' }}
+          >
+            <div className="flex items-center text-gray-500 opacity-50">
+              <Can I='read' a={ENTITIES.Users}>
+                <div className="p-2"><FaRegUser size={14} /></div>
+              </Can>
+              <div className="p-2"><FaRegFileAlt size={14} /></div>
+            </div>
+            <div className="p-2 text-gray-500 opacity-50"><MdOutlineSettings /></div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div 
+    <div
       className="border border-gray-100 flex flex-col justify-between cursor-pointer hover:border-blue-light"
       style={{ width: 280, height: 180, borderRadius: '8px' }}
     >
 
       <p
-        className="pt-6 px-6 font-sans font-bold text-gray-600" 
+        className="pt-6 px-6 font-sans font-bold text-gray-600"
         style={{
-          fontSize: '18px', 
+          fontSize: '18px',
           lineClamp: '2',
           WebkitLineClamp: '2',
           WebkitBoxOrient: 'vertical',
@@ -32,44 +65,44 @@ const ProjectCard: FunctionComponent<React.PropsWithChildren<Props>> = ({ data }
           minHeight: '80px'
         }}
       >
-        { data.name }
+        {data.name}
       </p>
 
       <div>
         <div className="px-6 font-sans text-base font-normal text-gray-500 pt-6 pb-2">
-          { (data.reports.length + ' ') + (data.reports.length === 1 ? ' Report' : 'Reports') }
+          {(data.reports.length + ' ') + (data.reports.length === 1 ? ' Report' : 'Reports')}
         </div>
-        <div 
+        <div
           className="px-6 py-2 flex items-center justify-between bg-gray-50"
-          style={{ borderBottomLeftRadius: '8px', borderBottomRightRadius: '8px' }} 
+          style={{ borderBottomLeftRadius: '8px', borderBottomRightRadius: '8px' }}
         >
-         <div className="flex items-center">
+          <div className="flex items-center">
             <Can I='read' a={ENTITIES.Users}>
-              <div 
-                  className="p-2  cursor-pointer text-gray-500 active:shadow-inbox rounded-sm"
-                  onClick={(e) => {
-                    e.stopPropagation()                  
-                    router.push(`/project/${data.id}/users`)
-                  }}
-                >                
-                  <FaRegUser size={14} />
-              </div>              
-            </Can>
-            <div 
+              <div
                 className="p-2  cursor-pointer text-gray-500 active:shadow-inbox rounded-sm"
                 onClick={(e) => {
-                  e.stopPropagation()              
-                  router.push(`/project/${data.id}/resources`)
+                  e.stopPropagation()
+                  router.push(`/project/${data.id}/users`)
                 }}
               >
-                <FaRegFileAlt size={14} />
+                <FaRegUser size={14} />
+              </div>
+            </Can>
+            <div
+              className="p-2  cursor-pointer text-gray-500 active:shadow-inbox rounded-sm"
+              onClick={(e) => {
+                e.stopPropagation()
+                router.push(`/project/${data.id}/resources`)
+              }}
+            >
+              <FaRegFileAlt size={14} />
             </div>
-         </div>
+          </div>
 
-          <div 
+          <div
             className="p-2 cursor-pointer text-gray-500 active:shadow-inbox rounded-sm"
             onClick={(e) => {
-              e.stopPropagation()              
+              e.stopPropagation()
               router.push(`/project/${data.id}/settings`)
             }}
           >
