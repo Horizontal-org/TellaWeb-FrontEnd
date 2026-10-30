@@ -38,6 +38,7 @@ export interface UserQuery {
   page: number;
   total?: number;
   exclude?: Array<string>;
+  excludeProject?: string;
   size: number;
   // Only the users of this project (admins are in every project)
   projectId?: string;

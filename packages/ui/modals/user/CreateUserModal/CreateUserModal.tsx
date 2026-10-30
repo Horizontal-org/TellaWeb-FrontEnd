@@ -39,7 +39,7 @@ export const CreateUserModal: FunctionComponent<React.PropsWithChildren<Props>> 
       btnType={btnType.Primary}
       subtitle='Enter the user’s basic information here. You will be able to add additional information on the next screen.'
       submit='SAVE'
-      disabled={!((username.length > 0) && password === confirmPassword)}
+      disabled={!(username.length >= 6 && password.length >= 6 && password === confirmPassword)}
       onSubmit={() => {
         onSubmit({
           username,
@@ -58,6 +58,7 @@ export const CreateUserModal: FunctionComponent<React.PropsWithChildren<Props>> 
             <TextInput
               name='username'
               placeholder='Email'
+              maxLength={60}
               value={username}
               onChange={(e) => { handleUsername(e.target.value) }}
               onFocus={(e) => {
@@ -168,6 +169,18 @@ export const CreateUserModal: FunctionComponent<React.PropsWithChildren<Props>> 
               {role !== ROLES.REPORTER && username.length > 0 && !(/\S+@\S+\.\S+/.test(username)) && (
                 <ErrorMessage
                   message='Please enter a valid email address.'
+                />
+              )}
+
+              {username.length > 0 && username.length < 6 && (
+                <ErrorMessage
+                  message='The username must have at least 6 characters.'
+                />
+              )}
+
+              {password.length > 0 && password.length < 6 && (
+                <ErrorMessage
+                  message='The password must have at least 6 characters.'
                 />
               )}
 

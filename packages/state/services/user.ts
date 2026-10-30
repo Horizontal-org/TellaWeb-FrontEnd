@@ -79,6 +79,7 @@ export const userApi = createApi({
           order: userQuery.sortOrder,
           search: userQuery.search,
           exclude: userQuery.exclude,
+          excludeProject: userQuery.excludeProject,
           projectId: userQuery.projectId,
         };
 

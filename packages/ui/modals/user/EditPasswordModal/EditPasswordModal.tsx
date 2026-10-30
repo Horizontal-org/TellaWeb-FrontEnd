@@ -21,7 +21,7 @@ export const EditPasswordModal: FunctionComponent<React.PropsWithChildren<Props>
   }, [newPassword])
 
   return (
-    <ButtonPopup       
+    <ButtonPopup
       toggleButton={(toggle) => (
         <Button
           text="CHANGE PASSWORD"
@@ -35,9 +35,9 @@ export const EditPasswordModal: FunctionComponent<React.PropsWithChildren<Props>
             Edit password
           </p>
           <p className='font-sans text-sm font-normal text-gray-500'>
-            Please enter the user new password.           
-          </p>      
-          
+            {`Please enter the user's new password.`}
+          </p>
+
           <div>
             <TextInput
               name='new-password'
@@ -65,10 +65,10 @@ export const EditPasswordModal: FunctionComponent<React.PropsWithChildren<Props>
           )}
 
           <div className='py-4'>
-            <TextInput 
+            <TextInput
               name='confirm-password'
               placeholder='Confirm new password'
-              type='password'          
+              type='password'
               value={confirmPassword}
               onChange={(e) => { handleConfirmPassword(e.target.value) }}
               onFocus={(e) => {
@@ -81,27 +81,33 @@ export const EditPasswordModal: FunctionComponent<React.PropsWithChildren<Props>
                   handleShowValidations(true)
                 }
               }}
-            /> 
+            />
           </div>
 
-          { showValidations && newPassword.length > 0 && confirmPassword.length > 0 && !(newPassword === confirmPassword) && (
+          {showValidations && newPassword.length > 0 && confirmPassword.length > 0 && !(newPassword === confirmPassword) && (
             <div className="w-full p-2 my-4  bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200">
               Your new passwords do not match
             </div>
           )}
 
+          {showValidations && newPassword.length > 0 && newPassword.length < 6 && (
+            <div className="w-full p-2 my-4  bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200">
+              The new password must have at least 6 characters
+            </div>
+          )}
+
           <div className='pb-4'>
-            <Button 
+            <Button
               text='SAVE'
               full={true}
-              disabled={!(newPassword.length > 0 && newPassword === confirmPassword)}
+              disabled={!(newPassword.length >= 6 && newPassword === confirmPassword)}
               onClick={() => {
                 onSubmit(newPassword)
                 toggle()
               }}
             />
           </div>
-          
+
         </div>
       )}
     />

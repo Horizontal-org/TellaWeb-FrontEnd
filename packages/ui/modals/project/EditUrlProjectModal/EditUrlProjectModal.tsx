@@ -39,6 +39,7 @@ export const EditUrlProjectModal: FunctionComponent<React.PropsWithChildren<Prop
           <div className='pt-4'>
             <TextInput
               name='url'
+              maxLength={150}
               placeholder='URL'
               value={url}
               onChange={(e) => { handleUrl(e.target.value) }}

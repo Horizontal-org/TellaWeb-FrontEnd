@@ -49,7 +49,8 @@ test("add a resource to a project", async ({ page, adminApi }) => {
 
   await page.goto(`/project/${project.id}/resources`)
   await waitForApp(page)
-  await page.getByRole("button", { name: "ADD RESOURCES" }).click()
+  // an empty project shows the button in the header and in the empty state
+  await page.getByRole("button", { name: "ADD RESOURCES" }).first().click()
   const dialog = page.getByRole("dialog")
   await searchAndSelect(dialog, title, `${title}.pdf`)
   await dialog.getByRole("button", { name: "ADD" }).click()

@@ -39,6 +39,7 @@ export const RenameProjectModal: FunctionComponent<React.PropsWithChildren<Props
           <div className='pt-4'>
             <TextInput
               name='name'
+              maxLength={150}
               placeholder='Project name'
               value={name}
               onChange={(e) => { handleName(e.target.value) }}

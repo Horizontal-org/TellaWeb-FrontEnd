@@ -3,7 +3,7 @@ import { Modal, ErrorMessage } from '../../../components/Modal'
 import { TextInput, ItemQuery } from '../../../'
 import { btnType } from '../../../components/Button/Button'
 import { IoMdAdd } from 'react-icons/io'
-import { User, UserQuery } from 'packages/state/domain/user'
+import { UserQuery } from 'packages/state/domain/user'
 import { useListQuery } from 'packages/state/services/user'
 import styled from 'styled-components'
 import { SearchUserInput } from 'packages/ui/components/SearchUserInput/SearchUserInput'
@@ -11,24 +11,25 @@ import { SearchEntityInput } from 'packages/ui/components/SearchEntityInput/Sear
 
 interface Props {
   onSubmit: (newUsers: string[]) => void;
-  userList: User[]
+  projectId: string
 }
 
 
 
 export const ManageUsersProjectModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
   onSubmit,
-  userList
+  projectId
 }) => {
 
   const [newUsers, handleNewUsers] = useState<Array<string>>([])
   const [parsedUserList, handleParsedUserList] = useState<Array<any>>([])
   const [query, setQuery] = useState<UserQuery>({
     page: 0,
-    size: 0,
+    size: 3,
     search: '',
   })
-  const { data: users, refetch } = useListQuery(query);
+  // nothing to show until the user types
+  const { data: users } = useListQuery(query, { skip: !query.search })
 
   useEffect(() => {
     const parsed = users?.results.map((u) => {
@@ -36,7 +37,7 @@ export const ManageUsersProjectModal: FunctionComponent<React.PropsWithChildren<
         id: u.id,
         label: u.username
       }
-    })
+    }) ?? []
 
     handleParsedUserList(parsed)
   }, [users])
@@ -80,19 +81,16 @@ export const ManageUsersProjectModal: FunctionComponent<React.PropsWithChildren<
               onSelect={(newUsers) => {
                 // EN EL SEGUNDO SEARCH CON MISMO USUARIO NO RENDERREA
                 handleNewUsers(newUsers)
-                setQuery({
-                  page: 0,
-                  size: 3,
-                  search: 'RETURN-NOTHING',
-                })
+                setQuery({ page: 0, size: 3, search: '' })
               }}
               entities={parsedUserList || []}
               onSearch={(searchQuery, excludedUsers) => {
                 setQuery({
                   page: 0,
                   size: 3,
-                  search: searchQuery.length > 0 ? searchQuery : ' ',
-                  exclude: [...excludedUsers, ...userList.map(ul => ul.id)]
+                  search: searchQuery,
+                  exclude: excludedUsers,
+                  excludeProject: projectId
                 })
               }}
             />

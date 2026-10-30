@@ -46,7 +46,7 @@ type Props = {
   project: Project
   // One page of the project's resources, as returned by the server
   resources: Resource[];
-  // Every resource of the project, so the add modal can leave them out
+  // Every resource of the project, for the empty state
   projectResources: Resource[];
   onQueryChange: (iq: ItemQuery) => void;
   onOpen: (resource: Resource) => void;
@@ -102,7 +102,7 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
                     onSubmit={(newResources) => {
                       onAddResources(newResources)
                     }}
-                    resourceList={projectResources}
+                    projectId={project.id}
                   />
                 </Can>
               </>
@@ -194,7 +194,7 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
                       onSubmit={(newResources) => {
                         onAddResources(newResources)
                       }}
-                      resourceList={projectResources}
+                      projectId={project.id}
                     />
                   </div>
                 </>

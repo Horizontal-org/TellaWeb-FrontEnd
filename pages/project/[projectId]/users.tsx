@@ -95,7 +95,6 @@ export const ProjectById = () => {
         addUsers({ id: currentProject.id, users: selected })
       }}
       users={users?.results || []}
-      projectUsers={currentProject.users}
       sidebar={<Menu />}
     />
   ) : null;

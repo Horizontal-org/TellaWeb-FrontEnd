@@ -23,6 +23,7 @@ export const resourcesApi = createApi({
           order: resourceQuery.sortOrder,
           search: resourceQuery.search,
           exclude: resourceQuery.exclude,
+          excludeProject: resourceQuery.excludeProject,
         };
 
         return {

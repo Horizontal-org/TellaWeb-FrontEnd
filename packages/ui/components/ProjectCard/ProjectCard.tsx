@@ -70,7 +70,7 @@ const ProjectCard: FunctionComponent<React.PropsWithChildren<Props>> = ({ data, 
 
       <div>
         <div className="px-6 font-sans text-base font-normal text-gray-500 pt-6 pb-2">
-          {(data.reports.length + ' ') + (data.reports.length === 1 ? ' Report' : 'Reports')}
+          {(data.reportCount + ' ') + (data.reportCount === 1 ? ' Report' : 'Reports')}
         </div>
         <div
           className="px-6 py-2 flex items-center justify-between bg-gray-50"

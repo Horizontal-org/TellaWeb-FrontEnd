@@ -31,8 +31,6 @@ type Props = {
   project: Project
   // One page of the project's users, as returned by the server
   users: User[];
-  // Every user of the project, so the add modal can leave them out
-  projectUsers: User[];
   onQueryChange: (iq: ItemQuery) => void;
   onOpen: (user: User) => void;
   onAddUsers: (newUsers: string[]) => void;
@@ -48,7 +46,6 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
   onQueryChange,
   onAddUsers,
   users = [],
-  projectUsers = [],
   sidebar,
   currentQuery,
   removeSelected,
@@ -74,7 +71,7 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
                   onSubmit={(newUsers) => {
                     onAddUsers(newUsers)
                   }}
-                  userList={projectUsers}
+                  projectId={project.id}
                 />
               </>
             )}

@@ -1,32 +1,30 @@
 import { FunctionComponent, useState, useEffect, useMemo } from 'react'
-import { Modal, ErrorMessage } from '../../../components/Modal'
-import { TextInput, ItemQuery } from '../../..'
+import { Modal } from '../../../components/Modal'
 import { btnType } from '../../../components/Button/Button'
 import { IoMdAdd } from 'react-icons/io'
 import { useListQuery } from 'packages/state/services/resource'
-import { Resource, ResourceQuery } from 'packages/state/domain/resource'
+import { ResourceQuery } from 'packages/state/domain/resource'
 import { SearchEntityInput } from 'packages/ui/components/SearchEntityInput/SearchEntityInput'
 
 interface Props {
   onSubmit: (newResources: string[]) => void;
-  resourceList: Resource[]
+  projectId: string
 }
-
-
 
 export const ManageResourcesProjectModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
   onSubmit,
-  resourceList
+  projectId
 }) => {
 
   const [newResources, handleNewResources] = useState<Array<string>>([])
   const [parsedRecList, handleParsedRecList] = useState<Array<any>>([])
   const [query, setQuery] = useState<ResourceQuery>({
     page: 0,
-    size: 0,
+    size: 3,
     search: '',
   })
-  const { data: resources, refetch } = useListQuery(query);
+  // nothing to show until the user types
+  const { data: resources } = useListQuery(query, { skip: !query.search })
 
 
   useEffect(() => {
@@ -35,7 +33,7 @@ export const ManageResourcesProjectModal: FunctionComponent<React.PropsWithChild
         id: u.id,
         label: u.fileName
       }
-    })
+    }) ?? []
 
     handleParsedRecList(parsed)
   }, [resources])
@@ -63,19 +61,16 @@ export const ManageResourcesProjectModal: FunctionComponent<React.PropsWithChild
             <SearchEntityInput
               onSelect={(selectedResources) => {
                 handleNewResources(selectedResources)
-                setQuery({
-                  page: 0,
-                  size: 3,
-                  search: 'RETURN-NOTHING',
-                })
+                setQuery({ page: 0, size: 3, search: '' })
               }}
               entities={parsedRecList || []}
               onSearch={(searchQuery, excludedResources) => {
                 setQuery({
                   page: 0,
                   size: 3,
-                  search: searchQuery.length > 0 ? searchQuery : 'RETURN-NOTHING',
-                  exclude: [...excludedResources, ...resourceList.map(ul => ul.id)]
+                  search: searchQuery,
+                  exclude: excludedResources,
+                  excludeProject: projectId
                 })
               }}
             />
