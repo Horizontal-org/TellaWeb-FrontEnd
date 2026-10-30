@@ -1,8 +1,8 @@
-import { 
-  FunctionComponent, 
-  useState, 
-  Dispatch, 
-  SetStateAction, 
+import {
+  FunctionComponent,
+  useState,
+  Dispatch,
+  SetStateAction,
   useRef,
   FormEvent,
   ChangeEvent,
@@ -12,18 +12,14 @@ import {
   ButtonMenu,
   ButtonOption,
   SearchInput,
-  DeleteModal,
   // CreateUserModal,
-  UserBar,
 } from "../..";
 import { MainLayout } from "../../layouts/MainLayout";
-import { User } from "packages/state/domain/user";
 import { Item } from "../../domain/Item";
 import { ItemQuery, Table, Button } from 'packages/ui'
 import { btnType } from "../../components/Button/Button";
 import { MdOpenInNew, MdRemoveRedEye, MdSave } from "react-icons/md";
 import { MdPictureAsPdf } from "react-icons/md";
-import { CreateUserModal } from '../../modals/user/CreateUserModal/CreateUserModal'
 import { Can } from "common/casl/Can";
 import { ENTITIES } from "common/casl/Ability";
 import HoveredRowWrapper from "packages/ui/components/Table/HoveredRowWrapper";
@@ -36,9 +32,10 @@ import { TableColumn } from "../../components/Table/Table";
 import { DeleteResourceModal } from "packages/ui/modals/resource/DeleteResourceModal/DeleteResourceModal";
 import { ResourceBar } from "packages/ui/components/ResourceBar/ResourceBar";
 import { PdfView } from "packages/ui/components/PdfView/PdfView";
+import { LayoutAbsoluteContent } from "packages/ui/components/LayoutAbsoluteContent/LayoutAbsoluteContent";
 
 type Props = {
-  sidebar: React.ReactNode;  
+  sidebar: React.ReactNode;
   resources: Resource[];
   currentQuery: ItemQuery;
   // onOpen: (user: User) => void;
@@ -54,11 +51,11 @@ export const RESOURCE_COLUMNS: TableColumn[] = [
     Header: "Title",
     headerKey: 'resource.title',
     accessor: (resource: Resource): string => resource.title,
-    className: "px-3 py-3 w-40 font-semibold",
+    className: "px-3 py-3 w-auto font-semibold",
   },
   {
     Header: "Date created",
-    headerKey: 'user.createdAt',
+    headerKey: 'resource.createdAt',
     className: "px-3 py-3 w-40",
     id: "date",
     accessor: (resource: Resource): string => format(new Date(resource.createdAt), "dd MMM yyyy"),
@@ -81,7 +78,7 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
   const [openViewer, handleViewer] = useState<boolean>(false)
 
   const [selectedResources, setSelectedResources] = useState<Resource[]>([]);
-  
+
   const searchInput = useRef<HTMLInputElement>(null);
   let searchTimeout = null
 
@@ -91,7 +88,9 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
 
     onQueryChange({
       ...currentQuery,
-      search: name
+      search: name,
+      // A new search starts again from the first page
+      pagination: { ...currentQuery.pagination, page: 0 }
     })
   };
 
@@ -101,17 +100,39 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
       subtitle="Manage all the resources available in your space"
       onClosePreview={() => setCurrentResource(undefined)}
       rightbarActive={true}
-      rightbar={<ResourceBar resource={currentResource}/>}
-      leftbar={sidebar}      
+      rightbar={<ResourceBar resource={currentResource} />}
+      leftbar={sidebar}
       leftbarActive={true}
       currentItem={currentResource}
+      absoluteContent={resources.length === 0 && (
+        <LayoutAbsoluteContent>
+          <div
+            className="text-center flex-col flex justify-center items-center"
+          >
+
+            <p className='text-xl font-semibold'>
+              You don’t have any resources yet.
+            </p>
+            <>
+              <p className='font-normal text-lg py-2'>
+                Create your first resource to get started.
+              </p>
+              <div className='py-4'>
+                <CreateResourceModal
+                  onSubmit={onCreateUser}
+                />
+              </div>
+            </>
+          </div>
+        </LayoutAbsoluteContent>
+      )}
       content={
         <div>
-          <div 
+          <div
             className="flex space-x-2 mb-2 p-2"
           >
 
-            <PdfView 
+            <PdfView
               isOpen={openViewer}
               fileName={currentResource ? currentResource.fileName : ''}
               handleIsOpen={() => {
@@ -123,7 +144,7 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
             {selectedResources.length === 0 && (
               <>
                 <Can I='create' a={ENTITIES.Resources}>
-                  <CreateResourceModal 
+                  <CreateResourceModal
                     onSubmit={onCreateUser}
                   />
                 </Can>
@@ -160,80 +181,83 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
                     type={btnType.Secondary}
                     icon={<RiDownload2Fill />}
                     text="Download"
-                    onClick={() => {                       
+                    onClick={() => {
                       onDownload([selectedResources[0].fileName])
                     }}
-                  />              
+                  />
                 </div>
                 <ButtonMenu openSide="right">
                   <Can I='delete' a={ENTITIES.Resources}>
-                    <DeleteResourceModal 
-                      onSubmit={() => { 
+                    <DeleteResourceModal
+                      onSubmit={() => {
                         onDelete(selectedResources[0].id)
-                      }}                      
-                    />                    
+                      }}
+                    />
                   </Can>
                 </ButtonMenu>
-              </>                                  
-            )}         
+              </>
+            )}
 
             {selectedResources.length > 1 && (
               <>
-                <div className='flex'>         
+                <div className='flex'>
                   <Button
                     type={btnType.Secondary}
                     icon={<RiDownload2Fill />}
                     text="Download"
-                    onClick={() => { 
+                    onClick={() => {
                       onDownload(selectedResources.map(f => f.fileName))
                     }}
-                  />              
-                </div>                
-              </>                                  
-            )}                
-           
+                  />
+                </div>
+              </>
+            )}
+
           </div>
-          <div>
-            <Table
-              columns={RESOURCE_COLUMNS}
-              data={resources}
-              itemQuery={currentQuery}
-              onSelection={setSelectedResources as Dispatch<SetStateAction<Item[]>>}
-              onFetch={onQueryChange}
-              icon={<MdPictureAsPdf/>}
-              rowOptions={(hoverRow, isHoverSelected) => (
-                <HoveredRowWrapper isHoverSelected={isHoverSelected}>
-                  <>
-                    <div className='pr-2'>
-                      <Button
-                        icon={<MdOpenInNew />}
-                        text="Open"
-                        onClick={(event: MouseEvent) => {
-                          event.preventDefault();
-                          event.stopPropagation()
-                          // onOpen(hoverRow);
-                          setCurrentResource(hoverRow);
-                          handleViewer(true)
-                        }}
-                      />
-                    </div>
-                    <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
-                      <ButtonOption
-                        icon={<MdRemoveRedEye />}
-                        color='#8B8E8F'
-                        text="Preview"
-                        onClick={(e: ChangeEvent) => {
-                          e.stopPropagation()
-                          setCurrentResource(hoverRow);
-                        }}
-                      />
-                    </ButtonMenu>
-                  </>
-                </HoveredRowWrapper>
-              )}
-            />
-          </div>
-         
+          {resources.length > 0 && (
+
+            <div>
+              <Table
+                columns={RESOURCE_COLUMNS}
+                data={resources}
+                itemQuery={currentQuery}
+                onSelection={setSelectedResources as Dispatch<SetStateAction<Item[]>>}
+                onFetch={onQueryChange}
+                icon={<MdPictureAsPdf />}
+                rowOptions={(hoverRow, isHoverSelected) => (
+                  <HoveredRowWrapper isHoverSelected={isHoverSelected}>
+                    <>
+                      <div className='pr-2'>
+                        <Button
+                          icon={<MdOpenInNew />}
+                          text="Open"
+                          onClick={(event: MouseEvent) => {
+                            event.preventDefault();
+                            event.stopPropagation()
+                            // onOpen(hoverRow);
+                            setCurrentResource(hoverRow);
+                            handleViewer(true)
+                          }}
+                        />
+                      </div>
+                      <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
+                        <ButtonOption
+                          icon={<MdRemoveRedEye />}
+                          color='#8B8E8F'
+                          text="Preview"
+                          onClick={(e: ChangeEvent) => {
+                            e.stopPropagation()
+                            setCurrentResource(hoverRow);
+                          }}
+                        />
+                      </ButtonMenu>
+                    </>
+                  </HoveredRowWrapper>
+                )}
+              />
+            </div>
+          )}
+
         </div>
       }
     />

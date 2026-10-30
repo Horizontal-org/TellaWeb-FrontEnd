@@ -1,36 +1,27 @@
 import {
   Dispatch,
-  FormEvent,
   FunctionComponent,
   SetStateAction,
-  useRef,
   useState,
   ChangeEvent,
-  useEffect
 } from "react";
-import { MdOpenInNew, MdRemoveRedEye, MdSave } from "react-icons/md";
+import { MdDelete, MdOpenInNew, MdRemoveRedEye, MdSave } from "react-icons/md";
 import {
-  ReportBar,
   Button,
   Table,
   ButtonMenu,
   ButtonOption,
-  SearchInput,
-  DeleteModal,
   UserBar
 } from "../..";
 import { btnType } from "../../components/Button/Button";
 
 import { MainLayout } from "../../layouts/MainLayout";
 
-import { REPORT_COLUMNS } from "../../domain/ReportTableColumns";
 import { ItemQuery } from "../../domain/ItemQuery";
 import { Item } from "../../domain/Item";
-import { Report } from "../../domain/Report";
 import { Project } from "packages/state/domain/project";
 import HoveredRowWrapper from "packages/ui/components/Table/HoveredRowWrapper";
-import { Can } from "common/casl/Can";
-import { ENTITIES } from "common/casl/Ability";
+import { ROLES } from "common/casl/Ability";
 import { User } from "packages/state/domain/user";
 import { ManageUsersProjectModal } from "packages/ui/modals/project/ManageUsersProjectModal/ManageUsersProjectModal";
 import { USER_COLUMNS } from "packages/ui/domain/UserTableColumns";
@@ -38,10 +29,13 @@ import { BsPerson } from "react-icons/bs";
 
 type Props = {
   project: Project
+  // One page of the project's users, as returned by the server
   users: User[];
+  // Every user of the project, so the add modal can leave them out
+  projectUsers: User[];
   onQueryChange: (iq: ItemQuery) => void;
   onOpen: (user: User) => void;
-  onAddUsers: (newUsers:  string[]) => void;
+  onAddUsers: (newUsers: string[]) => void;
   sidebar: React.ReactNode;
   currentQuery: ItemQuery;
   removeSelected: (selectedUsers: string[]) => void;
@@ -53,13 +47,13 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
   onQueryChange,
   onAddUsers,
   users = [],
+  projectUsers = [],
   sidebar,
   currentQuery,
   removeSelected
 }) => {
   const [currentUser, setCurrentUser] = useState<User | undefined>();
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
-  console.log("🚀 ~ selectedUsers:", selectedUsers)
 
   const openUser = () => {
     setCurrentUser(selectedUsers[0]);
@@ -68,17 +62,17 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
   return (
     <MainLayout
       title={"Project users"}
-      subtitle={`Manage users available in the project “${project.name}”`}            
+      subtitle={`Manage users available in the project “${project.name}”`}
       content={
         <div>
           <div className="flex space-x-2 mb-2 p-2">
             {selectedUsers.length === 0 && (
               <>
-                <ManageUsersProjectModal 
+                <ManageUsersProjectModal
                   onSubmit={(newUsers) => {
                     onAddUsers(newUsers)
                   }}
-                  userList={users}
+                  userList={projectUsers}
                 />
               </>
             )}
@@ -100,27 +94,33 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
                       icon={<MdRemoveRedEye />}
                       text="Preview"
                       onClick={openUser}
-                    />                    
+                    />
                   </>
-                )}             
-                <Button
-                  type={btnType.Secondary}
-                  text="Remove from project"
-                  onClick={() => {
-                    removeSelected(selectedUsers.map(su => su.id))
-                  }}
-                />         
+                )}
+
+                {selectedUsers.find(su => su.role !== ROLES.Admin) && (
+                  <div className="rounded-sm overflow-hidden border border-gray-100">
+                    <ButtonOption
+                      icon={<MdDelete />}
+                      color="#DC2626"
+                      text="Remove from project"
+                      onClick={() => {
+                        removeSelected(selectedUsers.map(su => su.id))
+                      }}
+                    />
+                  </div>
+                )}
               </>
             )}
           </div>
           <Table
             columns={USER_COLUMNS}
             data={users}
-            withPagination={false}
+            withPagination={true}
             itemQuery={currentQuery}
             onSelection={setSelectedUsers as Dispatch<SetStateAction<Item[]>>}
             onFetch={onQueryChange}
-            icon={<BsPerson/>}
+            icon={<BsPerson />}
             rowOptions={(hoveredRow, isHoverSelected) => (
               <HoveredRowWrapper isHoverSelected={isHoverSelected}>
                 <>
@@ -135,17 +135,19 @@ export const ProjectUsersPage: FunctionComponent<React.PropsWithChildren<Props>>
                       }}
                     />
                   </div>
-                  <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
-                    {/* <ButtonOption
-                      icon={<MdSave />}
-                      onClick={(event: MouseEvent) => {
-                        event.stopPropagation()
-                        onDownload(hoveredRow)
-                      }}
-                      text="Download"
-                      color='#8B8E8F'
-                    /> */}
-                  </ButtonMenu>
+                  {hoveredRow.role !== ROLES.Admin && (
+                    <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
+                      <ButtonOption
+                        icon={<MdDelete />}
+                        color="#DC2626"
+                        text="Remove from project"
+                        onClick={(e: ChangeEvent) => {
+                          e.stopPropagation()
+                          removeSelected([hoveredRow.id])
+                        }}
+                      />
+                    </ButtonMenu>
+                  )}
                 </>
               </HoveredRowWrapper>
             )}

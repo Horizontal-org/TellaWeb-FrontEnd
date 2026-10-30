@@ -8,43 +8,47 @@ import { MdDelete } from "react-icons/md";
 
 type Props = {
   render: React.ReactNode
+  title?: string
   onDelete: (e) => void
 }
 
-export const DeleteModal: FunctionComponent<React.PropsWithChildren<Props>> = ({ render, onDelete }) => {
-
+export const DeleteModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
+  render,
+  title = 'Delete file',
+  onDelete
+}) => {
   const [canDelete, handleCanDelete] = useState(false)
 
   return (
     <ButtonPopup
       toggleButton={(toggle) => (
-        <ButtonOption 
+        <ButtonOption
           icon={<MdDelete />}
-          color="#D6933B"
+          color="#DC2626"
           text="DELETE"
           onClick={(e) => {
             e.stopPropagation()
             toggle()
           }}
-        />      
-      )}                
+        />
+      )}
       onClose={() => {
         handleCanDelete(false)
       }}
       render={(toggle) => (
         <>
           <div className='p-4'>
-            <h3 className='py-2 text-xxxl font-sans font-bold text-gray-600'>Delete file</h3>
+            <h3 className='py-2 text-xxxl font-sans font-bold text-gray-600'>{title}</h3>
             <div className='text-base font-normal font-sans text-gray-500'>
-              { render }
+              {render}
             </div>
             <div className='py-4'>
               <p className='font-sans font-normal text-sm text-gray-500'>
-              {`To confirm, please type "DELETE"`}
+                {`To confirm, please type "DELETE"`}
               </p>
-              
+
               <div className='pt-4'>
-                <TextInput 
+                <TextInput
                   placeholder='Type in DELETE'
                   onChange={(e) => {
                     if (!canDelete && e.target.value === 'DELETE') {
@@ -69,8 +73,8 @@ export const DeleteModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
                   onDelete(e)
                 }}
               />
-            </div>          
-          </div>          
+            </div>
+          </div>
         </>
       )}
     />

@@ -36,6 +36,12 @@ export class AdminApi {
     return res.json()
   }
 
+  async put(url: string, data: unknown) {
+    const res = await this.ctx.put(`/api${url}`, { headers: this.headers, data })
+    if (!res.ok()) throw new Error(`PUT ${url}: ${res.status()} ${await res.text()}`)
+    return res.json()
+  }
+
   async delete(url: string) {
     const res = await this.ctx.delete(`/api${url}`, { headers: this.headers })
     if (!res.ok() && res.status() !== 404) throw new Error(`DELETE ${url}: ${res.status()}`)
@@ -47,6 +53,30 @@ export class AdminApi {
 
   createProject(name: string) {
     return this.post("/project/", { name })
+  }
+
+  // Same call as the project's "Add users" / "Add resources" dialogs. The backend toggles the ids:
+  // ones already in the project are removed
+  toggleInProject(projectId: string, entities: { users?: string[]; resources?: string[] }) {
+    return this.put(`/project/${projectId}`, entities)
+  }
+
+  getProject(projectId: string) {
+    return this.get(`/project/${projectId}`)
+  }
+
+  createConfiguration(name: string) {
+    return this.post("/config/", {
+      name,
+      camouflage: JSON.stringify({ visible: true, calculator: true, change_name: true }),
+      crashReports: JSON.stringify({ visible: true, enabled: true }),
+      serversVisible: true,
+    })
+  }
+
+  // Same call the mobile app makes to send a report to a project
+  createReport(projectId: string, title: string) {
+    return this.post(`/project/${projectId}`, { title })
   }
 
   // Same two calls the "Create resource" dialog makes: upload the bytes, then confirm the size
@@ -83,12 +113,15 @@ export class AdminApi {
   async removeTmpRecords() {
     const search = { limit: 100, offset: 0, search: TMP_PREFIX }
     const byPrefix = (field: string) => (item) => String(item[field] ?? "").startsWith(TMP_PREFIX)
-    const [users, projects, configs, resources] = await Promise.all([
+    const [users, projects, configs, resources, reports] = await Promise.all([
       this.get("/user/list", search),
       this.get("/project/", search),
       this.get("/config/", search),
       this.get("/resource/", search),
+      this.get("/report/", search),
     ])
+    // Reports go first: their project's foreign key doesn't cascade
+    for (const report of reports.results.filter(byPrefix("title"))) await this.delete(`/report/${report.id}`)
     for (const user of users.results.filter(byPrefix("username"))) await this.delete(`/user/${user.id}`)
     for (const project of projects.results.filter(byPrefix("name"))) await this.delete(`/project/${project.id}`)
     for (const config of configs.results.filter(byPrefix("name"))) await this.delete(`/config/${config.id}`)

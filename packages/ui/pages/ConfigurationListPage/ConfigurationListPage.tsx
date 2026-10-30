@@ -57,7 +57,9 @@ export const ConfigurationListPage: FunctionComponent<React.PropsWithChildren<Pr
 
     onQueryChange({
       ...currentQuery,
-      search: name
+      search: name,
+      // A new search starts again from the first page
+      pagination: { ...currentQuery.pagination, page: 0 }
     })
   };
   
@@ -120,11 +122,7 @@ export const ConfigurationListPage: FunctionComponent<React.PropsWithChildren<Pr
               itemQuery={currentQuery}
               onSelection={setSelectedConfigs as Dispatch<SetStateAction<Item[]>>}
               onFetch={onQueryChange}
-              icon={(
-                <div style={{height: '24px', width: '24px'}}>
-                  <RemoteConfigIcon/>
-                </div>
-              )}
+              icon={<RemoteConfigIcon/>}
               rowOptions={(hoverRow, isHoverSelected) => (
                 <HoveredRowWrapper isHoverSelected={isHoverSelected}>
                   <>

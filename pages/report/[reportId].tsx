@@ -12,6 +12,7 @@ import {
 import { useDeleteFileMutation } from "packages/state/services/files";
 import { useFileDownloader } from "packages/state/features/files/useFileDownloader";
 import { errorMessage } from "packages/state/utils/errorMessage";
+import { useReportFileDownloader } from "packages/state/features/files/useReportFileDownloader";
 
 export const ReportById = () => {
   // useAuthRequired();
@@ -26,6 +27,7 @@ export const ReportById = () => {
   const [editReport, editReportResult] = useEditReportMutation();
   const [deleteReport] = useDeleteReportMutation();
   const [downloadFile] = useFileDownloader();
+  const [downloadReportFile] = useReportFileDownloader();
   const [deleteFile] = useDeleteFileMutation();
 
   useEffect(() => {
@@ -49,6 +51,9 @@ export const ReportById = () => {
       }}
       onDownloadFile={(file) => {
         downloadFile(file);
+      }}
+      onDownloadReport={(report) => {
+        downloadReportFile(report.id);
       }}
       onEditTitle={(title) => {
         editReport({

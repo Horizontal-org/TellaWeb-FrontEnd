@@ -54,9 +54,6 @@ export const validateRoute = (ability, route) => {
   if (route.includes('user')) {
     entity = ENTITIES.Users
   }
-  if (route.includes('project')) {
-    entity = ENTITIES.Projects
-  }
   if (route.includes('configuration')) {
     entity = ENTITIES.RemoteConfigurations
   }
@@ -65,6 +62,10 @@ export const validateRoute = (ability, route) => {
   }
   if (route.includes('admin-center')) {
     entity = ENTITIES.AdminCenter
+  }
+  // Last, so the project's own pages (/project/[projectId]/resources, /users) check the project
+  if (route.includes('project')) {
+    entity = ENTITIES.Projects
   }
 
     

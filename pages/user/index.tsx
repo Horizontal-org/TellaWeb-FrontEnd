@@ -69,9 +69,9 @@ export const Report = () => {
   };
 
   // useEffect(() => {
-    // use refetch here 
+  // use refetch here 
   // }, [])
-  
+
   useEffect(() => {
     if (createUserResult.isSuccess) {
       handleToast("User created!", "info");
@@ -93,7 +93,7 @@ export const Report = () => {
   }, [batchDeleteUsersResult.status])
 
   return ready ? (
-    <UserListPage 
+    <UserListPage
       currentQuery={itemQuery}
       onQueryChange={(itemQuery) => setQuery(toUserQuery(itemQuery))}
       sidebar={<Menu />}
@@ -102,7 +102,7 @@ export const Report = () => {
         push(`./user/${user.id}`);
       }}
       onDelete={onBatchDeleteUsers}
-      onCreateUser={createUser} 
+      onCreateUser={createUser}
     ></UserListPage>
   ) : (
     false

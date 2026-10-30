@@ -13,18 +13,6 @@ interface Props {
 }
 
 
-const processResources = (resources) => {
-  if (resources) {
-    return resources.map((r: Resource) => {
-      return {
-        id: r.id,
-        label: r.fileName
-      }
-    } )
-  }
-
-  return []
-}
 
 export const ManageResourcesProjectModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
   onSubmit,
@@ -53,11 +41,11 @@ export const ManageResourcesProjectModal: FunctionComponent<React.PropsWithChild
   }, [resources])
 
   return (
-    <Modal 
+    <Modal
       title='Add resources to project'
       subtitle='Search and select the resources to add to this project.'
       button='ADD RESOURCES'
-      buttonIcon={<IoMdAdd color='#fff' size={20}/>}
+      buttonIcon={<IoMdAdd color='#fff' size={20} />}
       btnType={btnType.Primary}
       submit='ADD'
       disabled={!(newResources.length > 0)}
@@ -91,7 +79,7 @@ export const ManageResourcesProjectModal: FunctionComponent<React.PropsWithChild
                 })
               }}
             />
-          </div>          
+          </div>
 
         </div>
       )}

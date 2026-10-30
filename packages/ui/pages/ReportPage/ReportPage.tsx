@@ -33,6 +33,7 @@ type Props = {
   onDeleteReport: (report: Report) => void;
   onDeleteFile: (report: Report, file: IReportFile) => void;
   onDownloadFile: (file: IReportFile) => void;
+  onDownloadReport: (report: Report) => void;
   onClose: () => void;
   onEditTitle: (title: string) => void
 };
@@ -42,14 +43,15 @@ export const ReportPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   onDeleteReport,
   onDeleteFile,
   onDownloadFile,
+  onDownloadReport,
   onClose,
   onEditTitle
 }) => {
   const [leftSidebarOpen, changeLeftSidebarOpenStatus] = useState(true);
   const [rightSidebarOpen, changeRightSidebarOpenStatus] = useState(true);
-  const [compact, handleCompact] = useState(false)
+  // const [compact, handleCompact] = useState(false)
   const [current, setCurrent] = useState(1);
-  const { height, width } = useWindowDimensions()
+  // const { height, width } = useWindowDimensions()
 
   const goNext = () => {
     if (current === report.files.length) {
@@ -67,18 +69,18 @@ export const ReportPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
     setCurrent(current - 1);
   };
 
-  useEffect(() => {
-    onScreenResize()
-  }, [width, leftSidebarOpen, rightSidebarOpen]);
+  // useEffect(() => {
+  //   onScreenResize()
+  // }, [width, leftSidebarOpen, rightSidebarOpen]);
 
-  const onScreenResize = () => {
-    if (width <= 1200 && leftSidebarOpen && rightSidebarOpen && !compact) {
-      handleCompact(true)
-    } 
-    if (compact && (width > 1200 || !leftSidebarOpen || !rightSidebarOpen)) {
-      handleCompact(false)
-    }  
-  }
+  // const onScreenResize = () => {
+  //   if (width <= 1200 && leftSidebarOpen && rightSidebarOpen && !compact) {
+  //     handleCompact(true)
+  //   }
+  //   if (compact && (width > 1200 || !leftSidebarOpen || !rightSidebarOpen)) {
+  //     handleCompact(false)
+  //   }
+  // }
 
   const toggleLeftSideBar = () => changeLeftSidebarOpenStatus(!leftSidebarOpen)
   const toggleRightSideBar = () => changeRightSidebarOpenStatus(!rightSidebarOpen);
@@ -87,23 +89,23 @@ export const ReportPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
     <div className="flex grow min-h-screen">
       <LeftCollapsingSidebar collapsed={!leftSidebarOpen}>
         <ReportInformation report={report} />
-        <div className="grid grid-cols-2 gap-2 mt-6">
+        <div className="grid grid-cols-2 gap-2 mt-6" data-testid="report-files">
           {report.files.map((file, index) => {
             return (
-              <Thumbnail 
-                file={file} 
+              <Thumbnail
+                file={file}
                 selected={index == (current - 1)}
                 key={file.src.toString()}
                 onClick={() => {
                   setCurrent(index + 1)
-                }} 
+                }}
               />
             )
           })}
         </div>
       </LeftCollapsingSidebar>
 
-      <div 
+      <div
         className={cn(
           "flex flex-col flex-1 pt-20 transition-all duration-300 ease-in-out",
           {
@@ -115,53 +117,43 @@ export const ReportPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
       >
         <ToggleButtonsBar
           leftToggle={toggleLeftSideBar}
-          >
+        >
           {/* rightToggle={toggleRightSideBar} */}
-          { report.files.length > 0 && (
+          {report.files.length > 0 && (
             <div className="flex-1 flex space-x-2 mb-2 px-4 py-2">
               {/* <Button
                 type={btnType.Secondary}
                 icon={<MdInfoOutline />}
                 text="File Information"
               /> */}
-              { !compact && (
-                <Button
-                  type={btnType.Secondary}
-                  icon={<MdSave />}
-                  text="Download file"
-                  onClick={() => {
-                    onDownloadFile(report.files[current - 1])
-                  }}
-                />
-              )}
-              <ButtonMenu openSide="right" type={btnType.Secondary} text="...">         
-                { compact && (
-                  <ButtonOption
-                    text="Download file"
-                    icon={<MdSave />}
-                    onClick={() => { 
-                      onDownloadFile(report.files[current - 1])
+              <Button
+                type={btnType.Secondary}
+                icon={<MdSave />}
+                text="Download file"
+                onClick={() => {
+                  onDownloadFile(report.files[current - 1])
+                }}
+              />
 
-                    }}
-                    color='#8B8E8F'
+              <Can I='manage' a={ENTITIES.Reports}>
+                <ButtonMenu openSide="right" type={btnType.Secondary} text="...">
+                  <DeleteModal
+                    render={(
+                      <p>
+                        {report.files[current - 1].fileName} will be permanently deleted.
+                      </p>
+                    )}
+                    onDelete={() => onDeleteFile(report, report.files[current - 1])}
                   />
-                )}       
-                <DeleteModal 
-                  render={(
-                    <p>
-                      {report.files[current - 1].fileName} will be permanently deleted.
-                    </p>
-                  )}
-                  onDelete={() => onDeleteFile(report, report.files[current - 1])}
-                />                              
-              </ButtonMenu>
+                </ButtonMenu>
+              </Can>
             </div>
-          )}          
-          { report.files.length > 0 && (
+          )}
+          {report.files.length > 0 && (
             <div className="flex space-x-4 mb-2 px-4 py-2 items-center">
-              <Button type={btnType.Secondary} icon={<BsArrowsAngleExpand />} />
+              {/* <Button type={btnType.Secondary} icon={<BsArrowsAngleExpand />} /> */}
               <div >
-                <Paginator 
+                <Paginator
                   previousPage={goPrev}
                   nextPage={goNext}
                   canNextPage={true}
@@ -180,7 +172,7 @@ export const ReportPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
           )}
         </MainContent>
       </div>
-{/*       
+      {/*       
       <RightCollapsingSidebar collapsed={!rightSidebarOpen}>
         { !!(report.files.length) && (
           <VerificationInformation 
@@ -191,16 +183,15 @@ export const ReportPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
       </RightCollapsingSidebar> */}
 
       <TopBar title={report.title} onClose={onClose}>
-        <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
-          <Can I='edit' a={ENTITIES.Reports}>
-            <EditReportTitleModal 
+        <Can I='manage' a={ENTITIES.Reports}>
+          <ButtonMenu openSide="left" type={btnType.Secondary} text="...">
+            <EditReportTitleModal
               onSubmit={(name) => {
                 onEditTitle(name)
               }}
             />
-          </Can>
-          <Can I='delete' a={ENTITIES.Reports}>
-            <DeleteModal 
+
+            <DeleteModal
               render={(
                 <p>
                   Are you sure you want to delete the report? <br />
@@ -209,9 +200,9 @@ export const ReportPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
               )}
               onDelete={() => onDeleteReport(report)}
             />
-          </Can>
-        </ButtonMenu>
-        <Button icon={<MdRemoveRedEye />} text="Preview" />
+          </ButtonMenu>
+        </Can>
+        <Button icon={<MdSave />} text="Download" onClick={() => onDownloadReport(report)} />
       </TopBar>
     </div>
   );

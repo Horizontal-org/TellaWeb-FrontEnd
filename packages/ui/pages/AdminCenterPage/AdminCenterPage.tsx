@@ -6,7 +6,7 @@ import { IoMdHelpCircleOutline } from "react-icons/io";
 import { version } from 'package.json'
 import { btnType, Button } from "packages/ui/components/Button/Button";
 import { BackupManagement } from "packages/ui/components/BackupManagement/BackupManagement";
-import { LatestBackups } from "packages/state/domain/backup";
+import { BackupSpace, LatestBackups } from "packages/state/domain/backup";
 
 type Props = {
   sidebar: React.ReactNode;
@@ -15,6 +15,7 @@ type Props = {
   onBackupStart: () => void
   onBackupDelete: (id) => void
   backups: LatestBackups
+  backupSpace?: BackupSpace
 };
 
 
@@ -24,7 +25,8 @@ export const AdminCenterPage: FunctionComponent<React.PropsWithChildren<Props>> 
   onUpdate,
   onBackupStart,
   onBackupDelete,
-  backups
+  backups,
+  backupSpace
 }) => {
 
   return (
@@ -83,6 +85,7 @@ export const AdminCenterPage: FunctionComponent<React.PropsWithChildren<Props>> 
           {/* BACKUPS */}
           <BackupManagement 
             backups={backups}
+            backupSpace={backupSpace}
             onBackupDelete={onBackupDelete}
             onBackupStart={onBackupStart}
           />

@@ -6,8 +6,14 @@ import { AdminApi } from "./support/api"
 export const readData = (): E2EData => JSON.parse(fs.readFileSync(DATA_FILE, "utf8"))
 
 // Fails the test on uncaught page errors, which is what most upgrade breakage looks like.
-// adminApi talks to the backend directly, for setup, checks and clean-up
+// adminApi talks to the backend directly, for setup, checks and clean-up.
+// The GitHub API is blocked so NewVersionBanner (rate-limited, unauthenticated) never shows
+// and screenshots stay stable
 export const test = base.extend<{ pageErrors: Error[] }, { adminApi: AdminApi }>({
+  page: async ({ page }, use) => {
+    await page.route("https://api.github.com/**", (route) => route.abort())
+    await use(page)
+  },
   adminApi: [
     async ({}, use, workerInfo) => {
       const api = await AdminApi.login(workerInfo.project.use.baseURL)
@@ -48,5 +54,24 @@ export const expectToast = async (page: Page, text: string | RegExp) => {
   await expect(toast(page, text)).toBeVisible()
   await expect(toast(page, text)).toBeHidden({ timeout: 10_000 })
 }
+
+// components/Table: body rows, and the Paginator [<] "N of M" [>] (the label is a <strong>)
+export const bodyRows = (page: Page) => page.locator("tbody tr")
+export const pager = (page: Page) => page.locator("strong", { hasText: / of / }).locator("xpath=../..")
+
+// Waits for a request to an API path (e.g. "/api/user/list") whose query params pass the check
+export const apiRequest = (page: Page, path: string, check: (params: URLSearchParams) => boolean) =>
+  page.waitForRequest((req) => {
+    const url = new URL(req.url())
+    return url.pathname.replace(/\/$/, "") === path && check(url.searchParams)
+  })
+
+// Waits for the response to such a request. Next's 308 trailing-slash redirect (/api/x/ → /api/x)
+// is skipped, so this is the backend's answer
+export const apiResponse = (page: Page, path: string, check: (params: URLSearchParams) => boolean) =>
+  page.waitForResponse((res) => {
+    const url = new URL(res.url())
+    return res.status() !== 308 && url.pathname.replace(/\/$/, "") === path && check(url.searchParams)
+  })
 
 export { expect }

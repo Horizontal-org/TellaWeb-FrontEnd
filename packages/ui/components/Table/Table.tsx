@@ -33,8 +33,6 @@ export type TableColumn<T = any> = {
 
 type ColumnMeta = { className?: string; headerKey?: string };
 
-// TanStack Table 9 only includes the features a table registers. Sorting and pagination are done
-// by the server (manual modes), so no sorted or paginated row models are needed
 const features = tableFeatures({
   rowSortingFeature,
   rowSelectionFeature,
@@ -58,13 +56,18 @@ type Props = {
 const DEFAULT_ITEM_QUERY = {
   filter: {},
   sort: [],
-  pagination: { page: 1, total: 1, size: 1 },
+  pagination: { page: 0, total: 1, size: 1 },
 } as unknown as ItemQuery;
 
 const SELECTION_COLUMN_ID = "selection";
 
-// Only cursor: pointer, like react-table 7's checkbox props (which replaced the 40x40 size)
-const CHECKBOX_STYLE = { cursor: "pointer" };
+// Only cursor: pointer, like react-table 7's checkbox props (which replaced the 40x40 size).
+// margin: 0 drops the browser's uneven default margin so the checkbox centres in its box
+const CHECKBOX_STYLE = { cursor: "pointer", margin: 0 };
+
+// Fixed box shared by the header and row cells of the selection column, so checkboxes and
+// icons line up and every page's icon renders at the same size
+const SELECTION_BOX_CLASS = "flex items-center justify-center w-5 h-5 [&_svg]:size-[14px]";
 
 const toColumnDef = (column: TableColumn): ColumnDef<Features, Item> => {
   const id = column.id ?? (typeof column.accessor === "string" ? column.accessor : column.Header);
@@ -89,18 +92,24 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
+    pageIndex: itemQuery.pagination.page ?? 0,
     pageSize: itemQuery.pagination.size,
   });
+
+  // The parent can move the page too (a new search or sort goes back to the first one)
+  const queryPage = itemQuery.pagination.page ?? 0
+  useEffect(() => {
+    setPagination((p) => (p.pageIndex === queryPage ? p : { ...p, pageIndex: queryPage }))
+  }, [queryPage])
 
   const tColumns = useMemo<ColumnDef<Features, Item>[]>(
     () => [
       {
         id: SELECTION_COLUMN_ID,
-        meta: { className: "max-w-content text-center p-2" },
+        meta: { className: "w-px whitespace-nowrap text-center p-2" },
         enableSorting: false,
         header: ({ table }) => (
-          <div className='flex justify-center w-full'>
+          <div className={SELECTION_BOX_CLASS}>
             <IndeterminateCheckbox
               title="Toggle All Rows Selected"
               style={CHECKBOX_STYLE}
@@ -111,18 +120,16 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
           </div>
         ),
         cell: ({ row }) => (
-          <div className='flex justify-center'>
-            <div style={{width: 20}}>
-              { row.getIsSelected() ? (
-                <IndeterminateCheckbox
-                  title="Toggle Row Selected"
-                  style={CHECKBOX_STYLE}
-                  checked={row.getIsSelected()}
-                  indeterminate={false}
-                  onChange={(e) => row.toggleSelected(e.target.checked)}
-                />
-              ) : icon || <FaRegFolder size={14} color="#8B8E8F"/>}
-            </div>
+          <div className={SELECTION_BOX_CLASS}>
+            {row.getIsSelected() ? (
+              <IndeterminateCheckbox
+                title="Toggle Row Selected"
+                style={CHECKBOX_STYLE}
+                checked={row.getIsSelected()}
+                indeterminate={false}
+                onChange={(e) => row.toggleSelected(e.target.checked)}
+              />
+            ) : icon || <FaRegFolder color="#8B8E8F" />}
           </div>
         ),
       },
@@ -178,6 +185,7 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
         key: meta?.headerKey,
         order: desc ? 'desc' : 'asc'
       },
+      pagination: { ...itemQuery.pagination, page: 0 },
     })
     setSorting([{ id: columnId, desc }]);
   };
@@ -211,7 +219,7 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
                   >
                     <div className="flex flex-row">
                       {flexRender(header.column.columnDef.header, header.getContext())}
-                      <span className='pl-2'>
+                      {sortable && <span className='pl-2'>
                         {sorted === "desc" ? (
                           <MdExpandMore />
                         ) : sorted === "asc" ? (
@@ -219,7 +227,7 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
                         ) : (
                           ""
                         )}
-                      </span>
+                      </span>}
                     </div>
                   </th>
                 );
@@ -255,7 +263,7 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
                   }
                 )}
               >
-                {row.getAllCells().map((cell) => {
+                {row.getAllCells().map((cell, cellIndex, cells) => {
                   const meta = cell.column.columnDef.meta;
                   return (
                     <td
@@ -263,35 +271,35 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
                       className={meta?.className || "px-3 py-3"}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
+
+                      {hovering === i && cellIndex === cells.length - 1 && (
+                        <div
+                          className="absolute top-0"
+                          style={{
+                            right: 20
+                          }}
+                        >
+                          <div
+                            className="flex items-center "
+                            style={{
+                              height: 50,
+                              paddingRight: '20'
+                            }}
+                          >
+                            {rowOptions(row.original, row.getIsSelected())}
+                          </div>
+                        </div>
+                      )}
                     </td>
                   );
                 })}
-
-                { hovering === i && (
-                  <div
-                    className="absolute top-0"
-                    style={{
-                      right: 20
-                    }}
-                  >
-                    <div
-                      className="flex items-center "
-                      style={{
-                        height: 50,
-                        paddingRight: '20'
-                      }}
-                    >
-                      { rowOptions(row.original, row.getIsSelected()) }
-                    </div>
-                  </div>
-                )}
               </tr>
             );
           })}
         </tbody>
       </table>
 
-      { withPagination && (
+      {withPagination && (
         <div className='w-full flex justify-center item-center py-8'>
           <Paginator
             gotoPage={(index) => table.setPageIndex(index)}

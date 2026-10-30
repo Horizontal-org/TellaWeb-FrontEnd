@@ -1,12 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
-import { SettingsPage } from "../../packages/ui/pages/SettingsPage/SettingsPage";
 import { Menu } from "../../components/Menu";
-import { useAuthRequired } from "packages/state/features/auth/authHooks";
-import { useUserProfile } from "packages/state/features/user/userHooks";
 import { useToast } from "components/ToastWrapper";
-import { useDispatch } from "react-redux";
-import { setUser } from "packages/state/features/user/userSlice";
 import { ResourceListPage } from "packages/ui/pages/ResourceListPage/ResourceListPage";
 import { useRouter } from "next/router";
 import { ResourceQuery } from "packages/state/domain/resource";
@@ -93,7 +87,7 @@ const Resources = () => {
         downloadFile(fileNames)
       }}
       onQueryChange={(itemQuery) => setQuery(toResourceQuery(itemQuery))}
-      resources={resources?.results || []}      
+      resources={resources?.results || []}
     />
   );
 };

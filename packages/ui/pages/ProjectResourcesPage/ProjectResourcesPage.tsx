@@ -8,7 +8,7 @@ import {
   ChangeEvent,
   useEffect
 } from "react";
-import { MdOpenInNew, MdRemoveRedEye, MdSave } from "react-icons/md";
+import { MdDelete, MdOpenInNew, MdRemoveRedEye, MdSave } from "react-icons/md";
 import {
   ReportBar,
   Button,
@@ -40,13 +40,17 @@ import { RESOURCE_COLUMNS } from "../ResourceListPage/ResourceListPage";
 import { ManageResourcesProjectModal } from "packages/ui/modals/project/ManageResourcesProjectModal/ManageResourcesProjectModal";
 import { ResourceBar } from "packages/ui/components/ResourceBar/ResourceBar";
 import { PdfView } from "packages/ui/components/PdfView/PdfView";
+import { LayoutAbsoluteContent } from "packages/ui/components/LayoutAbsoluteContent/LayoutAbsoluteContent";
 
 type Props = {
   project: Project
+  // One page of the project's resources, as returned by the server
   resources: Resource[];
+  // Every resource of the project, so the add modal can leave them out
+  projectResources: Resource[];
   onQueryChange: (iq: ItemQuery) => void;
   onOpen: (resource: Resource) => void;
-  onAddResources: (newResources:  string[]) => void;
+  onAddResources: (newResources: string[]) => void;
   sidebar: React.ReactNode;
   currentQuery: ItemQuery;
   removeSelected: (selectedResources: string[]) => void;
@@ -59,6 +63,7 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
   onQueryChange,
   onAddResources,
   resources = [],
+  projectResources = [],
   sidebar,
   currentQuery,
   removeSelected,
@@ -73,16 +78,15 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
     setCurrentResource(selectedResources[0]);
   };
 
-
   return (
     <MainLayout
       title={"Project resources"}
-      subtitle={`Manage resources available in the project “${project.name}”`}      
+      subtitle={`Manage resources available in the project “${project.name}”`}
       content={
         <div>
 
 
-          <PdfView 
+          <PdfView
             isOpen={openViewer}
             fileName={currentResource ? currentResource.fileName : ''}
             handleIsOpen={() => {
@@ -94,12 +98,12 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
             {selectedResources.length === 0 && (
               <>
                 <Can I='attach' a={ENTITIES.Resources}>
-                  <ManageResourcesProjectModal 
+                  <ManageResourcesProjectModal
                     onSubmit={(newResources) => {
                       onAddResources(newResources)
                     }}
-                    resourceList={resources}
-                    />
+                    resourceList={projectResources}
+                  />
                 </Can>
               </>
             )}
@@ -107,57 +111,61 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
             {selectedResources.length > 0 && (
               <>
                 {selectedResources.length === 1 && (
-                  <>                   
+                  <>
                     <Button
                       type={btnType.Secondary}
                       icon={<MdRemoveRedEye />}
                       text="Preview"
                       onClick={openUser}
-                    />                    
+                    />
                   </>
                 )}
-                 <Can I='attach' a={ENTITIES.Resources}>                                    
-                    <Button
-                      type={btnType.Secondary}
+
+                <Can I='attach' a={ENTITIES.Resources}>
+                  <div className="rounded-sm overflow-hidden border border-gray-100">
+                    <ButtonOption
+                      icon={<MdDelete />}
+                      color="#DC2626"
                       text="Remove from project"
                       onClick={() => {
                         removeSelected(selectedResources.map(su => su.id))
                         setSelectedResources([])
                       }}
                     />
-                  </Can>             
+                  </div>
+                </Can>
               </>
             )}
           </div>
-          { (resources.length > 0) && (
-              <Table
-                columns={RESOURCE_COLUMNS}
-                data={resources}
-                withPagination={false}
-                itemQuery={currentQuery}
-                onSelection={setSelectedResources as Dispatch<SetStateAction<Item[]>>}
-                onFetch={onQueryChange}
-                icon={<MdPictureAsPdf/>}
-                rowOptions={(hoveredRow, isHoverSelected) => (
-                  <HoveredRowWrapper isHoverSelected={isHoverSelected}>
-                    <>
-                      <div className="px-2">
-                        <Button
-                          icon={<MdOpenInNew />}
-                          text="Open"
-                          onClick={(event: MouseEvent) => {
-                            event.preventDefault();
-                            event.stopPropagation()
-                            setCurrentResource(hoveredRow);
-                            handleViewer(true)
-                          }}
-                        />
-                      </div>
-                
-                    </>
-                  </HoveredRowWrapper>
-                )}
-              />
+          {(projectResources.length > 0) && (
+            <Table
+              columns={RESOURCE_COLUMNS}
+              data={resources}
+              withPagination={true}
+              itemQuery={currentQuery}
+              onSelection={setSelectedResources as Dispatch<SetStateAction<Item[]>>}
+              onFetch={onQueryChange}
+              icon={<MdPictureAsPdf />}
+              rowOptions={(hoveredRow, isHoverSelected) => (
+                <HoveredRowWrapper isHoverSelected={isHoverSelected}>
+                  <>
+                    <div className="px-2">
+                      <Button
+                        icon={<MdOpenInNew />}
+                        text="Open"
+                        onClick={(event: MouseEvent) => {
+                          event.preventDefault();
+                          event.stopPropagation()
+                          setCurrentResource(hoveredRow);
+                          handleViewer(true)
+                        }}
+                      />
+                    </div>
+
+                  </>
+                </HoveredRowWrapper>
+              )}
+            />
 
           )}
         </div>
@@ -165,30 +173,41 @@ export const ProjectResourcesPage: FunctionComponent<React.PropsWithChildren<Pro
       leftbar={sidebar}
       leftbarActive={true}
       rightbarActive={true}
-      absoluteContent={ (resources.length === 0 && !isLoading) && (
-        <div 
-          className="flex text-sm justify-center w-full p-6" 
-          style={{ 
-            position: 'absolute', 
-            bottom: 'calc(50% - 50px)',
-            marginLeft: '-60px'
-          }}
-        >          
-          <div 
-            className="py-8 px-12 text-center"
+      absoluteContent={(projectResources.length === 0 && !isLoading) && (
+        <LayoutAbsoluteContent>
+          <div
+            className="text-center flex-col flex justify-center items-center"
           >
 
-            <p className='text-xxxl text-gray-600 font-bold'>
-              Nothing to show
+            <p className='text-xl font-semibold'>
+              This project does not have any resources yet.
             </p>
-            <p className='py-2 font-normal text-lg text-gray-500'>
-              Resources will show up here after they are added by your team
-            </p>
-    
+            <Can I='attach' a={ENTITIES.Projects} passThrough>
+              {({ isAllowed }) => isAllowed ? (
+                <>
+                  <p className='font-normal text-lg py-2'>
+                    Add your first resource to get started.
+                  </p>
+                  <div className='py-4'>
+                    <ManageResourcesProjectModal
+                      onSubmit={(newResources) => {
+                        onAddResources(newResources)
+                      }}
+                      resourceList={projectResources}
+                    />
+                  </div>
+                </>
+              ) : (
+                <p className='font-normal text-lg text-gray-500 py-2'>
+                  Resources that are added to this project will appear here.
+                </p>
+              )}
+            </Can>
+
           </div>
-        </div>
+        </LayoutAbsoluteContent>
       )}
-      rightbar={<ResourceBar resource={currentResource}/>}
+      rightbar={<ResourceBar resource={currentResource} />}
       onClosePreview={() => setCurrentResource(undefined)}
       currentItem={currentResource}
     />
