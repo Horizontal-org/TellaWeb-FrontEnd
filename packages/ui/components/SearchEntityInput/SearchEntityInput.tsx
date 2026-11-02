@@ -1,9 +1,7 @@
 import { FunctionComponent, PropsWithChildren, useState, useEffect, useRef } from "react";
-import { User } from "packages/state/domain/user";
 import styled from 'styled-components'
 import { VscClose } from 'react-icons/vsc'
-import { BsPerson, BsCheck } from 'react-icons/bs'
-import { TbChevronDown } from 'react-icons/tb'
+import { BsPerson } from 'react-icons/bs'
 import { useOnClickOutside } from "packages/ui/hooks/useOnClickOutside";
 
 interface Props {
@@ -26,13 +24,10 @@ export const SearchEntityInput: FunctionComponent<PropsWithChildren<Props>> = ({
   const [selectedItems, handleSelectedItems] = useState([])
   const [showResults, handleShowResults] = useState(false)
 
-  console.log("🚀 ~ file: SearchEntityInput.tsx:30 ~ showResults:", showResults)
-
   const searchInput = useRef(null)
   const wrapperRef = useRef(null)
 
   useOnClickOutside(wrapperRef, () => {
-    console.log('1')
     handleShowResults(false)
   })
 
@@ -118,23 +113,23 @@ export const SearchEntityInput: FunctionComponent<PropsWithChildren<Props>> = ({
 
 
 
-const RolePicker = styled.div`
-  position: absolute;
-  right: 4px;
-  top: 6px;
-  display: flex;
-  align-items: center;
-  padding: 10px 4px;
+// const RolePicker = styled.div`
+//   position: absolute;
+//   right: 4px;
+//   top: 6px;
+//   display: flex;
+//   align-items: center;
+//   padding: 10px 4px;
 
-  > span {
-    font-size: 10px;
-    color: #8B8E8F;
-    padding-right: 6px;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
+//   > span {
+//     font-size: 10px;
+//     color: #8B8E8F;
+//     padding-right: 6px;
+//     font-weight: 700;
+//     text-transform: uppercase;
+//   }
 
-`
+// `
 
 const InputWrapper = styled.div`
   display: flex;
@@ -168,6 +163,7 @@ const Input = styled.span`
   padding: 2px;
   font-weight: 600;
   width: 100%;
+  line-break: anywhere;
 
   &:focus-visible {
     outline: none;

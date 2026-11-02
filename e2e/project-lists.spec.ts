@@ -4,7 +4,7 @@ import { TMP_PREFIX } from "./support/api"
 import { tinyPdf } from "./support/files"
 
 // The users and resources lists of a project (/project/[projectId]/users and /resources): server-side
-// sorting and pagination through GET /user/list?projectId= and GET /resource?projectId=. A second
+// sorting and pagination through GET /user/list?projectId= and GET /resource/project/:projectId. A second
 // project gets a user and a resource with the same prefix, which must never show up in the first
 // project's lists
 const PREFIX = `${TMP_PREFIX}plst-${Date.now().toString(36)}-`
@@ -51,7 +51,8 @@ const names = async (page: Page) => (await bodyRows(page).locator("td:nth-child(
 const lists = [
   {
     name: "users",
-    path: "/api/user/list",
+    path: () => "/api/user/list",
+    inProject: (p: URLSearchParams) => p.get("projectId") === projectId,
     header: "Name",
     sortKey: "user.username",
     own: userNames,
@@ -60,7 +61,8 @@ const lists = [
   },
   {
     name: "resources",
-    path: "/api/resource",
+    path: () => `/api/resource/project/${projectId}`,
+    inProject: () => true,
     header: "Title",
     sortKey: "resource.title",
     own: resourceTitles,
@@ -72,7 +74,7 @@ const lists = [
 for (const list of lists) {
   test.describe(`project ${list.name}`, () => {
     const listRequest = (page: Page, check: (params: URLSearchParams) => boolean) =>
-      apiRequest(page, list.path, (p) => p.get("projectId") === projectId && check(p))
+      apiRequest(page, list.path(), (p) => list.inProject(p) && check(p))
 
     const pageCount = () => Math.ceil(list.total() / 25)
 
@@ -145,7 +147,7 @@ test("sorting the project's resources by date is accepted by the server", async 
   await page.goto(`/project/${projectId}/resources`)
   await waitForApp(page)
   await expect(bodyRows(page)).toHaveCount(25)
-  const response = apiResponse(page, "/api/resource", (p) => p.get("sort") === "resource.createdAt")
+  const response = apiResponse(page, `/api/resource/project/${projectId}`, (p) => p.get("sort") === "resource.createdAt")
   await page.getByRole("columnheader", { name: "Date created" }).click()
   expect((await response).status()).toBe(200)
 })

@@ -77,7 +77,7 @@ test("only the project's own reports are listed", async ({ page }) => {
 
 test("clicking a header sorts on the server, descending then ascending", async ({ page }) => {
   await openProject(page)
-  const header = page.getByRole("columnheader", { name: "Name" })
+  const header = page.getByRole("columnheader", { name: "Title" })
 
   const desc = reportsRequest(page, (p) => p.get("sort") === "report.title" && p.get("order") === "desc")
   await header.click()
@@ -94,7 +94,7 @@ test("sorting from the second page goes back to the first one", async ({ page })
   await openProject(page)
   await goToSecondPage(page)
   const sorted = reportsRequest(page, (p) => p.get("sort") === "report.title" && p.get("offset") === "0")
-  await page.getByRole("columnheader", { name: "Name" }).click()
+  await page.getByRole("columnheader", { name: "Title" }).click()
   await sorted
   await expect(pager(page).locator("strong")).toHaveText("1 of 2")
   await expect(bodyRows(page)).toHaveCount(25)
