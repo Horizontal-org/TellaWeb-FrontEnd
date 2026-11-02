@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 import cn from "classnames";
 import { IReportFile } from "../../domain/ReportFile";
 
@@ -18,10 +18,14 @@ export const VideoThumbnail: FunctionComponent<React.PropsWithChildren<Props>> =
   box = false,
   selected,
 }) => {
+  const [loaded, setLoaded] = useState(false)
+
   return (
     <div
         onClick={onClick}
-        className={cn("bg-gray-25 rounded-md", {
+        className={cn("rounded-md", {
+          "bg-gray-25": loaded,
+          "bg-gray-100 animate-pulse": !loaded,
           "cursor-pointer": onClick !== null,
           "w-full h-full": full,
           "w-24 h-24": !full && !box,
@@ -47,7 +51,9 @@ export const VideoThumbnail: FunctionComponent<React.PropsWithChildren<Props>> =
             { file.src && (<video
               key={file.src}
               crossOrigin="use-credentials"
-              className={"w-full"}
+              className={cn("w-full", { invisible: !loaded })}
+              onLoadedData={() => setLoaded(true)}
+              onError={() => setLoaded(true)}
               >
               <source src={file.src} key={file.src} type='video/mp4' />
               Your browser does not support the <code>video</code> element.
