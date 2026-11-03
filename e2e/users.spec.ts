@@ -24,6 +24,8 @@ test("create a user, change their role and delete them", async ({ page, adminApi
   await dialog.getByRole("radio", { name: "Viewer" }).check()
   await dialog.getByRole("button", { name: "SAVE" }).click()
   await expectToast(page, "User created!")
+  // The list is paginated and not sorted by creation, so the new user can be on any page
+  await page.getByRole("textbox", { name: "Search" }).fill(email)
   await expect(page.getByRole("row", { name: `${email} viewer` })).toBeVisible()
 
   const user = await adminApi.findUser(email)
