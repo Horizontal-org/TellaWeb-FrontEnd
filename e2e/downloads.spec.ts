@@ -5,8 +5,14 @@ import { authenticated as test, expect, readData, waitForApp } from "./fixtures"
 // from the API's Content-Disposition and the content must be the real file
 const ZIP_MAGIC = "PK\u0003\u0004"
 
-const magic = async (download) =>
-  fs.readFileSync(await download.path()).subarray(0, 4).toString("latin1")
+// Read only the header: backups can exceed the 2 GiB readFileSync limit
+const magic = async (download) => {
+  const fd = fs.openSync(await download.path(), "r")
+  const buf = Buffer.alloc(4)
+  fs.readSync(fd, buf, 0, 4, 0)
+  fs.closeSync(fd)
+  return buf.toString("latin1")
+}
 
 test("report view downloads the open file with its own name", async ({ page }) => {
   const { image } = readData()
@@ -14,7 +20,7 @@ test("report view downloads the open file with its own name", async ({ page }) =
 
   await page.goto(`/report/${image.reportId}`)
   await waitForApp(page)
-  await page.locator(".grid.grid-cols-2 > *").nth(image.fileIndex).click()
+  await page.getByTestId("report-files").locator(":scope > *").nth(image.fileIndex).click()
 
   const downloadPromise = page.waitForEvent("download")
   await page.getByRole("button", { name: "Download file" }).first().click()
@@ -49,6 +55,10 @@ test("admin center downloads the latest backup", async ({ page }) => {
   const downloadPromise = page.waitForEvent("download")
   await page.getByRole("button", { name: "DOWNLOAD", exact: true }).click()
   const download = await downloadPromise
-  expect(download.suggestedFilename()).toBe("TELLAWEB_BACKUP.zip")
-  expect(await magic(download)).toBe(ZIP_MAGIC)
+  expect(download.suggestedFilename()).toMatch(/^\d+-\d+-\d+T\d+_\d+_\d+-backup\.zip$/)
+  // Backups can be several GB: stop the browser download and fetch only the header
+  await download.cancel()
+  const head = await page.request.get(download.url(), { headers: { Range: "bytes=0-3" } })
+  expect(head.status()).toBe(206)
+  expect((await head.body()).toString("latin1")).toBe(ZIP_MAGIC)
 })

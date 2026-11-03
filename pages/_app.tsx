@@ -9,6 +9,10 @@ import { useRouter } from "next/router";
 import { AbilityProvider } from '../common/casl/Can'
 import { defaultAbility } from '../common/casl/Ability'
 import { SplashScreen } from "packages/ui/components/SplashScreen/SplashScreen";
+import ReactModal from "react-modal";
+
+// lets react-modal hide the app from screen readers while a modal is open; skipped on the server (no document)
+if (typeof window !== "undefined") ReactModal.setAppElement("#__next");
 
 function TellaWeb({ Component, pageProps }: AppProps) {
   const router = useRouter();

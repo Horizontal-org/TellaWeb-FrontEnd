@@ -1,9 +1,7 @@
 import { FunctionComponent, PropsWithChildren, useState, useEffect, useRef } from "react";
-import { User } from "packages/state/domain/user";
 import styled from 'styled-components'
 import { VscClose } from 'react-icons/vsc'
-import { BsPerson, BsCheck } from 'react-icons/bs'
-import { TbChevronDown } from 'react-icons/tb' 
+import { BsPerson } from 'react-icons/bs'
 import { useOnClickOutside } from "packages/ui/hooks/useOnClickOutside";
 
 interface Props {
@@ -23,37 +21,31 @@ export const SearchEntityInput: FunctionComponent<PropsWithChildren<Props>> = ({
   onSelect
 }) => {
 
-  
   const [selectedItems, handleSelectedItems] = useState([])
   const [showResults, handleShowResults] = useState(false)
-  
-  console.log("🚀 ~ file: SearchEntityInput.tsx:30 ~ showResults:", showResults)
-  
+
   const searchInput = useRef(null)
   const wrapperRef = useRef(null)
 
   useOnClickOutside(wrapperRef, () => {
-    console.log('1')
-    handleShowResults(false) 
+    handleShowResults(false)
   })
 
   const clean = () => {
-    console.log('3')
     searchInput.current.textContent = ''
     handleShowResults(false)
   }
-  
+
   // this
   useEffect(() => {
     handleShowResults(true)
   }, [entities])
-  
+
   useEffect(() => {
     onSelect(selectedItems.map(si => si.id))
   }, [selectedItems])
 
   useEffect(() => {
-    console.log('2')
     handleShowResults(false)
   }, [])
 
@@ -61,59 +53,59 @@ export const SearchEntityInput: FunctionComponent<PropsWithChildren<Props>> = ({
     <Wrapper ref={wrapperRef}>
       <MultiSelect $resultsOpen={showResults || selectedItems.length > 0}>
 
-        { selectedItems.map(si => (
+        {selectedItems.map(si => (
           <Item key={si.label}>
             <span>
-              { si.label }
+              {si.label}
             </span>
             <VscClose onClick={() => {
-              handleSelectedItems(selectedItems.filter(sif => sif.id !== si.id ))
+              handleSelectedItems(selectedItems.filter(sif => sif.id !== si.id))
             }} size={16} color="#8B8E8F" />
           </Item>
         ))}
 
         <InputWrapper>
-          <Input 
+          <Input
             ref={searchInput}
-            className='font-sans' 
+            className='font-sans'
             role='textbox'
             contentEditable
-            onInput={(e) => { 
-              const newQuery = e.currentTarget.textContent              
+            onInput={(e) => {
+              const newQuery = e.currentTarget.textContent
               clearTimeout(timeoutToken)
 
               timeoutToken = setTimeout(() => {
-                onSearch(newQuery, selectedItems.map(si => si.id))                
+                onSearch(newQuery, selectedItems.map(si => si.id))
               }, 500)
             }}
           />
         </InputWrapper>
 
-        
+
       </MultiSelect>
 
       <AbsoluteContent>
-          { entities.length > 0 && showResults && ( 
-            <SearchResults>
-              { entities.map((ent, key) => (
-                <SearchResult
-                  key={ent.id}
-                  tabIndex={key}
-                  onClick={() => {
-                    let newItems = selectedItems
-                    newItems.push({id: ent.id, label: ent.label})
-                    handleSelectedItems([...newItems])
-                    clean()
-                  }}
-                >
-                  <BsPerson size='16' color="#8B8E8F"/>
-                  <p>
-                    {ent.label}
-                  </p>
-                </SearchResult>
-              ))}
-            </SearchResults>
-          )}       
+        {entities.length > 0 && showResults && (
+          <SearchResults>
+            {entities.map((ent, key) => (
+              <SearchResult
+                key={ent.id}
+                tabIndex={key}
+                onClick={() => {
+                  let newItems = selectedItems
+                  newItems.push({ id: ent.id, label: ent.label })
+                  handleSelectedItems([...newItems])
+                  clean()
+                }}
+              >
+                <BsPerson size='16' color="#8B8E8F" />
+                <p>
+                  {ent.label}
+                </p>
+              </SearchResult>
+            ))}
+          </SearchResults>
+        )}
       </AbsoluteContent>
     </Wrapper>
   )
@@ -121,23 +113,23 @@ export const SearchEntityInput: FunctionComponent<PropsWithChildren<Props>> = ({
 
 
 
-const RolePicker = styled.div`
-  position: absolute;
-  right: 4px;
-  top: 6px;
-  display: flex;
-  align-items: center;
-  padding: 10px 4px;
+// const RolePicker = styled.div`
+//   position: absolute;
+//   right: 4px;
+//   top: 6px;
+//   display: flex;
+//   align-items: center;
+//   padding: 10px 4px;
 
-  > span {
-    font-size: 10px;
-    color: #8B8E8F;
-    padding-right: 6px;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
+//   > span {
+//     font-size: 10px;
+//     color: #8B8E8F;
+//     padding-right: 6px;
+//     font-weight: 700;
+//     text-transform: uppercase;
+//   }
 
-`
+// `
 
 const InputWrapper = styled.div`
   display: flex;
@@ -171,6 +163,7 @@ const Input = styled.span`
   padding: 2px;
   font-weight: 600;
   width: 100%;
+  line-break: anywhere;
 
   &:focus-visible {
     outline: none;

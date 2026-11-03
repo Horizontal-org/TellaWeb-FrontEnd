@@ -92,11 +92,17 @@ export const EditSelfPasswordModal: FunctionComponent<React.PropsWithChildren<Pr
             </div>
           )}
 
+          {showValidations && newPassword.length > 0 && newPassword.length < 6 && (
+            <div className="w-full p-2 my-4  bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200">
+              The new password must have at least 6 characters
+            </div>
+          )}
+
           <div className='pb-4'>
             <Button 
               text='SAVE'
               full={true}
-              disabled={!(newPassword.length > 0 && newPassword === confirmPassword)}
+              disabled={!(newPassword.length >= 6 && newPassword === confirmPassword)}
               onClick={() => {
                 onSubmit(oldPassword, newPassword)
                 toggle()

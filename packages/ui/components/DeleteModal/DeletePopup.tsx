@@ -31,25 +31,25 @@ export const DeletePopup: FunctionComponent<React.PropsWithChildren<PropsWithChi
   const togglePopup = () => changePopupStatus(!popupOpen);
 
   const requestClose = () => {
-      togglePopup()
-      onClose && onClose()
-    
+    togglePopup()
+    onClose && onClose()
+
   }
 
   return (
     <div>
-      <ButtonOption 
+      <ButtonOption
         icon={icon}
         color={color}
         text={text}
         disabled={disabled}
         onClick={togglePopup}
-      />      
+      />
       <ReactModal
         isOpen={popupOpen}
         onRequestClose={requestClose}
         overlayClassName={
-          "flex bg-black/50 absolute inset-0 justify-center items-center"
+          "flex bg-black/50 fixed inset-0 z-50 justify-center items-center"
         }
         className="bg-white font-thin w-4/12 py-4 px-3 rounded-sm shadow-xl text-gray-800"
       >

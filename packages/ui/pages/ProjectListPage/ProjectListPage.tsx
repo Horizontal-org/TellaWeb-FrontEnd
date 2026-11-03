@@ -21,13 +21,15 @@ import { ENTITIES } from "common/casl/Ability";
 import { Project } from "packages/state/domain/project";
 import { CreateProjectModal } from '../../modals/project/CreateProjectModal/CreateProjectModal'
 import ProjectCard from "packages/ui/components/ProjectCard/ProjectCard";
+import { LayoutAbsoluteContent } from "packages/ui/components/LayoutAbsoluteContent/LayoutAbsoluteContent";
+import { IoMdAdd } from "react-icons/io";
 
 type Props = {
   projects: Project[];
-  onQueryChange: (iq: ItemQuery) => void;  
+  onQueryChange: (iq: ItemQuery) => void;
   sidebar: React.ReactNode;
   currentQuery: ItemQuery;
-  onCreateProject: ({name}) => void
+  onCreateProject: ({ name }) => void
   onOpen: (id: string) => void
   isLoading: boolean
 };
@@ -53,7 +55,9 @@ export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> 
 
     onQueryChange({
       ...currentQuery,
-      search: name
+      search: name,
+      // A new search starts again from the first page
+      pagination: { ...currentQuery.pagination, page: 0 }
     })
   };
 
@@ -64,10 +68,10 @@ export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> 
       subtitle="Organise all files and reports into folders"
       content={
         <div>
-          <div className="flex space-x-2 mb-2 p-2">    
+          <div className="flex space-x-2 mb-2 p-2">
             <>
               <Can I='create' a={ENTITIES.Projects}>
-                <CreateProjectModal                  
+                <CreateProjectModal
                   open={open}
                   onClose={() => { handleOpen(false) }}
                   existingNames={projects.map(p => p.name)}
@@ -89,52 +93,60 @@ export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> 
                   defaultValue={currentQuery.search}
                 />
               </form>
-            </>            
+            </>
           </div>
-                    
+
 
           <div className="py-4 flex flex-wrap ">
-              { projects.map((p) => (
+            {isLoading
+              ? [...Array(4)].map((_, i) => (
+                <div key={i} className='pt-4 pr-4'>
+                  <ProjectCard loading />
+                </div>
+              ))
+              : projects.map((p) => (
                 <div key={p.id} className='pt-4 pr-4' onClick={() => { onOpen(p.id) }}>
-                  <ProjectCard 
-                    data={p}                
+                  <ProjectCard
+                    data={p}
                   />
                 </div>
               ))}
           </div>
         </div>
       }
-      absoluteContent={ (projects.length === 0 && !isLoading) && (
-        <div 
-          className="flex text-sm justify-center w-full p-6" 
-          style={{ 
-            position: 'absolute', 
-            bottom: 'calc(50% - 50px)',
-            marginLeft: '-60px'
-          }}
-        >          
-          <div 
-            className="py-8 px-12 border rounded-sm border-gray-100"
+      absoluteContent={(projects.length === 0 && !isLoading) && (
+        <LayoutAbsoluteContent>
+          <div
+            className="text-center flex-col flex justify-center items-center"
           >
+            <p className='text-xl font-semibold'>
+              You don’t have any projects yet.
+            </p>
+            <Can I='create' a={ENTITIES.Projects} passThrough>
+              {({ isAllowed }) => isAllowed ? (
+                <>
+                  <p className='font-normal text-lg  py-2'>
+                    Create your first project to get started.
+                  </p>
+                  <div className='py-4'>
+                    <Button
+                      text='NEW PROJECT'
+                      icon={<IoMdAdd color='white' />}
+                      onClick={() => {
+                        handleOpen(true)
+                      }}
+                    />
+                  </div>
+                </>
+              ) : (
+                <p className='font-normal text-lg text-gray-500 py-2'>
+                  Projects that you are invited to will appear here.
+                </p>
+              )}
+            </Can>
 
-            <p className='text-xxxl text-gray-600 font-bold'>
-              No projects
-            </p>
-            <p className='py-2 font-normal text-sm text-gray-500'>
-              There are currently no projects. Get started by creating your first project.
-            </p>
-            
-            <div className='py-4'>
-              <Button 
-                text='CREATE PROJECT'
-                full={true}
-                onClick={() => {
-                  handleOpen(true)
-                }}
-              />
-            </div>
           </div>
-        </div>
+        </LayoutAbsoluteContent>
       )}
       leftbar={sidebar}
       leftbarActive={true}

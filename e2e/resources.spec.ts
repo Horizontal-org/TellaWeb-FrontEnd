@@ -14,7 +14,7 @@ test("upload, download and delete a resource", async ({ page, adminApi }) => {
   const dialog = page.getByRole("dialog")
   await dialog.locator('input[type="file"]').setInputFiles({ name: fileName, mimeType: "application/pdf", buffer: tinyPdf() })
   await expect(dialog.getByText(fileName)).toBeVisible()
-  await dialog.getByRole("button", { name: "SAVE" }).click()
+  await dialog.getByRole("button", { name: "CREATE RESOURCE" }).click()
   await expectToast(page, "The new resource was successfully added to your workspace")
 
   const row = page.getByRole("row", { name: new RegExp(title) })

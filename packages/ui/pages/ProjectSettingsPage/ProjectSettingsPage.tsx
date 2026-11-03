@@ -37,16 +37,16 @@ import { ENTITIES } from "common/casl/Ability";
 type Props = {
   project: Project
   onRename: (name: string) => void;
-  onEdit: ({}) => void
+  onEdit: ({ }) => void
   onDelete: () => void;
   onManage: (entity: string) => void;
   sidebar: React.ReactNode;
 };
 
-const voidFunction = () => {};
+const voidFunction = () => { };
 
 export const ProjectSettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
-  project,  
+  project,
   sidebar,
   onRename,
   onDelete,
@@ -78,52 +78,54 @@ export const ProjectSettingsPage: FunctionComponent<React.PropsWithChildren<Prop
             <div className="flex items-center">
               <p className="text-gray-600 text-base uppercase" style={{ minWidth: 300 }}>
                 Name
-              </p>                  
+              </p>
               <p>
                 <span>{project.name}</span>
-              </p>              
+              </p>
             </div>
-            <div>
-              <RenameProjectModal
-                currentName={project.name}
-                onSubmit={(newName) => {
-                  onRename(newName)
-                }}
-              />                        
-            </div>                
+            <Can I='edit' a={ENTITIES.Projects}>
+              <div>
+                <RenameProjectModal
+                  currentName={project.name}
+                  onSubmit={(newName) => {
+                    onRename(newName)
+                  }}
+                />
+              </div>
+            </Can>
           </div>
           <div className="flex justify-between items-center py-4 border-b">
             <div className="flex items-center">
               <p className="text-gray-600 text-base uppercase" style={{ minWidth: 300 }}>
                 Created
-              </p>                  
+              </p>
               <p>
                 <span>{createdAt ? format(createdAt, "dd MMM yyyy") : null}</span>
               </p>
             </div>
             <div>
               <p>
-                
-              </p>                               
-            </div>                
+
+              </p>
+            </div>
           </div>
           <div className="flex justify-between items-center py-4 border-b">
             <div className="flex items-center">
               <p className="text-gray-600 text-base uppercase" style={{ minWidth: 300 }}>
                 url
-              </p>             
+              </p>
               <div>
                 <div
-                  style={{ maxWidth: '100%'}}
+                  style={{ maxWidth: '100%' }}
                   className="text-ellipsis overflow-hidden whitespace-nowrap pr-8"
                 >
-                  {project.url  ? project.url : 'No URL set'}
+                  {project.url ? project.url : 'No URL set'}
                 </div>
-             
-              </div>     
+
+              </div>
             </div>
             <div className="flex items-center">
-              <Button 
+              <Button
                 type={btnType.Secondary}
                 text='COPY'
                 onClick={() => {
@@ -131,15 +133,17 @@ export const ProjectSettingsPage: FunctionComponent<React.PropsWithChildren<Prop
                   handleToast('URL copied to clipboard')
                 }}
               />
-              <div className="pl-2">
-                <EditUrlProjectModal
-                  currentUrl={project.slug}
-                  onSubmit={(newUrl) => {
-                    onEdit({ slug: newUrl })
-                  }}
-                />
-              </div>
-            </div>                
+              <Can I='edit' a={ENTITIES.Projects}>
+                <div className="pl-2">
+                  <EditUrlProjectModal
+                    currentUrl={project.slug}
+                    onSubmit={(newUrl) => {
+                      onEdit({ slug: newUrl })
+                    }}
+                  />
+                </div>
+              </Can>
+            </div>
           </div>
 
 
@@ -153,67 +157,69 @@ export const ProjectSettingsPage: FunctionComponent<React.PropsWithChildren<Prop
                 <div className="flex items-center">
                   <p className="text-gray-600 text-base uppercase" style={{ minWidth: 300 }}>
                     Manage users
-                  </p>                  
+                  </p>
                   <p>
-                    
+
                   </p>
                 </div>
                 <div>
-                  <Button 
+                  <Button
                     type={btnType.Secondary}
                     text='MANAGE'
-                    onClick={() => {onManage('users')}}  
+                    onClick={() => { onManage('users') }}
                   />
-                </div>                
-              </div>            
+                </div>
+              </div>
             </Can>
             <div className="flex justify-between items-center py-4 border-b">
               <div className="flex items-center">
                 <p className="text-gray-600 text-base uppercase" style={{ minWidth: 300 }}>
                   Manage resources
-                </p>                  
+                </p>
                 <p>
-                  
+
                 </p>
               </div>
               <div>
-                <Button 
+                <Button
                   type={btnType.Secondary}
                   text='MANAGE'
-                  onClick={() => {onManage('resources')}}  
+                  onClick={() => { onManage('resources') }}
                 />
-              </div>                
-            </div>                      
-          </div>
-
-
-          <div className="pt-4">
-            <p className="text-base text-gray-600 font-bold py-4">
-              Danger zone 
-            </p>
-
-            <div className="flex justify-between items-center py-4 border-b">
-              <div className="flex items-center">
-                <p className="text-gray-600 text-base uppercase" style={{ minWidth: 300 }}>
-                  Delete project
-                </p>                  
-                <p>
-                  
-                </p>
               </div>
-              <div>
-                <DeleteProjectModal
-                  currentName={project.name}
-                  onSubmit={onDelete}
-                />                              
-              </div>                
             </div>
           </div>
+
+
+          <Can I='manage' a={ENTITIES.Projects}>
+            <div className="pt-4">
+              <p className="text-base text-gray-600 font-bold py-4">
+                Danger zone
+              </p>
+
+              <div className="flex justify-between items-center py-4 border-b">
+                <div className="flex items-center">
+                  <p className="text-gray-600 text-base uppercase" style={{ minWidth: 300 }}>
+                    Delete project
+                  </p>
+                  <p>
+
+                  </p>
+                </div>
+                <div>
+                  <DeleteProjectModal
+                    currentName={project.name}
+                    onSubmit={onDelete}
+                  />
+                </div>
+              </div>
+            </div>
+          </Can>
 
         </div>
       }
       leftbar={sidebar}
-      leftbarActive={false}    
+      leftbarActive={false}
       rightbarActive={false}
       onClosePreview={() => setCurrentReport(undefined)}
       currentItem={currentReport}

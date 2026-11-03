@@ -53,7 +53,7 @@ const Configuration = () => {
   const [query, setQuery] = useState<ConfigurationQuery>(defaultQuery);
   
   const [createConfig, createConfigResult] = useCreateConfigurationMutation()
-  const { data: configurations, refetch } = useListQuery(query);
+  const { data: configurations, refetch, isLoading } = useListQuery(query);
   // The table needs the total from the API to know how many pages there are
   const itemQuery = useMemo(
     () => toItemQuery({ ...query, total: configurations?.total ?? query.total }),
@@ -76,6 +76,7 @@ const Configuration = () => {
 
   return (
     <ConfigurationListPage 
+      isLoading={isLoading}
       sidebar={<Menu />}
       configurations={configurations?.results || []}
       onCreateConfig={(name) => {

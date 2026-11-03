@@ -12,7 +12,7 @@ export const CONFIGURATION_COLUMNS: TableColumn[] = [
   {
     Header: "Date",
     headerKey: 'configuration.createdAt',
-    className: "px-3 py-3 w-40",
+    className: "px-3 py-3 w-auto",
     id: "date",
     accessor: (configuration: Configuration): string => {
       const date = new Date(configuration.createdAt)

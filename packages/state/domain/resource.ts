@@ -20,4 +20,5 @@ export interface ResourceQuery {
   total?: number;
   size: number;
   exclude?: Array<string>;
+  excludeProject?: string;
 }

@@ -4,10 +4,10 @@ import { Report } from "./Report";
 
 export const REPORT_COLUMNS: TableColumn[] = [
   {
-    Header: "Name",
+    Header: "Title",
     headerKey: 'report.title',
     accessor: (report: Report): string => report.title,
-    className: "px-3 py-3 w-40 font-semibold",
+    className: "px-3 py-3 w-auto font-semibold",
   },
   {
     Header: "Date",
@@ -19,7 +19,7 @@ export const REPORT_COLUMNS: TableColumn[] = [
   {
     Header: "User",
     headerKey: 'author.username',
-    className: "px-3 py-3 w-auto",
+    className: "px-3 py-3 w-80",
     accessor: (report: Report) => { return report.author ? report.author.username : 'deleted user' },
   },
 ];

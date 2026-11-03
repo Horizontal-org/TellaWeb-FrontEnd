@@ -4,7 +4,7 @@ import { AdminCenterPage } from "packages/ui/pages/AdminCenterPage/AdminCenterPa
 import { useListQuery, useUpdateGlobalSettingMutation } from "packages/state/services/global-setting";
 import { useToast } from "components/ToastWrapper";
 import { useRouter } from "next/router";
-import { useLatestQuery, useStartMutation, useDeleteMutation } from "packages/state/services/backup";
+import { useLatestQuery, useSpaceQuery, useStartMutation, useDeleteMutation } from "packages/state/services/backup";
 import { errorMessage } from "packages/state/utils/errorMessage";
 
 
@@ -23,6 +23,11 @@ const AdminCenter = () => {
     refetchOnMountOrArgChange: true,
   })
 
+  // not polled: the backend stats every stored file to compute it
+  const { data: backupSpace, refetch: refetchBackupSpace } = useSpaceQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  })
+
   const [newBackupFlag, handleNewBackupFlag] = useState<boolean>(false)
 
 
@@ -35,6 +40,7 @@ const AdminCenter = () => {
       if (newBackupFlag && !latestBackups.processing) {
         handleNewBackupFlag(false)
         handleToast("Your backup was successfully generated", "info");
+        refetchBackupSpace()
       }
     }
   }, [latestBackups])
@@ -66,6 +72,7 @@ const AdminCenter = () => {
     if (deleteBackupResult.isSuccess) {
       handleToast("Your backup was successfully deleted", "info");      
       refetchLatestBackups()
+      refetchBackupSpace()
     }
     if (deleteBackupResult.error && "status" in deleteBackupResult.error) {
       handleToast(errorMessage(deleteBackupResult.error), "danger");
@@ -77,6 +84,7 @@ const AdminCenter = () => {
     <AdminCenterPage
       globalSettings={globalSettings}
       backups={latestBackups}
+      backupSpace={backupSpace}
       sidebar={<Menu />}    
       onBackupStart={() => { startBackup() }}
       onBackupDelete={(id) => { deleteBackup(id) }}

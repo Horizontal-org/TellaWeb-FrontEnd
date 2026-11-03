@@ -1,15 +1,11 @@
 import React, { useMemo, useState, useEffect } from "react";
-import { ReportListPage, ItemQuery, Report as IReport } from "packages/ui";
+import { ItemQuery } from "packages/ui";
 import { Menu } from "../../components/Menu";
-import { toReport } from "../../common/toReport";
 import { useRouter } from "next/router";
-import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import {
   useCreateProjectMutation,
   useListQuery,
 } from "packages/state/services/project";
-import { ReportQuery } from "packages/state/domain/report";
-import { useReportFileDownloader } from "packages/state/features/files/useReportFileDownloader";
 import { ProjectQuery } from "packages/state/domain/project";
 import { ProjectListPage } from "packages/ui/pages/ProjectListPage/ProjectListPage";
 import { useToast } from "components/ToastWrapper";
@@ -55,7 +51,7 @@ export const Project = () => {
 
   const [createProject, createProjectResult] = useCreateProjectMutation()
   const { data: projects, refetch, isLoading } = useListQuery(query);
-  
+
   useEffect(() => {
     refetch()
   }, [])
@@ -71,7 +67,7 @@ export const Project = () => {
   }, [createProjectResult.status]);
 
   return (
-    <ProjectListPage 
+    <ProjectListPage
       isLoading={isLoading}
       currentQuery={itemQuery}
       projects={projects?.results || []}

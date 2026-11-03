@@ -8,7 +8,7 @@ type Props = {
   onClick?: () => void,
 };
 
-export const ImageView: FunctionComponent<React.PropsWithChildren<Props>> = ({ file, onClick = () => {} }) => {
+export const ImageView: FunctionComponent<React.PropsWithChildren<Props>> = ({ file, onClick = () => { } }) => {
 
   const [loading, handleLoading] = useState(true)
 
@@ -29,15 +29,17 @@ export const ImageView: FunctionComponent<React.PropsWithChildren<Props>> = ({ f
           }}
         />
 
-        { loading && (
-          <MediaLoader />
+        {loading && (
+          <div className='absolute inset-0'>
+            <MediaLoader />
+          </div>
         )}
-        
+
       </div>
     </div>
-    
+
   )
-} 
+}
 
 
 

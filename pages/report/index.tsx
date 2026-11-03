@@ -50,7 +50,7 @@ export const Report = () => {
 
   const [query, setQuery] = useState<ReportQuery>(defaultQuery);
 
-  const { data: reports } = useListQuery(query);
+  const { data: reports, isLoading } = useListQuery(query);
   // The table needs the total from the API to know how many pages there are
   const itemQuery = useMemo(
     () => toItemQuery({ ...query, total: reports?.total ?? query.total }),
@@ -65,6 +65,7 @@ export const Report = () => {
 
   return ready ? (
     <ReportListPage
+      isLoading={isLoading}
       currentQuery={itemQuery}
       onQueryChange={(itemQuery) => setQuery(toReportQuery(itemQuery))}
       onDelete={onBatchDelete}

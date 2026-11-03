@@ -1,8 +1,8 @@
-import { 
-  FunctionComponent, 
-  useState, 
-  Dispatch, 
-  SetStateAction, 
+import {
+  FunctionComponent,
+  useState,
+  Dispatch,
+  SetStateAction,
   useRef,
   FormEvent,
   ChangeEvent,
@@ -30,7 +30,7 @@ import { ENTITIES } from "common/casl/Ability";
 import HoveredRowWrapper from "packages/ui/components/Table/HoveredRowWrapper";
 
 type Props = {
-  sidebar: React.ReactNode;  
+  sidebar: React.ReactNode;
   users: User[];
   currentQuery: ItemQuery;
   onOpen: (user: User) => void;
@@ -41,6 +41,7 @@ type Props = {
     password: string
     role: string
   }) => void;
+  isLoading?: boolean;
 };
 
 export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
@@ -50,7 +51,8 @@ export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = (
   currentQuery,
   onCreateUser,
   onOpen,
-  onDelete
+  onDelete,
+  isLoading
 }) => {
 
   const [currentUser, setCurrentUser] = useState<User | undefined>();
@@ -69,7 +71,9 @@ export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = (
 
     onQueryChange({
       ...currentQuery,
-      search: name
+      search: name,
+      // A new search starts again from the first page
+      pagination: { ...currentQuery.pagination, page: 0 }
     })
   };
 
@@ -80,18 +84,18 @@ export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = (
       onClosePreview={() => setCurrentUser(undefined)}
       rightbar={<UserBar user={currentUser} />}
       rightbarActive={true}
-      leftbar={sidebar}      
+      leftbar={sidebar}
       leftbarActive={true}
       currentItem={currentUser}
       content={
         <div>
-          <div 
+          <div
             className="flex space-x-2 mb-2 p-2"
           >
             {selectedUsers.length === 0 && (
               <>
                 <Can I='create' a={ENTITIES.Users}>
-                  <CreateUserModal 
+                  <CreateUserModal
                     onSubmit={(newUser) => {
                       onCreateUser(newUser)
                     }}
@@ -131,11 +135,11 @@ export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = (
                     icon={<MdRemoveRedEye />}
                     text="Preview"
                     onClick={openUser}
-                  />              
+                  />
                 </div>
                 <ButtonMenu openSide="right">
                   <Can I='delete' a={ENTITIES.Users}>
-                    <DeleteModal 
+                    <DeleteModal
                       render={(
                         <p>
                           the selected users will be permanently deleted.
@@ -144,15 +148,15 @@ export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = (
                       onDelete={() => {
                         onDelete(selectedUsers)
                       }}
-                    />                    
+                    />
                   </Can>
                 </ButtonMenu>
-              </>                                  
-            )}                
+              </>
+            )}
             {selectedUsers.length > 1 && (
               <>
                 <Can I='delete' a={ENTITIES.Users}>
-                  <DeleteModal 
+                  <DeleteModal
                     render={(
                       <p>
                         the selected users will be permanently deleted.
@@ -161,19 +165,20 @@ export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = (
                     onDelete={() => {
                       onDelete(selectedUsers)
                     }}
-                  />                    
+                  />
                 </Can>
               </>
             )}
           </div>
           <div>
             <Table
+              loading={isLoading}
               columns={USER_COLUMNS}
               data={users}
               itemQuery={currentQuery}
               onSelection={setSelectedUsers as Dispatch<SetStateAction<Item[]>>}
               onFetch={onQueryChange}
-              icon={<BsPerson/>}
+              icon={<BsPerson />}
               rowOptions={(hoverRow, isHoverSelected) => (
                 <HoveredRowWrapper isHoverSelected={isHoverSelected}>
                   <>
@@ -199,7 +204,8 @@ export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = (
                         }}
                       />
                       <Can I='delete' a={ENTITIES.Users}>
-                        <DeleteModal 
+                        <DeleteModal
+                          title="Delete user"
                           render={(
                             <p>
                               the selected users will be permanently deleted.
@@ -208,7 +214,7 @@ export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = (
                           onDelete={(e) => {
                             onDelete([hoverRow])
                           }}
-                        />                    
+                        />
                       </Can>
                     </ButtonMenu>
                   </>
@@ -216,7 +222,7 @@ export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = (
               )}
             />
           </div>
-         
+
         </div>
       }
     />

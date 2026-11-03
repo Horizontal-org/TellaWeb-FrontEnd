@@ -44,7 +44,7 @@ export const VideoView: FunctionComponent<React.PropsWithChildren<Props>> = ({ f
           </video>
 
           {!duration && (
-            <div className="absolute">
+            <div className="absolute top-0 left-0 w-full">
               <MediaLoader />
             </div>
           )}

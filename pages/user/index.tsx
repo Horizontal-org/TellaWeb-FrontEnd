@@ -55,7 +55,7 @@ export const Report = () => {
 
   const [query, setQuery] = useState<UserQuery>(defaultQuery);
 
-  const { data: users, refetch } = useListQuery(query);
+  const { data: users, refetch, isLoading } = useListQuery(query);
   // The table needs the total from the API to know how many pages there are
   const itemQuery = useMemo(
     () => toItemQuery({ ...query, total: users?.total ?? query.total }),
@@ -69,9 +69,9 @@ export const Report = () => {
   };
 
   // useEffect(() => {
-    // use refetch here 
+  // use refetch here 
   // }, [])
-  
+
   useEffect(() => {
     if (createUserResult.isSuccess) {
       handleToast("User created!", "info");
@@ -93,7 +93,8 @@ export const Report = () => {
   }, [batchDeleteUsersResult.status])
 
   return ready ? (
-    <UserListPage 
+    <UserListPage
+      isLoading={isLoading}
       currentQuery={itemQuery}
       onQueryChange={(itemQuery) => setQuery(toUserQuery(itemQuery))}
       sidebar={<Menu />}
@@ -102,7 +103,7 @@ export const Report = () => {
         push(`./user/${user.id}`);
       }}
       onDelete={onBatchDeleteUsers}
-      onCreateUser={createUser} 
+      onCreateUser={createUser}
     ></UserListPage>
   ) : (
     false
