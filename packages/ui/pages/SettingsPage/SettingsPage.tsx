@@ -15,7 +15,6 @@ import { EditTwoFactorAuthModal } from "packages/ui/components/EditTwoFactorAuth
 type Props = {
   sidebar: React.ReactNode;
   onUpdateUsername: (username: string, confirmPassword: string) => void;
-  onUpdatePassword: (currentPassword: string, newPassword: string) => void;
   handleOtpActive: (value: boolean) => void
   user: User | null;
   otpActive: boolean
@@ -26,14 +25,10 @@ type Props = {
 export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   sidebar,
   onUpdateUsername,
-  onUpdatePassword,
   handleOtpActive,
   user,
   otpActive
 }) => {
-
-  const router = useRouter()
-  const { t, i18n } = useTranslation("settings")
 
   const [editTwoFactorOpen, handleditTwoFactorOpen] = useState<boolean>(false)
 
@@ -53,11 +48,11 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
               </p>
               <p>{user ? user.username : ""}</p>
             </div>
-            <EditEmailModal 
+            <EditEmailModal
               withPassword={true}
               isEmail={user && user.role !== ROLES.REPORTER}
               onSubmit={onUpdateUsername}
-              title="Please enter the new email address you would like to use to log in Tella" 
+              title="Please enter the new email address you would like to use to log in Tella"
             />
           </div>
 
@@ -68,7 +63,7 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
               </p>
               <p>••••••••••</p>
             </div>
-            <EditSelfPasswordModal onSubmit={onUpdatePassword} />
+            <EditSelfPasswordModal />
           </div>
 
           <div className="flex justify-between items-center py-4 border-b">
@@ -78,21 +73,21 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
               </p>
               <p>{otpActive ? 'ENABLED' : 'DISABLED'}</p>
             </div>
-            { otpActive ? 
-              <EditTwoFactorAuthModal handleExternalOpen={handleditTwoFactorOpen} externalOpen={editTwoFactorOpen} handleOtpActive={handleOtpActive}/> :
+            {otpActive ?
+              <EditTwoFactorAuthModal handleExternalOpen={handleditTwoFactorOpen} externalOpen={editTwoFactorOpen} handleOtpActive={handleOtpActive} /> :
               <TwoFactorAuthModal handleEditOpen={handleditTwoFactorOpen} handleOtpActive={handleOtpActive} />
             }
           </div>
 
-          <div 
+          <div
             className="flex justify-between items-center py-4 border-b"
           >
             <div className="flex items-center">
               <p className="text-gray-600 uppercase flex items-center" style={{ width: 200 }}>
-                TELLA WEB VERSION                
+                TELLA WEB VERSION
               </p>
-              <p>v{version}</p>            
-            </div>                        
+              <p>v{version}</p>
+            </div>
           </div>
 
           {/* HIDE FOR NOW */}
@@ -123,7 +118,7 @@ export const SettingsPage: FunctionComponent<React.PropsWithChildren<Props>> = (
             </ButtonMenu>
           </div> */}
         </div>
-      }      
+      }
     />
   );
 };

@@ -14,13 +14,12 @@ import { setUser } from "packages/state/features/user/userSlice";
 import { errorMessage } from "packages/state/utils/errorMessage";
 
 const Settings = () => {
-  
+
   const user = useUserProfile();
   const dispatch = useDispatch();
 
   const handleToast = useToast();
 
-  const [updatePassword, updatePasswordResult] = useUpdatePasswordSelfMutation();
   const [updateSelf, updateSelfResult] = useUpdateUserSelfMutation();
 
   const [otpActive, handleOtpActive] = useState<boolean | null>(null)
@@ -28,15 +27,6 @@ const Settings = () => {
   useEffect(() => {
     handleOtpActive(user.otp_active)
   }, [user])
-
-  useEffect(() => {
-    if (updatePasswordResult.isSuccess) {
-      handleToast("Password updated!", "info");
-    }
-    if (updatePasswordResult.error && "status" in updatePasswordResult.error) {
-      handleToast(errorMessage(updatePasswordResult.error), "danger");
-    }
-  }, [updatePasswordResult.status]);
 
   useEffect(() => {
     if (updateSelfResult.isSuccess) {
@@ -52,9 +42,6 @@ const Settings = () => {
     <SettingsPage
       sidebar={<Menu />}
       user={user}
-      onUpdatePassword={(current, newPassword) => {
-        updatePassword({ current, new: newPassword });
-      }}
       onUpdateUsername={(username, confirmPassword) => {
         updateSelf({ username: username, confirmPassword: confirmPassword })
       }}
