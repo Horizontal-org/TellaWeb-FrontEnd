@@ -44,6 +44,13 @@ export const projectApi = createApi({
       }),
     }),
 
+    checkName: builder.query<{ taken: boolean }, { name: string, excludeId?: string }>({
+      query: ({ name, excludeId }) => ({
+        url: `/check/${encodeURIComponent(name)}`,
+        params: { excludeId },
+      }),
+    }),
+
     editProject: builder.mutation<
       Project,
       { id: string; name?: string; url?: string; slug?: string }
@@ -88,5 +95,6 @@ export const {
   useGetByIdQuery,
   useEditProjectMutation,
   useAddEntitiesMutation,
-  useDeleteProjectMutation
+  useDeleteProjectMutation,
+  useLazyCheckNameQuery
 } = projectApi;

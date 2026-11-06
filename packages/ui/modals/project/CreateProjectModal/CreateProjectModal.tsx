@@ -5,7 +5,7 @@ import { btnType } from '../../../components/Button/Button'
 import { IoMdAdd } from 'react-icons/io'
 
 interface Props {
-  existingNames: string[];
+  checkName: (name: string) => Promise<boolean>
   open: boolean;
   onSubmit: (newProject: {
     name: string;
@@ -15,13 +15,14 @@ interface Props {
 
 export const CreateProjectModal: FunctionComponent<React.PropsWithChildren<Props>> = ({
   onSubmit,
-  existingNames,
+  checkName,
   open,
   onClose
 }) => {
 
   const [name, handleName] = useState<string>('')
   const [showValidations, handleShowValidations] = useState(false)
+  const [taken, handleTaken] = useState(false)
   
   return (
     <Modal 
@@ -32,13 +33,14 @@ export const CreateProjectModal: FunctionComponent<React.PropsWithChildren<Props
       btnType={btnType.Primary}
       subtitle='Name your new project. This name will be visible to Tella users.'
       submit='SAVE'
-      disabled={!(name.length > 0)}
+      disabled={!(name.length > 0) || taken}
       onSubmit={() => {
         onSubmit({
           name,         
         })
 
         handleName('')
+        handleTaken(false)
       }}
       onClose={onClose}
       render={() => (
@@ -49,7 +51,10 @@ export const CreateProjectModal: FunctionComponent<React.PropsWithChildren<Props
               maxLength={150}
               placeholder='Project name'
               value={name}
-              onChange={(e) => { handleName(e.target.value) }}
+              onChange={(e) => {
+                handleName(e.target.value)
+                handleTaken(false)
+              }}
               onFocus={(e) => {
                 if (!e.currentTarget.contains(e.relatedTarget)) {
                   handleShowValidations(false)
@@ -58,6 +63,7 @@ export const CreateProjectModal: FunctionComponent<React.PropsWithChildren<Props
               onBlur={(e) => {
                 if (!e.currentTarget.contains(e.relatedTarget)) {
                   handleShowValidations(true)
+                  if (name.length > 0) checkName(name).then(handleTaken)
                 }
               }}
             />
@@ -66,7 +72,7 @@ export const CreateProjectModal: FunctionComponent<React.PropsWithChildren<Props
 
           { showValidations && (
             <>
-              { existingNames.includes(name) && (
+              { taken && (
                 <ErrorMessage 
                   message='Name taken.'
                 />          

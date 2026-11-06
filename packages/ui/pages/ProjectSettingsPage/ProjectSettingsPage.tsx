@@ -37,6 +37,7 @@ import { ENTITIES } from "common/casl/Ability";
 type Props = {
   project: Project
   onRename: (name: string) => void;
+  checkName: (name: string) => Promise<boolean>
   onEdit: ({ }) => void
   onDelete: () => void;
   onManage: (entity: string) => void;
@@ -49,6 +50,7 @@ export const ProjectSettingsPage: FunctionComponent<React.PropsWithChildren<Prop
   project,
   sidebar,
   onRename,
+  checkName,
   onDelete,
   onManage,
   onEdit
@@ -87,6 +89,7 @@ export const ProjectSettingsPage: FunctionComponent<React.PropsWithChildren<Prop
               <div>
                 <RenameProjectModal
                   currentName={project.name}
+                  checkName={checkName}
                   onSubmit={(newName) => {
                     onRename(newName)
                   }}
