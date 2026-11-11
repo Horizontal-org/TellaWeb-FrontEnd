@@ -41,14 +41,14 @@ export const authApi = createApi({
         body: credential
       })
     }),
-    authRecoveryKey: builder.mutation<LoginResponse, { code: string, userId: string, password: string }>({
+    authRecoveryKey: builder.mutation<LoginResponse, { code: string, mfa_token: string }>({
       query: (credential) => ({
         url: "auth/otp/recovery-key",
         method: "POST",
         body: credential
       })
     }),
-    otpLogin: builder.mutation<LoginResponse, { code: string, userId: string }>({
+    otpLogin: builder.mutation<LoginResponse, { code: string, mfa_token: string }>({
       query: (credential) => ({
         url: "auth/otp/login",
         method: "POST",

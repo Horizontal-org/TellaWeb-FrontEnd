@@ -3,8 +3,6 @@ import {
   useState,
   Dispatch,
   SetStateAction,
-  useRef,
-  FormEvent,
   ChangeEvent,
   PropsWithChildren
 } from "react";
@@ -58,23 +56,8 @@ export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = (
   const [currentUser, setCurrentUser] = useState<User | undefined>();
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
 
-  const searchInput = useRef<HTMLInputElement>(null);
-  let searchTimeout = null
-
   const openUser = () => {
     setCurrentUser(selectedUsers[0]);
-  };
-
-  const search = (e: FormEvent<HTMLFormElement> | ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const name = searchInput.current.value;
-
-    onQueryChange({
-      ...currentQuery,
-      search: name,
-      // A new search starts again from the first page
-      pagination: { ...currentQuery.pagination, page: 0 }
-    })
   };
 
   return (
@@ -102,18 +85,17 @@ export const UserListPage: FunctionComponent<React.PropsWithChildren<Props>> = (
                   />
                 </Can>
 
-                <form onSubmit={search} className="flex">
+                <div className="flex">
                   <SearchInput
-                    onChange={(e) => {
-                      clearTimeout(searchTimeout)
-                      searchTimeout = setTimeout(() => {
-                        search(e)
-                      }, 500)
-                    }}
-                    ref={searchInput}
                     defaultValue={currentQuery.search}
+                    onSearch={(search) => onQueryChange({
+                      ...currentQuery,
+                      search,
+                      // A new search starts again from the first page
+                      pagination: { ...currentQuery.pagination, page: 0 }
+                    })}
                   />
-                </form>
+                </div>
               </>
             )}
             {selectedUsers.length === 1 && (

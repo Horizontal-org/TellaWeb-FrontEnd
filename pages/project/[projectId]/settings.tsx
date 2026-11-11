@@ -6,6 +6,7 @@ import {
   useDeleteProjectMutation,
   useEditProjectMutation,
   useGetByIdQuery,
+  useLazyCheckNameQuery,
 } from "packages/state/services/project";
 import { ReportQuery } from "packages/state/domain/report";
 import { useReportFileDownloader } from "packages/state/features/files/useReportFileDownloader";
@@ -22,6 +23,7 @@ export const ProjectById = () => {
   );
   const [editProject, editProjectResult] = useEditProjectMutation()
   const [deleteProject, deleteProjectResult] = useDeleteProjectMutation()
+  const [triggerCheckName] = useLazyCheckNameQuery()
 
   const { push } = useRouter();
   const [downloadReportFile] = useReportFileDownloader();
@@ -54,6 +56,9 @@ export const ProjectById = () => {
       onManage={(entity) => {
         push(`/project/${currentProject.id}/${entity}`);
       }}      
+      checkName={(name) =>
+        triggerCheckName({ name, excludeId: currentProject.id }).unwrap().then((r) => r.taken).catch(() => false)
+      }
       onRename={(newName) => {
         editProject({
           id: currentProject.id,

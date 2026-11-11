@@ -3,8 +3,6 @@ import {
   useState,
   Dispatch,
   SetStateAction,
-  useRef,
-  FormEvent,
   ChangeEvent,
   PropsWithChildren
 } from "react";
@@ -46,7 +44,6 @@ type Props = {
   isLoading?: boolean
 };
 
-
 export const RESOURCE_COLUMNS: TableColumn[] = [
   {
     Header: "Title",
@@ -62,7 +59,6 @@ export const RESOURCE_COLUMNS: TableColumn[] = [
     accessor: (resource: Resource): string => format(new Date(resource.createdAt), "dd MMM yyyy"),
   }
 ];
-
 
 export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   sidebar,
@@ -80,21 +76,6 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
   const [openViewer, handleViewer] = useState<boolean>(false)
 
   const [selectedResources, setSelectedResources] = useState<Resource[]>([]);
-
-  const searchInput = useRef<HTMLInputElement>(null);
-  let searchTimeout = null
-
-  const search = (e: FormEvent<HTMLFormElement> | ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const name = searchInput.current.value;
-
-    onQueryChange({
-      ...currentQuery,
-      search: name,
-      // A new search starts again from the first page
-      pagination: { ...currentQuery.pagination, page: 0 }
-    })
-  };
 
   return (
     <MainLayout
@@ -142,7 +123,6 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
               }}
             />
 
-
             {selectedResources.length === 0 && (
               <>
                 <Can I='create' a={ENTITIES.Resources}>
@@ -151,18 +131,17 @@ export const ResourceListPage: FunctionComponent<React.PropsWithChildren<Props>>
                   />
                 </Can>
 
-                <form onSubmit={search} className="flex">
+                <div className="flex">
                   <SearchInput
-                    onChange={(e) => {
-                      clearTimeout(searchTimeout)
-                      searchTimeout = setTimeout(() => {
-                        search(e)
-                      }, 500)
-                    }}
-                    ref={searchInput}
                     defaultValue={currentQuery.search}
+                    onSearch={(search) => onQueryChange({
+                      ...currentQuery,
+                      search,
+                      // A new search starts again from the first page
+                      pagination: { ...currentQuery.pagination, page: 0 }
+                    })}
                   />
-                </form>
+                </div>
               </>
             )}
 

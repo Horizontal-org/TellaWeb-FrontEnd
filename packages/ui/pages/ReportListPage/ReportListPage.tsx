@@ -1,9 +1,7 @@
 import {
   Dispatch,
-  FormEvent,
   FunctionComponent,
   SetStateAction,
-  useRef,
   useState,
   ChangeEvent,
   useEffect
@@ -56,23 +54,8 @@ export const ReportListPage: FunctionComponent<React.PropsWithChildren<Props>> =
   const [currentReport, setCurrentReport] = useState<Report | undefined>();
   const [selectedReports, setSelectedReports] = useState<Report[]>([]);
 
-  const searchInput = useRef<HTMLInputElement>(null);
-  let searchTimeout = null
-
   const openReport = () => {
     setCurrentReport(selectedReports[0]);
-  };
-
-  const search = (e: FormEvent<HTMLFormElement> | ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const name = searchInput.current.value;
-
-    onQueryChange({
-      ...currentQuery,
-      search: name,
-      // A new search starts again from the first page
-      pagination: { ...currentQuery.pagination, page: 0 }
-    })
   };
 
   return (
@@ -84,18 +67,17 @@ export const ReportListPage: FunctionComponent<React.PropsWithChildren<Props>> =
           <div className="flex space-x-2 mb-2 p-2">
             {selectedReports.length === 0 && (
               <>
-                <form onSubmit={search} className="flex">
+                <div className="flex">
                   <SearchInput
-                    onChange={(e) => {
-                      clearTimeout(searchTimeout)
-                      searchTimeout = setTimeout(() => {
-                        search(e)
-                      }, 500)
-                    }}
-                    ref={searchInput}
                     defaultValue={currentQuery.search}
+                    onSearch={(search) => onQueryChange({
+                      ...currentQuery,
+                      search,
+                      // A new search starts again from the first page
+                      pagination: { ...currentQuery.pagination, page: 0 }
+                    })}
                   />
-                </form>
+                </div>
               </>
             )}
             {selectedReports.length === 1 && (

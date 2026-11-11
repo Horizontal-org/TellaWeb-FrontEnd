@@ -1,11 +1,8 @@
 import {
   Dispatch,
-  FormEvent,
   FunctionComponent,
   SetStateAction,
-  useRef,
   useState,
-  ChangeEvent,
   useEffect
 } from "react";
 import { MdOpenInNew, MdRemoveRedEye, MdSave } from "react-icons/md";
@@ -30,10 +27,10 @@ type Props = {
   sidebar: React.ReactNode;
   currentQuery: ItemQuery;
   onCreateProject: ({ name }) => void
+  checkName: (name: string) => Promise<boolean>
   onOpen: (id: string) => void
   isLoading: boolean
 };
-
 
 export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
   projects = [],
@@ -41,26 +38,12 @@ export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> 
   sidebar,
   currentQuery,
   onCreateProject,
+  checkName,
   onOpen,
   isLoading
 }) => {
 
   const [open, handleOpen] = useState<boolean>(false)
-  const searchInput = useRef<HTMLInputElement>(null);
-  let searchTimeout = null
-
-  const search = (e: FormEvent<HTMLFormElement> | ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const name = searchInput.current.value;
-
-    onQueryChange({
-      ...currentQuery,
-      search: name,
-      // A new search starts again from the first page
-      pagination: { ...currentQuery.pagination, page: 0 }
-    })
-  };
-
 
   return (
     <MainLayout
@@ -74,28 +57,26 @@ export const ProjectListPage: FunctionComponent<React.PropsWithChildren<Props>> 
                 <CreateProjectModal
                   open={open}
                   onClose={() => { handleOpen(false) }}
-                  existingNames={projects.map(p => p.name)}
+                  checkName={checkName}
                   onSubmit={(newProject) => {
                     handleOpen(false)
                     onCreateProject(newProject)
                   }}
                 />
               </Can>
-              <form onSubmit={search} className="flex">
+              <div className="flex">
                 <SearchInput
-                  onChange={(e) => {
-                    clearTimeout(searchTimeout)
-                    searchTimeout = setTimeout(() => {
-                      search(e)
-                    }, 500)
-                  }}
-                  ref={searchInput}
                   defaultValue={currentQuery.search}
+                  onSearch={(search) => onQueryChange({
+                    ...currentQuery,
+                    search,
+                    // A new search starts again from the first page
+                    pagination: { ...currentQuery.pagination, page: 0 }
+                  })}
                 />
-              </form>
+              </div>
             </>
           </div>
-
 
           <div className="py-4 flex flex-wrap ">
             {isLoading

@@ -4,6 +4,7 @@ import { Menu } from "../../components/Menu";
 import { useRouter } from "next/router";
 import {
   useCreateProjectMutation,
+  useLazyCheckNameQuery,
   useListQuery,
 } from "packages/state/services/project";
 import { ProjectQuery } from "packages/state/domain/project";
@@ -50,6 +51,7 @@ export const Project = () => {
   const { push } = useRouter()
 
   const [createProject, createProjectResult] = useCreateProjectMutation()
+  const [triggerCheckName] = useLazyCheckNameQuery()
   const { data: projects, refetch, isLoading } = useListQuery(query);
 
   useEffect(() => {
@@ -73,6 +75,8 @@ export const Project = () => {
       projects={projects?.results || []}
       sidebar={<Menu />}
       onCreateProject={createProject}
+      // a failed check isn't blocking: the backend rejects duplicates on submit anyway
+      checkName={(name) => triggerCheckName({ name }).unwrap().then((r) => r.taken).catch(() => false)}
       onOpen={(id) => {
         push(`./project/${id}`)
       }}
