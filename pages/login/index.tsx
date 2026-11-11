@@ -30,7 +30,6 @@ const Login = () => {
 
   const [isSuspicious, handleSuspicious] = useState(false)
   const [loginResponse, handleLoginResponse] = useState<LoginResponse|null>(null)
-  const [password, handlePassword] = useState<string>('')
   
   //twofactor
   const [twoFactorError, handleTwoFactorErrors] = useState('')
@@ -62,7 +61,6 @@ const Login = () => {
       if(!data.user?.otp_active) {
         return dispatch(setCredentials(data));
       }
-      handlePassword(credential.password)
       handleLoginResponse(data)
     } catch (err) {
       dispatch(setError(err.data.message || "Something went wrong, try again"));
@@ -71,7 +69,7 @@ const Login = () => {
 
   const handleTwoFactorAuth = async (otpValue: string) => {
     try{
-      const data = await otpLogin({ userId: loginResponse.user.id, code: otpValue}).unwrap()
+      const data = await otpLogin({ mfa_token: loginResponse.mfa_token, code: otpValue }).unwrap()
       dispatch(setCredentials(data))
     } catch(err) {
       handleTwoFactorErrors('The verification code is incorrect. Please try again')
@@ -80,7 +78,7 @@ const Login = () => {
 
   const handleRecoveryKeyAuth = async(recoveryKey: string) => {
     try {
-      const data = await authRecoveryKey({ userId: loginResponse.user.id, code: recoveryKey, password}).unwrap()
+      const data = await authRecoveryKey({ mfa_token: loginResponse.mfa_token, code: recoveryKey }).unwrap()
 
       dispatch(setCredentials(data))
     } catch (err) {

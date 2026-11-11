@@ -19,6 +19,7 @@ export interface LoginResponse {
   refresh_token: string
   user: User,
   flagged?: boolean
+  mfa_token?: string
 }
 
 export interface OtpEnableRes {
