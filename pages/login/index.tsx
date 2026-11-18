@@ -21,16 +21,16 @@ const Login = () => {
   const user = useUserProfile();
   const router = useRouter();
   const dispatch = useDispatch();
-  const { verification_successful } = router.query  
+  const { verification_successful } = router.query
   const [login, { isLoading }] = useLoginMutation();
-  const [otpLogin, {isLoading: otpLoading}] = useOtpLoginMutation()
-  const [authRecoveryKey, {isLoading: recoveryKeyLoading}] = useAuthRecoveryKeyMutation()
+  const [otpLogin, { isLoading: otpLoading }] = useOtpLoginMutation()
+  const [authRecoveryKey, { isLoading: recoveryKeyLoading }] = useAuthRecoveryKeyMutation()
   const [loadUserProfile, { data }] = useLazyGetProfileQuery();
   const ability = useAbility();
 
   const [isSuspicious, handleSuspicious] = useState(false)
-  const [loginResponse, handleLoginResponse] = useState<LoginResponse|null>(null)
-  
+  const [loginResponse, handleLoginResponse] = useState<LoginResponse | null>(null)
+
   //twofactor
   const [twoFactorError, handleTwoFactorErrors] = useState('')
 
@@ -57,26 +57,30 @@ const Login = () => {
         handleSuspicious(true)
         return
       }
-      
-      if(!data.user?.otp_active) {
+
+      if (!data.user?.otp_active) {
         return dispatch(setCredentials(data));
       }
       handleLoginResponse(data)
     } catch (err) {
-      dispatch(setError(err.data.message || "Something went wrong, try again"));
+      if (err.status === 401) {
+        dispatch(setError('Incorrect email or password. Please try again'));
+      } else {
+        dispatch(setError(err.data.message || "Something went wrong, try again"));
+      }
     }
   };
 
   const handleTwoFactorAuth = async (otpValue: string) => {
-    try{
+    try {
       const data = await otpLogin({ mfa_token: loginResponse.mfa_token, code: otpValue }).unwrap()
       dispatch(setCredentials(data))
-    } catch(err) {
+    } catch (err) {
       handleTwoFactorErrors('The verification code is incorrect. Please try again')
     }
   }
 
-  const handleRecoveryKeyAuth = async(recoveryKey: string) => {
+  const handleRecoveryKeyAuth = async (recoveryKey: string) => {
     try {
       const data = await authRecoveryKey({ mfa_token: loginResponse.mfa_token, code: recoveryKey }).unwrap()
 
@@ -100,7 +104,7 @@ const Login = () => {
         twoFactorErrorMessage={twoFactorError}
         clearLoginResponse={() => handleLoginResponse(null)}
         verificationSuccessful={verification_successful}
-      />    
+      />
     </>
   );
 };

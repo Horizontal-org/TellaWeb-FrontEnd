@@ -6,6 +6,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { useBackupDownloader } from "packages/state/features/backup/useBackupDownloader";
 import { StartBackupModal } from "packages/ui/modals/backup/StartBackupModal";
 import { DeleteBackupModal } from "packages/ui/modals/backup/DeleteBackupModal";
+import { useToast } from "components/ToastWrapper";
 interface Props {
     backups: LatestBackups
     backupSpace?: BackupSpace
@@ -23,6 +24,7 @@ export const BackupManagement: FunctionComponent<React.PropsWithChildren<Props>>
 }) => {
 
     const [downloadFile] = useBackupDownloader()
+    const handleToast = useToast()
 
     if (!backups) {
         return null
@@ -34,27 +36,27 @@ export const BackupManagement: FunctionComponent<React.PropsWithChildren<Props>>
                 Backups
             </p>
 
-            <div 
+            <div
                 className="flex justify-between items-center py-4 border-b"
             >
                 <div className="flex items-center">
                     <p className="text-gray-600 uppercase flex items-center" style={{ width: 350 }}>
                         GENERATE NEW BACKUP
                     </p>
-                    <p>{ backups.processing ? 'Your backup is being generated. Come back in a few minutes to download it' : ''}</p>
+                    <p>{backups.processing ? 'Your backup is being generated. Come back in a few minutes to download it' : ''}</p>
                 </div>
 
-                <StartBackupModal 
+                <StartBackupModal
                     backups={backups}
                     onBackupStart={onBackupStart}
                 />
-                
+
             </div>
 
 
-            { backupSpace && (
-                <div 
-                className="flex justify-between items-center py-4 border-b"
+            {backupSpace && (
+                <div
+                    className="flex justify-between items-center py-4 border-b"
                 >
                     <div className="flex items-center">
                         <p className="text-gray-600 uppercase flex items-center" style={{ width: 350 }}>
@@ -65,9 +67,9 @@ export const BackupManagement: FunctionComponent<React.PropsWithChildren<Props>>
                 </div>
             )}
 
-            { backups.latest && (
-                <div 
-                className="flex justify-between items-center py-4 border-b"
+            {backups.latest && (
+                <div
+                    className="flex justify-between items-center py-4 border-b"
                 >
                     <div className="flex items-center">
                         <p className="text-gray-600 uppercase flex items-center" style={{ width: 350 }}>
@@ -79,29 +81,30 @@ export const BackupManagement: FunctionComponent<React.PropsWithChildren<Props>>
                     <div className="flex items-center">
                         <div className="pr-4">
 
-                            <DeleteBackupModal 
+                            <DeleteBackupModal
                                 onSubmit={() => {
                                     onBackupDelete(backups.latest.id)
-                                }}               
+                                }}
                             />
-             
+
                         </div>
-                        <Button 
-                            text="DOWNLOAD" 
-                            type={btnType.Secondary} 
+                        <Button
+                            text="DOWNLOAD"
+                            type={btnType.Secondary}
                             onClick={(e: any) => {
                                 e.preventDefault()
+                                handleToast("Your download has started", "success")
                                 downloadFile(backups.latest.id)
                             }}
-                        /> 
+                        />
                     </div>
                 </div>
             )}
 
 
-            { backups.deleted && (
-                <div 
-                className="flex justify-between items-center py-4 border-b"
+            {backups.deleted && (
+                <div
+                    className="flex justify-between items-center py-4 border-b"
                 >
                     <div className="flex items-center">
                         <p className="text-gray-600 uppercase flex items-center" style={{ width: 350 }}>

@@ -32,7 +32,7 @@ export const useAuthRequired = (loginUrl = "/login", redirectTo?: string) => {
       loadUserProfile().then(
         (response) => {
           if (response.isError) return
-          
+
           visitAnalytic()
           updateAbility(response.data, ability)
           dispatch(setUser(response.data))
@@ -51,5 +51,5 @@ export const useAuthRequired = (loginUrl = "/login", redirectTo?: string) => {
     if (redirectTo && redirectTo !== router.pathname && user) router.replace(redirectTo);
   }, [user, loginUrl, router, data]);
 
-  return user; 
+  return user;
 };

@@ -85,6 +85,7 @@ const Resources = () => {
         deleteResource(id)
       }}
       onDownload={(fileNames) => {
+        handleToast("Your download has started", "success")
         downloadFile(fileNames)
       }}
       onQueryChange={(itemQuery) => setQuery(toResourceQuery(itemQuery))}

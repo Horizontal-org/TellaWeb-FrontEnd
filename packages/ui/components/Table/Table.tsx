@@ -20,6 +20,7 @@ import { IndeterminateCheckbox } from "./IndeterminateCheckbox";
 import { Item } from "../../domain/Item";
 import { ItemQuery } from "../../domain/ItemQuery";
 import { Paginator } from "../Paginator/Paginator";
+import { Sortable } from "./Sortable";
 
 // Column definition used by the list pages (domain/*TableColumns.ts). headerKey is the field the
 // backend sorts by when the header is clicked
@@ -223,7 +224,7 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
                   >
                     <div className="flex flex-row">
                       {flexRender(header.column.columnDef.header, header.getContext())}
-                      {sortable && <span className='pl-2'>
+                      {/* {sortable && <span className='pl-2'>
                         {sorted === "desc" ? (
                           <MdExpandMore />
                         ) : sorted === "asc" ? (
@@ -231,7 +232,8 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
                         ) : (
                           ""
                         )}
-                      </span>}
+                      </span>} */}
+                      <Sortable isSortable={sortable} sorted={sorted} />
                     </div>
                   </th>
                 );

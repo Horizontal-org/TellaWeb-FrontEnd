@@ -55,7 +55,7 @@ test("admin center downloads the latest backup", async ({ page }) => {
   const downloadPromise = page.waitForEvent("download")
   await page.getByRole("button", { name: "DOWNLOAD", exact: true }).click()
   const download = await downloadPromise
-  expect(download.suggestedFilename()).toMatch(/^\d+-\d+-\d+T\d+_\d+_\d+-backup\.zip$/)
+  expect(download.suggestedFilename()).toMatch(/^tellaweb-backup-\d{1,2}[a-z]+\d{4}-\d{2}h\d{2}utc\.zip$/)
   // Backups can be several GB: stop the browser download and fetch only the header
   await download.cancel()
   const head = await page.request.get(download.url(), { headers: { Range: "bytes=0-3" } })

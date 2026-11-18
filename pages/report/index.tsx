@@ -9,6 +9,7 @@ import {
 } from "packages/state/services/reports";
 import { ReportQuery } from "packages/state/domain/report";
 import { useReportFileDownloader } from "packages/state/features/files/useReportFileDownloader";
+import { useToast } from "components/ToastWrapper";
 
 const defaultQuery: ReportQuery = {
   page: 0,
@@ -43,10 +44,11 @@ const toReportQuery = (itemQuery: ItemQuery): ReportQuery => {
 };
 
 export const Report = () => {
-  const ready = true 
-  
+  const ready = true
+
   const { push } = useRouter();
   const [downloadReportFile] = useReportFileDownloader();
+  const handleToast = useToast();
 
   const [query, setQuery] = useState<ReportQuery>(defaultQuery);
 
@@ -73,6 +75,7 @@ export const Report = () => {
         push(`./report/${report.id}`);
       }}
       onDownload={(report) => {
+        handleToast("Your download has started", "success")
         downloadReportFile(report.id);
       }}
       reports={reports?.results.map(toReport) || []}

@@ -27,6 +27,7 @@ export const ReportById = () => {
   const [editReport, editReportResult] = useEditReportMutation();
   const [deleteReport] = useDeleteReportMutation();
   const [downloadFile] = useFileDownloader();
+
   const [downloadReportFile] = useReportFileDownloader();
   const [deleteFile] = useDeleteFileMutation();
 
@@ -50,9 +51,11 @@ export const ReportById = () => {
         }
       }}
       onDownloadFile={(file) => {
+        handleToast("Your download has started", "success");
         downloadFile(file);
       }}
       onDownloadReport={(report) => {
+        handleToast("Your download has started", "success");
         downloadReportFile(report.id);
       }}
       onEditTitle={(title) => {

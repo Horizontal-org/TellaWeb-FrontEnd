@@ -14,40 +14,40 @@ export const DeleteBackupModal: FunctionComponent<React.PropsWithChildren<Props>
 
   return (
 
-     <ButtonPopup                  
-          toggleButton={(toggle) => (
-            <Button              
-              icon={<FaRegTrashAlt />}
-              onClick={toggle}              
-              type={btnType.Secondary}
-            />
-          )}
-          render={(toggle) => (
-            <div className='px-4'>
-
-              <div>
-                <p className='py-2 font-sans text-gray-600 text-xxxl font-bold'>
-                  {`Delete backup?`}
-                </p>
-                
-                <p className='font-sans text-sm font-normal text-gray-500'>
-                    This action is permanent and irreversible.
-                </p>
-              </div>
-    
-              <div className='py-4 flex justify-end'>
-                <Button 
-                  text="DELETE BACKUP"
-                  type={btnType.Danger}
-                  onClick={() => {                
-                    toggle()
-                    onSubmit()
-                  }}
-                />
-              </div>
-            </div>
-          )}
+    <ButtonPopup
+      toggleButton={(toggle) => (
+        <Button
+          icon={<FaRegTrashAlt />}
+          onClick={toggle}
+          type={btnType.Secondary}
         />
-    
+      )}
+      render={(toggle) => (
+        <div className='px-4'>
+
+          <div>
+            <p className='py-2 font-sans text-gray-600 text-xxxl font-bold'>
+              {`Delete backup?`}
+            </p>
+
+            <p className='font-sans font-normal text-gray-500'>
+              This action is permanent and irreversible.
+            </p>
+          </div>
+
+          <div className='py-4 flex justify-end'>
+            <Button
+              text="DELETE BACKUP"
+              type={btnType.Danger}
+              onClick={() => {
+                toggle()
+                onSubmit()
+              }}
+            />
+          </div>
+        </div>
+      )}
+    />
+
   )
 }

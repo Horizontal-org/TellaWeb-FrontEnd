@@ -97,6 +97,7 @@ export const ProjectById = () => {
         push(`/report/${report.id}`);
       }}
       onDownload={(report) => {
+        handleToast("Your download has started", "success")
         downloadReportFile(report.id);
       }}
       onDelete={onBatchDelete}

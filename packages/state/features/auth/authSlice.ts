@@ -29,7 +29,7 @@ export const authSlice = createSlice({
       if (process.env.NODE_ENV === 'development') {
         Cookies.set("access_token", access_token);
       }
-      
+
       return {
         accessToken: access_token,
         refreshToken: refresh_token,
