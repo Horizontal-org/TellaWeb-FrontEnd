@@ -100,10 +100,10 @@ export const CreateResourceModal: FunctionComponent<React.PropsWithChildren<Prop
         onSubmit()
         handleModalOpen(false)
       } catch (e) {
-        if (e.status === 413) {
+        if (e.response?.status === 413) {
           handleToast('The file selected is larger than 20MB. Please select another smaller file.', "danger");
         } else {
-          handleToast('There was an unexpected error, please try again.', "danger");
+          handleToast(e.response?.data?.message || 'There was an unexpected error, please try again.', "danger");
         }
       } finally {
         handleProcessing(null)

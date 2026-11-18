@@ -40,3 +40,15 @@ test("upload, download and delete a resource", async ({ page, adminApi }) => {
   await expectToast(page, "The resource was successfully deleted")
   await expect.poll(() => adminApi.findResource(title)).toBeUndefined()
 })
+
+test("uploading a file that isn't really a PDF shows the backend's error", async ({ page, adminApi }) => {
+  const title = uniqueName("fake-pdf")
+  await page.goto("/resource")
+  await waitForApp(page)
+  await page.getByRole("button", { name: "CREATE RESOURCE" }).click()
+  const dialog = page.getByRole("dialog")
+  await dialog.locator('input[type="file"]').setInputFiles({ name: `${title}.pdf`, mimeType: "application/pdf", buffer: Buffer.from("not a pdf") })
+  await dialog.getByRole("button", { name: "CREATE RESOURCE" }).click()
+  await expectToast(page, "File is not a valid PDF")
+  expect(await adminApi.findResource(title)).toBeUndefined()
+})
