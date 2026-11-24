@@ -36,7 +36,7 @@ export const FinalStep: FunctionComponent<React.PropsWithChildren<Props>> = ({
       )}
       <div className='pb-4'>
         <button
-          className="bg-blue-300 hover:bg-blue py-2 text-white uppercase text-base font-bold rounded w-full disabled:opacity-50"
+          className="bg-blue-300 hover:bg-blue py-2 text-white uppercase text-base font-bold rounded-sm w-full disabled:opacity-50"
           type={"submit"}
         >
           <span>VERIFY</span>

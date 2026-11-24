@@ -17,8 +17,8 @@ export const SidebarButton: FunctionComponent<React.PropsWithChildren<Props>> = 
         style={{ lineHeight: 1, height: 36, width: 36 }}
         onClick={onClick}
         className={cn({
-          "active:shadow-inbox rounded": true,
-          "flex flex-col justify-center items-center focus:outline-none cursor-pointer border-r my-2 stroke-current text-customgray-500 hover:bg-gray-50": true,
+          "active:shadow-inbox rounded-sm": true,
+          "flex flex-col justify-center items-center focus:outline-hidden cursor-pointer border-r my-2 stroke-current text-customgray-500 hover:bg-gray-50": true,
           "transform rotate-180": position && position === 'right'
         })}
       >

@@ -8,7 +8,7 @@ type Props = {
   onClick?: () => void,
 };
 
-export const ImageView: FunctionComponent<React.PropsWithChildren<Props>> = ({ file, onClick }) => {
+export const ImageView: FunctionComponent<React.PropsWithChildren<Props>> = ({ file, onClick = () => { } }) => {
 
   const [loading, handleLoading] = useState(true)
 
@@ -21,26 +21,25 @@ export const ImageView: FunctionComponent<React.PropsWithChildren<Props>> = ({ f
           className='cursor-pointer'
           src={window.location.origin + file.src}
           alt={file.fileName}
-          layout='fill'
-          objectFit='contain'
+          fill
+          style={{ objectFit: 'contain' }}
           unoptimized={true}
-          onLoadingComplete={() => {
+          onLoad={() => {
             handleLoading(false)
           }}
         />
 
-        { loading && (
-          <MediaLoader />
+        {loading && (
+          <div className='absolute inset-0'>
+            <MediaLoader />
+          </div>
         )}
-        
+
       </div>
     </div>
-    
-  )
-} 
 
-ImageView.defaultProps = {
-  onClick: () => {}
+  )
 }
+
 
 

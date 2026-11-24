@@ -68,8 +68,8 @@ export const MainLayout: FunctionComponent<React.PropsWithChildren<Props>> = ({
           "transform mr-64": rightbar && rightSidebarOpen,
         })}
       >
-        
-        <NewVersionBanner/>
+
+        <NewVersionBanner />
 
         <div className="p-8">
           {title && <Title>{title}</Title>}
@@ -78,19 +78,19 @@ export const MainLayout: FunctionComponent<React.PropsWithChildren<Props>> = ({
         <div className="flex">
           {leftbar && leftbarActive && (
             <div>
-              <SidebarButton 
+              <SidebarButton
                 onClick={toggleLeftSideBar}
-              />          
+              />
             </div>
           )}
           <div className="flex-1">
             {content}
 
-            { absoluteContent }
+            {absoluteContent}
           </div>
           {rightbar && rightbarActive && (
             <div>
-              <SidebarButton 
+              <SidebarButton
                 onClick={toggleRightSideBar}
                 position='right'
               />

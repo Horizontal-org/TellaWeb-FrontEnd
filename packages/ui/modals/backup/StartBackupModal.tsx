@@ -22,17 +22,17 @@ export const StartBackupModal: FunctionComponent<React.PropsWithChildren<Props>>
   // const [onExitModal, handleOnExitModal] = useState<boolean>(false) 
   // const [externalOpen, handleExternalOpen] = useState<boolean>(false)
 
-  const handleExitProgress = () =>{
+  const handleExitProgress = () => {
     // handleOnExitModal(false)
     // handleExternalOpen(false)
   }
 
   return (
-    <ButtonPopup       
+    <ButtonPopup
       onClose={() => {
         // handleExternalOpen(false)
         // handleOnExitModal(true)
-      }} 
+      }}
       toggleButton={(toggle) => (
         <Button
           text="GENERATE "
@@ -56,20 +56,24 @@ export const StartBackupModal: FunctionComponent<React.PropsWithChildren<Props>>
             <p className='py-2 font-sans text-gray-600 text-xxxl font-bold'>
               {`Generate backup?`}
             </p>
-            
-            { backups.latest && (
-              <p className='font-sans text-sm font-normal text-gray-500'>
-                If you generate a new backup, your previous backup from { format(new Date(backups.latest.createdAt), "dd LLLL yyyy 'at' HH:mm") } will be deleted. Make sure to download that backup if you don’t want to lose it before generating a new one.
+
+            {backups.latest ? (
+              <p className='font-sans font-normal text-gray-500'>
+                If you generate a new backup, your previous backup from {format(new Date(backups.latest.createdAt), "dd LLLL yyyy 'at' HH:mm")} will be deleted. Make sure to download that backup if you don’t want to lose it before generating a new one.
+              </p>
+            ) : (
+              <p className='font-sans font-normal text-gray-500'>
+                Generate new backup? You will be able to download it after the process is complete.
               </p>
             )}
 
           </div>
 
           <div className='py-4 flex justify-end'>
-            <Button 
+            <Button
               text="GENERATE BACKUP"
-              
-              onClick={() => {                
+
+              onClick={() => {
                 toggle()
                 onBackupStart()
               }}

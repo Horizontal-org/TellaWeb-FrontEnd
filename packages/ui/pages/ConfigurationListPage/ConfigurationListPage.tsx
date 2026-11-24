@@ -1,10 +1,7 @@
 import { 
   useState, 
-  ChangeEvent, 
-  FormEvent, 
   FunctionComponent, 
   ReactNode, 
-  useRef,
   Dispatch,
   SetStateAction
 } from "react";
@@ -29,6 +26,7 @@ interface Props {
   onCreateConfig: (name: string) => void;
   configurations: Configuration[];
   onOpen: (config: Configuration) => void;
+  isLoading?: boolean;
 }
 
 export const ConfigurationListPage: FunctionComponent<React.PropsWithChildren<Props>> = ({
@@ -37,7 +35,8 @@ export const ConfigurationListPage: FunctionComponent<React.PropsWithChildren<Pr
   currentQuery,
   onCreateConfig,
   configurations,
-  onOpen
+  onOpen,
+  isLoading
 }) => {
 
   const [currentConfig, setCurrentConfig] = useState<Configuration | undefined>();
@@ -47,19 +46,6 @@ export const ConfigurationListPage: FunctionComponent<React.PropsWithChildren<Pr
     setCurrentConfig(setSelectedConfigs[0]);
   };
 
-  const searchInput = useRef<HTMLInputElement>();
-   let searchTimeout = null
-
-
-  const search = (e: FormEvent<HTMLFormElement> | ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const name = searchInput.current.value;
-
-    onQueryChange({
-      ...currentQuery,
-      search: name
-    })
-  };
   
   return (
     <MainLayout 
@@ -77,18 +63,17 @@ export const ConfigurationListPage: FunctionComponent<React.PropsWithChildren<Pr
                 />
               </Can>
               <div className="pl-2">
-                <form onSubmit={search} className="flex">
+                <div className="flex">
                   <SearchInput
-                    onChange={(e) => {
-                      clearTimeout(searchTimeout)
-                      searchTimeout = setTimeout(() => {
-                        search(e)
-                      }, 500)
-                    }}
-                    ref={searchInput}
                     defaultValue={currentQuery.search}
+                    onSearch={(search) => onQueryChange({
+                      ...currentQuery,
+                      search,
+                      // A new search starts again from the first page
+                      pagination: { ...currentQuery.pagination, page: 0 }
+                    })}
                   />
-                </form>
+                </div>
               </div>
             </div>
           )}
@@ -112,19 +97,15 @@ export const ConfigurationListPage: FunctionComponent<React.PropsWithChildren<Pr
             </div>
           )}
 
-
           <div>
             <Table
+              loading={isLoading}
               columns={CONFIGURATION_COLUMNS}
               data={configurations}
               itemQuery={currentQuery}
               onSelection={setSelectedConfigs as Dispatch<SetStateAction<Item[]>>}
               onFetch={onQueryChange}
-              icon={(
-                <div style={{height: '24px', width: '24px'}}>
-                  <RemoteConfigIcon/>
-                </div>
-              )}
+              icon={<RemoteConfigIcon/>}
               rowOptions={(hoverRow, isHoverSelected) => (
                 <HoveredRowWrapper isHoverSelected={isHoverSelected}>
                   <>

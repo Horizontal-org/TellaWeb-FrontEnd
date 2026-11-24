@@ -5,6 +5,11 @@ import { RootStore } from "../store";
 
 let refreshPromise: Promise<boolean> | null = null;
 
+// Only 401s the backend tags as session errors (expired/invalid token) are worth a refresh.
+// Other 401s (wrong password, wrong OTP code) go straight back to the caller.
+const isInvalidSession = (error?: FetchBaseQueryError) =>
+  error?.status === 401 && (error.data as { code?: string })?.code === "INVALID_SESSION"
+
 const baseQuery = (baseUrl: string) =>
   fetchBaseQuery({
     baseUrl,
@@ -22,7 +27,7 @@ const baseQueryWithRefresh =
   async (args, api, extraOptions) => {
     let result = await baseQuery(baseUrl)(args, api, extraOptions);
 
-    if (result.error && result.error.status === 401) {
+    if (isInvalidSession(result.error)) {
       if (!refreshPromise) {
         refreshPromise = (async () => {
           const { refreshToken } = (api.getState() as RootStore).auth;

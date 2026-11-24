@@ -19,6 +19,7 @@ export interface LoginResponse {
   refresh_token: string
   user: User,
   flagged?: boolean
+  mfa_token?: string
 }
 
 export interface OtpEnableRes {
@@ -38,7 +39,10 @@ export interface UserQuery {
   page: number;
   total?: number;
   exclude?: Array<string>;
+  excludeProject?: string;
   size: number;
+  // Only the users of this project (admins are in every project)
+  projectId?: string;
 }
 
 export interface OtpData {

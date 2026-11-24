@@ -26,14 +26,14 @@ export const projectApi = createApi({
       },
     }),
 
-    createProject: builder.mutation<Project, { 
-      name: string,      
+    createProject: builder.mutation<Project, {
+      name: string,
     }>({
       query: ({ name }) => ({
         url: `/`,
         method: "POST",
         body: {
-          name,         
+          name,
         },
       }),
     }),
@@ -41,6 +41,13 @@ export const projectApi = createApi({
     getById: builder.query<Project, string>({
       query: (projectId) => ({
         url: `/${projectId}`,
+      }),
+    }),
+
+    checkName: builder.query<{ taken: boolean }, { name: string, excludeId?: string }>({
+      query: ({ name, excludeId }) => ({
+        url: `/check/${encodeURIComponent(name)}`,
+        params: { excludeId },
       }),
     }),
 
@@ -88,5 +95,6 @@ export const {
   useGetByIdQuery,
   useEditProjectMutation,
   useAddEntitiesMutation,
-  useDeleteProjectMutation
+  useDeleteProjectMutation,
+  useLazyCheckNameQuery
 } = projectApi;

@@ -1,12 +1,12 @@
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import { RootStore } from "../../store";
 import { useLazyGetProfileQuery } from "packages/state/services/user";
 import { useUserProfile } from "../user/userHooks";
 import { setUser } from "../user/userSlice";
 
-import { AbilityContext } from "common/casl/Can";
+import { useAbility } from "common/casl/Can";
 import { updateAbility } from "common/casl/Ability";
 import PUBLIC_ROUTES from '../../../ui/utilities/publicRoutes'
 import { visitAnalytic } from "common/globalSettings/VisitAnalytic";
@@ -22,7 +22,7 @@ export const useAuthRequired = (loginUrl = "/login", redirectTo?: string) => {
   const user = useUserProfile();
   const router = useRouter();
   const dispatch = useDispatch();
-  const ability = useContext(AbilityContext);
+  const ability = useAbility();
   const [loadUserProfile, data] = useLazyGetProfileQuery();
 
   // If the token was retrieved from the localstorage, we try to
@@ -32,7 +32,7 @@ export const useAuthRequired = (loginUrl = "/login", redirectTo?: string) => {
       loadUserProfile().then(
         (response) => {
           if (response.isError) return
-          
+
           visitAnalytic()
           updateAbility(response.data, ability)
           dispatch(setUser(response.data))
@@ -51,5 +51,5 @@ export const useAuthRequired = (loginUrl = "/login", redirectTo?: string) => {
     if (redirectTo && redirectTo !== router.pathname && user) router.replace(redirectTo);
   }, [user, loginUrl, router, data]);
 
-  return user; 
+  return user;
 };

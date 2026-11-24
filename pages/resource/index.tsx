@@ -1,18 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { SettingsPage } from "../../packages/ui/pages/SettingsPage/SettingsPage";
 import { Menu } from "../../components/Menu";
-import { useAuthRequired } from "packages/state/features/auth/authHooks";
-import { useUserProfile } from "packages/state/features/user/userHooks";
 import { useToast } from "components/ToastWrapper";
-import { useDispatch } from "react-redux";
-import { setUser } from "packages/state/features/user/userSlice";
 import { ResourceListPage } from "packages/ui/pages/ResourceListPage/ResourceListPage";
 import { useRouter } from "next/router";
 import { ResourceQuery } from "packages/state/domain/resource";
 import { ItemQuery } from "@tellaweb/ui";
 import { useDeleteResourceMutation, useListQuery } from "packages/state/services/resource";
 import { useResourceFileDownloader } from "packages/state/features/resources/useResourceFilesDownloader";
+import { errorMessage } from "packages/state/utils/errorMessage";
 
 
 const defaultQuery: ResourceQuery = {
@@ -56,9 +51,13 @@ const Resources = () => {
   const { push } = useRouter();
 
   const [query, setQuery] = useState<ResourceQuery>(defaultQuery);
-  const itemQuery = useMemo(() => toItemQuery(query), [query]);
 
-  const { data: resources, refetch } = useListQuery(query);
+  const { data: resources, refetch, isLoading } = useListQuery(query);
+  // The table needs the total from the API to know how many pages there are
+  const itemQuery = useMemo(
+    () => toItemQuery({ ...query, total: resources?.total ?? query.total }),
+    [query, resources?.total]
+  );
   const [deleteResource, deleteResourceResult] = useDeleteResourceMutation();
   const [downloadFile] = useResourceFileDownloader();
 
@@ -69,12 +68,13 @@ const Resources = () => {
       refetch()
     }
     if (deleteResourceResult.error && "status" in deleteResourceResult.error) {
-      handleToast(deleteResourceResult.error.data.message, "danger");
+      handleToast(errorMessage(deleteResourceResult.error), "danger");
     }
   }, [deleteResourceResult.status]);
 
   return (
     <ResourceListPage
+      isLoading={isLoading}
       onCreateUser={() => {
         refetch()
         handleToast('The new resource was successfully added to your workspace', 'success')
@@ -85,10 +85,11 @@ const Resources = () => {
         deleteResource(id)
       }}
       onDownload={(fileNames) => {
+        handleToast("Your download has started", "success")
         downloadFile(fileNames)
       }}
       onQueryChange={(itemQuery) => setQuery(toResourceQuery(itemQuery))}
-      resources={resources?.results || []}      
+      resources={resources?.results || []}
     />
   );
 };

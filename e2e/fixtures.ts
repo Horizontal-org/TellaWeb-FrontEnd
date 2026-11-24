@@ -1,0 +1,77 @@
+import { test as base, expect, Page } from "@playwright/test"
+import fs from "fs"
+import { AUTH_FILE, DATA_FILE, E2EData } from "./global-setup"
+import { AdminApi } from "./support/api"
+
+export const readData = (): E2EData => JSON.parse(fs.readFileSync(DATA_FILE, "utf8"))
+
+// Fails the test on uncaught page errors, which is what most upgrade breakage looks like.
+// adminApi talks to the backend directly, for setup, checks and clean-up.
+// The GitHub API is blocked so NewVersionBanner (rate-limited, unauthenticated) never shows
+// and screenshots stay stable
+export const test = base.extend<{ pageErrors: Error[] }, { adminApi: AdminApi }>({
+  page: async ({ page }, use) => {
+    await page.route("https://api.github.com/**", (route) => route.abort())
+    await use(page)
+  },
+  adminApi: [
+    async ({}, use, workerInfo) => {
+      const api = await AdminApi.login(workerInfo.project.use.baseURL)
+      await use(api)
+      await api.removeTmpRecords()
+      await api.dispose()
+    },
+    { scope: "worker" },
+  ],
+  pageErrors: [
+    async ({ page }, use) => {
+      const errors: Error[] = []
+      page.on("pageerror", (error) => errors.push(error))
+      await use(errors)
+      expect(errors, errors.map((e) => e.message).join("\n")).toEqual([])
+    },
+    { auto: true },
+  ],
+})
+
+export const authenticated = test.extend({
+  storageState: AUTH_FILE,
+})
+
+// Waits until the app is past the splash screen and requests have settled
+export const waitForApp = async (page: Page) => {
+  await page.waitForLoadState("load")
+  await page.waitForLoadState("networkidle").catch(() => undefined)
+  await expect(page).not.toHaveURL(/\/login/)
+}
+
+// The toast the app shows after an action (components/ToastWrapper.tsx)
+export const toast = (page: Page, text: string | RegExp) => page.getByText(text)
+
+// Checks a toast appears, then waits for it to go away. ToastWrapper doesn't cancel the previous
+// toast's 5 s hide timer, so a toast shown right after another one can disappear early
+export const expectToast = async (page: Page, text: string | RegExp) => {
+  await expect(toast(page, text)).toBeVisible()
+  await expect(toast(page, text)).toBeHidden({ timeout: 10_000 })
+}
+
+// components/Table: body rows, and the Paginator [<] "N of M" [>] (the label is a <strong>)
+export const bodyRows = (page: Page) => page.locator("tbody tr")
+export const pager = (page: Page) => page.locator("strong", { hasText: / of / }).locator("xpath=../..")
+
+// Waits for a request to an API path (e.g. "/api/user/list") whose query params pass the check
+export const apiRequest = (page: Page, path: string, check: (params: URLSearchParams) => boolean) =>
+  page.waitForRequest((req) => {
+    const url = new URL(req.url())
+    return url.pathname.replace(/\/$/, "") === path && check(url.searchParams)
+  })
+
+// Waits for the response to such a request. Next's 308 trailing-slash redirect (/api/x/ → /api/x)
+// is skipped, so this is the backend's answer
+export const apiResponse = (page: Page, path: string, check: (params: URLSearchParams) => boolean) =>
+  page.waitForResponse((res) => {
+    const url = new URL(res.url())
+    return res.status() !== 308 && url.pathname.replace(/\/$/, "") === path && check(url.searchParams)
+  })
+
+export { expect }

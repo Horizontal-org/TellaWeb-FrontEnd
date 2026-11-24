@@ -18,4 +18,6 @@ export interface ReportQuery {
   page: number;
   total?: number;
   size: number;
+  // Only the reports of this project
+  projectId?: string;
 }

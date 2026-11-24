@@ -4,12 +4,12 @@ import { AdminCenterPage } from "packages/ui/pages/AdminCenterPage/AdminCenterPa
 import { useListQuery, useUpdateGlobalSettingMutation } from "packages/state/services/global-setting";
 import { useToast } from "components/ToastWrapper";
 import { useRouter } from "next/router";
-import { useLatestQuery, useStartMutation, useDeleteMutation } from "packages/state/services/backup";
-import { on } from "cluster";
+import { useLatestQuery, useSpaceQuery, useStartMutation, useDeleteMutation } from "packages/state/services/backup";
+import { errorMessage } from "packages/state/utils/errorMessage";
 
 
 const AdminCenter = () => {
-  const { data: globalSettings, refetch } = useListQuery();
+  const { data: globalSettings } = useListQuery(undefined, { refetchOnMountOrArgChange: true })
   const router = useRouter()
   const handleToast = useToast()
 
@@ -17,19 +17,18 @@ const AdminCenter = () => {
   const [startBackup, startBackupResult] = useStartMutation();
   const [deleteBackup, deleteBackupResult] = useDeleteMutation();
   
-  const { data: latestBackups, refetch: refetchLatestBackups } = useLatestQuery();
+  // while on the page, poll for new backup status (stops on unmount)
+  const { data: latestBackups, refetch: refetchLatestBackups } = useLatestQuery(undefined, {
+    pollingInterval: 30000,
+    refetchOnMountOrArgChange: true,
+  })
+
+  // not polled: the backend stats every stored file to compute it
+  const { data: backupSpace, refetch: refetchBackupSpace } = useSpaceQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  })
 
   const [newBackupFlag, handleNewBackupFlag] = useState<boolean>(false)
-
-  useEffect(() => {
-    refetch()
-    refetchLatestBackups()
-
-    // if on the page check for new backup status
-    setInterval(() => {
-      refetchLatestBackups()
-    }, 30000)
-  }, [])
 
 
   useEffect(() => {
@@ -41,6 +40,7 @@ const AdminCenter = () => {
       if (newBackupFlag && !latestBackups.processing) {
         handleNewBackupFlag(false)
         handleToast("Your backup was successfully generated", "info");
+        refetchBackupSpace()
       }
     }
   }, [latestBackups])
@@ -54,7 +54,7 @@ const AdminCenter = () => {
       }, 1500)
     }
     if (updateResult.error && "status" in updateResult.error) {
-      handleToast(updateResult.error.data.message, "danger");
+      handleToast(errorMessage(updateResult.error), "danger");
     }
   }, [updateResult.status]);
 
@@ -64,7 +64,7 @@ const AdminCenter = () => {
       refetchLatestBackups()
     }
     if (startBackupResult.error && "status" in startBackupResult.error) {
-      handleToast(startBackupResult.error.data.message, "danger");
+      handleToast(errorMessage(startBackupResult.error), "danger");
     }
   }, [startBackupResult.status]);
 
@@ -72,9 +72,10 @@ const AdminCenter = () => {
     if (deleteBackupResult.isSuccess) {
       handleToast("Your backup was successfully deleted", "info");      
       refetchLatestBackups()
+      refetchBackupSpace()
     }
     if (deleteBackupResult.error && "status" in deleteBackupResult.error) {
-      handleToast(deleteBackupResult.error.data.message, "danger");
+      handleToast(errorMessage(deleteBackupResult.error), "danger");
     }
   }, [deleteBackupResult.status]);
 
@@ -83,6 +84,7 @@ const AdminCenter = () => {
     <AdminCenterPage
       globalSettings={globalSettings}
       backups={latestBackups}
+      backupSpace={backupSpace}
       sidebar={<Menu />}    
       onBackupStart={() => { startBackup() }}
       onBackupDelete={(id) => { deleteBackup(id) }}

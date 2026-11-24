@@ -1,9 +1,8 @@
-// @ts-nocheck
 import { format } from "date-fns";
-import { Column } from "react-table";
+import { TableColumn } from "../components/Table/Table";
 import { Configuration } from "./Configuration";
 
-export const CONFIG_COLUMNS: Array<Column> = [
+export const CONFIG_COLUMNS: Array<TableColumn> = [
   {
     Header: "Configuration name",
     accessor: "name",

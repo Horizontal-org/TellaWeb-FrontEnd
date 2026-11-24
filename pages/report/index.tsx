@@ -2,13 +2,14 @@ import React, { useMemo, useState, useEffect } from "react";
 import { ReportListPage, ItemQuery, Report as IReport } from "packages/ui";
 import { Menu } from "../../components/Menu";
 import { toReport } from "../../common/toReport";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import {
   useBatchDeleteMutation,
   useListQuery,
 } from "packages/state/services/reports";
 import { ReportQuery } from "packages/state/domain/report";
 import { useReportFileDownloader } from "packages/state/features/files/useReportFileDownloader";
+import { useToast } from "components/ToastWrapper";
 
 const defaultQuery: ReportQuery = {
   page: 0,
@@ -43,15 +44,20 @@ const toReportQuery = (itemQuery: ItemQuery): ReportQuery => {
 };
 
 export const Report = () => {
-  const ready = true 
-  
+  const ready = true
+
   const { push } = useRouter();
   const [downloadReportFile] = useReportFileDownloader();
+  const handleToast = useToast();
 
   const [query, setQuery] = useState<ReportQuery>(defaultQuery);
-  const itemQuery = useMemo(() => toItemQuery(query), [query]);
 
-  const { data: reports } = useListQuery(query);
+  const { data: reports, isLoading } = useListQuery(query);
+  // The table needs the total from the API to know how many pages there are
+  const itemQuery = useMemo(
+    () => toItemQuery({ ...query, total: reports?.total ?? query.total }),
+    [query, reports?.total]
+  );
   const [batchDelete] = useBatchDeleteMutation();
 
   const onBatchDelete = async (reportsToDelete: IReport[]) => {
@@ -61,6 +67,7 @@ export const Report = () => {
 
   return ready ? (
     <ReportListPage
+      isLoading={isLoading}
       currentQuery={itemQuery}
       onQueryChange={(itemQuery) => setQuery(toReportQuery(itemQuery))}
       onDelete={onBatchDelete}
@@ -68,6 +75,7 @@ export const Report = () => {
         push(`./report/${report.id}`);
       }}
       onDownload={(report) => {
+        handleToast("Your download has started", "success")
         downloadReportFile(report.id);
       }}
       reports={reports?.results.map(toReport) || []}

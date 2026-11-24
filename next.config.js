@@ -2,6 +2,8 @@ const { i18n } = require("./next-i18next.config");
 
 module.exports = {
   reactStrictMode: false,
+  // Don't let a lockfile in a parent folder change the inferred workspace root
+  outputFileTracingRoot: __dirname,
   async rewrites() {
     return [
       {
@@ -19,13 +21,7 @@ module.exports = {
     ];
   },
   images: {
-    domains: ['localhost', 'tella-app.org'],
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true
+    remotePatterns: [{ hostname: 'localhost' }, { hostname: 'tella-app.org' }],
   },
   i18n,
 };

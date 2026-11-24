@@ -11,6 +11,8 @@ import {
 } from "packages/state/services/reports";
 import { useDeleteFileMutation } from "packages/state/services/files";
 import { useFileDownloader } from "packages/state/features/files/useFileDownloader";
+import { errorMessage } from "packages/state/utils/errorMessage";
+import { useReportFileDownloader } from "packages/state/features/files/useReportFileDownloader";
 
 export const ReportById = () => {
   // useAuthRequired();
@@ -25,6 +27,8 @@ export const ReportById = () => {
   const [editReport, editReportResult] = useEditReportMutation();
   const [deleteReport] = useDeleteReportMutation();
   const [downloadFile] = useFileDownloader();
+
+  const [downloadReportFile] = useReportFileDownloader();
   const [deleteFile] = useDeleteFileMutation();
 
   useEffect(() => {
@@ -32,7 +36,7 @@ export const ReportById = () => {
       handleToast("Title updated!", "info");
     }
     if (editReportResult.error && "status" in editReportResult.error) {
-      handleToast(editReportResult.error.data.message, "danger");
+      handleToast(errorMessage(editReportResult.error), "danger");
     }
   }, [editReportResult.status]);
 
@@ -47,7 +51,12 @@ export const ReportById = () => {
         }
       }}
       onDownloadFile={(file) => {
+        handleToast("Your download has started", "success");
         downloadFile(file);
+      }}
+      onDownloadReport={(report) => {
+        handleToast("Your download has started", "success");
+        downloadReportFile(report.id);
       }}
       onEditTitle={(title) => {
         editReport({

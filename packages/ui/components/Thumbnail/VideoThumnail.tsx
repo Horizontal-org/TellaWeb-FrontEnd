@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 import cn from "classnames";
 import { IReportFile } from "../../domain/ReportFile";
 
@@ -13,32 +13,36 @@ type Props = {
 
 export const VideoThumbnail: FunctionComponent<React.PropsWithChildren<Props>> = ({
   file,
-  onClick,
-  full,
-  box,
+  onClick = () => {},
+  full = false,
+  box = false,
   selected,
 }) => {
+  const [loaded, setLoaded] = useState(false)
+
   return (
     <div
         onClick={onClick}
-        className={cn("bg-gray-25 rounded-md", {
+        className={cn("rounded-md", {
+          "bg-gray-25": loaded,
+          "bg-gray-100 animate-pulse": !loaded,
           "cursor-pointer": onClick !== null,
           "w-full h-full": full,
           "w-24 h-24": !full && !box,
-          "aspect-w-4 aspect-h-4 w-full": box,
+          "aspect-square w-full": box,
         })}
         aria-hidden="true" // TODO: a11y
       >
         <div
           className={cn(
-            "flex content-center flex-wrap rounded-md  hover:bg-black",
+            "flex content-center flex-wrap rounded-md",
             {
-              "hover:bg-opacity-5 ": file.thumbnail === undefined,
-              "hover:bg-opacity-10": file.thumbnail !== undefined,
+              "hover:bg-black/5": file.thumbnail === undefined,
+              "hover:bg-black/10": file.thumbnail !== undefined,
               "border-gray-100 hover:border-gray-500 border": !selected,
               "border-blue-400 hover:border-blue-500 border-2": !!(selected),
               "w-24 h-24": !full && !box,
-              "aspect-w-4 aspect-h-4 w-full": box,
+              "aspect-square w-full": box,
               "h-full w-full": full,
             }
           )}
@@ -47,7 +51,9 @@ export const VideoThumbnail: FunctionComponent<React.PropsWithChildren<Props>> =
             { file.src && (<video
               key={file.src}
               crossOrigin="use-credentials"
-              className={"w-full"}
+              className={cn("w-full", { invisible: !loaded })}
+              onLoadedData={() => setLoaded(true)}
+              onError={() => setLoaded(true)}
               >
               <source src={file.src} key={file.src} type='video/mp4' />
               Your browser does not support the <code>video</code> element.
@@ -58,8 +64,3 @@ export const VideoThumbnail: FunctionComponent<React.PropsWithChildren<Props>> =
   )
 };
 
-VideoThumbnail.defaultProps = {
-  onClick: () => {},
-  full: false,
-  box: false,
-};

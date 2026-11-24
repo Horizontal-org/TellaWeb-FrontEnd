@@ -22,7 +22,6 @@ export const reportsSlice = createSlice({
       };
     },
   },
-  extraReducers: {},
 });
 
 export const { setCurrentReport } = reportsSlice.actions;

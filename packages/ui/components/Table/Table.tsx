@@ -1,6 +1,17 @@
-// @ts-nocheck
-import { FunctionComponent, useEffect, useState, useMemo } from "react";
-import { Column, useTable, useRowSelect, useSortBy, usePagination } from "react-table";
+import { FunctionComponent, ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import {
+  ColumnDef,
+  PaginationState,
+  RowSelectionState,
+  SortingState,
+  flexRender,
+  metaHelper,
+  rowPaginationFeature,
+  rowSelectionFeature,
+  rowSortingFeature,
+  tableFeatures,
+  useTable,
+} from "@tanstack/react-table";
 import cn from "classnames";
 import { MdExpandMore } from "react-icons/md";
 import { MdExpandLess } from "react-icons/md";
@@ -9,9 +20,31 @@ import { IndeterminateCheckbox } from "./IndeterminateCheckbox";
 import { Item } from "../../domain/Item";
 import { ItemQuery } from "../../domain/ItemQuery";
 import { Paginator } from "../Paginator/Paginator";
+import { Sortable } from "./Sortable";
+
+// Column definition used by the list pages (domain/*TableColumns.ts). headerKey is the field the
+// backend sorts by when the header is clicked
+export type TableColumn<T = any> = {
+  Header: string;
+  accessor?: string | ((row: T) => ReactNode);
+  id?: string;
+  className?: string;
+  headerKey?: string;
+};
+
+type ColumnMeta = { className?: string; headerKey?: string };
+
+const features = tableFeatures({
+  rowSortingFeature,
+  rowSelectionFeature,
+  rowPaginationFeature,
+  columnMeta: metaHelper<ColumnMeta>(),
+});
+
+type Features = typeof features;
 
 type Props = {
-  columns: Array<Column>;
+  columns: Array<TableColumn>;
   data: Array<Item>;
   withPagination?: boolean;
   onSelection?: (items: Item[]) => void;
@@ -19,159 +52,211 @@ type Props = {
   itemQuery?: ItemQuery;
   icon?: React.ReactNode;
   rowOptions: (hoveredRow, isHoverSelected) => React.ReactNode
+  loading?: boolean;
+};
+
+const DEFAULT_ITEM_QUERY = {
+  filter: {},
+  sort: [],
+  pagination: { page: 0, total: 1, size: 1 },
+} as unknown as ItemQuery;
+
+const SELECTION_COLUMN_ID = "selection";
+
+const SKELETON_ROWS = 25;
+
+// Only cursor: pointer, like react-table 7's checkbox props (which replaced the 40x40 size).
+// margin: 0 drops the browser's uneven default margin so the checkbox centres in its box
+const CHECKBOX_STYLE = { cursor: "pointer", margin: 0 };
+
+// Fixed box shared by the header and row cells of the selection column, so checkboxes and
+// icons line up and every page's icon renders at the same size
+const SELECTION_BOX_CLASS = "flex items-center justify-center w-5 h-5 [&_svg]:size-[14px]";
+
+const toColumnDef = (column: TableColumn): ColumnDef<Features, Item> => {
+  const id = column.id ?? (typeof column.accessor === "string" ? column.accessor : column.Header);
+  const meta: ColumnMeta = { className: column.className, headerKey: column.headerKey };
+  if (typeof column.accessor === "function") {
+    return { id, header: column.Header, accessorFn: column.accessor, meta };
+  }
+  return { id, header: column.Header, accessorKey: column.accessor ?? id, meta };
 };
 
 export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
   columns,
   data,
-  onSelection,
-  onFetch,
-  itemQuery,
+  onSelection = () => null,
+  onFetch = () => null,
+  itemQuery = DEFAULT_ITEM_QUERY,
   icon,
   rowOptions,
-  withPagination
+  withPagination = true,
+  loading = false,
 }: Props) => {
-  const tColumns = useMemo<Column[]>(() => columns, []);
-  const tData = useMemo(() => data, [data]);
-  const [hovering, handleHover] = useState()
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-    selectedFlatRows,
-    //pagination
-    page,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
-    pageCount,
-    gotoPage,
-    nextPage,
-    previousPage,
-    setPageSize,
-    state: { selectedRowIds, pageIndex, pageSize },
-  } = useTable(
-    {
-      columns: tColumns,
-      data: tData,
-      manualPagination: true,
-      initialState: { pageIndex: 0, pageSize: itemQuery.pagination.size },
-      autoResetPage: false,
-      pageCount: Math.floor(itemQuery.pagination.total / itemQuery.pagination.size) + 1,
-      manualSortBy: true,
-      disableMultiSort: true,
-    },
-    useSortBy,
-    usePagination,
-    useRowSelect,
-    (hooks) => {
-      hooks.visibleColumns.push((col) => [
-        {
-          id: "selection",
-          Header: ({ getToggleAllRowsSelectedProps }) => (
-            <div className='flex justify-center w-full'>
-              <IndeterminateCheckbox style={{width: 40, height: 40}} {...getToggleAllRowsSelectedProps()} />
-            </div>
-          ),
-          className: "max-w-content text-center p-2",
-          // eslint-disable-next-line react/display-name
-          Cell: ({ row }) => {
-            return (
-              <div className='flex justify-center'>
-                <div style={{width: 20}}>
-                  { row.isSelected ? (
-                    <IndeterminateCheckbox style={{width: 40, height: 40}}  {...row.getToggleRowSelectedProps()} />
-                  ) : icon || <FaRegFolder size={14} color="#8B8E8F"/>}
-                </div>
-              </div>
-            )
-          },
-        },
-        ...col,
-      ]);
-    }
+  const [hovering, handleHover] = useState<number | null>(null);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: itemQuery.pagination.page ?? 0,
+    pageSize: itemQuery.pagination.size,
+  });
+
+  // The parent can move the page too (a new search or sort goes back to the first one)
+  const queryPage = itemQuery.pagination.page ?? 0
+  useEffect(() => {
+    setPagination((p) => (p.pageIndex === queryPage ? p : { ...p, pageIndex: queryPage }))
+  }, [queryPage])
+
+  const tColumns = useMemo<ColumnDef<Features, Item>[]>(
+    () => [
+      {
+        id: SELECTION_COLUMN_ID,
+        meta: { className: "w-px whitespace-nowrap text-center p-2" },
+        enableSorting: false,
+        header: ({ table }) => (
+          <div className={SELECTION_BOX_CLASS}>
+            <IndeterminateCheckbox
+              title="Toggle All Rows Selected"
+              style={CHECKBOX_STYLE}
+              checked={table.getIsAllRowsSelected()}
+              indeterminate={table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()}
+              onChange={(e) => table.toggleAllRowsSelected(e.target.checked)}
+            />
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className={SELECTION_BOX_CLASS}>
+            {row.getIsSelected() ? (
+              <IndeterminateCheckbox
+                title="Toggle Row Selected"
+                style={CHECKBOX_STYLE}
+                checked={row.getIsSelected()}
+                indeterminate={false}
+                onChange={(e) => row.toggleSelected(e.target.checked)}
+              />
+            ) : icon || <FaRegFolder color="#8B8E8F" />}
+          </div>
+        ),
+      },
+      ...columns.map(toColumnDef),
+    ],
+    []
   );
 
+  const table = useTable({
+    features,
+    columns: tColumns,
+    data,
+    manualPagination: true,
+    manualSorting: true,
+    enableMultiSort: false,
+    autoResetPageIndex: false,
+    pageCount: Math.max(1, Math.ceil((itemQuery.pagination.total || 0) / itemQuery.pagination.size)),
+    state: { sorting, rowSelection, pagination },
+    onSortingChange: setSorting,
+    onRowSelectionChange: setRowSelection,
+    onPaginationChange: setPagination,
+  });
+
+  // Selection is cleared when new data arrives (react-table 7 did this by default)
+  const mounted = useRef(false);
   useEffect(() => {
-    const r = selectedFlatRows.map((d) => d.original) as Item[];
-    onSelection(r);
-  }, [selectedRowIds, onSelection]);
+    if (mounted.current) setRowSelection({});
+    mounted.current = true;
+  }, [data]);
+
+  useEffect(() => {
+    onSelection(table.getSelectedRowModel().flatRows.map((row) => row.original));
+  }, [rowSelection, onSelection]);
 
   useEffect(() => {
     onFetch({
       ...itemQuery,
       pagination: {
         total: itemQuery.pagination.total,
-        size: pageSize,
-        page: pageIndex
+        size: pagination.pageSize,
+        page: pagination.pageIndex
       }
     })
-  }, [pageIndex, pageSize])
+  }, [pagination.pageIndex, pagination.pageSize])
+
+  // Server-side sort: unsorted or ascending → descending, descending → ascending
+  const sortBy = (columnId: string, meta: ColumnMeta) => {
+    const current = sorting.find((s) => s.id === columnId);
+    const desc = !(current && current.desc);
+    onFetch({
+      ...itemQuery,
+      sort: {
+        key: meta?.headerKey,
+        order: desc ? 'desc' : 'asc'
+      },
+      pagination: { ...itemQuery.pagination, page: 0 },
+    })
+    setSorting([{ id: columnId, desc }]);
+  };
+
+  const rows = table.getRowModel().rows;
 
   return (
     <>
-      <table
-        {...getTableProps()}
-        className={`table-auto border-collapse w-full ${
-          getTableProps().className
-        }`}
-      >
+      <table className="table-auto border-collapse w-full">
         <thead className="border-b border-gray-200">
-          {headerGroups.map((headerGroup, i) => (
+          {table.getHeaderGroups().map((headerGroup) => (
             <tr
-              key={i}
-              {...headerGroup.getHeaderGroupProps()}
+              key={headerGroup.id}
               className="rounded-lg text-base font-sans text-gray-300 text-left"
             >
-              {headerGroup.headers.map((column, j) => (
-                <th
-                  disableSortBy={j === 0}
-                  key={j}
-                  {...column.getHeaderProps([
-                    {
-                      className: `${column.className} font-semibold text-base`,
-                    },
-                    column.getSortByToggleProps()
-                  ])}
-                  onClick={() => {
-                    if (j === 0) { 
-                      return
-                    }
-
-                    onFetch({
-                      ...itemQuery,
-                      sort: {
-                        key: column.headerKey,
-                        order: column.isSortedDesc ? 'asc' : 'desc'
-                      },
-                    })
-                    column.toggleSortBy(!column.isSortedDesc)
-                  }}
-                >
-                  <div className="flex flex-row">
-                    {column.render("Header")}
-                    <span className='pl-2'>
-                      {column.isSorted ? (
-                        column.isSortedDesc ? (
+              {headerGroup.headers.map((header) => {
+                const meta = header.column.columnDef.meta;
+                const sortable = header.column.id !== SELECTION_COLUMN_ID;
+                const sorted = header.column.getIsSorted();
+                return (
+                  <th
+                    key={header.id}
+                    colSpan={header.colSpan}
+                    className={`${meta?.className} font-semibold text-base`}
+                    title={sortable ? "Toggle SortBy" : undefined}
+                    style={sortable ? { cursor: "pointer" } : undefined}
+                    onClick={() => {
+                      if (!sortable) return
+                      sortBy(header.column.id, meta)
+                    }}
+                  >
+                    <div className="flex flex-row">
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      {/* {sortable && <span className='pl-2'>
+                        {sorted === "desc" ? (
                           <MdExpandMore />
-                        ) : (
+                        ) : sorted === "asc" ? (
                           <MdExpandLess />
-                        )
-                      ) : (
-                        ""
-                      )}
-                    </span>
-                  </div>
-                </th>
-              ))}
+                        ) : (
+                          ""
+                        )}
+                      </span>} */}
+                      <Sortable isSortable={sortable} sorted={sorted} />
+                    </div>
+                  </th>
+                );
+              })}
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()} className="text-base text-gray-700">
-          {rows.map((row, i) => {
-            prepareRow(row);
+        <tbody className="text-base text-gray-700" aria-busy={loading}>
+          {loading ? [...Array(SKELETON_ROWS)].map((_, i) => (
+            <tr key={i} className="border-b border-gray-200" style={{ height: 50 }}>
+              {table.getAllLeafColumns().map((column) => (
+                <td key={column.id} className={column.columnDef.meta?.className || "px-3 py-3"}>
+                  {column.id === SELECTION_COLUMN_ID ? (
+                    <div className={`${SELECTION_BOX_CLASS} opacity-50`}>
+                      {icon || <FaRegFolder color="#8B8E8F" />}
+                    </div>
+                  ) : (
+                    <div className="bg-gray-100 rounded-lg animate-pulse w-3/4" style={{ height: 14 }} />
+                  )}
+                </td>
+              ))}
+            </tr>
+          )) : rows.map((row, i) => {
             return (
               <tr
                 onMouseEnter={() => {
@@ -182,86 +267,73 @@ export const Table: FunctionComponent<React.PropsWithChildren<Props>> = ({
                     handleHover(null)
                   }
                 }}
-                key={i}
+                key={row.id}
                 style={{
                   height: 50
                 }}
-                onClick={(e) => {
-                  row.toggleRowSelected() 
+                onClick={() => {
+                  row.toggleSelected()
                 }}
-                {...row.getRowProps()}
                 className={cn(
                   "border-b border-gray-200 hover:border-transparent",
                   'relative',
                   {
-                    "bg-blue-light": row.isSelected,
-                    "hover:bg-gray-50": !row.isSelected,
+                    "bg-blue-light": row.getIsSelected(),
+                    "hover:bg-gray-50": !row.getIsSelected(),
                   }
                 )}
               >
-                {row.cells.map((cell, j) => {
+                {row.getAllCells().map((cell, cellIndex, cells) => {
+                  const meta = cell.column.columnDef.meta;
                   return (
                     <td
-                      key={j}
-                      {...cell.getCellProps([
-                        { className: cell.column.className || "px-3 py-3" },
-                      ])}
+                      key={cell.id}
+                      className={meta?.className || "px-3 py-3"}
                     >
-                      {cell.render("Cell")}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+
+                      {hovering === i && cellIndex === cells.length - 1 && (
+                        <div
+                          className="absolute top-0"
+                          style={{
+                            right: 20
+                          }}
+                        >
+                          <div
+                            className="flex items-center "
+                            style={{
+                              height: 50,
+                              paddingRight: '20'
+                            }}
+                          >
+                            {rowOptions(row.original, row.getIsSelected())}
+                          </div>
+                        </div>
+                      )}
                     </td>
                   );
                 })}
-
-                { hovering === i && (
-                  <div 
-                    className="absolute top-0"
-                    style={{
-                      right: 20
-                    }}
-                  >
-                    <div 
-                      className="flex items-center "
-                      style={{
-                        height: 50,
-                        paddingRight: '20'
-                      }}
-                    >
-                      { rowOptions(row.original, row.isSelected) }
-                    </div>
-                  </div>
-                )}
               </tr>
             );
           })}
         </tbody>
       </table>
 
-      { withPagination && (
+      {withPagination && !loading && (
         <div className='w-full flex justify-center item-center py-8'>
-          <Paginator 
-            gotoPage={gotoPage}
-            previousPage={previousPage}
-            nextPage={nextPage}
-            canNextPage={canNextPage}
-            canPreviousPage={canPreviousPage}
-            pageCount={pageCount}
-            pageIndex={pageIndex}
-            pageTotal={pageOptions.length}
+          <Paginator
+            gotoPage={(index) => table.setPageIndex(index)}
+            previousPage={() => table.previousPage()}
+            nextPage={() => table.nextPage()}
+            canNextPage={table.getCanNextPage()}
+            canPreviousPage={table.getCanPreviousPage()}
+            pageCount={table.getPageCount()}
+            pageIndex={pagination.pageIndex}
+            pageTotal={table.getPageCount()}
           />
         </div>
       )}
-      
+
     </>
   );
-};
-
-Table.defaultProps = {
-  onSelection: () => null,
-  onFetch: () => null,
-  withPagination: true,
-  itemQuery: {
-    filter: {},
-    sort: [],
-    pagination: { page: 1, total: 1, size: 1 },
-  },
 };

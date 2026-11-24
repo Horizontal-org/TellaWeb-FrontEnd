@@ -55,7 +55,7 @@ export const ToastWrapper: FunctionComponent<React.PropsWithChildren<Props>> = (
         { showToast && (
           <div 
             className={cn(
-              'fixed shadow-md p-2 transition text-sm font-bold font-sans duration-300 text-white rounded',
+              'fixed shadow-md p-2 transition text-sm font-bold font-sans duration-300 text-white rounded-sm',
               {
                 'opacity-100': !isFading,
                 'opacity-0': isFading,

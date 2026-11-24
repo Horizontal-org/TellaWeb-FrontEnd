@@ -1,14 +1,19 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { MdSearch } from "react-icons/md";
-import { ComponentPropsWithoutRef, forwardRef, useState } from "react";
+import { ComponentPropsWithoutRef, forwardRef, useEffect, useRef, useState } from "react";
 import cn from "classnames";
 
 export const SearchInput = forwardRef<
   HTMLInputElement,
-  ComponentPropsWithoutRef<"input">
->(({ ...props }, ref) => {
+  ComponentPropsWithoutRef<"input"> & { onSearch?: (value: string) => void }
+>(({ onSearch, onChange, onKeyDown, ...props }, ref) => {
   const [inFocus, setFocus] = useState(false);
   const [inHover, setHover] = useState(false);
+
+  const timer = useRef<ReturnType<typeof setTimeout>>(null)
+  // Latest callback, so a debounced search uses the query of the latest render
+  const onSearchRef = useRef(onSearch)
+  onSearchRef.current = onSearch
+  useEffect(() => () => clearTimeout(timer.current), [])
 
   return (
     <div className="relative flex items-center justify-center">
@@ -46,7 +51,7 @@ export const SearchInput = forwardRef<
           hover:placeholder-gray-800
           hover:border-gray-500
           focus:border-blue-300
-          focus:outline-none
+          focus:outline-hidden
           py-1
           pr-2
           pl-9"
@@ -54,6 +59,19 @@ export const SearchInput = forwardRef<
         onMouseLeave={() => setHover(false)}
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
+        onChange={(e) => {
+          onChange?.(e)
+          const value = e.target.value
+          clearTimeout(timer.current)
+          timer.current = setTimeout(() => onSearchRef.current?.(value), 500)
+        }}
+        onKeyDown={(e) => {
+          onKeyDown?.(e)
+          if (e.key !== "Enter") return
+          e.preventDefault()
+          clearTimeout(timer.current)
+          onSearchRef.current?.(e.currentTarget.value)
+        }}
         {...props}
       />
     </div>

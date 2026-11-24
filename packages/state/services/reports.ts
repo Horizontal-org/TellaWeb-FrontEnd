@@ -28,6 +28,7 @@ export const reportsApi = createApi({
           sort: reportQuery.sortKey,
           order: reportQuery.sortOrder,
           search: reportQuery.search,
+          projectId: reportQuery.projectId,
         };
 
         return {
@@ -89,9 +90,9 @@ function providesList<R extends { id: string | number }[], T extends string>(
 ) {
   return resultsWithIds
     ? [
-        { type: tagType, id: "LIST" },
-        ...resultsWithIds.map(({ id }) => ({ type: tagType, id })),
-      ]
+      { type: tagType, id: "LIST" },
+      ...resultsWithIds.map(({ id }) => ({ type: tagType, id })),
+    ]
     : [{ type: tagType, id: "LIST" }];
 }
 

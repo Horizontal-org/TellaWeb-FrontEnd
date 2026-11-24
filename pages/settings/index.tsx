@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import { SettingsPage } from "../../packages/ui/pages/SettingsPage/SettingsPage";
 import { Menu } from "../../components/Menu";
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
@@ -11,15 +11,15 @@ import {
 } from "packages/state/services/user";
 import { useDispatch } from "react-redux";
 import { setUser } from "packages/state/features/user/userSlice";
+import { errorMessage } from "packages/state/utils/errorMessage";
 
 const Settings = () => {
-  
+
   const user = useUserProfile();
   const dispatch = useDispatch();
 
   const handleToast = useToast();
 
-  const [updatePassword, updatePasswordResult] = useUpdatePasswordSelfMutation();
   const [updateSelf, updateSelfResult] = useUpdateUserSelfMutation();
 
   const [otpActive, handleOtpActive] = useState<boolean | null>(null)
@@ -29,21 +29,12 @@ const Settings = () => {
   }, [user])
 
   useEffect(() => {
-    if (updatePasswordResult.isSuccess) {
-      handleToast("Password updated!", "info");
-    }
-    if (updatePasswordResult.error && "status" in updatePasswordResult.error) {
-      handleToast(updatePasswordResult.error.data.message, "danger");
-    }
-  }, [updatePasswordResult.status]);
-
-  useEffect(() => {
     if (updateSelfResult.isSuccess) {
       handleToast("Email updated!", "info");
       dispatch(setUser({ ...user, ...updateSelfResult.data }));
     }
     if (updateSelfResult.error && "status" in updateSelfResult.error) {
-      handleToast(updateSelfResult.error.data.message, "danger");
+      handleToast(errorMessage(updateSelfResult.error), "danger");
     }
   }, [updateSelfResult.status]);
 
@@ -51,9 +42,6 @@ const Settings = () => {
     <SettingsPage
       sidebar={<Menu />}
       user={user}
-      onUpdatePassword={(current, newPassword) => {
-        updatePassword({ current, new: newPassword });
-      }}
       onUpdateUsername={(username, confirmPassword) => {
         updateSelf({ username: username, confirmPassword: confirmPassword })
       }}

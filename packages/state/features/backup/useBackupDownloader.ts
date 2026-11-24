@@ -1,16 +1,12 @@
-import { useFetchBlob, DownloaderState } from "../files/useFetchBlob";
-import { File } from "../../domain/file";
+import { useBrowserDownload } from "../files/useBrowserDownload"
+import { DownloaderState } from "../files/useFetchBlob"
 
+type BackupDownloader = (id: string) => Promise<void>
 
-type FileDownloader = (id: string, name: string) => Promise<void>;
+export const useBackupDownloader = (): [BackupDownloader, DownloaderState] => {
+  const [startDownload, downloadState] = useBrowserDownload()
+  const download = async (id: string) =>
+    startDownload(`${process.env.NEXT_PUBLIC_API_URL}/backup/download/${id}`)
 
-export const useBackupDownloader = (): [FileDownloader, DownloaderState] => {
-  const [downloadBlob, downloadState] = useFetchBlob();
-  const download = async (id: string, name: string) => {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/backup/download/${id}`;
-    
-    return downloadBlob(url, 'zip', name);
-  };
-
-  return [download, downloadState];
-};
+  return [download, downloadState]
+}

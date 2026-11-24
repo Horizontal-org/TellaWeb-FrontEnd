@@ -1,9 +1,8 @@
-// @ts-nocheck
 import { format } from "date-fns";
-import { Column } from "react-table";
+import { TableColumn } from "../components/Table/Table";
 import { Configuration } from "../../state/domain/configuration";
 
-export const CONFIGURATION_COLUMNS: Column[] = [
+export const CONFIGURATION_COLUMNS: TableColumn[] = [
   {
     Header: "Name",
     headerKey: 'configuration.name',
@@ -13,7 +12,7 @@ export const CONFIGURATION_COLUMNS: Column[] = [
   {
     Header: "Date",
     headerKey: 'configuration.createdAt',
-    className: "px-3 py-3 w-40",
+    className: "px-3 py-3 w-auto",
     id: "date",
     accessor: (configuration: Configuration): string => {
       const date = new Date(configuration.createdAt)

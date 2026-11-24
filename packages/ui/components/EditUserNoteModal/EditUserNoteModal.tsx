@@ -29,6 +29,7 @@ export const EditUserNoteModal: FunctionComponent<React.PropsWithChildren<Props>
           <div className='py-4'>
             <TextArea
               name='note'
+              maxLength={255}
               placeholder='Note'
               value={note}
               onChange={(e) => { handleNote(e.target.value) }}

@@ -21,7 +21,7 @@ export const TwoFactor: FunctionComponent<React.PropsWithChildren<Props>> = ({
   const [isOtp, handleIsOtp] = useState<boolean>(true)
   return (
     <form 
-      className="p-10 bg-white rounded flex justify-center items-center flex-col shadow-md border"
+      className="p-10 bg-white rounded-sm flex justify-center items-center flex-col shadow-md border"
       onSubmit={(e) => {
         e.preventDefault()
         if(isOtp) {
@@ -55,7 +55,7 @@ export const TwoFactor: FunctionComponent<React.PropsWithChildren<Props>> = ({
         </div>
         )}
         <button
-          className="bg-blue-300 hover:bg-blue py-2 text-white uppercase text-base font-bold rounded w-full disabled:opacity-50"
+          className="bg-blue-300 hover:bg-blue py-2 text-white uppercase text-base font-bold rounded-sm w-full disabled:opacity-50"
           disabled={otpValue.length < 6 || isLoading}
           type={"submit"}
         >

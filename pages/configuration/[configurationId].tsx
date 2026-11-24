@@ -12,6 +12,7 @@ import {
   useDeleteConfigurationMutation
 } from "packages/state/services/configuration";
 import { toRemoteConfiguration } from 'common/toRemoteConfiguration';
+import { errorMessage } from "packages/state/utils/errorMessage";
 
 const ConfigById: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
   // useAuthRequired();
@@ -40,7 +41,7 @@ const ConfigById: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
       loadConfig(currentConfigId)
     }
     if (updateConfigurationResult.error && "status" in updateConfigurationResult.error) {
-      handleToast(updateConfigurationResult.error.data.message, "danger");
+      handleToast(errorMessage(updateConfigurationResult.error), "danger");
     }
   }, [updateConfigurationResult.status]);
 

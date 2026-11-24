@@ -6,10 +6,12 @@ import {
   useDeleteProjectMutation,
   useEditProjectMutation,
   useGetByIdQuery,
+  useLazyCheckNameQuery,
 } from "packages/state/services/project";
 import { ReportQuery } from "packages/state/domain/report";
 import { useReportFileDownloader } from "packages/state/features/files/useReportFileDownloader";
 import { Menu } from "components/Menu";
+import { errorMessage } from "packages/state/utils/errorMessage";
 
 export const ProjectById = () => {
 
@@ -21,6 +23,7 @@ export const ProjectById = () => {
   );
   const [editProject, editProjectResult] = useEditProjectMutation()
   const [deleteProject, deleteProjectResult] = useDeleteProjectMutation()
+  const [triggerCheckName] = useLazyCheckNameQuery()
 
   const { push } = useRouter();
   const [downloadReportFile] = useReportFileDownloader();
@@ -31,7 +34,7 @@ export const ProjectById = () => {
       refetch()
     }
     if (editProjectResult.error && "status" in editProjectResult.error) {
-      handleToast(editProjectResult.error.data.message, "danger");
+      handleToast(errorMessage(editProjectResult.error), "danger");
     }
   }, [editProjectResult.status]);
 
@@ -42,7 +45,7 @@ export const ProjectById = () => {
       router.push("/project")
     }
     if (deleteProjectResult.error && "status" in deleteProjectResult.error) {
-      handleToast(deleteProjectResult.error.data.message, "danger");
+      handleToast(errorMessage(deleteProjectResult.error), "danger");
     }
   }, [deleteProjectResult.status]);
 
@@ -53,6 +56,9 @@ export const ProjectById = () => {
       onManage={(entity) => {
         push(`/project/${currentProject.id}/${entity}`);
       }}      
+      checkName={(name) =>
+        triggerCheckName({ name, excludeId: currentProject.id }).unwrap().then((r) => r.taken).catch(() => false)
+      }
       onRename={(newName) => {
         editProject({
           id: currentProject.id,

@@ -41,6 +41,7 @@ export const EditEmailModal: FunctionComponent<React.PropsWithChildren<Props>> =
           <div className='py-4'>
             <TextInput
               name='username'
+              maxLength={60}
               placeholder={isEmail ? 'Email' : 'Username'}
               value={username}
               onChange={(e) => { handleUsername(e.target.value) }}
@@ -59,6 +60,7 @@ export const EditEmailModal: FunctionComponent<React.PropsWithChildren<Props>> =
           <div>
             <TextInput
               name='confirm-username'
+              maxLength={60}
               placeholder={isEmail ? 'Confirm email' : 'Confirm username'}
               value={confirmUsername}
               onChange={(e) => { handleConfirmUsername(e.target.value) }}
@@ -106,6 +108,12 @@ export const EditEmailModal: FunctionComponent<React.PropsWithChildren<Props>> =
                 </div>
               )}
 
+              { username.length > 0 && username.length < 6 && (
+                <div className="w-full p-2 mt-4  bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200">
+                  The { isEmail ? 'email' : 'name'} must have at least 6 characters
+                </div>
+              )}
+
               { !(username === confirmUsername) && (
                 <div className="w-full p-2 mt-4  bg-red-100 text-center text-red-900 text-sm rounded-md border border-red-200">
                   The { isEmail ? 'email addresses' : 'names'} do not match
@@ -125,7 +133,7 @@ export const EditEmailModal: FunctionComponent<React.PropsWithChildren<Props>> =
             <Button 
               text='SAVE'
               full={true}
-              disabled={!(username.length > 0 && username === confirmUsername && (withPassword ? confirmPassword.length > 0 : true)) || (isEmail && !(/\S+@\S+\.\S+/.test(username)))}
+              disabled={!(username.length >= 6 && username === confirmUsername && (withPassword ? confirmPassword.length > 0 : true)) || (isEmail && !(/\S+@\S+\.\S+/.test(username)))}
               onClick={() => {
                 onSubmit(username, confirmPassword)
                 toggle()

@@ -1,17 +1,16 @@
-import { useFetchBlob, DownloaderState } from "./useFetchBlob";
+import { useBrowserDownload } from "./useBrowserDownload"
+import { DownloaderState } from "./useFetchBlob"
 
-type ReportFileDownloader = (reportId: string) => Promise<void>;
+type ReportFileDownloader = (reportId: string) => Promise<void>
 
 export const useReportFileDownloader = (): [
   ReportFileDownloader,
   DownloaderState
 ] => {
-  const [downloadBlob, downloadState] = useFetchBlob();
+  const [startDownload, downloadState] = useBrowserDownload()
 
-  const download = async (reportId) => {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/file/report/${reportId}`;
-    return downloadBlob(url);
-  };
+  const download = async (reportId: string) =>
+    startDownload(`${process.env.NEXT_PUBLIC_API_URL}/file/report/${reportId}`)
 
-  return [download, downloadState];
-};
+  return [download, downloadState]
+}

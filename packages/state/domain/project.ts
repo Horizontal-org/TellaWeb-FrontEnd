@@ -9,6 +9,7 @@ export interface Project {
   resources: Resource[];
   reports: Report[];
   createdAt: string;
+  reportCount?: number;
   url?: string;
   slug?: string;
   id?: string;
