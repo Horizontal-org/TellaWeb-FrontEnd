@@ -43,3 +43,12 @@ test("create, rename and delete a project", async ({ page, adminApi }) => {
 
   await expect.poll(() => adminApi.findProject(renamed)).toBeUndefined()
 })
+
+// A stale link to a deleted project: every project tab goes back to the list instead of a blank page
+for (const tab of ["", "/users", "/resources", "/settings"]) {
+  test(`unknown project redirects to the list (${tab || "/"})`, async ({ page }) => {
+    await page.goto(`/project/00000000-0000-4000-8000-000000000000${tab}`)
+    await expectToast(page, "Project not found")
+    await expect(page).toHaveURL(/\/project$/)
+  })
+}

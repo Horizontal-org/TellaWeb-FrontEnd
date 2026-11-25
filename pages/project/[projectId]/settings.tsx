@@ -5,12 +5,12 @@ import { useToast } from "../../../components/ToastWrapper";
 import {
   useDeleteProjectMutation,
   useEditProjectMutation,
-  useGetByIdQuery,
   useLazyCheckNameQuery,
 } from "packages/state/services/project";
 import { ReportQuery } from "packages/state/domain/report";
 import { useReportFileDownloader } from "packages/state/features/files/useReportFileDownloader";
 import { Menu } from "components/Menu";
+import { useProject } from "components/useProject";
 import { errorMessage } from "packages/state/utils/errorMessage";
 
 export const ProjectById = () => {
@@ -18,9 +18,7 @@ export const ProjectById = () => {
   const router = useRouter();
   const handleToast = useToast()
 
-  const { data: currentProject, refetch } = useGetByIdQuery(
-    "" + router.query.projectId
-  );
+  const { data: currentProject, refetch } = useProject();
   const [editProject, editProjectResult] = useEditProjectMutation()
   const [deleteProject, deleteProjectResult] = useDeleteProjectMutation()
   const [triggerCheckName] = useLazyCheckNameQuery()

@@ -4,12 +4,10 @@ import { ItemQuery, ProjectPage, ReportPage, Report as IReport } from "packages/
 import { toReport } from "../../../common/toReport";
 import { useToast } from "../../../components/ToastWrapper";
 import { useAuthRequired } from "packages/state/features/auth/authHooks";
-import {
-  useGetByIdQuery,
-} from "packages/state/services/project";
 import { ReportQuery } from "packages/state/domain/report";
 import { useReportFileDownloader } from "packages/state/features/files/useReportFileDownloader";
 import { Menu } from "components/Menu";
+import { useProject } from "components/useProject";
 import { useBatchDeleteMutation, useListQuery } from "packages/state/services/reports";
 import { errorMessage } from "packages/state/utils/errorMessage";
 
@@ -51,9 +49,7 @@ export const ProjectById = () => {
   const handleToast = useToast()
 
   const projectId = router.query.projectId as string | undefined
-  const { data: currentProject, refetch } = useGetByIdQuery(
-    "" + projectId
-  );
+  const { data: currentProject, refetch } = useProject();
 
   const { push } = useRouter();
   const [downloadReportFile, downloadState] = useReportFileDownloader();

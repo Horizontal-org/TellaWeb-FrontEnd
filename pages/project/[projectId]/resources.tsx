@@ -6,11 +6,11 @@ import { useAuthRequired } from "packages/state/features/auth/authHooks";
 import {
   useAddEntitiesMutation,
   useEditProjectMutation,
-  useGetByIdQuery,
 } from "packages/state/services/project";
 import { ReportQuery } from "packages/state/domain/report";
 import { useReportFileDownloader } from "packages/state/features/files/useReportFileDownloader";
 import { Menu } from "components/Menu";
+import { useProject } from "components/useProject";
 import { UserQuery } from "packages/state/domain/user";
 import { ProjectUsersPage } from "packages/ui/pages/ProjectUsersPage/ProjectUsersPage";
 import { ResourceQuery } from "packages/state/domain/resource";
@@ -57,9 +57,7 @@ export const ProjectById = () => {
   const router = useRouter();
   const handleToast = useToast()
   const projectId = router.query.projectId as string | undefined
-  const { data: currentProject, refetch, isLoading } = useGetByIdQuery(
-    "" + projectId
-  );
+  const { data: currentProject, refetch, isLoading } = useProject();
 
   const { push } = useRouter();
   const [query, setQuery] = useState<ResourceQuery>(defaultQuery);
